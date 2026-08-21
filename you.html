@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>MiniTube - You</title>
 
@@ -20,22 +26,31 @@ body{
   padding-bottom:80px;
 }
 
+
+/* =========================
+   HEADER
+   ========================= */
+
 header{
   position:sticky;
   top:0;
   z-index:20;
+
   height:64px;
+
   background:#111;
   border-bottom:1px solid #292929;
+
   display:flex;
   align-items:center;
+
   padding:0 16px;
   gap:14px;
 }
 
 .back{
-  border:0;
   background:none;
+  border:0;
   color:white;
   font-size:30px;
   cursor:pointer;
@@ -54,289 +69,998 @@ header{
   flex:1;
 }
 
-.avatar{
+.avatarSmall{
   width:42px;
   height:42px;
+
   border-radius:50%;
   background:#7c4dff;
+
   display:grid;
   place-items:center;
+
   font-weight:bold;
-  font-size:18px;
 }
 
-.profile{
-  padding:30px 20px;
-  text-align:center;
-  border-bottom:1px solid #292929;
+
+/* =========================
+   CHANNEL HERO
+   ========================= */
+
+.channelHeader{
+
+  margin:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #24132d,
+      #171717
+    );
+
+  border-radius:22px;
+
+  padding:25px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:20px;
 }
 
-.profile .bigAvatar{
-  width:86px;
-  height:86px;
+.channelAvatar{
+
+  width:90px;
+  height:90px;
+
   border-radius:50%;
+
   background:#7c4dff;
+
   display:grid;
+
   place-items:center;
-  margin:auto;
+
   font-size:34px;
+
   font-weight:bold;
+
+  flex-shrink:0;
 }
 
-.profile h1{
-  margin:15px 0 5px;
-  font-size:25px;
+.channelDetails{
+  flex:1;
 }
 
-.profile p{
-  margin:0;
-  color:#999;
+.channelName{
+
+  font-size:26px;
+
+  font-weight:800;
+
+  margin-bottom:7px;
 }
 
-.stats{
+.handle{
+
+  color:#aaa;
+
+  font-size:14px;
+
+  margin-bottom:10px;
+}
+
+.channelStats{
+
+  color:#aaa;
+
+  font-size:14px;
+}
+
+.channelActions{
+
+  margin-top:15px;
+
   display:flex;
-  justify-content:center;
-  gap:45px;
-  margin-top:22px;
-}
 
-.stat b{
-  display:block;
-  font-size:20px;
-}
-
-.stat span{
-  color:#999;
-  font-size:13px;
-}
-
-.section{
-  padding:22px 18px;
-}
-
-.sectionTitle{
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-
-.menu{
-  display:flex;
-  flex-direction:column;
   gap:10px;
+
+  flex-wrap:wrap;
 }
 
-.menu button{
-  width:100%;
-  padding:16px;
-  background:#181818;
-  color:white;
-  border:1px solid #292929;
-  border-radius:12px;
-  text-align:left;
-  font-size:16px;
+.subscribeButton{
+
+  border:0;
+
+  border-radius:22px;
+
+  padding:10px 18px;
+
+  background:#fff;
+
+  color:#111;
+
+  font-weight:bold;
+
   cursor:pointer;
 }
 
-.menu button:active{
+.subscribeButton.subscribed{
+
   background:#292929;
+
+  color:white;
+
+  border:1px solid #555;
 }
 
-.menuIcon{
-  display:inline-block;
-  width:32px;
-  font-size:20px;
-}
+.editButton{
 
-.upload{
-  background:#ff0033 !important;
-  border:0 !important;
+  border:1px solid #555;
+
+  background:#292929;
+
+  color:white;
+
+  border-radius:22px;
+
+  padding:10px 18px;
+
   font-weight:bold;
+
+  cursor:pointer;
 }
+
+
+/* =========================
+   CONTENT
+   ========================= */
+
+.content{
+
+  padding:0 20px;
+}
+
+.sectionTitle{
+
+  font-size:21px;
+
+  font-weight:bold;
+
+  margin:
+
+    25px 0
+    15px;
+}
+
+.grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(260px,1fr)
+    );
+
+  gap:18px;
+}
+
+.card{
+
+  background:#181818;
+
+  border-radius:16px;
+
+  overflow:hidden;
+}
+
+.card video{
+
+  width:100%;
+
+  aspect-ratio:16/9;
+
+  display:block;
+
+  background:#000;
+}
+
+.info{
+
+  padding:12px;
+}
+
+.title{
+
+  font-size:17px;
+
+  font-weight:bold;
+
+  word-break:break-word;
+}
+
+.meta{
+
+  color:#999;
+
+  font-size:13px;
+
+  margin-top:7px;
+}
+
+.watchButton{
+
+  margin-top:12px;
+
+  background:#292929;
+
+  color:white;
+
+  border:0;
+
+  padding:9px 14px;
+
+  border-radius:8px;
+
+  cursor:pointer;
+}
+
+
+/* =========================
+   EMPTY
+   ========================= */
+
+.empty{
+
+  background:#181818;
+
+  border:1px solid #292929;
+
+  border-radius:16px;
+
+  padding:45px 20px;
+
+  text-align:center;
+}
+
+.emptyIcon{
+
+  font-size:45px;
+
+  margin-bottom:15px;
+}
+
+.empty h2{
+
+  margin:
+    0 0 8px;
+}
+
+.empty p{
+
+  color:#999;
+
+  line-height:1.5;
+
+  margin:0;
+}
+
+.homeButton{
+
+  margin-top:20px;
+
+  background:#ff0033;
+
+  color:white;
+
+  border:0;
+
+  border-radius:25px;
+
+  padding:13px 22px;
+
+  font-size:15px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
 
 .bottom{
+
   position:fixed;
+
   bottom:0;
   left:0;
   right:0;
+
   height:70px;
+
   background:#151515;
+
   border-top:1px solid #333;
+
   display:flex;
+
   justify-content:space-around;
+
   align-items:center;
+
   z-index:30;
 }
 
 .bottom button{
+
   background:none;
+
   border:0;
+
   color:#aaa;
+
   font-size:13px;
+
+  cursor:pointer;
 }
 
 .bottom button b{
+
   display:block;
+
   font-size:22px;
+
   color:white;
+
   margin-bottom:3px;
 }
 
 .bottom .active{
+
   color:white;
 }
 
+
+/* =========================
+   MOBILE
+   ========================= */
+
 @media(max-width:600px){
 
-  .stats{
-    gap:30px;
+  .channelHeader{
+
+    margin:16px;
+
+    padding:20px;
+
+    align-items:flex-start;
+  }
+
+  .channelAvatar{
+
+    width:70px;
+    height:70px;
+
+    font-size:27px;
+  }
+
+  .channelName{
+
+    font-size:21px;
+  }
+
+  .content{
+
+    padding:0 16px;
+  }
+
+  .grid{
+
+    grid-template-columns:1fr;
   }
 
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
 <header>
 
-  <button class="back" onclick="goHome()">
+  <button
+    class="back"
+    onclick="goHome()"
+  >
     ‹
   </button>
 
+
   <div class="logo">
-    <span>▶</span> MiniTube
+
+    <span>▶</span>
+    MiniTube
+
   </div>
+
 
   <div class="spacer"></div>
 
-  <div class="avatar">
+
+  <div class="avatarSmall">
+
     M
+
   </div>
 
 </header>
 
 
-<section class="profile">
+<!-- =========================
+     CHANNEL HEADER
+     ========================= -->
 
-  <div class="bigAvatar">
+<section class="channelHeader">
+
+
+  <div class="channelAvatar">
+
     M
+
   </div>
 
-  <h1>My MiniTube</h1>
 
-  <p>@user</p>
+  <div class="channelDetails">
 
-  <div class="stats">
 
-    <div class="stat">
-      <b id="videoCount">0</b>
-      <span>Videos</span>
+    <div class="channelName">
+
+      My Channel
+
     </div>
 
-    <div class="stat">
-      <b>0</b>
-      <span>Subscribers</span>
+
+    <div class="handle">
+
+      @mychannel
+
     </div>
 
-    <div class="stat">
-      <b>0</b>
-      <span>Following</span>
+
+    <div class="channelStats">
+
+      <span id="videoCount">
+        0
+      </span>
+
+      videos
+
+      &nbsp; • &nbsp;
+
+      <span id="subscriberStatus">
+        Not subscribed
+      </span>
+
     </div>
+
+
+    <div class="channelActions">
+
+
+      <button
+        id="subscribeButton"
+        class="subscribeButton"
+        onclick="toggleSubscribe()"
+      >
+
+        Subscribe
+
+      </button>
+
+
+      <button
+        class="editButton"
+        onclick="alert('Channel editing will be added later')"
+      >
+
+        Edit Channel
+
+      </button>
+
+
+    </div>
+
 
   </div>
 
 </section>
 
 
-<section class="section">
+<!-- =========================
+     VIDEOS
+     ========================= -->
+
+<section class="content">
+
 
   <div class="sectionTitle">
-    Your content
-  </div>
 
-  <div class="menu">
-
-    <button class="upload" onclick="goHome()">
-      <span class="menuIcon">＋</span>
-      Upload a video
-    </button>
-
-    <button onclick="showMessage('Your videos will appear here.')">
-      <span class="menuIcon">▶</span>
-      Your videos
-    </button>
-
-    <button onclick="showMessage('Liked videos will appear here.')">
-      <span class="menuIcon">♡</span>
-      Liked videos
-    </button>
-
-    <button onclick="showMessage('Watch history will appear here.')">
-      <span class="menuIcon">◷</span>
-      Watch history
-    </button>
+    Your Videos
 
   </div>
+
+
+  <div id="videos">
+
+    Loading videos...
+
+  </div>
+
 
 </section>
 
 
-<section class="section">
-
-  <div class="sectionTitle">
-    More
-  </div>
-
-  <div class="menu">
-
-    <button onclick="showMessage('Settings coming soon.')">
-      <span class="menuIcon">⚙</span>
-      Settings
-    </button>
-
-    <button onclick="showMessage('Help center coming soon.')">
-      <span class="menuIcon">?</span>
-      Help & feedback
-    </button>
-
-  </div>
-
-</section>
-
+<!-- =========================
+     BOTTOM NAV
+     ========================= -->
 
 <div class="bottom">
 
+
   <button onclick="goHome()">
+
     <b>⌂</b>
+
     Home
+
   </button>
+
 
   <button onclick="goShorts()">
+
     <b>▶</b>
+
     Shorts
+
   </button>
+
 
   <button onclick="goHome()">
+
     <b>＋</b>
+
     Create
+
   </button>
 
-  <button onclick="showMessage('Subscriptions coming soon.')">
+
+  <button onclick="goSubscriptions()">
+
     <b>□</b>
+
     Subscriptions
+
   </button>
+
 
   <button class="active">
+
     <b>●</b>
+
     You
+
   </button>
+
 
 </div>
 
 
 <script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   SUBSCRIBE SYSTEM
+   ===================================== */
+
+const SUBSCRIBE_KEY =
+  "minitube_my_channel_subscribed";
+
+
+/* =====================================
+   CHECK SUBSCRIPTION
+   ===================================== */
+
+function isSubscribed(){
+
+  return localStorage.getItem(
+    SUBSCRIBE_KEY
+  ) === "true";
+
+}
+
+
+/* =====================================
+   UPDATE SUBSCRIBE BUTTON
+   ===================================== */
+
+function updateSubscribeButton(){
+
+  const button =
+    document.getElementById(
+      "subscribeButton"
+    );
+
+  const status =
+    document.getElementById(
+      "subscriberStatus"
+    );
+
+
+  const subscribed =
+    isSubscribed();
+
+
+  if(subscribed){
+
+    button.textContent =
+      "Subscribed";
+
+    button.classList.add(
+      "subscribed"
+    );
+
+    status.textContent =
+      "Subscribed";
+
+  }else{
+
+    button.textContent =
+      "Subscribe";
+
+    button.classList.remove(
+      "subscribed"
+    );
+
+    status.textContent =
+      "Not subscribed";
+
+  }
+
+}
+
+
+/* =====================================
+   TOGGLE SUBSCRIBE
+   ===================================== */
+
+function toggleSubscribe(){
+
+  const subscribed =
+    isSubscribed();
+
+
+  localStorage.setItem(
+    SUBSCRIBE_KEY,
+    String(!subscribed)
+  );
+
+
+  updateSubscribeButton();
+
+}
+
+
+/* =====================================
+   LOAD VIDEOS
+   ===================================== */
+
+async function loadVideos(){
+
+  const container =
+    document.getElementById(
+      "videos"
+    );
+
+  const count =
+    document.getElementById(
+      "videoCount"
+    );
+
+
+  try{
+
+    container.innerHTML =
+      "Loading videos...";
+
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/videos"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "API error"
+      );
+
+    }
+
+
+    const videos =
+      await response.json();
+
+
+    count.textContent =
+      videos.length;
+
+
+    renderVideos(
+      videos
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          ⚠️
+        </div>
+
+        <h2>
+          Couldn't load videos
+        </h2>
+
+        <p>
+          Please try again later.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =====================================
+   DISPLAY VIDEOS
+   ===================================== */
+
+function renderVideos(videos){
+
+  const container =
+    document.getElementById(
+      "videos"
+    );
+
+
+  if(videos.length === 0){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          📹
+        </div>
+
+
+        <h2>
+          No videos yet
+        </h2>
+
+
+        <p>
+          Upload a video from the Home
+          page and it will appear here.
+        </p>
+
+
+        <button
+          class="homeButton"
+          onclick="goHome()"
+        >
+          Go to Home
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  videos.forEach(video => {
+
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+      "card";
+
+
+    const videoURL =
+      API_BASE +
+      "/video/" +
+      encodeURIComponent(
+        video.name
+      );
+
+
+    card.innerHTML = `
+
+      <video
+        preload="metadata"
+        src="${videoURL}"
+      ></video>
+
+
+      <div class="info">
+
+
+        <div class="title">
+
+          ${escapeHTML(
+            video.name
+          )}
+
+        </div>
+
+
+        <div class="meta">
+
+          My Channel
+
+        </div>
+
+
+        <button
+          class="watchButton"
+        >
+
+          ▶ Watch
+
+        </button>
+
+
+      </div>
+
+    `;
+
+
+    const videoElement =
+      card.querySelector(
+        "video"
+      );
+
+
+    const title =
+      card.querySelector(
+        ".title"
+      );
+
+
+    const watchButton =
+      card.querySelector(
+        ".watchButton"
+      );
+
+
+    function openVideo(){
+
+      window.location.href =
+        "watch.html?video=" +
+        encodeURIComponent(
+          video.name
+        );
+
+    }
+
+
+    videoElement.addEventListener(
+      "click",
+      openVideo
+    );
+
+
+    title.addEventListener(
+      "click",
+      openVideo
+    );
+
+
+    watchButton.addEventListener(
+      "click",
+      openVideo
+    );
+
+
+    container.appendChild(
+      card
+    );
+
+  });
+
+}
+
+
+/* =====================================
+   SECURITY
+   ===================================== */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
 
 function goHome(){
 
@@ -354,50 +1078,25 @@ function goShorts(){
 }
 
 
-function showMessage(message){
+function goSubscriptions(){
 
-  alert(message);
-
-}
-
-
-/* Count uploaded videos */
-
-async function loadVideoCount(){
-
-  try{
-
-    const API_BASE =
-      "https://wispy-base-65bb.naradsocial7.workers.dev";
-
-    const response =
-      await fetch(
-        API_BASE + "/api/videos"
-      );
-
-    if(!response.ok){
-      return;
-    }
-
-    const videos =
-      await response.json();
-
-    document.getElementById(
-      "videoCount"
-    ).textContent =
-      videos.length;
-
-  }catch(error){
-
-    console.log(error);
-
-  }
+  window.location.href =
+    "subscriptions.html";
 
 }
 
-loadVideoCount();
+
+/* =====================================
+   START
+   ===================================== */
+
+updateSubscribeButton();
+
+loadVideos();
 
 </script>
 
+
 </body>
+
 </html>
