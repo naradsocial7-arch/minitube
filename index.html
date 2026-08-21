@@ -2,412 +2,380 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MiniTube</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
+*{box-sizing:border-box}
 body{
-  background:#0f0f0f;
-  color:white;
-  padding-bottom:75px;
+ margin:0;background:#0f0f0f;color:#fff;
+ font-family:Arial,sans-serif;padding-bottom:75px
 }
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#0f0f0f;
-  padding:12px 15px;
-  border-bottom:1px solid #292929;
+header{
+ position:sticky;top:0;z-index:10;background:#111;
+ padding:12px;border-bottom:1px solid #292929
 }
-
-.top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.logo{
-  font-size:22px;
-  font-weight:800;
-  color:#ff0033;
-}
-
-.logo span{
-  color:white;
-}
-
+.top{display:flex;align-items:center;gap:12px}
+.logo{font-size:24px;font-weight:800;white-space:nowrap}
+.logo b{color:#ff0033}
 .search{
-  flex:1;
-  max-width:600px;
-  background:#222;
-  border:1px solid #444;
-  border-radius:25px;
-  padding:11px 16px;
-  color:white;
-  outline:none;
+ flex:1;background:#222;border:1px solid #444;
+ border-radius:25px;padding:12px 16px;color:white;
+ outline:none;font-size:15px
 }
-
-.profile{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  background:#7c4dff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:bold;
+.avatar{
+ width:42px;height:42px;border-radius:50%;
+ background:#7c4dff;display:grid;place-items:center;
+ font-weight:bold
 }
-
 .categories{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:12px 0 2px;
+ display:flex;gap:10px;overflow-x:auto;padding:12px 0 2px
 }
-
-.categories::-webkit-scrollbar{
-  display:none;
+.categories button{
+ border:0;border-radius:22px;padding:10px 18px;
+ background:#292929;color:white;white-space:nowrap
 }
-
-.category{
-  white-space:nowrap;
-  background:#272727;
-  color:white;
-  border:0;
-  border-radius:18px;
-  padding:8px 15px;
-}
-
-.category.active{
-  background:white;
-  color:black;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:18px 12px;
-}
+.categories button.active{background:white;color:#111}
 
 .hero{
-  background:linear-gradient(135deg,#24112d,#171717);
-  border-radius:14px;
-  padding:25px 18px;
-  margin-bottom:22px;
+ margin:20px;border-radius:22px;padding:28px;
+ background:linear-gradient(120deg,#24132d,#151515)
 }
-
-.hero h1{
-  font-size:28px;
-  margin-bottom:8px;
-}
-
-.hero p{
-  color:#aaa;
-  margin-bottom:16px;
-}
-
+.hero h1{margin:0 0 10px;font-size:30px}
+.hero p{color:#aaa}
 .upload{
-  background:#ff0033;
-  color:white;
-  border:0;
-  padding:11px 18px;
-  border-radius:22px;
-  font-weight:bold;
+ background:#ff0033;color:white;border:0;
+ border-radius:28px;padding:15px 22px;font-weight:bold;
+ font-size:16px
 }
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px 12px;
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:16px;padding:0 20px
 }
-
-.card{
-  cursor:pointer;
-}
-
+.card{cursor:pointer}
 .thumb{
-  width:100%;
-  aspect-ratio:16/9;
-  border-radius:10px;
-  background:linear-gradient(135deg,#333,#111);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:35px;
-  margin-bottom:9px;
+ width:100%;aspect-ratio:16/9;background:#222;
+ border-radius:15px;display:grid;place-items:center;
+ overflow:hidden
 }
-
-.card h3{
-  font-size:15px;
-  line-height:1.35;
-}
-
-.meta{
-  color:#999;
-  font-size:13px;
-  margin-top:5px;
-}
-
-.like{
-  background:none;
-  color:#aaa;
-  border:0;
-  margin-top:7px;
-  font-size:14px;
-}
-
-.like.liked{
-  color:#ff0033;
-}
-
-.empty{
-  text-align:center;
-  padding:50px 10px;
-  color:#888;
-  display:none;
-}
+.thumb video{width:100%;height:100%;object-fit:cover}
+.play{font-size:45px}
+.title{font-size:17px;font-weight:bold;margin-top:9px}
+.meta{color:#999;margin-top:5px;font-size:14px}
+.like{color:#ccc;margin-top:8px}
 
 .bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:65px;
-  background:#181818;
-  border-top:1px solid #333;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:20;
+ position:fixed;bottom:0;left:0;right:0;
+ height:70px;background:#151515;border-top:1px solid #333;
+ display:flex;justify-content:space-around;z-index:20
 }
-
-.nav{
-  color:#aaa;
-  background:none;
-  border:0;
-  font-size:12px;
-  text-align:center;
+.bottom button{
+ background:none;border:0;color:#aaa;font-size:13px
 }
+.bottom button span{display:block;font-size:25px;margin-bottom:3px}
+.bottom button.active{color:white}
 
-.nav b{
-  display:block;
-  font-size:21px;
-  margin-bottom:3px;
+.modal{
+ display:none;position:fixed;inset:0;background:#000b;
+ z-index:50;align-items:center;justify-content:center;padding:20px
 }
-
-.nav.active{
-  color:white;
+.box{
+ background:#181818;border-radius:20px;padding:22px;
+ width:100%;max-width:430px
 }
-
-@media(max-width:850px){
-  .grid{
-    grid-template-columns:repeat(3,1fr);
-  }
+.box h2{margin-top:0}
+.box input,.box select{
+ width:100%;padding:13px;margin:8px 0;
+ border-radius:10px;border:1px solid #444;
+ background:#252525;color:white
+}
+.close{
+ float:right;background:none;border:0;color:white;
+ font-size:25px
+}
+.primary{
+ width:100%;padding:14px;border:0;border-radius:12px;
+ background:#ff0033;color:white;font-weight:bold;margin-top:10px
+}
+.empty{
+ text-align:center;color:#888;padding:50px 20px
 }
 
 @media(max-width:600px){
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-    gap:20px 10px;
-  }
-
-  .hero h1{
-    font-size:23px;
-  }
-
-  .search{
-    max-width:none;
-  }
+ .grid{grid-template-columns:repeat(2,1fr);gap:14px;padding:0 14px}
+ .hero{margin:14px;padding:22px}
+ .title{font-size:15px}
 }
 </style>
 </head>
 
 <body>
 
-<header class="header">
-  <div class="top">
-    <div class="logo">▶ <span>MiniTube</span></div>
+<header>
+ <div class="top">
+  <div class="logo"><b>▶</b> MiniTube</div>
+  <input id="search" class="search" placeholder="Search videos...">
+  <div class="avatar">M</div>
+ </div>
 
-    <input
-      id="search"
-      class="search"
-      type="search"
-      placeholder="Search videos..."
-      oninput="searchVideos()"
-    >
-
-    <div class="profile">M</div>
-  </div>
-
-  <div class="categories">
-    <button class="category active">All</button>
-    <button class="category">Music</button>
-    <button class="category">Gaming</button>
-    <button class="category">News</button>
-    <button class="category">Sports</button>
-    <button class="category">Shorts</button>
-  </div>
+ <div class="categories">
+  <button class="active" onclick="category('All',this)">All</button>
+  <button onclick="category('Music',this)">Music</button>
+  <button onclick="category('Gaming',this)">Gaming</button>
+  <button onclick="category('News',this)">News</button>
+  <button onclick="category('Sports',this)">Sports</button>
+  <button onclick="category('Shorts',this)">Shorts</button>
+ </div>
 </header>
 
-<main class="container">
+<section class="hero">
+ <h1>Welcome to MiniTube</h1>
+ <p>Your experimental video-sharing platform.</p>
+ <button class="upload" onclick="openUpload()">＋ Upload Video</button>
+</section>
 
-  <section class="hero">
-    <h1>Welcome to MiniTube</h1>
-    <p>Your experimental video-sharing platform.</p>
-    <button class="upload" onclick="uploadMessage()">
-      ＋ Upload Video
-    </button>
-  </section>
+<main id="feed" class="grid"></main>
 
-  <div id="videoGrid" class="grid">
-
-    <article class="card" data-title="Amazing Nature Adventure">
-      <div class="thumb">🌄</div>
-      <h3>Amazing Nature Adventure</h3>
-      <div class="meta">MiniTube Creator • 12K views</div>
-      <button class="like" onclick="likeVideo(this)">♡ Like</button>
-    </article>
-
-    <article class="card" data-title="Ultimate Gaming Challenge">
-      <div class="thumb">🎮</div>
-      <h3>Ultimate Gaming Challenge</h3>
-      <div class="meta">GameZone • 8.4K views</div>
-      <button class="like" onclick="likeVideo(this)">♡ Like</button>
-    </article>
-
-    <article class="card" data-title="Top 10 Amazing Places">
-      <div class="thumb">✈️</div>
-      <h3>Top 10 Amazing Places</h3>
-      <div class="meta">Travel World • 21K views</div>
-      <button class="like" onclick="likeVideo(this)">♡ Like</button>
-    </article>
-
-    <article class="card" data-title="Daily News Update">
-      <div class="thumb">📰</div>
-      <h3>Daily News Update</h3>
-      <div class="meta">Mini News • 5.2K views</div>
-      <button class="like" onclick="likeVideo(this)">♡ Like</button>
-    </article>
-
-    <article class="card" data-title="Street Football Skills">
-      <div class="thumb">⚽</div>
-      <h3>Street Football Skills</h3>
-      <div class="meta">Sports Hub • 15K views</div>
-      <button class="like" onclick="likeVideo(this)">♡ Like</button>
-    </article>
-
-    <article class="card" data-title="Relaxing Music">
-      <div class="thumb">🎵</div>
-      <h3>Relaxing Music</h3>
-      <div class="meta">Music Studio • 31K views</div>
-      <button class="like" onclick="likeVideo(this)">♡ Like</button>
-    </article>
-
-  </div>
-
-  <div id="empty" class="empty">
-    No videos found.
-  </div>
-
-</main>
+<div id="empty" class="empty" style="display:none">
+ No videos found.<br><br>
+ Upload your first video 🚀
+</div>
 
 <nav class="bottom">
-  <button class="nav active" onclick="home()">
-    <b>⌂</b>Home
-  </button>
-
-  <button class="nav" onclick="showShorts()">
-    <b>▶</b>Shorts
-  </button>
-
-  <button class="nav" onclick="uploadMessage()">
-    <b>＋</b>Create
-  </button>
-
-  <button class="nav" onclick="showSubscriptions()">
-    <b>▣</b>Subscriptions
-  </button>
-
-  <button class="nav" onclick="showProfile()">
-    <b>●</b>You
-  </button>
+ <button class="active" onclick="showHome(this)">
+  <span>⌂</span>Home
+ </button>
+ <button onclick="category('Shorts',this)">
+  <span>▶</span>Shorts
+ </button>
+ <button onclick="openUpload()">
+  <span>＋</span>Create
+ </button>
+ <button onclick="alert('Subscriptions coming soon!')">
+  <span>▣</span>Subscriptions
+ </button>
+ <button onclick="alert('Your MiniTube profile')">
+  <span>●</span>You
+ </button>
 </nav>
 
+<div id="modal" class="modal">
+ <div class="box">
+  <button class="close" onclick="closeUpload()">×</button>
+  <h2>Upload Video</h2>
+
+  <input id="videoTitle" placeholder="Video title">
+
+  <select id="videoCategory">
+   <option>Music</option>
+   <option>Gaming</option>
+   <option>News</option>
+   <option>Sports</option>
+   <option>Shorts</option>
+   <option>Other</option>
+  </select>
+
+  <input id="videoFile" type="file" accept="video/*">
+
+  <button class="primary" onclick="saveVideo()">
+   Upload to MiniTube
+  </button>
+ </div>
+</div>
+
+<div id="player" class="modal">
+ <div class="box">
+  <button class="close" onclick="closePlayer()">×</button>
+  <h2 id="playerTitle"></h2>
+  <video id="mainVideo" controls playsinline
+   style="width:100%;border-radius:12px"></video>
+ </div>
+</div>
+
 <script>
+let videos=[];
+let currentCategory="All";
 
-function likeVideo(button){
-  button.classList.toggle("liked");
+const DB="MiniTubeDB";
+const STORE="videos";
 
-  if(button.classList.contains("liked")){
-    button.innerHTML="♥ Liked";
-  }else{
-    button.innerHTML="♡ Like";
-  }
+function openDB(){
+ return new Promise((resolve,reject)=>{
+  const r=indexedDB.open(DB,1);
+
+  r.onupgradeneeded=e=>{
+   e.target.result.createObjectStore(STORE,{keyPath:"id"})
+  };
+
+  r.onsuccess=()=>resolve(r.result);
+  r.onerror=()=>reject(r.error);
+ });
 }
 
-function uploadMessage(){
-  alert("Upload system coming in the next phase!");
+async function saveToDB(video){
+ const db=await openDB();
+ return new Promise((resolve,reject)=>{
+  const tx=db.transaction(STORE,"readwrite");
+  tx.objectStore(STORE).put(video);
+  tx.oncomplete=resolve;
+  tx.onerror=()=>reject(tx.error);
+ });
 }
 
-function showShorts(){
-  alert("Shorts system will be added in Phase 2.");
+async function getVideos(){
+ const db=await openDB();
+ return new Promise((resolve,reject)=>{
+  const tx=db.transaction(STORE,"readonly");
+  const r=tx.objectStore(STORE).getAll();
+  r.onsuccess=()=>resolve(r.result);
+  r.onerror=()=>reject(r.error);
+ });
 }
 
-function showSubscriptions(){
-  alert("Subscriptions will be added soon.");
+async function load(){
+ videos=await getVideos();
+ render();
 }
 
-function showProfile(){
-  alert("Your creator profile will be added soon.");
+function render(){
+ const feed=document.getElementById("feed");
+ const empty=document.getElementById("empty");
+ feed.innerHTML="";
+
+ const search=document.getElementById("search").value.toLowerCase();
+
+ const filtered=videos.filter(v=>{
+  const cat=currentCategory==="All" || v.category===currentCategory;
+  const text=v.title.toLowerCase().includes(search);
+  return cat && text;
+ });
+
+ if(filtered.length===0){
+  empty.style.display="block";
+  return;
+ }
+
+ empty.style.display="none";
+
+ filtered.forEach(v=>{
+  const url=URL.createObjectURL(v.file);
+
+  const card=document.createElement("article");
+  card.className="card";
+
+  card.innerHTML=`
+   <div class="thumb">
+    <video src="${url}" muted preload="metadata"></video>
+   </div>
+   <div class="title">${escapeHTML(v.title)}</div>
+   <div class="meta">You • ${v.category}</div>
+   <div class="like" onclick="event.stopPropagation();like('${v.id}')">
+    ♡ Like
+   </div>
+  `;
+
+  card.onclick=()=>play(v,url);
+
+  feed.appendChild(card);
+ });
 }
 
-function home(){
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+function escapeHTML(text){
+ return text.replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#039;"
+ }[m]));
 }
 
-function searchVideos(){
-
-  const query =
-    document.getElementById("search")
-    .value
-    .toLowerCase();
-
-  const cards =
-    document.querySelectorAll(".card");
-
-  let found=0;
-
-  cards.forEach(card=>{
-
-    const title =
-      card.dataset.title.toLowerCase();
-
-    if(title.includes(query)){
-      card.style.display="";
-      found++;
-    }else{
-      card.style.display="none";
-    }
-
-  });
-
-  document.getElementById("empty").style.display =
-    found === 0 ? "block" : "none";
+function openUpload(){
+ document.getElementById("modal").style.display="flex";
 }
 
+function closeUpload(){
+ document.getElementById("modal").style.display="none";
+}
+
+async function saveVideo(){
+ const title=document.getElementById("videoTitle").value.trim();
+ const category=document.getElementById("videoCategory").value;
+ const file=document.getElementById("videoFile").files[0];
+
+ if(!title){
+  alert("Video title likho.");
+  return;
+ }
+
+ if(!file){
+  alert("Pehle video select karo.");
+  return;
+ }
+
+ const video={
+  id:Date.now().toString(),
+  title,
+  category,
+  file
+ };
+
+ await saveToDB(video);
+
+ document.getElementById("videoTitle").value="";
+ document.getElementById("videoFile").value="";
+
+ closeUpload();
+
+ await load();
+
+ alert("🎉 Video MiniTube mein upload ho gaya!");
+}
+
+function play(v,url){
+ document.getElementById("playerTitle").textContent=v.title;
+
+ const player=document.getElementById("mainVideo");
+ player.src=url;
+
+ document.getElementById("player").style.display="flex";
+ player.play().catch(()=>{});
+}
+
+function closePlayer(){
+ const player=document.getElementById("mainVideo");
+ player.pause();
+ player.src="";
+ document.getElementById("player").style.display="none";
+}
+
+function category(cat,button){
+ currentCategory=cat;
+
+ document.querySelectorAll(".categories button")
+ .forEach(b=>b.classList.remove("active"));
+
+ if(button && button.classList.contains("categories"))
+  button.classList.add("active");
+
+ render();
+}
+
+function showHome(button){
+ currentCategory="All";
+ document.querySelectorAll(".bottom button")
+ .forEach(b=>b.classList.remove("active"));
+ button.classList.add("active");
+ render();
+}
+
+function like(id){
+ alert("❤️ Liked!");
+}
+
+document.getElementById("search")
+ .addEventListener("input",render);
+
+load();
 </script>
 
 </body>
-  </html>
+</html>
