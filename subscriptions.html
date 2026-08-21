@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -24,6 +25,11 @@ body{
   font-family:Arial,sans-serif;
   padding-bottom:80px;
 }
+
+
+/* =========================
+   HEADER
+   ========================= */
 
 header{
   position:sticky;
@@ -51,6 +57,7 @@ header{
 .logo{
   font-size:23px;
   font-weight:800;
+  white-space:nowrap;
 }
 
 .logo span{
@@ -71,8 +78,12 @@ header{
   place-items:center;
 
   font-weight:bold;
-  font-size:18px;
 }
+
+
+/* =========================
+   PAGE TITLE
+   ========================= */
 
 .pageTitle{
   padding:25px 20px 10px;
@@ -88,38 +99,72 @@ header{
   margin-top:8px;
 }
 
-.channels{
-  display:flex;
-  gap:14px;
-  overflow-x:auto;
-  padding:15px 20px 25px;
-}
 
-.channel{
-  min-width:90px;
-  text-align:center;
+/* =========================
+   CHANNEL
+   ========================= */
+
+.channelBox{
+  margin:10px 20px 25px;
+
+  background:#181818;
+  border-radius:16px;
+
+  padding:16px;
+
+  display:flex;
+  align-items:center;
+  gap:14px;
 }
 
 .channelAvatar{
-  width:62px;
-  height:62px;
-  margin:auto;
+  width:55px;
+  height:55px;
 
   border-radius:50%;
-  background:#292929;
+  background:#7c4dff;
 
   display:grid;
   place-items:center;
 
-  font-size:23px;
   font-weight:bold;
+  font-size:20px;
+}
+
+.channelInfo{
+  flex:1;
 }
 
 .channelName{
-  margin-top:8px;
-  color:#ddd;
-  font-size:13px;
+  font-weight:bold;
+  font-size:16px;
 }
+
+.channelStatus{
+  color:#999;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.unsubscribe{
+  background:#292929;
+  color:white;
+
+  border:1px solid #555;
+
+  border-radius:22px;
+
+  padding:9px 15px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+
+/* =========================
+   FEED
+   ========================= */
 
 .feed{
   padding:0 20px;
@@ -131,12 +176,61 @@ header{
   margin-bottom:15px;
 }
 
+.grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(260px,1fr)
+    );
+
+  gap:18px;
+}
+
+.card{
+  background:#181818;
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.card video{
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+  background:#000;
+}
+
+.info{
+  padding:12px;
+}
+
+.title{
+  font-size:17px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.meta{
+  color:#999;
+  font-size:13px;
+  margin-top:7px;
+}
+
+
+/* =========================
+   EMPTY
+   ========================= */
+
 .empty{
   background:#181818;
+
   border:1px solid #292929;
+
   border-radius:16px;
 
   padding:45px 20px;
+
   text-align:center;
 }
 
@@ -162,6 +256,7 @@ header{
   color:white;
 
   border:0;
+
   border-radius:25px;
 
   padding:13px 22px;
@@ -172,8 +267,14 @@ header{
   cursor:pointer;
 }
 
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
 .bottom{
   position:fixed;
+
   bottom:0;
   left:0;
   right:0;
@@ -181,9 +282,11 @@ header{
   height:70px;
 
   background:#151515;
+
   border-top:1px solid #333;
 
   display:flex;
+
   justify-content:space-around;
   align-items:center;
 
@@ -193,21 +296,32 @@ header{
 .bottom button{
   background:none;
   border:0;
+
   color:#aaa;
+
   font-size:13px;
+
   cursor:pointer;
 }
 
 .bottom button b{
   display:block;
+
   font-size:22px;
+
   color:white;
+
   margin-bottom:3px;
 }
 
 .bottom .active{
   color:white;
 }
+
+
+/* =========================
+   MOBILE
+   ========================= */
 
 @media(max-width:600px){
 
@@ -216,13 +330,17 @@ header{
     padding-right:16px;
   }
 
-  .channels{
-    padding-left:16px;
-    padding-right:16px;
+  .channelBox{
+    margin-left:16px;
+    margin-right:16px;
   }
 
   .feed{
     padding:0 16px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
   }
 
 }
@@ -231,8 +349,13 @@ header{
 
 </head>
 
+
 <body>
 
+
+<!-- =========================
+     HEADER
+     ========================= -->
 
 <header>
 
@@ -243,11 +366,16 @@ header{
     ‹
   </button>
 
+
   <div class="logo">
+
     <span>▶</span> MiniTube
+
   </div>
 
+
   <div class="spacer"></div>
+
 
   <div class="avatar">
     M
@@ -255,6 +383,10 @@ header{
 
 </header>
 
+
+<!-- =========================
+     TITLE
+     ========================= -->
 
 <section class="pageTitle">
 
@@ -269,35 +401,16 @@ header{
 </section>
 
 
-<section class="channels">
+<!-- =========================
+     CHANNEL AREA
+     ========================= -->
 
-  <div class="channel">
-
-    <div class="channelAvatar">
-      +
-    </div>
-
-    <div class="channelName">
-      Discover
-    </div>
-
-  </div>
+<div id="channelArea"></div>
 
 
-  <div class="channel">
-
-    <div class="channelAvatar">
-      M
-    </div>
-
-    <div class="channelName">
-      My Channel
-    </div>
-
-  </div>
-
-</section>
-
+<!-- =========================
+     VIDEO FEED
+     ========================= -->
 
 <section class="feed">
 
@@ -306,68 +419,449 @@ header{
   </div>
 
 
-  <div class="empty">
-
-    <div class="emptyIcon">
-      📺
-    </div>
-
-    <h2>
-      Nothing here yet
-    </h2>
-
-    <p>
-      Subscribe to channels to see
-      their latest videos here.
-    </p>
-
-    <button
-      class="homeBtn"
-      onclick="goHome()"
-    >
-      Explore videos
-    </button>
-
-  </div>
+  <div id="videos"></div>
 
 </section>
 
 
+<!-- =========================
+     BOTTOM NAV
+     ========================= -->
+
 <div class="bottom">
 
   <button onclick="goHome()">
+
     <b>⌂</b>
+
     Home
+
   </button>
 
 
   <button onclick="goShorts()">
+
     <b>▶</b>
+
     Shorts
+
   </button>
 
 
   <button onclick="goHome()">
+
     <b>＋</b>
+
     Create
+
   </button>
 
 
   <button class="active">
+
     <b>□</b>
+
     Subscriptions
+
   </button>
 
 
   <button onclick="goYou()">
+
     <b>●</b>
+
     You
+
   </button>
 
 </div>
 
 
 <script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   SUBSCRIBE KEY
+   ===================================== */
+
+const SUBSCRIBE_KEY =
+  "minitube_my_channel_subscribed";
+
+
+let allVideos = [];
+
+
+/* =====================================
+   CHECK SUBSCRIPTION
+   ===================================== */
+
+function isSubscribed(){
+
+  return localStorage.getItem(
+    SUBSCRIBE_KEY
+  ) === "true";
+
+}
+
+
+/* =====================================
+   UNSUBSCRIBE
+   ===================================== */
+
+function unsubscribe(){
+
+  localStorage.setItem(
+    SUBSCRIBE_KEY,
+    "false"
+  );
+
+  renderPage();
+
+}
+
+
+/* =====================================
+   CHANNEL
+   ===================================== */
+
+function renderChannel(){
+
+  const area =
+    document.getElementById(
+      "channelArea"
+    );
+
+
+  if(!isSubscribed()){
+
+    area.innerHTML = `
+
+      <div class="channelBox">
+
+        <div class="channelAvatar">
+          M
+        </div>
+
+
+        <div class="channelInfo">
+
+          <div class="channelName">
+            My Channel
+          </div>
+
+
+          <div class="channelStatus">
+            You're not subscribed
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  area.innerHTML = `
+
+    <div class="channelBox">
+
+      <div class="channelAvatar">
+        M
+      </div>
+
+
+      <div class="channelInfo">
+
+        <div class="channelName">
+          My Channel
+        </div>
+
+
+        <div class="channelStatus">
+          Subscribed
+        </div>
+
+      </div>
+
+
+      <button
+        class="unsubscribe"
+        onclick="unsubscribe()"
+      >
+        Subscribed
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================
+   LOAD VIDEOS
+   ===================================== */
+
+async function loadVideos(){
+
+  const container =
+    document.getElementById(
+      "videos"
+    );
+
+
+  if(!isSubscribed()){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          🔔
+        </div>
+
+
+        <h2>
+          Subscribe to My Channel
+        </h2>
+
+
+        <p>
+          Subscribe to see the latest
+          videos from this channel here.
+        </p>
+
+
+        <button
+          class="homeBtn"
+          onclick="goHome()"
+        >
+          Explore videos
+        </button>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    "Loading videos...";
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/videos"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "API error"
+      );
+
+    }
+
+
+    allVideos =
+      await response.json();
+
+
+    renderVideos(
+      allVideos
+    );
+
+
+  }catch(error){
+
+    console.error(error);
+
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          ⚠️
+        </div>
+
+
+        <h2>
+          Couldn't load videos
+        </h2>
+
+
+        <p>
+          Please try again later.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =====================================
+   DISPLAY VIDEOS
+   ===================================== */
+
+function renderVideos(videos){
+
+  const container =
+    document.getElementById(
+      "videos"
+    );
+
+
+  if(videos.length === 0){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          📺
+        </div>
+
+
+        <h2>
+          No videos yet
+        </h2>
+
+
+        <p>
+          This channel hasn't uploaded
+          any videos yet.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML = "";
+
+
+  videos.forEach(video => {
+
+    const card =
+      document.createElement(
+        "div"
+      );
+
+
+    card.className =
+      "card";
+
+
+    const videoURL =
+      API_BASE +
+      "/video/" +
+      encodeURIComponent(
+        video.name
+      );
+
+
+    card.innerHTML = `
+
+      <video
+        controls
+        preload="metadata"
+        src="${videoURL}"
+      ></video>
+
+
+      <div class="info">
+
+        <div class="title">
+          ${escapeHTML(
+            video.name
+          )}
+        </div>
+
+
+        <div class="meta">
+          My Channel
+        </div>
+
+      </div>
+
+    `;
+
+
+    container.appendChild(
+      card
+    );
+
+  });
+
+}
+
+
+/* =====================================
+   SECURITY
+   ===================================== */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
 
 function goHome(){
 
@@ -392,8 +886,24 @@ function goYou(){
 
 }
 
+
+/* =====================================
+   START
+   ===================================== */
+
+function renderPage(){
+
+  renderChannel();
+
+  loadVideos();
+
+}
+
+
+renderPage();
+
 </script>
 
-
 </body>
+
 </html>
