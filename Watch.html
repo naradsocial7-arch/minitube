@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>MiniTube - Watch</title>
+
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  background:#0f0f0f;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:30px;
+}
+
+
+/* =====================================
+   HEADER
+   ===================================== */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.back{
+  background:none;
+  border:0;
+  color:white;
+  font-size:28px;
+  cursor:pointer;
+  padding:0 4px;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.logo span{
+  color:#ff0033;
+}
+
+.search{
+  flex:1;
+  background:#222;
+  border:1px solid #444;
+  border-radius:30px;
+  padding:13px 17px;
+  color:white;
+  font-size:16px;
+  outline:none;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+}
+
+
+/* =====================================
+   WATCH AREA
+   ===================================== */
+
+.watch{
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+}
+
+.player{
+  width:100%;
+  background:#000;
+}
+
+.player video{
+  width:100%;
+  max-height:650px;
+  display:block;
+  background:#000;
+}
+
+
+/* =====================================
+   INFO
+   ===================================== */
+
+.info{
+  padding:18px;
+}
+
+.title{
+  font-size:23px;
+  font-weight:700;
+  line-height:1.3;
+  word-break:break-word;
+}
+
+.meta{
+  color:#999;
+  margin-top:8px;
+  font-size:14px;
+}
+
+
+/* =====================================
+   ACTIONS
+   ===================================== */
+
+.actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  padding-bottom:16px;
+  border-bottom:1px solid #292929;
+}
+
+.actionBtn{
+  background:#222;
+  border:0;
+  color:#ddd;
+  border-radius:22px;
+  padding:11px 17px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.actionBtn:hover{
+  background:#333;
+}
+
+.likeBtn.liked{
+  color:#ff0033;
+}
+
+
+/* =====================================
+   DESCRIPTION
+   ===================================== */
+
+.description{
+  margin-top:18px;
+  background:#181818;
+  border-radius:14px;
+  padding:16px;
+  color:#ccc;
+  line-height:1.5;
+}
+
+.descriptionTitle{
+  color:white;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+
+/* =====================================
+   STATUS
+   ===================================== */
+
+.status{
+  text-align:center;
+  color:#aaa;
+  padding:40px 20px;
+}
+
+
+/* =====================================
+   MOBILE
+   ===================================== */
+
+@media(max-width:600px){
+
+  header{
+    padding:10px 12px;
+  }
+
+  .top{
+    gap:8px;
+  }
+
+  .back{
+    font-size:25px;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+
+  .search{
+    min-width:0;
+    padding:11px 13px;
+    font-size:14px;
+  }
+
+  .avatar{
+    width:38px;
+    height:38px;
+    flex-shrink:0;
+  }
+
+  .title{
+    font-size:20px;
+  }
+
+  .info{
+    padding:15px;
+  }
+
+  .player video{
+    max-height:none;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================
+     HEADER
+     ===================================== -->
+
+<header>
+
+  <div class="top">
+
+    <button
+      class="back"
+      onclick="goHome()"
+      aria-label="Back"
+    >
+      ‹
+    </button>
+
+    <div class="logo">
+      <span>▶</span> MiniTube
+    </div>
+
+    <input
+      id="search"
+      class="search"
+      placeholder="Search videos..."
+      onkeydown="searchVideo(event)"
+    >
+
+    <div class="avatar">
+      M
+    </div>
+
+  </div>
+
+</header>
+
+
+
+<!-- =====================================
+     WATCH PAGE
+     ===================================== -->
+
+<main
+  id="watch"
+  class="watch"
+>
+
+  <div
+    id="status"
+    class="status"
+  >
+    Loading video...
+  </div>
+
+</main>
+
+
+
+<script>
+
+/* =====================================
+   MINITUBE WATCH PAGE
+   LIKE + VIEWS + SHARE
+   ===================================== */
+
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+
+/* =====================================
+   GET VIDEO NAME
+   ===================================== */
+
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const videoName =
+  params.get("v");
+
+
+
+/* =====================================
+   LOAD VIDEO
+   ===================================== */
+
+function loadVideo(){
+
+  const watch =
+    document.getElementById("watch");
+
+
+  const status =
+    document.getElementById("status");
+
+
+  if(!videoName){
+
+    status.textContent =
+      "Video not found.";
+
+    return;
+
+  }
+
+
+  const decodedName =
+    decodeURIComponent(videoName);
+
+
+  const encodedName =
+    encodeURIComponent(decodedName);
+
+
+  const videoURL =
+    API_BASE +
+    "/video/" +
+    encodedName;
+
+
+
+  /* =================================
+     LOCAL STORAGE KEYS
+     ================================= */
+
+  const likeKey =
+    "likes_" + decodedName;
+
+
+  const likedKey =
+    "liked_" + decodedName;
+
+
+  const viewsKey =
+    "views_" + decodedName;
+
+
+  const viewedKey =
+    "viewed_" + decodedName;
+
+
+
+  let likes =
+    Number(
+      localStorage.getItem(
+        likeKey
+      ) || 0
+    );
+
+
+  let liked =
+    localStorage.getItem(
+      likedKey
+    ) === "true";
+
+
+  let views =
+    Number(
+      localStorage.getItem(
+        viewsKey
+      ) || 0
+    );
+
+
+
+  /* =================================
+     PAGE
+     ================================= */
+
+  watch.innerHTML = `
+
+    <div class="player">
+
+      <video
+        id="videoPlayer"
+        controls
+        autoplay
+        playsinline
+        preload="metadata"
+        src="${videoURL}"
+      ></video>
+
+    </div>
+
+
+    <div class="info">
+
+      <div class="title">
+        ${escapeHTML(decodedName)}
+      </div>
+
+
+      <div class="meta">
+        You • Other
+      </div>
+
+
+      <div class="actions">
+
+
+        <button
+          id="likeButton"
+          class="actionBtn likeBtn ${liked ? "liked" : ""}"
+        >
+          ${liked ? "♥" : "♡"}
+          Like
+          <span id="likeCount">
+            ${likes}
+          </span>
+        </button>
+
+
+        <button
+          class="actionBtn"
+          id="viewButton"
+        >
+          👁️
+          <span id="viewCount">
+            ${views}
+          </span>
+          views
+        </button>
+
+
+        <button
+          class="actionBtn"
+          onclick="shareVideo()"
+        >
+          ↗ Share
+        </button>
+
+
+      </div>
+
+
+      <div class="description">
+
+        <div class="descriptionTitle">
+          About this video
+        </div>
+
+        <div>
+          ${escapeHTML(decodedName)}
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+
+  /* =================================
+     LIKE BUTTON
+     ================================= */
+
+  const likeButton =
+    document.getElementById(
+      "likeButton"
+    );
+
+
+  const likeCount =
+    document.getElementById(
+      "likeCount"
+    );
+
+
+  likeButton.addEventListener(
+    "click",
+    function(){
+
+      liked =
+        !liked;
+
+
+      if(liked){
+
+        likes++;
+
+      }else{
+
+        if(likes > 0){
+          likes--;
+        }
+
+      }
+
+
+      localStorage.setItem(
+        likeKey,
+        likes
+      );
+
+
+      localStorage.setItem(
+        likedKey,
+        liked
+      );
+
+
+      likeButton.classList.toggle(
+        "liked",
+        liked
+      );
+
+
+      likeButton.innerHTML =
+        `${liked ? "♥" : "♡"}
+         Like
+         <span id="likeCount">
+         ${likes}
+         </span>`;
+
+    }
+  );
+
+
+
+  /* =================================
+     VIEW COUNTER
+     ================================= */
+
+  const videoPlayer =
+    document.getElementById(
+      "videoPlayer"
+    );
+
+
+  const viewCount =
+    document.getElementById(
+      "viewCount"
+    );
+
+
+  let counted =
+    localStorage.getItem(
+      viewedKey
+    ) === "true";
+
+
+  let viewTimer;
+
+
+
+  videoPlayer.addEventListener(
+    "play",
+    function(){
+
+      if(counted){
+        return;
+      }
+
+
+      clearTimeout(
+        viewTimer
+      );
+
+
+      viewTimer =
+        setTimeout(
+          function(){
+
+            views++;
+
+
+            localStorage.setItem(
+              viewsKey,
+              views
+            );
+
+
+            localStorage.setItem(
+              viewedKey,
+              "true"
+            );
+
+
+            viewCount.textContent =
+              views;
+
+
+            counted = true;
+
+          },
+          3000
+        );
+
+    }
+  );
+
+
+
+  videoPlayer.addEventListener(
+    "pause",
+    function(){
+
+      clearTimeout(
+        viewTimer
+      );
+
+    }
+  );
+
+
+
+  videoPlayer.addEventListener(
+    "ended",
+    function(){
+
+      clearTimeout(
+        viewTimer
+      );
+
+    }
+  );
+
+}
+
+
+
+/* =====================================
+   SHARE VIDEO
+   ===================================== */
+
+async function shareVideo(){
+
+  const url =
+    window.location.href;
+
+
+  const title =
+    videoName
+      ? decodeURIComponent(
+          videoName
+        )
+      : "MiniTube Video";
+
+
+  try{
+
+    if(
+      navigator.share
+    ){
+
+      await navigator.share({
+
+        title:
+          title,
+
+        text:
+          "Watch this video on MiniTube",
+
+        url:
+          url
+
+      });
+
+    }else{
+
+      await navigator.clipboard.writeText(
+        url
+      );
+
+
+      alert(
+        "Video link copied!"
+      );
+
+    }
+
+  }catch(error){
+
+    console.log(
+      "Share cancelled."
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   GO HOME
+   ===================================== */
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+
+/* =====================================
+   SEARCH
+   ===================================== */
+
+function searchVideo(event){
+
+  if(
+    event.key !== "Enter"
+  ){
+
+    return;
+
+  }
+
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .trim();
+
+
+  if(!search){
+    return;
+  }
+
+
+  window.location.href =
+    "index.html?search=" +
+    encodeURIComponent(search);
+
+}
+
+
+
+/* =====================================
+   SECURITY
+   ===================================== */
+
+function escapeHTML(text){
+
+  return text
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+
+/* =====================================
+   START
+   ===================================== */
+
+loadVideo();
+
+</script>
+
+
+</body>
+
+</html>
