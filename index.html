@@ -2,110 +2,232 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>MiniTube</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
 body{
- margin:0;background:#0f0f0f;color:#fff;
- font-family:Arial,sans-serif;padding-bottom:75px
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
 }
+
 header{
- position:sticky;top:0;z-index:10;background:#111;
- padding:12px;border-bottom:1px solid #292929
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
 }
-.top{display:flex;align-items:center;gap:12px}
-.logo{font-size:24px;font-weight:800;white-space:nowrap}
-.logo b{color:#ff0033}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.logo span{
+  color:#ff0033;
+}
+
 .search{
- flex:1;background:#222;border:1px solid #444;
- border-radius:25px;padding:12px 16px;color:white;
- outline:none;font-size:15px
+  flex:1;
+  background:#222;
+  border:1px solid #444;
+  border-radius:30px;
+  padding:13px 17px;
+  color:white;
+  font-size:16px;
+  outline:none;
 }
+
 .avatar{
- width:42px;height:42px;border-radius:50%;
- background:#7c4dff;display:grid;place-items:center;
- font-weight:bold
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
 }
+
 .categories{
- display:flex;gap:10px;overflow-x:auto;padding:12px 0 2px
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-top:12px;
 }
+
 .categories button{
- border:0;border-radius:22px;padding:10px 18px;
- background:#292929;color:white;white-space:nowrap
+  border:0;
+  border-radius:22px;
+  padding:10px 18px;
+  background:#292929;
+  color:white;
+  font-size:15px;
+  white-space:nowrap;
 }
-.categories button.active{background:white;color:#111}
+
+.categories button.active{
+  background:white;
+  color:#111;
+}
 
 .hero{
- margin:20px;border-radius:22px;padding:28px;
- background:linear-gradient(120deg,#24132d,#151515)
+  margin:24px 22px;
+  padding:28px;
+  border-radius:30px;
+  background:linear-gradient(120deg,#24132d,#151515);
 }
-.hero h1{margin:0 0 10px;font-size:30px}
-.hero p{color:#aaa}
+
+.hero h1{
+  margin:0 0 10px;
+  font-size:30px;
+}
+
+.hero p{
+  color:#aaa;
+  font-size:17px;
+}
+
 .upload{
- background:#ff0033;color:white;border:0;
- border-radius:28px;padding:15px 22px;font-weight:bold;
- font-size:16px
+  background:#ff0033;
+  color:white;
+  border:0;
+  border-radius:30px;
+  padding:15px 22px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.file{
+  display:none;
+}
+
+.status{
+  text-align:center;
+  color:#aaa;
+  padding:20px;
 }
 
 .grid{
- display:grid;grid-template-columns:repeat(2,1fr);
- gap:16px;padding:0 20px
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  padding:0 22px;
 }
-.card{cursor:pointer}
-.thumb{
- width:100%;aspect-ratio:16/9;background:#222;
- border-radius:15px;display:grid;place-items:center;
- overflow:hidden
+
+.card{
+  background:#181818;
+  border-radius:16px;
+  overflow:hidden;
 }
-.thumb video{width:100%;height:100%;object-fit:cover}
-.play{font-size:45px}
-.title{font-size:17px;font-weight:bold;margin-top:9px}
-.meta{color:#999;margin-top:5px;font-size:14px}
-.like{color:#ccc;margin-top:8px}
+
+.card video{
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+  background:#000;
+}
+
+.info{
+  padding:12px;
+}
+
+.title{
+  font-size:17px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.meta{
+  color:#999;
+  font-size:13px;
+  margin-top:7px;
+}
+
+.delete{
+  margin-top:10px;
+  background:#292929;
+  color:#ff4964;
+  border:0;
+  padding:8px 12px;
+  border-radius:8px;
+}
+
+.empty{
+  text-align:center;
+  color:#888;
+  padding:60px 20px;
+  font-size:18px;
+}
 
 .bottom{
- position:fixed;bottom:0;left:0;right:0;
- height:70px;background:#151515;border-top:1px solid #333;
- display:flex;justify-content:space-around;z-index:20
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
 }
-.bottom button{
- background:none;border:0;color:#aaa;font-size:13px
-}
-.bottom button span{display:block;font-size:25px;margin-bottom:3px}
-.bottom button.active{color:white}
 
-.modal{
- display:none;position:fixed;inset:0;background:#000b;
- z-index:50;align-items:center;justify-content:center;padding:20px
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
 }
-.box{
- background:#181818;border-radius:20px;padding:22px;
- width:100%;max-width:430px
-}
-.box h2{margin-top:0}
-.box input,.box select{
- width:100%;padding:13px;margin:8px 0;
- border-radius:10px;border:1px solid #444;
- background:#252525;color:white
-}
-.close{
- float:right;background:none;border:0;color:white;
- font-size:25px
-}
-.primary{
- width:100%;padding:14px;border:0;border-radius:12px;
- background:#ff0033;color:white;font-weight:bold;margin-top:10px
-}
-.empty{
- text-align:center;color:#888;padding:50px 20px
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
 }
 
 @media(max-width:600px){
- .grid{grid-template-columns:repeat(2,1fr);gap:14px;padding:0 14px}
- .hero{margin:14px;padding:22px}
- .title{font-size:15px}
+  .top{
+    gap:9px;
+  }
+
+  .logo{
+    font-size:21px;
+  }
+
+  .avatar{
+    width:38px;
+    height:38px;
+  }
+
+  .hero{
+    margin:20px 16px;
+    padding:24px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    padding:0 16px;
+  }
 }
 </style>
 </head>
@@ -113,268 +235,382 @@ header{
 <body>
 
 <header>
- <div class="top">
-  <div class="logo"><b>▶</b> MiniTube</div>
-  <input id="search" class="search" placeholder="Search videos...">
-  <div class="avatar">M</div>
- </div>
 
- <div class="categories">
-  <button class="active" onclick="category('All',this)">All</button>
-  <button onclick="category('Music',this)">Music</button>
-  <button onclick="category('Gaming',this)">Gaming</button>
-  <button onclick="category('News',this)">News</button>
-  <button onclick="category('Sports',this)">Sports</button>
-  <button onclick="category('Shorts',this)">Shorts</button>
- </div>
+  <div class="top">
+
+    <div class="logo">
+      <span>▶</span> MiniTube
+    </div>
+
+    <input
+      id="search"
+      class="search"
+      placeholder="Search videos..."
+      oninput="filterVideos()"
+    >
+
+    <div class="avatar">M</div>
+
+  </div>
+
+  <div class="categories">
+    <button class="active">All</button>
+    <button>Music</button>
+    <button>Gaming</button>
+    <button>News</button>
+    <button>Sports</button>
+  </div>
+
 </header>
 
+
 <section class="hero">
- <h1>Welcome to MiniTube</h1>
- <p>Your experimental video-sharing platform.</p>
- <button class="upload" onclick="openUpload()">＋ Upload Video</button>
+
+  <h1>Welcome to MiniTube</h1>
+
+  <p>
+    Your own video-sharing platform.
+  </p>
+
+  <button
+    class="upload"
+    onclick="document.getElementById('file').click()"
+  >
+    + Upload Video
+  </button>
+
+  <input
+    id="file"
+    class="file"
+    type="file"
+    accept="video/*"
+    onchange="uploadVideo()"
+  >
+
 </section>
 
-<main id="feed" class="grid"></main>
 
-<div id="empty" class="empty" style="display:none">
- No videos found.<br><br>
- Upload your first video 🚀
+<div id="status" class="status">
+  Loading videos...
 </div>
 
-<nav class="bottom">
- <button class="active" onclick="showHome(this)">
-  <span>⌂</span>Home
- </button>
- <button onclick="category('Shorts',this)">
-  <span>▶</span>Shorts
- </button>
- <button onclick="openUpload()">
-  <span>＋</span>Create
- </button>
- <button onclick="alert('Subscriptions coming soon!')">
-  <span>▣</span>Subscriptions
- </button>
- <button onclick="alert('Your MiniTube profile')">
-  <span>●</span>You
- </button>
-</nav>
+<div id="videos" class="grid"></div>
 
-<div id="modal" class="modal">
- <div class="box">
-  <button class="close" onclick="closeUpload()">×</button>
-  <h2>Upload Video</h2>
 
-  <input id="videoTitle" placeholder="Video title">
+<div class="bottom">
 
-  <select id="videoCategory">
-   <option>Music</option>
-   <option>Gaming</option>
-   <option>News</option>
-   <option>Sports</option>
-   <option>Shorts</option>
-   <option>Other</option>
-  </select>
-
-  <input id="videoFile" type="file" accept="video/*">
-
-  <button class="primary" onclick="saveVideo()">
-   Upload to MiniTube
+  <button>
+    <b>⌂</b>
+    Home
   </button>
- </div>
+
+  <button>
+    <b>▶</b>
+    Shorts
+  </button>
+
+  <button onclick="document.getElementById('file').click()">
+    <b>＋</b>
+    Create
+  </button>
+
+  <button>
+    <b>□</b>
+    Subscriptions
+  </button>
+
+  <button>
+    <b>●</b>
+    You
+  </button>
+
 </div>
 
-<div id="player" class="modal">
- <div class="box">
-  <button class="close" onclick="closePlayer()">×</button>
-  <h2 id="playerTitle"></h2>
-  <video id="mainVideo" controls playsinline
-   style="width:100%;border-radius:12px"></video>
- </div>
-</div>
 
 <script>
-let videos=[];
-let currentCategory="All";
 
-const DB="MiniTubeDB";
-const STORE="videos";
+/* =====================================
+   IMPORTANT:
+   Replace YOUR_WORKER_URL with your
+   Cloudflare Worker URL.
+   ===================================== */
 
-function openDB(){
- return new Promise((resolve,reject)=>{
-  const r=indexedDB.open(DB,1);
+const API_BASE = "YOUR_WORKER_URL";
 
-  r.onupgradeneeded=e=>{
-   e.target.result.createObjectStore(STORE,{keyPath:"id"})
-  };
 
-  r.onsuccess=()=>resolve(r.result);
-  r.onerror=()=>reject(r.error);
- });
+let allVideos = [];
+
+
+/* LOAD VIDEOS */
+
+async function loadVideos(){
+
+  const status = document.getElementById("status");
+
+  try{
+
+    status.textContent = "Loading videos...";
+
+    const response = await fetch(
+      API_BASE + "/api/videos"
+    );
+
+    if(!response.ok){
+      throw new Error("API error");
+    }
+
+    allVideos = await response.json();
+
+    renderVideos(allVideos);
+
+  }catch(error){
+
+    console.error(error);
+
+    status.textContent =
+      "Unable to load videos.";
+
+  }
+
 }
 
-async function saveToDB(video){
- const db=await openDB();
- return new Promise((resolve,reject)=>{
-  const tx=db.transaction(STORE,"readwrite");
-  tx.objectStore(STORE).put(video);
-  tx.oncomplete=resolve;
-  tx.onerror=()=>reject(tx.error);
- });
+
+/* DISPLAY VIDEOS */
+
+function renderVideos(videos){
+
+  const container =
+    document.getElementById("videos");
+
+  const status =
+    document.getElementById("status");
+
+  container.innerHTML = "";
+
+  if(videos.length === 0){
+
+    status.innerHTML =
+      "No videos found.<br><br>Upload your first video 🚀";
+
+    return;
+
+  }
+
+  status.textContent =
+    videos.length + " video(s)";
+
+  videos.forEach(video => {
+
+    const card =
+      document.createElement("div");
+
+    card.className = "card";
+
+    const videoURL =
+      API_BASE +
+      "/video/" +
+      encodeURIComponent(video.name);
+
+    card.innerHTML = `
+
+      <video
+        controls
+        preload="metadata"
+        src="${videoURL}">
+      </video>
+
+      <div class="info">
+
+        <div class="title">
+          ${escapeHTML(video.name)}
+        </div>
+
+        <div class="meta">
+          ${formatSize(video.size)}
+        </div>
+
+        <button
+          class="delete"
+          onclick="deleteVideo('${encodeURIComponent(video.name)}')"
+        >
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
 }
 
-async function getVideos(){
- const db=await openDB();
- return new Promise((resolve,reject)=>{
-  const tx=db.transaction(STORE,"readonly");
-  const r=tx.objectStore(STORE).getAll();
-  r.onsuccess=()=>resolve(r.result);
-  r.onerror=()=>reject(r.error);
- });
+
+/* UPLOAD */
+
+async function uploadVideo(){
+
+  const input =
+    document.getElementById("file");
+
+  const file =
+    input.files[0];
+
+  if(!file){
+    return;
+  }
+
+  const status =
+    document.getElementById("status");
+
+  try{
+
+    status.textContent =
+      "Uploading " + file.name + "...";
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/upload?filename=" +
+        encodeURIComponent(file.name),
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              file.type || "video/mp4"
+          },
+          body:file
+        }
+      );
+
+    const result =
+      await response.json();
+
+    if(!response.ok){
+      throw new Error(
+        result.error || "Upload failed"
+      );
+    }
+
+    status.textContent =
+      "Upload successful 🚀";
+
+    input.value = "";
+
+    await loadVideos();
+
+  }catch(error){
+
+    console.error(error);
+
+    status.textContent =
+      "Upload failed: " +
+      error.message;
+
+  }
+
 }
 
-async function load(){
- videos=await getVideos();
- render();
+
+/* DELETE */
+
+async function deleteVideo(name){
+
+  if(!confirm("Delete this video?")){
+    return;
+  }
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/delete/" +
+        name,
+        {
+          method:"DELETE"
+        }
+      );
+
+    if(!response.ok){
+      throw new Error("Delete failed");
+    }
+
+    await loadVideos();
+
+  }catch(error){
+
+    alert(
+      "Could not delete video."
+    );
+
+  }
+
 }
 
-function render(){
- const feed=document.getElementById("feed");
- const empty=document.getElementById("empty");
- feed.innerHTML="";
 
- const search=document.getElementById("search").value.toLowerCase();
+/* SEARCH */
 
- const filtered=videos.filter(v=>{
-  const cat=currentCategory==="All" || v.category===currentCategory;
-  const text=v.title.toLowerCase().includes(search);
-  return cat && text;
- });
+function filterVideos(){
 
- if(filtered.length===0){
-  empty.style.display="block";
-  return;
- }
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
 
- empty.style.display="none";
+  const filtered =
+    allVideos.filter(video =>
+      video.name
+        .toLowerCase()
+        .includes(search)
+    );
 
- filtered.forEach(v=>{
-  const url=URL.createObjectURL(v.file);
+  renderVideos(filtered);
 
-  const card=document.createElement("article");
-  card.className="card";
-
-  card.innerHTML=`
-   <div class="thumb">
-    <video src="${url}" muted preload="metadata"></video>
-   </div>
-   <div class="title">${escapeHTML(v.title)}</div>
-   <div class="meta">You • ${v.category}</div>
-   <div class="like" onclick="event.stopPropagation();like('${v.id}')">
-    ♡ Like
-   </div>
-  `;
-
-  card.onclick=()=>play(v,url);
-
-  feed.appendChild(card);
- });
 }
+
+
+/* HELPERS */
+
+function formatSize(bytes){
+
+  if(bytes < 1024){
+    return bytes + " B";
+  }
+
+  if(bytes < 1024 * 1024){
+    return (
+      (bytes / 1024).toFixed(1) +
+      " KB"
+    );
+  }
+
+  return (
+    (bytes / (1024 * 1024)).toFixed(1) +
+    " MB"
+  );
+
+}
+
 
 function escapeHTML(text){
- return text.replace(/[&<>"']/g,m=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#039;"
- }[m]));
+
+  return text
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
 }
 
-function openUpload(){
- document.getElementById("modal").style.display="flex";
-}
 
-function closeUpload(){
- document.getElementById("modal").style.display="none";
-}
+/* START */
 
-async function saveVideo(){
- const title=document.getElementById("videoTitle").value.trim();
- const category=document.getElementById("videoCategory").value;
- const file=document.getElementById("videoFile").files[0];
+loadVideos();
 
- if(!title){
-  alert("Video title likho.");
-  return;
- }
-
- if(!file){
-  alert("Pehle video select karo.");
-  return;
- }
-
- const video={
-  id:Date.now().toString(),
-  title,
-  category,
-  file
- };
-
- await saveToDB(video);
-
- document.getElementById("videoTitle").value="";
- document.getElementById("videoFile").value="";
-
- closeUpload();
-
- await load();
-
- alert("🎉 Video MiniTube mein upload ho gaya!");
-}
-
-function play(v,url){
- document.getElementById("playerTitle").textContent=v.title;
-
- const player=document.getElementById("mainVideo");
- player.src=url;
-
- document.getElementById("player").style.display="flex";
- player.play().catch(()=>{});
-}
-
-function closePlayer(){
- const player=document.getElementById("mainVideo");
- player.pause();
- player.src="";
- document.getElementById("player").style.display="none";
-}
-
-function category(cat,button){
- currentCategory=cat;
-
- document.querySelectorAll(".categories button")
- .forEach(b=>b.classList.remove("active"));
-
- if(button && button.classList.contains("categories"))
-  button.classList.add("active");
-
- render();
-}
-
-function showHome(button){
- currentCategory="All";
- document.querySelectorAll(".bottom button")
- .forEach(b=>b.classList.remove("active"));
- button.classList.add("active");
- render();
-}
-
-function like(id){
- alert("❤️ Liked!");
-}
-
-document.getElementById("search")
- .addEventListener("input",render);
-
-load();
 </script>
 
 </body>
