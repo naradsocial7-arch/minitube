@@ -411,22 +411,17 @@ async function loadVideos(){
 
 function renderVideos(videos){
 
-  const container =
-    document.getElementById("videos");
-
-  const status =
-    document.getElementById("status");
+  const container = document.getElementById("videos");
+  const status = document.getElementById("status");
 
   container.innerHTML = "";
 
   if(videos.length === 0){
 
     status.innerHTML =
-      "No videos found.<br><br>" +
-      "Upload your first video 🚀";
+      "No videos found.<br><br>Upload your first video 🚀";
 
     return;
-
   }
 
   status.textContent =
@@ -434,48 +429,25 @@ function renderVideos(videos){
 
   videos.forEach(video => {
 
-    const card =
-      document.createElement("div");
-
+    const card = document.createElement("div");
     card.className = "card";
-
 
     const videoURL =
       API_BASE +
       "/video/" +
       encodeURIComponent(video.name);
 
-
-    /* LIKE DATA */
-
     const likeKey =
-      "likes_" + video.name;
-
-    const likedKey =
       "liked_" + video.name;
 
-    let likes =
-      Number(
-        localStorage.getItem(likeKey) || 0
-      );
+    const likeCountKey =
+      "likes_" + video.name;
 
     let liked =
-      localStorage.getItem(likedKey) === "true";
+      localStorage.getItem(likeKey) === "true";
 
-
-    /* VIEW DATA */
-
-    const viewsKey =
-      "views_" + video.name;
-
-    const viewedKey =
-      "viewed_" + video.name;
-
-    let views =
-      Number(
-        localStorage.getItem(viewsKey) || 0
-      );
-
+    let likes =
+      Number(localStorage.getItem(likeCountKey) || 0);
 
     card.innerHTML = `
 
@@ -495,189 +467,48 @@ function renderVideos(videos){
           You • Other
         </div>
 
-        <div class="actions">
+        <div style="
+          display:flex;
+          align-items:center;
+          gap:14px;
+          margin-top:10px;
+        ">
 
-          <button class="likeBtn ${liked ? "liked" : ""}">
+          <button
+            onclick="toggleLike('${encodeURIComponent(video.name)}')"
+            id="like-${encodeURIComponent(video.name)}"
+            style="
+              background:none;
+              border:0;
+              color:${liked ? '#ff0033' : '#ccc'};
+              font-size:17px;
+              padding:0;
+              cursor:pointer;
+            "
+          >
             ${liked ? "♥" : "♡"} Like
-            <span class="likeCount">
+            <span id="count-${encodeURIComponent(video.name)}">
               ${likes}
             </span>
           </button>
 
-          <div class="views">
-            👁️
-            <span class="viewCount">
-              ${views}
-            </span>
-            views
-          </div>
-
         </div>
 
-        <button class="delete">
+        <button
+          class="delete"
+          onclick="deleteVideo('${encodeURIComponent(video.name)}')"
+        >
           Delete
         </button>
 
       </div>
-
     `;
-
-
-    /* =================================
-       LIKE BUTTON
-       ================================= */
-
-    const likeButton =
-      card.querySelector(".likeBtn");
-
-    const likeCount =
-      card.querySelector(".likeCount");
-
-
-    likeButton.addEventListener(
-      "click",
-      function(){
-
-        liked =
-          !liked;
-
-        if(liked){
-
-          likes++;
-
-        }else{
-
-          if(likes > 0){
-            likes--;
-          }
-
-        }
-
-
-        localStorage.setItem(
-          likeKey,
-          likes
-        );
-
-        localStorage.setItem(
-          likedKey,
-          liked
-        );
-
-
-        likeButton.classList.toggle(
-          "liked",
-          liked
-        );
-
-
-        likeButton.innerHTML =
-          `${liked ? "♥" : "♡"} Like
-           <span class="likeCount">
-           ${likes}
-           </span>`;
-
-      }
-    );
-
-
-    /* =================================
-       VIEW COUNTER
-       ================================= */
-
-    const videoElement =
-      card.querySelector("video");
-
-    const viewCount =
-      card.querySelector(".viewCount");
-
-
-    let counted =
-      localStorage.getItem(viewedKey)
-      === "true";
-
-
-    let viewTimer;
-
-
-    videoElement.addEventListener(
-      "play",
-      function(){
-
-        if(counted){
-          return;
-        }
-
-
-        clearTimeout(viewTimer);
-
-
-        viewTimer =
-          setTimeout(
-            function(){
-
-              views++;
-
-              localStorage.setItem(
-                viewsKey,
-                views
-              );
-
-              localStorage.setItem(
-                viewedKey,
-                "true"
-              );
-
-              viewCount.textContent =
-                views;
-
-              counted = true;
-
-            },
-            3000
-          );
-
-      }
-    );
-
-
-    videoElement.addEventListener(
-      "pause",
-      function(){
-
-        clearTimeout(viewTimer);
-
-      }
-    );
-
-
-    /* =================================
-       DELETE
-       ================================= */
-
-    const deleteButton =
-      card.querySelector(".delete");
-
-
-    deleteButton.addEventListener(
-      "click",
-      async function(){
-
-        await deleteVideo(
-          encodeURIComponent(video.name)
-        );
-
-      }
-    );
-
 
     container.appendChild(card);
 
   });
 
 }
-
-
 /* =====================================
    UPLOAD
    ===================================== */
