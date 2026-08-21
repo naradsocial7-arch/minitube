@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -162,39 +163,21 @@ header{
   margin-top:7px;
 }
 
-.actions{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin-top:12px;
-}
-
-.likeBtn{
-  background:none;
-  border:0;
-  color:#ccc;
-  font-size:16px;
-  padding:0;
-  cursor:pointer;
-}
-
-.likeBtn.liked{
-  color:#ff0033;
-}
-
-.views{
-  color:#aaa;
-  font-size:15px;
-}
-
 .delete{
-  margin-top:12px;
+  margin-top:10px;
   background:#292929;
   color:#ff4964;
   border:0;
   padding:8px 12px;
   border-radius:8px;
   cursor:pointer;
+}
+
+.empty{
+  text-align:center;
+  color:#888;
+  padding:60px 20px;
+  font-size:18px;
 }
 
 .bottom{
@@ -253,6 +236,7 @@ header{
 }
 
 </style>
+
 </head>
 
 <body>
@@ -272,17 +256,33 @@ header{
       oninput="filterVideos()"
     >
 
-    <div class="avatar">M</div>
+    <div class="avatar">
+      M
+    </div>
 
   </div>
 
   <div class="categories">
 
-    <button class="active">All</button>
-    <button>Music</button>
-    <button>Gaming</button>
-    <button>News</button>
-    <button>Sports</button>
+    <button class="active">
+      All
+    </button>
+
+    <button>
+      Music
+    </button>
+
+    <button>
+      Gaming
+    </button>
+
+    <button>
+      News
+    </button>
+
+    <button>
+      Sports
+    </button>
 
   </div>
 
@@ -291,7 +291,9 @@ header{
 
 <section class="hero">
 
-  <h1>Welcome to MiniTube</h1>
+  <h1>
+    Welcome to MiniTube
+  </h1>
 
   <p>
     Your own video-sharing platform.
@@ -319,6 +321,7 @@ header{
   Loading videos...
 </div>
 
+
 <div id="videos" class="grid"></div>
 
 
@@ -334,7 +337,9 @@ header{
     Shorts
   </button>
 
-  <button onclick="document.getElementById('file').click()">
+  <button
+    onclick="document.getElementById('file').click()"
+  >
     <b>＋</b>
     Create
   </button>
@@ -355,11 +360,10 @@ header{
 <script>
 
 /* =====================================
-   CLOUDFLARE WORKER
+   CLOUDFLARE WORKER URL
    ===================================== */
 
-const API_BASE =
-  "https://wispy-base-65bb.naradsocial7.workers.dev";
+const API_BASE = "YOUR_WORKER_URL";
 
 
 let allVideos = [];
@@ -385,7 +389,11 @@ async function loadVideos(){
       );
 
     if(!response.ok){
-      throw new Error("API error");
+
+      throw new Error(
+        "API error"
+      );
+
     }
 
     allVideos =
@@ -411,31 +419,48 @@ async function loadVideos(){
 
 function renderVideos(videos){
 
-  const container = document.getElementById("videos");
-  const status = document.getElementById("status");
+  const container =
+    document.getElementById("videos");
+
+  const status =
+    document.getElementById("status");
 
   container.innerHTML = "";
+
 
   if(videos.length === 0){
 
     status.innerHTML =
-      "No videos found.<br><br>Upload your first video 🚀";
+      "No videos found.<br><br>" +
+      "Upload your first video 🚀";
 
     return;
+
   }
+
 
   status.textContent =
     videos.length + " video(s)";
 
+
   videos.forEach(video => {
 
-    const card = document.createElement("div");
-    card.className = "card";
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "card";
+
 
     const videoURL =
       API_BASE +
       "/video/" +
-      encodeURIComponent(video.name);
+      encodeURIComponent(
+        video.name
+      );
+
+
+    /* LIKE DATA */
 
     const likeKey =
       "liked_" + video.name;
@@ -443,40 +468,88 @@ function renderVideos(videos){
     const likeCountKey =
       "likes_" + video.name;
 
+
     let liked =
-      localStorage.getItem(likeKey) === "true";
+      localStorage.getItem(
+        likeKey
+      ) === "true";
+
 
     let likes =
-      Number(localStorage.getItem(likeCountKey) || 0);
+      Number(
+        localStorage.getItem(
+          likeCountKey
+        ) || 0
+      );
+
+
+    /* VIEW DATA */
+
+    const viewKey =
+      "views_" + video.name;
+
+
+    let views =
+      Number(
+        localStorage.getItem(
+          viewKey
+        ) || 0
+      );
+
+
+    const encodedName =
+      encodeURIComponent(
+        video.name
+      );
+
+
+    /* CARD */
 
     card.innerHTML = `
 
       <video
         controls
         preload="metadata"
-        src="${videoURL}">
+        src="${videoURL}"
+        onclick="addView('${encodedName}')"
+      >
       </video>
+
 
       <div class="info">
 
+
         <div class="title">
-          ${escapeHTML(video.name)}
+
+          ${escapeHTML(
+            video.name
+          )}
+
         </div>
+
 
         <div class="meta">
+
           You • Other
+
         </div>
 
-        <div style="
-          display:flex;
-          align-items:center;
-          gap:14px;
-          margin-top:10px;
-        ">
+
+        <div
+          style="
+            display:flex;
+            align-items:center;
+            gap:18px;
+            margin-top:10px;
+          "
+        >
+
+
+          <!-- LIKE -->
 
           <button
-            onclick="toggleLike('${encodeURIComponent(video.name)}')"
-            id="like-${encodeURIComponent(video.name)}"
+            onclick="toggleLike('${encodedName}')"
+            id="like-${encodedName}"
             style="
               background:none;
               border:0;
@@ -486,29 +559,217 @@ function renderVideos(videos){
               cursor:pointer;
             "
           >
-            ${liked ? "♥" : "♡"} Like
-            <span id="count-${encodeURIComponent(video.name)}">
+
+            ${liked ? "♥" : "♡"}
+            Like
+
+            <span
+              id="count-${encodedName}"
+            >
               ${likes}
             </span>
+
           </button>
+
+
+          <!-- VIEWS -->
+
+          <span
+            style="
+              color:#aaa;
+              font-size:16px;
+            "
+          >
+
+            👁️
+
+            <span
+              id="views-${encodedName}"
+            >
+              ${views}
+            </span>
+
+            views
+
+          </span>
+
 
         </div>
 
+
+        <!-- DELETE -->
+
         <button
           class="delete"
-          onclick="deleteVideo('${encodeURIComponent(video.name)}')"
+          onclick="deleteVideo('${encodedName}')"
         >
+
           Delete
+
         </button>
 
+
       </div>
+
     `;
+
 
     container.appendChild(card);
 
   });
 
 }
+
+
+/* =====================================
+   LIKE SYSTEM
+   ===================================== */
+
+function toggleLike(name){
+
+  const decodedName =
+    decodeURIComponent(
+      name
+    );
+
+
+  const likeKey =
+    "liked_" + decodedName;
+
+
+  const likeCountKey =
+    "likes_" + decodedName;
+
+
+  let liked =
+    localStorage.getItem(
+      likeKey
+    ) === "true";
+
+
+  let likes =
+    Number(
+      localStorage.getItem(
+        likeCountKey
+      ) || 0
+    );
+
+
+  if(liked){
+
+    liked =
+      false;
+
+
+    if(likes > 0){
+
+      likes--;
+
+    }
+
+  }else{
+
+    liked =
+      true;
+
+    likes++;
+
+  }
+
+
+  localStorage.setItem(
+    likeKey,
+    liked
+  );
+
+
+  localStorage.setItem(
+    likeCountKey,
+    likes
+  );
+
+
+  const button =
+    document.getElementById(
+      "like-" + name
+    );
+
+
+  const count =
+    document.getElementById(
+      "count-" + name
+    );
+
+
+  if(button){
+
+    button.style.color =
+      liked
+        ? "#ff0033"
+        : "#ccc";
+
+
+    button.innerHTML =
+      `${liked ? "♥" : "♡"} Like
+       <span id="count-${name}">
+         ${likes}
+       </span>`;
+
+  }
+
+
+}
+
+
+/* =====================================
+   VIEW SYSTEM
+   ===================================== */
+
+function addView(name){
+
+  const decodedName =
+    decodeURIComponent(
+      name
+    );
+
+
+  const viewKey =
+    "views_" + decodedName;
+
+
+  let views =
+    Number(
+      localStorage.getItem(
+        viewKey
+      ) || 0
+    );
+
+
+  views++;
+
+
+  localStorage.setItem(
+    viewKey,
+    views
+  );
+
+
+  const viewCount =
+    document.getElementById(
+      "views-" + name
+    );
+
+
+  if(viewCount){
+
+    viewCount.textContent =
+      views;
+
+  }
+
+}
+
+
 /* =====================================
    UPLOAD
    ===================================== */
@@ -516,18 +777,26 @@ function renderVideos(videos){
 async function uploadVideo(){
 
   const input =
-    document.getElementById("file");
+    document.getElementById(
+      "file"
+    );
+
 
   const file =
     input.files[0];
 
+
   if(!file){
+
     return;
+
   }
 
 
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
 
 
   try{
@@ -542,7 +811,9 @@ async function uploadVideo(){
       await fetch(
         API_BASE +
         "/api/upload?filename=" +
-        encodeURIComponent(file.name),
+        encodeURIComponent(
+          file.name
+        ),
         {
           method:"POST",
 
@@ -584,6 +855,7 @@ async function uploadVideo(){
   }catch(error){
 
     console.error(error);
+
 
     status.textContent =
       "Upload failed: " +
@@ -655,7 +927,9 @@ function filterVideos(){
 
   const search =
     document
-      .getElementById("search")
+      .getElementById(
+        "search"
+      )
       .value
       .toLowerCase();
 
@@ -669,13 +943,15 @@ function filterVideos(){
     );
 
 
-  renderVideos(filtered);
+  renderVideos(
+    filtered
+  );
 
 }
 
 
 /* =====================================
-   FORMAT SIZE
+   HELPERS
    ===================================== */
 
 function formatSize(bytes){
@@ -703,17 +979,13 @@ function formatSize(bytes){
 
   return (
     (bytes /
-      (1024 * 1024))
-      .toFixed(1) +
+      (1024 * 1024)
+    ).toFixed(1) +
     " MB"
   );
 
 }
 
-
-/* =====================================
-   SECURITY
-   ===================================== */
 
 function escapeHTML(text){
 
