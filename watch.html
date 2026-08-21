@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>MiniTube - Watch</title>
 
@@ -12,36 +18,39 @@
   box-sizing:border-box;
 }
 
-html,body{
+body{
   margin:0;
-  padding:0;
   background:#0f0f0f;
   color:white;
   font-family:Arial,sans-serif;
-}
-
-body{
   padding-bottom:80px;
 }
 
-/* HEADER */
+
+/* =========================
+   HEADER
+   ========================= */
 
 header{
   position:sticky;
   top:0;
   z-index:20;
+
   height:64px;
+
   background:#111;
   border-bottom:1px solid #292929;
+
   display:flex;
   align-items:center;
-  padding:0 14px;
+
+  padding:0 16px;
   gap:14px;
 }
 
 .back{
-  border:0;
   background:none;
+  border:0;
   color:white;
   font-size:30px;
   cursor:pointer;
@@ -50,113 +59,143 @@ header{
 .logo{
   font-size:23px;
   font-weight:800;
-  white-space:nowrap;
 }
 
 .logo span{
   color:#ff0033;
 }
 
-.search{
-  margin-left:auto;
-  width:min(420px,45%);
-  background:#222;
-  border:1px solid #444;
-  border-radius:30px;
-  padding:12px 16px;
-  color:white;
-  outline:none;
-  font-size:15px;
+.spacer{
+  flex:1;
 }
 
-/* PLAYER */
+.avatar{
+  width:42px;
+  height:42px;
 
-.watch{
-  max-width:1000px;
-  margin:24px auto;
-  padding:0 16px;
+  border-radius:50%;
+  background:#7c4dff;
+
+  display:grid;
+  place-items:center;
+
+  font-weight:bold;
 }
 
-.player{
+
+/* =========================
+   MAIN
+   ========================= */
+
+.main{
+  max-width:1100px;
+  margin:0 auto;
+  padding:20px;
+}
+
+
+/* =========================
+   VIDEO
+   ========================= */
+
+.videoBox{
   width:100%;
   background:#000;
   border-radius:14px;
   overflow:hidden;
 }
 
-.player video{
+.videoBox video{
   width:100%;
   display:block;
   max-height:70vh;
   background:#000;
 }
 
-/* INFO */
 
-.info{
-  padding:18px 2px;
-}
+/* =========================
+   VIDEO INFO
+   ========================= */
 
 .title{
   font-size:24px;
-  font-weight:700;
-  line-height:1.3;
+  font-weight:bold;
+  margin-top:18px;
   word-break:break-word;
 }
 
 .meta{
   color:#999;
-  margin-top:10px;
   font-size:14px;
+  margin-top:8px;
 }
 
 .actions{
   display:flex;
   align-items:center;
-  gap:10px;
-  margin-top:18px;
+  gap:14px;
+  margin-top:15px;
   flex-wrap:wrap;
 }
 
-.action{
+.actionButton{
+  background:#292929;
   border:0;
-  background:#222;
   color:white;
   border-radius:22px;
   padding:10px 16px;
   cursor:pointer;
-  font-size:14px;
+  font-size:15px;
 }
 
-.action:hover{
-  background:#333;
-}
-
-.like.liked{
+.actionButton.liked{
   color:#ff0033;
 }
 
-/* CHANNEL */
+.subscribeButton{
+  background:white;
+  color:#111;
+  border:0;
+  border-radius:22px;
+  padding:10px 17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.subscribeButton.subscribed{
+  background:#292929;
+  color:white;
+  border:1px solid #555;
+}
+
+
+/* =========================
+   CHANNEL
+   ========================= */
 
 .channel{
   margin-top:18px;
-  padding:16px;
+  padding:15px;
+
   background:#181818;
   border-radius:14px;
+
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:12px;
 }
 
-.avatar{
-  width:46px;
-  height:46px;
+.channelAvatar{
+  width:48px;
+  height:48px;
+
   border-radius:50%;
   background:#7c4dff;
+
   display:grid;
   place-items:center;
+
   font-weight:bold;
-  font-size:19px;
 }
 
 .channelInfo{
@@ -167,173 +206,259 @@ header{
   font-weight:bold;
 }
 
-.subscribers{
+.channelText{
   color:#999;
   font-size:13px;
   margin-top:4px;
 }
 
-.subscribe{
-  border:0;
+
+/* =========================
+   COMMENTS
+   ========================= */
+
+.comments{
+  margin-top:30px;
+}
+
+.commentsTitle{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.commentForm{
+  background:#181818;
+  border-radius:14px;
+  padding:15px;
+}
+
+.commentInput{
+  width:100%;
+
+  min-height:80px;
+
+  resize:vertical;
+
+  background:#222;
+  border:1px solid #444;
+
+  border-radius:10px;
+
+  padding:12px;
+
+  color:white;
+
+  font-family:Arial,sans-serif;
+  font-size:15px;
+
+  outline:none;
+}
+
+.commentInput:focus{
+  border-color:#777;
+}
+
+.commentBottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-top:10px;
+
+  gap:10px;
+}
+
+.commentName{
+  color:#999;
+  font-size:13px;
+}
+
+.postButton{
   background:#ff0033;
   color:white;
-  font-weight:bold;
-  padding:11px 17px;
+
+  border:0;
+
   border-radius:22px;
-  cursor:pointer;
-}
 
-.subscribe.subscribed{
-  background:#333;
-}
+  padding:10px 18px;
 
-/* STATUS */
-
-.status{
-  text-align:center;
-  color:#aaa;
-  padding:70px 20px;
-}
-
-/* MORE VIDEOS */
-
-.more{
-  max-width:1000px;
-  margin:0 auto;
-  padding:0 16px;
-}
-
-.more h2{
-  font-size:20px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:
-    repeat(auto-fit,minmax(230px,1fr));
-  gap:16px;
-}
-
-.card{
-  background:#181818;
-  border-radius:12px;
-  overflow:hidden;
-  cursor:pointer;
-}
-
-.card video{
-  width:100%;
-  aspect-ratio:16/9;
-  object-fit:cover;
-  display:block;
-  background:#000;
-  pointer-events:none;
-}
-
-.cardInfo{
-  padding:11px;
-}
-
-.cardTitle{
   font-weight:bold;
-  font-size:15px;
+
+  cursor:pointer;
+}
+
+.commentList{
+  margin-top:18px;
+}
+
+.comment{
+  background:#181818;
+
+  border-radius:12px;
+
+  padding:14px;
+
+  margin-bottom:10px;
+}
+
+.commentTop{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.commentAvatar{
+  width:34px;
+  height:34px;
+
+  border-radius:50%;
+
+  background:#7c4dff;
+
+  display:grid;
+  place-items:center;
+
+  font-size:13px;
+
+  font-weight:bold;
+}
+
+.commentAuthor{
+  font-weight:bold;
+}
+
+.commentDate{
+  color:#777;
+  font-size:12px;
+}
+
+.commentText{
+  margin-top:9px;
+
+  color:#ddd;
+
+  line-height:1.5;
+
+  white-space:pre-wrap;
+
   word-break:break-word;
 }
 
-.cardMeta{
-  color:#999;
-  font-size:12px;
-  margin-top:6px;
+.commentActions{
+  margin-top:10px;
 }
 
-/* BOTTOM */
+.deleteComment{
+  background:none;
+  border:0;
+
+  color:#ff4964;
+
+  padding:0;
+
+  cursor:pointer;
+
+  font-size:13px;
+}
+
+.noComments{
+  color:#888;
+  text-align:center;
+  padding:25px;
+}
+
+
+/* =========================
+   BOTTOM
+   ========================= */
 
 .bottom{
   position:fixed;
+
   bottom:0;
   left:0;
   right:0;
+
   height:70px;
+
   background:#151515;
+
   border-top:1px solid #333;
+
   display:flex;
+
   justify-content:space-around;
   align-items:center;
+
   z-index:30;
 }
 
 .bottom button{
-  border:0;
   background:none;
+  border:0;
+
   color:#aaa;
+
   font-size:13px;
+
   cursor:pointer;
 }
 
 .bottom button b{
   display:block;
-  color:white;
+
   font-size:22px;
+
+  color:white;
+
   margin-bottom:3px;
 }
 
-/* MOBILE */
+
+/* =========================
+   MOBILE
+   ========================= */
 
 @media(max-width:600px){
 
-  header{
-    gap:8px;
-  }
-
-  .logo{
-    font-size:20px;
-  }
-
-  .search{
-    display:none;
-  }
-
-  .watch{
-    margin:12px auto;
-    padding:0 10px;
-  }
-
-  .player{
-    border-radius:0;
-  }
-
-  .player video{
-    max-height:none;
+  .main{
+    padding:14px;
   }
 
   .title{
     font-size:20px;
   }
 
-  .channel{
-    padding:13px;
+  .videoBox{
+    border-radius:10px;
   }
 
-  .subscribe{
-    padding:9px 13px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
+  .commentBottom{
+    align-items:flex-end;
   }
 
 }
 
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
 
 <header>
 
   <button
     class="back"
-    onclick="history.back()">
+    onclick="goHome()"
+  >
     ‹
   </button>
 
@@ -341,42 +466,172 @@ header{
     <span>▶</span> MiniTube
   </div>
 
-  <input
-    class="search"
-    id="search"
-    placeholder="Search videos..."
-    oninput="searchVideos()"
-  >
+  <div class="spacer"></div>
+
+  <div class="avatar">
+    M
+  </div>
 
 </header>
 
 
-<main>
+<!-- =========================
+     MAIN
+     ========================= -->
 
-  <section
-    class="watch"
-    id="watchArea">
+<main class="main">
 
-    <div class="status">
-      Loading video...
+
+  <!-- VIDEO -->
+
+  <div class="videoBox">
+
+    <video
+      id="videoPlayer"
+      controls
+      autoplay
+      playsinline
+    ></video>
+
+  </div>
+
+
+  <!-- TITLE -->
+
+  <div
+    id="videoTitle"
+    class="title"
+  >
+    Loading video...
+  </div>
+
+
+  <div class="meta">
+
+    <span id="viewCount">
+      0
+    </span>
+
+    views
+
+  </div>
+
+
+  <!-- ACTIONS -->
+
+  <div class="actions">
+
+    <button
+      id="likeButton"
+      class="actionButton"
+      onclick="toggleLike()"
+    >
+      ♡ Like
+      <span id="likeCount">
+        0
+      </span>
+    </button>
+
+
+    <button
+      class="actionButton"
+      onclick="shareVideo()"
+    >
+      ↗ Share
+    </button>
+
+
+    <button
+      id="subscribeButton"
+      class="subscribeButton"
+      onclick="toggleSubscribe()"
+    >
+      Subscribe
+    </button>
+
+  </div>
+
+
+  <!-- CHANNEL -->
+
+  <div class="channel">
+
+    <div class="channelAvatar">
+      M
     </div>
 
-  </section>
+    <div class="channelInfo">
+
+      <div class="channelName">
+        My Channel
+      </div>
+
+      <div class="channelText">
+        Your MiniTube creator channel
+      </div>
+
+    </div>
+
+  </div>
 
 
-  <section class="more">
+  <!-- COMMENTS -->
 
-    <h2>More videos</h2>
+  <section class="comments">
+
+    <div class="commentsTitle">
+
+      Comments
+      <span id="commentCount">
+        0
+      </span>
+
+    </div>
+
+
+    <div class="commentForm">
+
+      <textarea
+        id="commentInput"
+        class="commentInput"
+        placeholder="Add a comment..."
+        maxlength="500"
+      ></textarea>
+
+
+      <div class="commentBottom">
+
+        <div class="commentName">
+          Commenting as Main Player
+        </div>
+
+
+        <button
+          class="postButton"
+          onclick="postComment()"
+        >
+          Post Comment
+        </button>
+
+      </div>
+
+    </div>
+
 
     <div
-      class="grid"
-      id="moreVideos">
-    </div>
+      id="commentList"
+      class="commentList"
+    ></div>
 
   </section>
+
 
 </main>
 
+
+<!-- =========================
+     BOTTOM NAV
+     ========================= -->
 
 <div class="bottom">
 
@@ -385,22 +640,26 @@ header{
     Home
   </button>
 
+
   <button onclick="goShorts()">
     <b>▶</b>
     Shorts
   </button>
+
 
   <button onclick="goHome()">
     <b>＋</b>
     Create
   </button>
 
-  <button>
+
+  <button onclick="goSubscriptions()">
     <b>□</b>
     Subscriptions
   </button>
 
-  <button onclick="goHome()">
+
+  <button onclick="goYou()">
     <b>●</b>
     You
   </button>
@@ -410,122 +669,145 @@ header{
 
 <script>
 
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
 const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
 
-let allVideos = [];
 
-let currentVideo = null;
-
-
-/* ================================
-   GET VIDEO NAME
-================================ */
+/* =====================================
+   VIDEO NAME
+   ===================================== */
 
 const params =
   new URLSearchParams(
     window.location.search
   );
 
+
 const videoName =
   params.get("video");
 
 
-/* ================================
-   LOAD
-================================ */
+/* =====================================
+   LOCAL STORAGE KEYS
+   ===================================== */
 
-async function loadVideos(){
-
-  try{
-
-    const response =
-      await fetch(
-        API_BASE + "/api/videos"
-      );
-
-    if(!response.ok){
-      throw new Error("API error");
-    }
-
-    allVideos =
-      await response.json();
+const commentKey =
+  "minitube_comments_" +
+  (videoName || "");
 
 
-    if(videoName){
-
-      currentVideo =
-        allVideos.find(
-          v => v.name === videoName
-        );
-
-    }
+const likeKey =
+  "likes_" +
+  (videoName || "");
 
 
-    renderWatch();
+const likedKey =
+  "liked_" +
+  (videoName || "");
 
-    renderMoreVideos(allVideos);
 
-  }catch(error){
+const viewKey =
+  "views_" +
+  (videoName || "");
 
-    console.error(error);
 
+const subscribeKey =
+  "minitube_my_channel_subscribed";
+
+
+/* =====================================
+   START
+   ===================================== */
+
+loadVideo();
+
+loadComments();
+
+updateLike();
+
+updateSubscribe();
+
+
+/* =====================================
+   LOAD VIDEO
+   ===================================== */
+
+function loadVideo(){
+
+  const player =
     document.getElementById(
-      "watchArea"
-    ).innerHTML = `
-      <div class="status">
-        Unable to load video.
-      </div>
-    `;
+      "videoPlayer"
+    );
 
-  }
-
-}
-
-
-/* ================================
-   WATCH VIDEO
-================================ */
-
-function renderWatch(){
-
-  const area =
+  const title =
     document.getElementById(
-      "watchArea"
+      "videoTitle"
     );
 
 
-  if(!currentVideo){
+  if(!videoName){
 
-    area.innerHTML = `
-      <div class="status">
-        Video not found.
-      </div>
-    `;
+    title.textContent =
+      "Video not found";
 
     return;
 
   }
 
 
-  const name =
-    currentVideo.name;
-
-
-  const videoURL =
+  player.src =
     API_BASE +
     "/video/" +
-    encodeURIComponent(name);
+    encodeURIComponent(
+      videoName
+    );
 
 
-  const likeKey =
-    "likes_" + name;
+  title.textContent =
+    videoName;
 
-  const likedKey =
-    "liked_" + name;
 
-  const viewsKey =
-    "views_" + name;
+  updateViews();
+
+}
+
+
+/* =====================================
+   VIEWS
+   ===================================== */
+
+function updateViews(){
+
+  const count =
+    Number(
+      localStorage.getItem(
+        viewKey
+      ) || 0
+    );
+
+
+  document.getElementById(
+    "viewCount"
+  ).textContent =
+    count;
+
+}
+
+
+/* =====================================
+   LIKE
+   ===================================== */
+
+function toggleLike(){
+
+  let liked =
+    localStorage.getItem(
+      likedKey
+    ) === "true";
 
 
   let likes =
@@ -536,197 +818,102 @@ function renderWatch(){
     );
 
 
-  let liked =
-    localStorage.getItem(
-      likedKey
-    ) === "true";
+  liked =
+    !liked;
 
 
-  let views =
-    Number(
-      localStorage.getItem(
-        viewsKey
-      ) || 0
-    );
+  if(liked){
+
+    likes++;
+
+  }else{
+
+    if(likes > 0){
+
+      likes--;
+
+    }
+
+  }
 
 
-  area.innerHTML = `
-
-    <div class="player">
-
-      <video
-        id="mainVideo"
-        controls
-        autoplay
-        playsinline
-        src="${videoURL}">
-      </video>
-
-    </div>
-
-
-    <div class="info">
-
-      <div class="title">
-        ${escapeHTML(name)}
-      </div>
-
-      <div class="meta">
-
-        ${views} views
-        •
-        MiniTube
-
-      </div>
-
-
-      <div class="actions">
-
-        <button
-          class="action like ${liked ? "liked" : ""}"
-          id="likeButton">
-
-          ${liked ? "♥" : "♡"}
-          Like
-          <span id="likeCount">
-            ${likes}
-          </span>
-
-        </button>
-
-
-        <button
-          class="action"
-          onclick="shareVideo()">
-
-          ↗ Share
-
-        </button>
-
-      </div>
-
-
-      <div class="channel">
-
-        <div class="avatar">
-          M
-        </div>
-
-        <div class="channelInfo">
-
-          <div class="channelName">
-            MiniTube
-          </div>
-
-          <div class="subscribers">
-            Video creator
-          </div>
-
-        </div>
-
-
-        <button
-          class="subscribe"
-          id="subscribeButton">
-
-          Subscribe
-
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  setupLike(
-    name,
-    likes,
-    liked
+  localStorage.setItem(
+    likedKey,
+    String(liked)
   );
 
 
-  setupSubscribe();
+  localStorage.setItem(
+    likeKey,
+    String(likes)
+  );
+
+
+  updateLike();
 
 }
 
 
-/* ================================
-   LIKE
-================================ */
-
-function setupLike(
-  name,
-  likes,
-  liked
-){
+function updateLike(){
 
   const button =
     document.getElementById(
       "likeButton"
     );
 
+
   const count =
-    document.getElementById(
-      "likeCount"
+    Number(
+      localStorage.getItem(
+        likeKey
+      ) || 0
     );
 
 
-  button.onclick =
-    function(){
-
-      liked =
-        !liked;
-
-
-      if(liked){
-
-        likes++;
-
-      }else{
-
-        if(likes > 0){
-          likes--;
-        }
-
-      }
+  const liked =
+    localStorage.getItem(
+      likedKey
+    ) === "true";
 
 
-      localStorage.setItem(
-        "likes_" + name,
-        likes
-      );
-
-      localStorage.setItem(
-        "liked_" + name,
-        liked
-      );
+  button.textContent =
+    (liked ? "♥" : "♡") +
+    " Like " +
+    count;
 
 
-      button.classList.toggle(
-        "liked",
-        liked
-      );
-
-
-      button.innerHTML =
-        `${liked ? "♥" : "♡"}
-         Like
-         <span id="likeCount">
-         ${likes}
-         </span>`;
-
-    };
+  button.classList.toggle(
+    "liked",
+    liked
+  );
 
 }
 
 
-/* ================================
+/* =====================================
    SUBSCRIBE
-================================ */
+   ===================================== */
 
-function setupSubscribe(){
+function toggleSubscribe(){
+
+  const current =
+    localStorage.getItem(
+      subscribeKey
+    ) === "true";
+
+
+  localStorage.setItem(
+    subscribeKey,
+    String(!current)
+  );
+
+
+  updateSubscribe();
+
+}
+
+
+function updateSubscribe(){
 
   const button =
     document.getElementById(
@@ -734,45 +921,11 @@ function setupSubscribe(){
     );
 
 
-  let subscribed =
+  const subscribed =
     localStorage.getItem(
-      "minitube_subscribed"
+      subscribeKey
     ) === "true";
 
-
-  updateSubscribe(
-    button,
-    subscribed
-  );
-
-
-  button.onclick =
-    function(){
-
-      subscribed =
-        !subscribed;
-
-
-      localStorage.setItem(
-        "minitube_subscribed",
-        subscribed
-      );
-
-
-      updateSubscribe(
-        button,
-        subscribed
-      );
-
-    };
-
-}
-
-
-function updateSubscribe(
-  button,
-  subscribed
-){
 
   button.textContent =
     subscribed
@@ -788,139 +941,220 @@ function updateSubscribe(
 }
 
 
-/* ================================
-   SHARE
-================================ */
+/* =====================================
+   COMMENTS
+   ===================================== */
 
-async function shareVideo(){
-
-  const url =
-    window.location.href;
-
+function getComments(){
 
   try{
 
-    if(
-      navigator.share
-    ){
-
-      await navigator.share({
-
-        title:
-          currentVideo
-            ? currentVideo.name
-            : "MiniTube",
-
-        url:url
-
-      });
-
-    }else{
-
-      await navigator.clipboard
-        .writeText(url);
-
-      alert(
-        "Video link copied!"
-      );
-
-    }
+    return JSON.parse(
+      localStorage.getItem(
+        commentKey
+      ) || "[]"
+    );
 
   }catch(error){
 
-    console.log(error);
+    return [];
 
   }
 
 }
 
 
-/* ================================
-   MORE VIDEOS
-================================ */
+/* =====================================
+   POST COMMENT
+   ===================================== */
 
-function renderMoreVideos(
-  videos
-){
+function postComment(){
+
+  const input =
+    document.getElementById(
+      "commentInput"
+    );
+
+
+  const text =
+    input.value.trim();
+
+
+  if(!text){
+
+    alert(
+      "Please write a comment first."
+    );
+
+    return;
+
+  }
+
+
+  const comments =
+    getComments();
+
+
+  comments.unshift({
+
+    id:
+      Date.now(),
+
+    author:
+      "Main Player",
+
+    text:
+      text,
+
+    date:
+      new Date().toLocaleString()
+
+  });
+
+
+  localStorage.setItem(
+    commentKey,
+    JSON.stringify(
+      comments
+    )
+  );
+
+
+  input.value = "";
+
+
+  renderComments();
+
+}
+
+
+/* =====================================
+   LOAD COMMENTS
+   ===================================== */
+
+function loadComments(){
+
+  renderComments();
+
+}
+
+
+/* =====================================
+   DISPLAY COMMENTS
+   ===================================== */
+
+function renderComments(){
 
   const container =
     document.getElementById(
-      "moreVideos"
+      "commentList"
     );
+
+
+  const count =
+    document.getElementById(
+      "commentCount"
+    );
+
+
+  const comments =
+    getComments();
+
+
+  count.textContent =
+    comments.length;
+
+
+  if(comments.length === 0){
+
+    container.innerHTML = `
+
+      <div class="noComments">
+
+        No comments yet.
+        Be the first to comment!
+
+      </div>
+
+    `;
+
+    return;
+
+  }
 
 
   container.innerHTML = "";
 
 
-  videos.forEach(
-    video => {
+  comments.forEach(
+    function(comment){
 
-      if(
-        currentVideo &&
-        video.name ===
-        currentVideo.name
-      ){
-
-        return;
-
-      }
-
-
-      const url =
-        API_BASE +
-        "/video/" +
-        encodeURIComponent(
-          video.name
-        );
-
-
-      const card =
+      const element =
         document.createElement(
           "div"
         );
 
 
-      card.className =
-        "card";
+      element.className =
+        "comment";
 
 
-      card.innerHTML = `
+      element.innerHTML = `
 
-        <video
-          muted
-          preload="metadata"
-          src="${url}">
-        </video>
+        <div class="commentTop">
 
-        <div class="cardInfo">
-
-          <div class="cardTitle">
-            ${escapeHTML(video.name)}
+          <div class="commentAvatar">
+            M
           </div>
 
-          <div class="cardMeta">
-            MiniTube • Other
+          <div>
+
+            <div class="commentAuthor">
+
+              ${escapeHTML(
+                comment.author
+              )}
+
+            </div>
+
+            <div class="commentDate">
+
+              ${escapeHTML(
+                comment.date
+              )}
+
+            </div>
+
           </div>
+
+        </div>
+
+
+        <div class="commentText">
+
+          ${escapeHTML(
+            comment.text
+          )}
+
+        </div>
+
+
+        <div class="commentActions">
+
+          <button
+            class="deleteComment"
+            onclick="deleteComment(${comment.id})"
+          >
+            Delete
+          </button>
 
         </div>
 
       `;
 
 
-      card.onclick =
-        function(){
-
-          window.location.href =
-            "watch.html?video=" +
-            encodeURIComponent(
-              video.name
-            );
-
-        };
-
-
       container.appendChild(
-        card
+        element
       );
 
     }
@@ -929,60 +1163,87 @@ function renderMoreVideos(
 }
 
 
-/* ================================
-   SEARCH
-================================ */
+/* =====================================
+   DELETE COMMENT
+   ===================================== */
 
-function searchVideos(){
+function deleteComment(id){
 
-  const value =
-    document
-      .getElementById(
-        "search"
-      )
-      .value
-      .toLowerCase();
-
-
-  const filtered =
-    allVideos.filter(
-      video =>
-        video.name
-          .toLowerCase()
-          .includes(value)
+  const confirmed =
+    confirm(
+      "Delete this comment?"
     );
 
 
-  renderMoreVideos(
-    filtered
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  const comments =
+    getComments().filter(
+      function(comment){
+
+        return comment.id !== id;
+
+      }
+    );
+
+
+  localStorage.setItem(
+    commentKey,
+    JSON.stringify(
+      comments
+    )
   );
 
-}
 
-
-/* ================================
-   NAVIGATION
-================================ */
-
-function goHome(){
-
-  window.location.href =
-    "index.html";
+  renderComments();
 
 }
 
 
-function goShorts(){
+/* =====================================
+   SHARE
+   ===================================== */
 
-  window.location.href =
-    "shorts.html";
+function shareVideo(){
+
+  if(
+    navigator.share
+  ){
+
+    navigator.share({
+
+      title:
+        videoName || "MiniTube Video",
+
+      url:
+        window.location.href
+
+    });
+
+  }else{
+
+    navigator.clipboard.writeText(
+      window.location.href
+    );
+
+
+    alert(
+      "Video link copied!"
+    );
+
+  }
 
 }
 
 
-/* ================================
+/* =====================================
    SECURITY
-================================ */
+   ===================================== */
 
 function escapeHTML(text){
 
@@ -1016,13 +1277,44 @@ function escapeHTML(text){
 }
 
 
-/* ================================
-   START
-================================ */
+/* =====================================
+   NAVIGATION
+   ===================================== */
 
-loadVideos();
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
 
 </script>
 
+
 </body>
+
 </html>
