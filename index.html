@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
 <title>MiniTube</title>
 
@@ -19,6 +24,10 @@ body{
   font-family:Arial,sans-serif;
   padding-bottom:80px;
 }
+
+/* =========================
+   HEADER
+   ========================= */
 
 header{
   position:sticky;
@@ -88,6 +97,11 @@ header{
   color:#111;
 }
 
+
+/* =========================
+   HERO
+   ========================= */
+
 .hero{
   margin:24px 22px;
   padding:28px;
@@ -126,9 +140,17 @@ header{
   padding:20px;
 }
 
+
+/* =========================
+   VIDEO GRID
+   ========================= */
+
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(260px,1fr)
+  );
   gap:18px;
   padding:0 22px;
 }
@@ -172,6 +194,46 @@ header{
   font-size:13px;
   margin-top:7px;
 }
+
+
+/* =========================
+   CHANNEL + SUBSCRIBE
+   ========================= */
+
+.channelRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:7px;
+}
+
+.channelName{
+  color:#999;
+  font-size:13px;
+}
+
+.subscribeBtn{
+  border:0;
+  border-radius:22px;
+  padding:9px 16px;
+  background:#fff;
+  color:#111;
+  font-weight:bold;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.subscribeBtn.subscribed{
+  background:#292929;
+  color:#fff;
+  border:1px solid #555;
+}
+
+
+/* =========================
+   ACTIONS
+   ========================= */
 
 .actions{
   display:flex;
@@ -224,6 +286,11 @@ header{
   cursor:pointer;
 }
 
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
 .bottom{
   position:fixed;
   bottom:0;
@@ -243,6 +310,7 @@ header{
   border:0;
   color:#aaa;
   font-size:13px;
+  cursor:pointer;
 }
 
 .bottom button b{
@@ -251,6 +319,11 @@ header{
   color:white;
   margin-bottom:3px;
 }
+
+
+/* =========================
+   MOBILE
+   ========================= */
 
 @media(max-width:600px){
 
@@ -277,12 +350,27 @@ header{
     padding:0 16px;
   }
 
+  .channelRow{
+    align-items:center;
+  }
+
+  .subscribeBtn{
+    padding:8px 14px;
+  }
+
 }
 
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
 
 <header>
 
@@ -299,26 +387,49 @@ header{
       oninput="filterVideos()"
     >
 
-    <div class="avatar">M</div>
+    <div class="avatar">
+      M
+    </div>
 
   </div>
 
+
   <div class="categories">
 
-    <button class="active">All</button>
-    <button>Music</button>
-    <button>Gaming</button>
-    <button>News</button>
-    <button>Sports</button>
+    <button class="active">
+      All
+    </button>
+
+    <button>
+      Music
+    </button>
+
+    <button>
+      Gaming
+    </button>
+
+    <button>
+      News
+    </button>
+
+    <button>
+      Sports
+    </button>
 
   </div>
 
 </header>
 
 
+<!-- =========================
+     HERO
+     ========================= -->
+
 <section class="hero">
 
-  <h1>Welcome to MiniTube</h1>
+  <h1>
+    Welcome to MiniTube
+  </h1>
 
   <p>
     Your own video-sharing platform.
@@ -342,12 +453,23 @@ header{
 </section>
 
 
-<div id="status" class="status">
+<div
+  id="status"
+  class="status"
+>
   Loading videos...
 </div>
 
-<div id="videos" class="grid"></div>
 
+<div
+  id="videos"
+  class="grid"
+></div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+     ========================= -->
 
 <div class="bottom">
 
@@ -356,22 +478,28 @@ header{
     Home
   </button>
 
-  <button onclick="alert('Shorts page coming next')">
+
+  <button onclick="goShorts()">
     <b>▶</b>
     Shorts
   </button>
 
-  <button onclick="document.getElementById('file').click()">
+
+  <button
+    onclick="document.getElementById('file').click()"
+  >
     <b>＋</b>
     Create
   </button>
 
-  <button onclick="alert('Subscriptions page coming next')">
+
+  <button onclick="goSubscriptions()">
     <b>□</b>
     Subscriptions
   </button>
 
-  <button onclick="alert('Channel page coming next')">
+
+  <button onclick="goYou()">
     <b>●</b>
     You
   </button>
@@ -387,6 +515,67 @@ header{
 
 const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   SUBSCRIBE SYSTEM
+   ===================================== */
+
+const SUBSCRIBE_KEY =
+  "minitube_my_channel_subscribed";
+
+
+function isSubscribed(){
+
+  return localStorage.getItem(
+    SUBSCRIBE_KEY
+  ) === "true";
+
+}
+
+
+function toggleSubscribe(){
+
+  const current =
+    isSubscribed();
+
+  localStorage.setItem(
+    SUBSCRIBE_KEY,
+    String(!current)
+  );
+
+  updateSubscribeButtons();
+
+}
+
+
+function updateSubscribeButtons(){
+
+  const buttons =
+    document.querySelectorAll(
+      ".subscribeBtn"
+    );
+
+  const subscribed =
+    isSubscribed();
+
+
+  buttons.forEach(button => {
+
+    button.classList.toggle(
+      "subscribed",
+      subscribed
+    );
+
+
+    button.textContent =
+      subscribed
+        ? "Subscribed"
+        : "Subscribe";
+
+  });
+
+}
 
 
 let allVideos = [];
@@ -413,7 +602,44 @@ function openWatch(videoName){
 
 function goHome(){
 
-  window.location.href = "index.html";
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =====================================
+   SHORTS
+   ===================================== */
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+/* =====================================
+   SUBSCRIPTIONS
+   ===================================== */
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+/* =====================================
+   YOU
+   ===================================== */
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
 
 }
 
@@ -425,30 +651,46 @@ function goHome(){
 async function loadVideos(){
 
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
+
 
   try{
 
     status.textContent =
       "Loading videos...";
 
+
     const response =
       await fetch(
-        API_BASE + "/api/videos"
+        API_BASE +
+        "/api/videos"
       );
 
+
     if(!response.ok){
-      throw new Error("API error");
+
+      throw new Error(
+        "API error"
+      );
+
     }
+
 
     allVideos =
       await response.json();
 
-    renderVideos(allVideos);
+
+    renderVideos(
+      allVideos
+    );
+
 
   }catch(error){
 
     console.error(error);
+
 
     status.textContent =
       "Unable to load videos.";
@@ -465,12 +707,19 @@ async function loadVideos(){
 function renderVideos(videos){
 
   const container =
-    document.getElementById("videos");
+    document.getElementById(
+      "videos"
+    );
+
 
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
+
 
   container.innerHTML = "";
+
 
   if(videos.length === 0){
 
@@ -482,14 +731,19 @@ function renderVideos(videos){
 
   }
 
+
   status.textContent =
-    videos.length + " video(s)";
+    videos.length +
+    " video(s)";
 
 
   videos.forEach(video => {
 
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
+
 
     card.className =
       "card";
@@ -498,91 +752,133 @@ function renderVideos(videos){
     const videoURL =
       API_BASE +
       "/video/" +
-      encodeURIComponent(video.name);
+      encodeURIComponent(
+        video.name
+      );
 
 
-    /* =================================
+    /* ===============================
        LIKE DATA
-       ================================= */
+       =============================== */
 
     const likeKey =
-      "likes_" + video.name;
+      "likes_" +
+      video.name;
+
 
     const likedKey =
-      "liked_" + video.name;
+      "liked_" +
+      video.name;
 
 
     let likes =
       Number(
-        localStorage.getItem(likeKey) || 0
+        localStorage.getItem(
+          likeKey
+        ) || 0
       );
 
 
     let liked =
-      localStorage.getItem(likedKey)
-      === "true";
+      localStorage.getItem(
+        likedKey
+      ) === "true";
 
 
-    /* =================================
+    /* ===============================
        VIEW DATA
-       ================================= */
+       =============================== */
 
     const viewsKey =
-      "views_" + video.name;
+      "views_" +
+      video.name;
 
 
     let views =
       Number(
-        localStorage.getItem(viewsKey) || 0
+        localStorage.getItem(
+          viewsKey
+        ) || 0
       );
 
 
-    /* =================================
-       CARD
-       ================================= */
+    /* ===============================
+       CARD HTML
+       =============================== */
 
     card.innerHTML = `
 
       <video
         class="cardVideo"
         preload="metadata"
-        src="${videoURL}">
-      </video>
+        src="${videoURL}"
+      ></video>
 
 
       <div class="info">
 
         <div
           class="title"
-          title="Watch ${escapeHTML(video.name)}"
+          title="Watch ${escapeHTML(
+            video.name
+          )}"
         >
-          ${escapeHTML(video.name)}
+          ${escapeHTML(
+            video.name
+          )}
         </div>
 
 
-        <div class="meta">
-          You • Other
+        <div class="channelRow">
+
+          <div class="channelName">
+            My Channel
+          </div>
+
+
+          <button
+            class="subscribeBtn"
+            onclick="toggleSubscribe()"
+          >
+            Subscribe
+          </button>
+
         </div>
 
 
         <div class="actions">
 
           <button
-            class="likeBtn ${liked ? "liked" : ""}"
+            class="likeBtn ${
+              liked ? "liked" : ""
+            }"
           >
-            ${liked ? "♥" : "♡"} Like
+
+            ${
+              liked
+                ? "♥"
+                : "♡"
+            }
+
+            Like
+
             <span class="likeCount">
               ${likes}
             </span>
+
           </button>
 
 
           <div class="views">
+
             👁️
+
             <span class="viewCount">
               ${views}
             </span>
+
             views
+
           </div>
 
         </div>
@@ -602,70 +898,86 @@ function renderVideos(videos){
     `;
 
 
-    /* =================================
+    /* ===============================
        VIDEO → WATCH PAGE
-       ================================= */
+       =============================== */
 
     const videoElement =
-      card.querySelector(".cardVideo");
+      card.querySelector(
+        ".cardVideo"
+      );
 
 
     videoElement.addEventListener(
       "click",
       function(){
 
-        openWatch(video.name);
+        openWatch(
+          video.name
+        );
 
       }
     );
 
 
-    /* =================================
+    /* ===============================
        TITLE → WATCH PAGE
-       ================================= */
+       =============================== */
 
     const titleElement =
-      card.querySelector(".title");
+      card.querySelector(
+        ".title"
+      );
 
 
     titleElement.addEventListener(
       "click",
       function(){
 
-        openWatch(video.name);
+        openWatch(
+          video.name
+        );
 
       }
     );
 
 
-    /* =================================
+    /* ===============================
        WATCH BUTTON
-       ================================= */
+       =============================== */
 
     const watchButton =
-      card.querySelector(".watchBtn");
+      card.querySelector(
+        ".watchBtn"
+      );
 
 
     watchButton.addEventListener(
       "click",
       function(){
 
-        openWatch(video.name);
+        openWatch(
+          video.name
+        );
 
       }
     );
 
 
-    /* =================================
+    /* ===============================
        LIKE BUTTON
-       ================================= */
+       =============================== */
 
     const likeButton =
-      card.querySelector(".likeBtn");
+      card.querySelector(
+        ".likeBtn"
+      );
 
 
     const likeCount =
-      card.querySelector(".likeCount");
+      card.querySelector(
+        ".likeCount"
+      );
 
 
     likeButton.addEventListener(
@@ -719,12 +1031,14 @@ function renderVideos(videos){
     );
 
 
-    /* =================================
+    /* ===============================
        DELETE
-       ================================= */
+       =============================== */
 
     const deleteButton =
-      card.querySelector(".delete");
+      card.querySelector(
+        ".delete"
+      );
 
 
     deleteButton.addEventListener(
@@ -732,16 +1046,27 @@ function renderVideos(videos){
       async function(){
 
         await deleteVideo(
-          encodeURIComponent(video.name)
+          encodeURIComponent(
+            video.name
+          )
         );
 
       }
     );
 
 
-    container.appendChild(card);
+    container.appendChild(
+      card
+    );
 
   });
+
+
+  /* ===============================
+     UPDATE SUBSCRIBE BUTTONS
+     =============================== */
+
+  updateSubscribeButtons();
 
 }
 
@@ -753,7 +1078,9 @@ function renderVideos(videos){
 async function uploadVideo(){
 
   const input =
-    document.getElementById("file");
+    document.getElementById(
+      "file"
+    );
 
 
   const file =
@@ -768,7 +1095,9 @@ async function uploadVideo(){
 
 
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
 
 
   try{
@@ -783,7 +1112,9 @@ async function uploadVideo(){
       await fetch(
         API_BASE +
         "/api/upload?filename=" +
-        encodeURIComponent(file.name),
+        encodeURIComponent(
+          file.name
+        ),
         {
           method:"POST",
 
@@ -794,6 +1125,7 @@ async function uploadVideo(){
           },
 
           body:file
+
         }
       );
 
@@ -824,7 +1156,9 @@ async function uploadVideo(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      error
+    );
 
 
     status.textContent =
@@ -897,7 +1231,9 @@ function filterVideos(){
 
   const search =
     document
-      .getElementById("search")
+      .getElementById(
+        "search"
+      )
       .value
       .toLowerCase();
 
@@ -907,47 +1243,14 @@ function filterVideos(){
       video =>
         video.name
           .toLowerCase()
-          .includes(search)
+          .includes(
+            search
+          )
     );
 
 
-  renderVideos(filtered);
-
-}
-
-
-/* =====================================
-   FORMAT SIZE
-   ===================================== */
-
-function formatSize(bytes){
-
-  if(bytes < 1024){
-
-    return bytes + " B";
-
-  }
-
-
-  if(
-    bytes <
-    1024 * 1024
-  ){
-
-    return (
-      (bytes / 1024)
-        .toFixed(1) +
-      " KB"
-    );
-
-  }
-
-
-  return (
-    (bytes /
-      (1024 * 1024))
-      .toFixed(1) +
-    " MB"
+  renderVideos(
+    filtered
   );
 
 }
@@ -959,12 +1262,27 @@ function formatSize(bytes){
 
 function escapeHTML(text){
 
-  return text
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  return String(text)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
