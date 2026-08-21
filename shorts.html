@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MiniTube - Shorts</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  padding:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  padding-bottom:70px;
+}
+
+/* HEADER */
+
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:64px;
+  z-index:20;
+  background:rgba(15,15,15,.95);
+  border-bottom:1px solid #292929;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  gap:14px;
+}
+
+.back{
+  border:0;
+  background:none;
+  color:white;
+  font-size:30px;
+  padding:0;
+  cursor:pointer;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.logo span{
+  color:#ff0033;
+}
+
+.title{
+  margin-left:auto;
+  font-size:17px;
+  font-weight:bold;
+}
+
+/* SHORTS AREA */
+
+.shorts{
+  width:100%;
+  max-width:600px;
+  height:calc(100vh - 70px);
+  margin:64px auto 0;
+  overflow-y:auto;
+  scroll-snap-type:y mandatory;
+  scrollbar-width:none;
+}
+
+.shorts::-webkit-scrollbar{
+  display:none;
+}
+
+/* SHORT CARD */
+
+.short{
+  position:relative;
+  width:100%;
+  height:calc(100vh - 70px);
+  min-height:500px;
+  scroll-snap-align:start;
+  background:#000;
+  overflow:hidden;
+}
+
+.short video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000;
+}
+
+/* GRADIENT */
+
+.gradient{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:42%;
+  background:linear-gradient(
+    transparent,
+    rgba(0,0,0,.9)
+  );
+  pointer-events:none;
+}
+
+/* INFO */
+
+.info{
+  position:absolute;
+  left:16px;
+  right:85px;
+  bottom:25px;
+  z-index:3;
+}
+
+.videoName{
+  font-size:18px;
+  font-weight:bold;
+  word-break:break-word;
+  margin-bottom:8px;
+}
+
+.meta{
+  color:#ccc;
+  font-size:14px;
+}
+
+/* SIDE ACTIONS */
+
+.actions{
+  position:absolute;
+  right:14px;
+  bottom:30px;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:20px;
+}
+
+.action{
+  background:rgba(20,20,20,.7);
+  border:0;
+  color:white;
+  width:52px;
+  min-height:52px;
+  border-radius:50%;
+  font-size:24px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+
+.action span{
+  font-size:11px;
+  margin-top:3px;
+  color:#ddd;
+}
+
+.action.liked{
+  color:#ff0033;
+}
+
+/* EMPTY */
+
+.empty{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:#aaa;
+  padding:30px;
+}
+
+.empty strong{
+  display:block;
+  color:white;
+  font-size:22px;
+  margin-bottom:10px;
+}
+
+/* LOADING */
+
+.loading{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#aaa;
+}
+
+/* BOTTOM NAV */
+
+.bottom{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:30;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+.bottom .active{
+  color:white;
+}
+
+@media(min-width:601px){
+
+  body{
+    background:#111;
+  }
+
+  .shorts{
+    box-shadow:
+      0 0 40px rgba(0,0,0,.7);
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+
+  <button
+    class="back"
+    onclick="goHome()"
+  >
+    ‹
+  </button>
+
+  <div class="logo">
+    <span>▶</span> MiniTube
+  </div>
+
+  <div class="title">
+    Shorts
+  </div>
+
+</header>
+
+
+<!-- SHORTS -->
+
+<main
+  id="shorts"
+  class="shorts"
+>
+
+  <div class="loading">
+    Loading Shorts...
+  </div>
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+  <button class="active">
+    <b>▶</b>
+    Shorts
+  </button>
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+  <button onclick="goHome()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+  <button onclick="goHome()">
+    <b>●</b>
+    You
+  </button>
+
+</nav>
+
+
+<script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+let videos = [];
+
+
+/* =====================================
+   HOME
+   ===================================== */
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =====================================
+   LOAD VIDEOS
+   ===================================== */
+
+async function loadShorts(){
+
+  const container =
+    document.getElementById("shorts");
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE + "/api/videos"
+      );
+
+    if(!response.ok){
+      throw new Error("API error");
+    }
+
+    const data =
+      await response.json();
+
+    videos = data;
+
+    renderShorts();
+
+  }catch(error){
+
+    console.error(error);
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div>
+
+          <strong>
+            Unable to load Shorts
+          </strong>
+
+          Please try again later.
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =====================================
+   RENDER
+   ===================================== */
+
+function renderShorts(){
+
+  const container =
+    document.getElementById("shorts");
+
+  container.innerHTML = "";
+
+
+  if(!videos.length){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div>
+
+          <strong>
+            No Shorts yet
+          </strong>
+
+          Upload a video from the Home page
+          to start building your Shorts feed 🚀
+
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  videos.forEach(
+    (video,index) => {
+
+      createShort(
+        video,
+        index,
+        container
+      );
+
+    }
+  );
+
+
+  setupAutoplay();
+
+}
+
+
+/* =====================================
+   CREATE SHORT
+   ===================================== */
+
+function createShort(
+  video,
+  index,
+  container
+){
+
+  const card =
+    document.createElement("section");
+
+  card.className = "short";
+
+
+  const videoURL =
+    API_BASE +
+    "/video/" +
+    encodeURIComponent(video.name);
+
+
+  /* LIKE */
+
+  const likeKey =
+    "likes_" + video.name;
+
+  const likedKey =
+    "liked_" + video.name;
+
+
+  let likes =
+    Number(
+      localStorage.getItem(
+        likeKey
+      ) || 0
+    );
+
+
+  let liked =
+    localStorage.getItem(
+      likedKey
+    ) === "true";
+
+
+  /* VIEWS */
+
+  const viewsKey =
+    "views_" + video.name;
+
+  const viewedKey =
+    "viewed_" + video.name;
+
+
+  let views =
+    Number(
+      localStorage.getItem(
+        viewsKey
+      ) || 0
+    );
+
+
+  card.innerHTML = `
+
+    <video
+      playsinline
+      loop
+      preload="metadata"
+      src="${videoURL}">
+    </video>
+
+    <div class="gradient"></div>
+
+
+    <div class="info">
+
+      <div class="videoName">
+        ${escapeHTML(video.name)}
+      </div>
+
+      <div class="meta">
+        You • Other
+      </div>
+
+    </div>
+
+
+    <div class="actions">
+
+      <button class="action likeBtn">
+
+        <span class="heart">
+          ${liked ? "♥" : "♡"}
+        </span>
+
+        <span class="likeNumber">
+          ${likes}
+        </span>
+
+      </button>
+
+
+      <button class="action">
+
+        ▶
+
+        <span>
+          Play
+        </span>
+
+      </button>
+
+
+      <button class="action shareBtn">
+
+        ↗
+
+        <span>
+          Share
+        </span>
+
+      </button>
+
+
+      <button class="action">
+
+        👁
+
+        <span class="shortViews">
+          ${views}
+        </span>
+
+      </button>
+
+    </div>
+
+  `;
+
+
+  /* =================================
+     ELEMENTS
+     ================================= */
+
+  const videoElement =
+    card.querySelector("video");
+
+  const likeButton =
+    card.querySelector(".likeBtn");
+
+  const heart =
+    card.querySelector(".heart");
+
+  const likeNumber =
+    card.querySelector(".likeNumber");
+
+  const viewNumber =
+    card.querySelector(".shortViews");
+
+
+  /* =================================
+     LIKE
+     ================================= */
+
+  likeButton.addEventListener(
+    "click",
+    function(){
+
+      liked = !liked;
+
+
+      if(liked){
+
+        likes++;
+
+      }else{
+
+        if(likes > 0){
+          likes--;
+        }
+
+      }
+
+
+      localStorage.setItem(
+        likeKey,
+        likes
+      );
+
+
+      localStorage.setItem(
+        likedKey,
+        liked
+      );
+
+
+      heart.textContent =
+        liked ? "♥" : "♡";
+
+
+      likeNumber.textContent =
+        likes;
+
+
+      likeButton.classList.toggle(
+        "liked",
+        liked
+      );
+
+    }
+  );
+
+
+  /* =================================
+     PLAY BUTTON
+     ================================= */
+
+  const playButton =
+    card.querySelectorAll(
+      ".action"
+    )[1];
+
+
+  playButton.addEventListener(
+    "click",
+    function(){
+
+      if(videoElement.paused){
+
+        videoElement.play();
+
+      }else{
+
+        videoElement.pause();
+
+      }
+
+    }
+  );
+
+
+  /* =================================
+     SHARE
+     ================================= */
+
+  const shareButton =
+    card.querySelector(".shareBtn");
+
+
+  shareButton.addEventListener(
+    "click",
+    async function(){
+
+      const shareURL =
+        window.location.href;
+
+
+      try{
+
+        if(
+          navigator.share
+        ){
+
+          await navigator.share({
+
+            title:
+              video.name,
+
+            text:
+              "Watch this on MiniTube",
+
+            url:
+              shareURL
+
+          });
+
+        }else{
+
+          await navigator.clipboard.writeText(
+            shareURL
+          );
+
+          alert(
+            "MiniTube link copied!"
+          );
+
+        }
+
+      }catch(error){
+
+        console.log(
+          "Share cancelled"
+        );
+
+      }
+
+    }
+  );
+
+
+  /* =================================
+     VIEW COUNTER
+     ================================= */
+
+  let counted =
+    localStorage.getItem(
+      viewedKey
+    ) === "true";
+
+
+  let viewTimer;
+
+
+  videoElement.addEventListener(
+    "play",
+    function(){
+
+      if(counted){
+        return;
+      }
+
+
+      clearTimeout(
+        viewTimer
+      );
+
+
+      viewTimer =
+        setTimeout(
+          function(){
+
+            views++;
+
+
+            localStorage.setItem(
+              viewsKey,
+              views
+            );
+
+
+            localStorage.setItem(
+              viewedKey,
+              "true"
+            );
+
+
+            viewNumber.textContent =
+              views;
+
+
+            counted = true;
+
+          },
+          3000
+        );
+
+    }
+  );
+
+
+  videoElement.addEventListener(
+    "pause",
+    function(){
+
+      clearTimeout(
+        viewTimer
+      );
+
+    }
+  );
+
+
+  container.appendChild(card);
+
+}
+
+
+/* =====================================
+   AUTOPLAY WHEN VISIBLE
+   ===================================== */
+
+function setupAutoplay(){
+
+  const observer =
+    new IntersectionObserver(
+      entries => {
+
+        entries.forEach(
+          entry => {
+
+            const video =
+              entry.target
+                .querySelector("video");
+
+
+            if(
+              entry.isIntersecting
+              &&
+              entry.intersectionRatio > .7
+            ){
+
+              document
+                .querySelectorAll(
+                  ".short video"
+                )
+                .forEach(
+                  other => {
+
+                    if(
+                      other !== video
+                    ){
+
+                      other.pause();
+
+                    }
+
+                  }
+                );
+
+
+              video.play()
+                .catch(
+                  () => {}
+                );
+
+            }else{
+
+              video.pause();
+
+            }
+
+          }
+        );
+
+      },
+      {
+        threshold:[
+          0.7
+        ]
+      }
+    );
+
+
+  document
+    .querySelectorAll(".short")
+    .forEach(
+      card => {
+
+        observer.observe(
+          card
+        );
+
+      }
+    );
+
+}
+
+
+/* =====================================
+   SECURITY
+   ===================================== */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================
+   START
+   ===================================== */
+
+loadShorts();
+
+</script>
+
+</body>
+</html>
