@@ -1,45 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>MiniTube</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
+  padding-bottom:85px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px 10px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.logo span{
+  color:#ff0033;
+}
+
+.search{
+  flex:1;
+  background:#222;
+  border:1px solid #444;
+  border-radius:35px;
+  padding:13px 17px;
+  color:white;
+  font-size:16px;
+  outline:none;
+}
+
+.search::placeholder{
+  color:#888;
+}
+
+.avatar{
+  width:38px;
+  height:52px;
+  border-radius:22px;
+  background:#7b3cff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:bold;
+}
+
+/* =========================
+   CATEGORIES
+========================= */
+
+.categories{
+  display:flex;
+  gap:16px;
+  overflow-x:auto;
+  padding:10px 10px 8px;
+  scrollbar-width:none;
+}
+
+.categories::-webkit-scrollbar{
+  display:none;
+}
+
+.category{
+  border:0;
+  background:#272727;
+  color:white;
+  padding:12px 28px;
+  border-radius:30px;
+  font-size:17px;
+  white-space:nowrap;
+}
+
+.category.active{
+  background:white;
+  color:#222;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main{
+  padding:24px 25px;
+  max-width:900px;
+  margin:auto;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  background:linear-gradient(
+    110deg,
+    #24112d,
+    #151515
+  );
+  border-radius:48px;
+  padding:42px 38px 38px;
+  margin-bottom:60px;
+}
+
+.hero h1{
+  margin:0 0 28px;
+  font-size:38px;
+  line-height:1.15;
+}
+
+.hero p{
+  color:#aaa;
+  font-size:22px;
+  margin:0 0 28px;
+}
+
+.upload-btn{
+  display:inline-block;
+  background:#ff0033;
+  color:white;
+  border:0;
+  border-radius:35px;
+  padding:17px 28px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.upload-btn:active{
+  transform:scale(.97);
+}
+
+/* hidden file input */
+
+#file{
+  display:none;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+#status{
+  text-align:center;
+  color:#aaa;
+  font-size:20px;
+  margin:20px 0 35px;
+}
+
+/* =========================
+   VIDEO CARD
+========================= */
+
+.card{
+  background:#191919;
+  border-radius:28px;
+  overflow:hidden;
+  margin-bottom:30px;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
+}
+
+.card video{
+  display:block;
+  width:100%;
+  max-height:520px;
+  background:#000;
+  object-fit:contain;
+}
+
+.info{
+  padding:20px;
+}
+
+.title{
+  font-size:24px;
+  font-weight:700;
+  margin-bottom:10px;
+  word-break:break-word;
+}
+
+.meta{
+  color:#999;
+  font-size:16px;
+  margin-bottom:12px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-top:12px;
+}
+
+.like-btn{
+  background:none;
+  border:0;
+  color:#ccc;
+  font-size:17px;
+  padding:0;
+  cursor:pointer;
+}
+
+.like-btn.liked{
+  color:#ff0033;
+}
+
+.views{
+  color:#aaa;
+  font-size:16px;
+}
+
+.delete{
+  margin-top:18px;
+  background:#292929;
+  color:#ff5577;
+  border:0;
+  border-radius:12px;
+  padding:11px 18px;
+  font-size:15px;
+  cursor:pointer;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:78px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:200;
+}
+
+.nav-item{
+  color:#aaa;
+  text-align:center;
+  font-size:14px;
+}
+
+.nav-icon{
+  display:block;
+  color:white;
+  font-size:27px;
+  line-height:30px;
+  margin-bottom:4px;
+}
+
+.create{
+  font-size:32px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+  header{
+    padding:10px 12px;
+  }
+
+  .top{
+    gap:10px;
+  }
+
+  .logo{
+    font-size:22px;
+  }
+
+  .search{
+    min-width:0;
+    font-size:15px;
+    padding:12px 14px;
+  }
+
+  .avatar{
+    width:35px;
+    height:48px;
+  }
+
+  .categories{
+    gap:14px;
+    padding-left:14px;
+  }
+
+  .category{
+    padding:11px 25px;
+  }
+
+  main{
+    padding:24px 25px;
+  }
+
+  .hero{
+    border-radius:45px;
+    padding:40px 38px 38px;
+    margin-bottom:60px;
+  }
+
+  .hero h1{
+    font-size:36px;
+  }
+
+  .hero p{
+    font-size:21px;
+  }
+
+  .title{
+    font-size:23px;
+  }
+
+  .card{
+    border-radius:28px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+  <div class="top">
+
+    <div class="logo">
+      <span>▶</span> MiniTube
+    </div>
+
+    <input
+      id="search"
+      class="search"
+      type="search"
+      placeholder="Search videos..."
+      oninput="filterVideos()"
+    >
+
+    <div class="avatar">
+      M
+    </div>
+
+  </div>
+
+
+  <div class="categories">
+
+    <button class="category active">
+      All
+    </button>
+
+    <button class="category">
+      Music
+    </button>
+
+    <button class="category">
+      Gaming
+    </button>
+
+    <button class="category">
+      News
+    </button>
+
+    <button class="category">
+      Sports
+    </button>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+
+  <section class="hero">
+
+    <h1>
+      Welcome to MiniTube
+    </h1>
+
+    <p>
+      Your own video-sharing platform.
+    </p>
+
+    <label
+      for="file"
+      class="upload-btn"
+    >
+      + Upload Video
+    </label>
+
+    <input
+      id="file"
+      type="file"
+      accept="video/*"
+      onchange="uploadVideo()"
+    >
+
+  </section>
+
+
+  <div id="status">
+    Loading videos...
+  </div>
+
+
+  <div id="videos"></div>
+
+
+</main>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<nav class="bottom-nav">
+
+  <div class="nav-item">
+
+    <span class="nav-icon">
+      ⌂
+    </span>
+
+    Home
+
+  </div>
+
+
+  <div class="nav-item">
+
+    <span class="nav-icon">
+      ▶
+    </span>
+
+    Shorts
+
+  </div>
+
+
+  <div class="nav-item">
+
+    <span class="nav-icon create">
+      +
+    </span>
+
+    Create
+
+  </div>
+
+
+  <div class="nav-item">
+
+    <span class="nav-icon">
+      □
+    </span>
+
+    Subscriptions
+
+  </div>
+
+
+  <div class="nav-item">
+
+    <span class="nav-icon">
+      ●
+    </span>
+
+    You
+
+  </div>
+
+</nav>
+
+
 <script>
 
 /* =====================================
    MINITUBE
+   COMPLETE FRONTEND
    LIKE + VIEWS + UPLOAD + DELETE + SEARCH
-   ===================================== */
+===================================== */
+
+
+/*
+   IMPORTANT:
+
+   Replace ONLY YOUR_WORKER_URL
+   with your actual Cloudflare Worker URL.
+
+   Example:
+
+   const API_BASE =
+     "https://minitube-api.example.workers.dev";
+*/
 
 const API_BASE = "YOUR_WORKER_URL";
+
 
 let allVideos = [];
 
 
 /* =====================================
    LOAD VIDEOS
-   ===================================== */
+===================================== */
 
 async function loadVideos(){
 
-  const status = document.getElementById("status");
+  const status =
+    document.getElementById("status");
 
   try{
 
-    status.textContent = "Loading videos...";
+    status.textContent =
+      "Loading videos...";
 
-    const response = await fetch(
-      API_BASE + "/api/videos"
-    );
+
+    const response =
+      await fetch(
+        API_BASE + "/api/videos"
+      );
+
 
     if(!response.ok){
-      throw new Error("API error");
+
+      throw new Error(
+        "Unable to load videos"
+      );
+
     }
 
-    allVideos = await response.json();
+
+    const contentType =
+      response.headers.get(
+        "content-type"
+      ) || "";
+
+
+    if(
+      !contentType.includes(
+        "application/json"
+      )
+    ){
+
+      throw new Error(
+        "Server did not return JSON. Check your Worker URL."
+      );
+
+    }
+
+
+    allVideos =
+      await response.json();
+
+
+    if(
+      !Array.isArray(allVideos)
+    ){
+
+      throw new Error(
+        "Invalid video data"
+      );
+
+    }
+
 
     renderVideos(allVideos);
+
 
   }catch(error){
 
     console.error(error);
 
+
     status.textContent =
-      "Unable to load videos.";
+      "Unable to load videos: " +
+      error.message;
 
   }
 
@@ -48,15 +646,17 @@ async function loadVideos(){
 
 /* =====================================
    DISPLAY VIDEOS
-   ===================================== */
+===================================== */
 
 function renderVideos(videos){
 
   const container =
     document.getElementById("videos");
 
+
   const status =
     document.getElementById("status");
+
 
   container.innerHTML = "";
 
@@ -73,7 +673,8 @@ function renderVideos(videos){
 
 
   status.textContent =
-    videos.length + " video(s)";
+    videos.length +
+    " video(s)";
 
 
   videos.forEach(video => {
@@ -81,36 +682,44 @@ function renderVideos(videos){
     const card =
       document.createElement("div");
 
-    card.className = "card";
 
-
-    const encodedName =
-      encodeURIComponent(video.name);
+    card.className =
+      "card";
 
 
     const videoURL =
       API_BASE +
       "/video/" +
-      encodedName;
+      encodeURIComponent(
+        video.name
+      );
 
 
-    /* LIKE DATA */
+    const encodedName =
+      encodeURIComponent(
+        video.name
+      );
+
 
     const likeKey =
-      "liked_" + video.name;
+      "liked_" +
+      video.name;
+
 
     const likeCountKey =
-      "likes_" + video.name;
+      "likes_" +
+      video.name;
 
-
-    /* VIEW DATA */
 
     const viewKey =
-      "views_" + video.name;
+      "views_" +
+      video.name;
 
 
     let liked =
-      localStorage.getItem(likeKey) === "true";
+      localStorage.getItem(
+        likeKey
+      ) === "true";
 
 
     let likes =
@@ -141,8 +750,13 @@ function renderVideos(videos){
 
       <div class="info">
 
+
         <div class="title">
-          ${escapeHTML(video.name)}
+
+          ${escapeHTML(
+            video.name
+          )}
+
         </div>
 
 
@@ -151,31 +765,17 @@ function renderVideos(videos){
         </div>
 
 
-        <div style="
-          display:flex;
-          align-items:center;
-          gap:18px;
-          margin-top:10px;
-          flex-wrap:wrap;
-        ">
+        <div class="actions">
 
-
-          <!-- LIKE -->
 
           <button
+            class="like-btn ${liked ? "liked" : ""}"
             onclick="toggleLike('${encodedName}')"
             id="like-${encodedName}"
-            style="
-              background:none;
-              border:0;
-              color:${liked ? "#ff0033" : "#ccc"};
-              font-size:17px;
-              padding:0;
-              cursor:pointer;
-            "
           >
 
-            ${liked ? "♥" : "♡"} Like
+            ${liked ? "♥" : "♡"}
+            Like
 
             <span
               id="count-${encodedName}"
@@ -186,12 +786,7 @@ function renderVideos(videos){
           </button>
 
 
-          <!-- VIEWS -->
-
-          <span style="
-            color:#aaa;
-            font-size:16px;
-          ">
+          <span class="views">
 
             👁️
 
@@ -208,8 +803,6 @@ function renderVideos(videos){
 
         </div>
 
-
-        <!-- DELETE -->
 
         <button
           class="delete"
@@ -233,20 +826,24 @@ function renderVideos(videos){
 
 /* =====================================
    LIKE SYSTEM
-   ===================================== */
+===================================== */
 
 function toggleLike(name){
 
   const decodedName =
-    decodeURIComponent(name);
+    decodeURIComponent(
+      name
+    );
 
 
   const likeKey =
-    "liked_" + decodedName;
+    "liked_" +
+    decodedName;
 
 
   const likeCountKey =
-    "likes_" + decodedName;
+    "likes_" +
+    decodedName;
 
 
   let liked =
@@ -267,8 +864,11 @@ function toggleLike(name){
 
     liked = false;
 
+
     if(likes > 0){
+
       likes--;
+
     }
 
   }else{
@@ -300,17 +900,17 @@ function toggleLike(name){
 
   if(button){
 
-    button.style.color =
+    button.classList.toggle(
+      "liked",
       liked
-        ? "#ff0033"
-        : "#ccc";
+    );
 
 
     button.innerHTML =
       `${liked ? "♥" : "♡"} Like
-       <span id="count-${name}">
-         ${likes}
-       </span>`;
+      <span id="count-${name}">
+        ${likes}
+      </span>`;
 
   }
 
@@ -318,17 +918,20 @@ function toggleLike(name){
 
 
 /* =====================================
-   VIEW SYSTEM
-   ===================================== */
+   VIEWS SYSTEM
+===================================== */
 
 function addView(name){
 
   const decodedName =
-    decodeURIComponent(name);
+    decodeURIComponent(
+      name
+    );
 
 
   const viewKey =
-    "views_" + decodedName;
+    "views_" +
+    decodedName;
 
 
   let views =
@@ -366,12 +969,14 @@ function addView(name){
 
 /* =====================================
    UPLOAD
-   ===================================== */
+===================================== */
 
 async function uploadVideo(){
 
   const input =
-    document.getElementById("file");
+    document.getElementById(
+      "file"
+    );
 
 
   const file =
@@ -379,12 +984,16 @@ async function uploadVideo(){
 
 
   if(!file){
+
     return;
+
   }
 
 
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
 
 
   try{
@@ -397,31 +1006,66 @@ async function uploadVideo(){
 
     const response =
       await fetch(
+
         API_BASE +
         "/api/upload?filename=" +
-        encodeURIComponent(file.name),
+        encodeURIComponent(
+          file.name
+        ),
+
         {
+
           method:"POST",
 
           headers:{
+
             "Content-Type":
               file.type ||
               "video/mp4"
+
           },
 
           body:file
+
         }
+
       );
 
 
-    const result =
-      await response.json();
+    const contentType =
+      response.headers.get(
+        "content-type"
+      ) || "";
+
+
+    let result = null;
+
+
+    if(
+      contentType.includes(
+        "application/json"
+      )
+    ){
+
+      result =
+        await response.json();
+
+    }else{
+
+      const text =
+        await response.text();
+
+      throw new Error(
+        "Server returned HTML instead of JSON. Check your Worker URL."
+      );
+
+    }
 
 
     if(!response.ok){
 
       throw new Error(
-        result.error ||
+        result?.error ||
         "Upload failed"
       );
 
@@ -453,10 +1097,16 @@ async function uploadVideo(){
 
 
 /* =====================================
-   DELETE VIDEO
-   ===================================== */
+   DELETE
+===================================== */
 
 async function deleteVideo(name){
+
+  const decodedName =
+    decodeURIComponent(
+      name
+    );
+
 
   if(
     !confirm(
@@ -473,12 +1123,17 @@ async function deleteVideo(name){
 
     const response =
       await fetch(
+
         API_BASE +
         "/api/delete/" +
-        name,
+        encodeURIComponent(
+          decodedName
+        ),
+
         {
           method:"DELETE"
         }
+
       );
 
 
@@ -498,6 +1153,7 @@ async function deleteVideo(name){
 
     console.error(error);
 
+
     alert(
       "Could not delete video."
     );
@@ -509,15 +1165,18 @@ async function deleteVideo(name){
 
 /* =====================================
    SEARCH
-   ===================================== */
+===================================== */
 
 function filterVideos(){
 
   const search =
     document
-      .getElementById("search")
+      .getElementById(
+        "search"
+      )
       .value
-      .toLowerCase();
+      .toLowerCase()
+      .trim();
 
 
   const filtered =
@@ -525,75 +1184,47 @@ function filterVideos(){
       video =>
         video.name
           .toLowerCase()
-          .includes(search)
+          .includes(
+            search
+          )
     );
 
 
-  renderVideos(filtered);
-
-}
-
-
-/* =====================================
-   FORMAT SIZE
-   ===================================== */
-
-function formatSize(bytes){
-
-  if(bytes < 1024){
-
-    return bytes + " B";
-
-  }
-
-
-  if(
-    bytes <
-    1024 * 1024
-  ){
-
-    return (
-      (bytes / 1024)
-        .toFixed(1) +
-      " KB"
-    );
-
-  }
-
-
-  return (
-    (bytes /
-      (1024 * 1024))
-      .toFixed(1) +
-    " MB"
+  renderVideos(
+    filtered
   );
 
 }
 
 
 /* =====================================
-   SECURITY
-   ===================================== */
+   ESCAPE HTML
+===================================== */
 
 function escapeHTML(text){
 
-  return text
+  return String(text)
+
     .replace(
       /&/g,
       "&amp;"
     )
+
     .replace(
       /</g,
       "&lt;"
     )
+
     .replace(
       />/g,
       "&gt;"
     )
+
     .replace(
       /"/g,
       "&quot;"
     )
+
     .replace(
       /'/g,
       "&#039;"
@@ -603,9 +1234,14 @@ function escapeHTML(text){
 
 
 /* =====================================
-   START MINITUBE
-   ===================================== */
+   START
+===================================== */
 
 loadVideos();
 
 </script>
+
+
+</body>
+
+</html>
