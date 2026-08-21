@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>MiniTube - Subscriptions</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  height:64px;
+  background:#111;
+  border-bottom:1px solid #292929;
+
+  display:flex;
+  align-items:center;
+
+  padding:0 16px;
+  gap:14px;
+}
+
+.back{
+  background:none;
+  border:0;
+  color:white;
+  font-size:30px;
+  cursor:pointer;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#ff0033;
+}
+
+.spacer{
+  flex:1;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+
+  display:grid;
+  place-items:center;
+
+  font-weight:bold;
+  font-size:18px;
+}
+
+.pageTitle{
+  padding:25px 20px 10px;
+}
+
+.pageTitle h1{
+  margin:0;
+  font-size:28px;
+}
+
+.pageTitle p{
+  color:#999;
+  margin-top:8px;
+}
+
+.channels{
+  display:flex;
+  gap:14px;
+  overflow-x:auto;
+  padding:15px 20px 25px;
+}
+
+.channel{
+  min-width:90px;
+  text-align:center;
+}
+
+.channelAvatar{
+  width:62px;
+  height:62px;
+  margin:auto;
+
+  border-radius:50%;
+  background:#292929;
+
+  display:grid;
+  place-items:center;
+
+  font-size:23px;
+  font-weight:bold;
+}
+
+.channelName{
+  margin-top:8px;
+  color:#ddd;
+  font-size:13px;
+}
+
+.feed{
+  padding:0 20px;
+}
+
+.feedTitle{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.empty{
+  background:#181818;
+  border:1px solid #292929;
+  border-radius:16px;
+
+  padding:45px 20px;
+  text-align:center;
+}
+
+.emptyIcon{
+  font-size:45px;
+  margin-bottom:15px;
+}
+
+.empty h2{
+  margin:0 0 8px;
+}
+
+.empty p{
+  color:#999;
+  line-height:1.5;
+  margin:0;
+}
+
+.homeBtn{
+  margin-top:20px;
+
+  background:#ff0033;
+  color:white;
+
+  border:0;
+  border-radius:25px;
+
+  padding:13px 22px;
+
+  font-size:15px;
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+
+  height:70px;
+
+  background:#151515;
+  border-top:1px solid #333;
+
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+
+  z-index:30;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+.bottom .active{
+  color:white;
+}
+
+@media(max-width:600px){
+
+  .pageTitle{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .channels{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .feed{
+    padding:0 16px;
+  }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header>
+
+  <button
+    class="back"
+    onclick="goHome()"
+  >
+    ‹
+  </button>
+
+  <div class="logo">
+    <span>▶</span> MiniTube
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="avatar">
+    M
+  </div>
+
+</header>
+
+
+<section class="pageTitle">
+
+  <h1>
+    Subscriptions
+  </h1>
+
+  <p>
+    Videos from channels you follow
+  </p>
+
+</section>
+
+
+<section class="channels">
+
+  <div class="channel">
+
+    <div class="channelAvatar">
+      +
+    </div>
+
+    <div class="channelName">
+      Discover
+    </div>
+
+  </div>
+
+
+  <div class="channel">
+
+    <div class="channelAvatar">
+      M
+    </div>
+
+    <div class="channelName">
+      My Channel
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="feed">
+
+  <div class="feedTitle">
+    Latest videos
+  </div>
+
+
+  <div class="empty">
+
+    <div class="emptyIcon">
+      📺
+    </div>
+
+    <h2>
+      Nothing here yet
+    </h2>
+
+    <p>
+      Subscribe to channels to see
+      their latest videos here.
+    </p>
+
+    <button
+      class="homeBtn"
+      onclick="goHome()"
+    >
+      Explore videos
+    </button>
+
+  </div>
+
+</section>
+
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+
+  <button class="active">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+</script>
+
+
+</body>
+</html>
