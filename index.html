@@ -139,11 +139,17 @@ header{
   overflow:hidden;
 }
 
-.card video{
+.cardVideo{
   width:100%;
   aspect-ratio:16/9;
   display:block;
   background:#000;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+.cardVideo:hover{
+  opacity:.92;
 }
 
 .info{
@@ -154,6 +160,11 @@ header{
   font-size:17px;
   font-weight:bold;
   word-break:break-word;
+  cursor:pointer;
+}
+
+.title:hover{
+  text-decoration:underline;
 }
 
 .meta{
@@ -187,8 +198,24 @@ header{
   font-size:15px;
 }
 
+.watchBtn{
+  margin-top:12px;
+  background:#292929;
+  color:white;
+  border:0;
+  padding:9px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.watchBtn:hover{
+  background:#383838;
+}
+
 .delete{
   margin-top:12px;
+  margin-left:6px;
   background:#292929;
   color:#ff4964;
   border:0;
@@ -324,12 +351,12 @@ header{
 
 <div class="bottom">
 
-  <button>
+  <button onclick="goHome()">
     <b>⌂</b>
     Home
   </button>
 
-  <button>
+  <button onclick="alert('Shorts page coming next')">
     <b>▶</b>
     Shorts
   </button>
@@ -339,12 +366,12 @@ header{
     Create
   </button>
 
-  <button>
+  <button onclick="alert('Subscriptions page coming next')">
     <b>□</b>
     Subscriptions
   </button>
 
-  <button>
+  <button onclick="alert('Channel page coming next')">
     <b>●</b>
     You
   </button>
@@ -363,6 +390,32 @@ const API_BASE =
 
 
 let allVideos = [];
+
+
+/* =====================================
+   OPEN WATCH PAGE
+   ===================================== */
+
+function openWatch(videoName){
+
+  const url =
+    "watch.html?video=" +
+    encodeURIComponent(videoName);
+
+  window.location.href = url;
+
+}
+
+
+/* =====================================
+   HOME
+   ===================================== */
+
+function goHome(){
+
+  window.location.href = "index.html";
+
+}
 
 
 /* =====================================
@@ -432,12 +485,14 @@ function renderVideos(videos){
   status.textContent =
     videos.length + " video(s)";
 
+
   videos.forEach(video => {
 
     const card =
       document.createElement("div");
 
-    card.className = "card";
+    card.className =
+      "card";
 
 
     const videoURL =
@@ -446,7 +501,9 @@ function renderVideos(videos){
       encodeURIComponent(video.name);
 
 
-    /* LIKE DATA */
+    /* =================================
+       LIKE DATA
+       ================================= */
 
     const likeKey =
       "likes_" + video.name;
@@ -454,22 +511,25 @@ function renderVideos(videos){
     const likedKey =
       "liked_" + video.name;
 
+
     let likes =
       Number(
         localStorage.getItem(likeKey) || 0
       );
 
+
     let liked =
-      localStorage.getItem(likedKey) === "true";
+      localStorage.getItem(likedKey)
+      === "true";
 
 
-    /* VIEW DATA */
+    /* =================================
+       VIEW DATA
+       ================================= */
 
     const viewsKey =
       "views_" + video.name;
 
-    const viewedKey =
-      "viewed_" + video.name;
 
     let views =
       Number(
@@ -477,32 +537,45 @@ function renderVideos(videos){
       );
 
 
+    /* =================================
+       CARD
+       ================================= */
+
     card.innerHTML = `
 
       <video
-        controls
+        class="cardVideo"
         preload="metadata"
         src="${videoURL}">
       </video>
 
+
       <div class="info">
 
-        <div class="title">
+        <div
+          class="title"
+          title="Watch ${escapeHTML(video.name)}"
+        >
           ${escapeHTML(video.name)}
         </div>
+
 
         <div class="meta">
           You • Other
         </div>
 
+
         <div class="actions">
 
-          <button class="likeBtn ${liked ? "liked" : ""}">
+          <button
+            class="likeBtn ${liked ? "liked" : ""}"
+          >
             ${liked ? "♥" : "♡"} Like
             <span class="likeCount">
               ${likes}
             </span>
           </button>
+
 
           <div class="views">
             👁️
@@ -514,6 +587,12 @@ function renderVideos(videos){
 
         </div>
 
+
+        <button class="watchBtn">
+          ▶ Watch
+        </button>
+
+
         <button class="delete">
           Delete
         </button>
@@ -524,11 +603,66 @@ function renderVideos(videos){
 
 
     /* =================================
+       VIDEO → WATCH PAGE
+       ================================= */
+
+    const videoElement =
+      card.querySelector(".cardVideo");
+
+
+    videoElement.addEventListener(
+      "click",
+      function(){
+
+        openWatch(video.name);
+
+      }
+    );
+
+
+    /* =================================
+       TITLE → WATCH PAGE
+       ================================= */
+
+    const titleElement =
+      card.querySelector(".title");
+
+
+    titleElement.addEventListener(
+      "click",
+      function(){
+
+        openWatch(video.name);
+
+      }
+    );
+
+
+    /* =================================
+       WATCH BUTTON
+       ================================= */
+
+    const watchButton =
+      card.querySelector(".watchBtn");
+
+
+    watchButton.addEventListener(
+      "click",
+      function(){
+
+        openWatch(video.name);
+
+      }
+    );
+
+
+    /* =================================
        LIKE BUTTON
        ================================= */
 
     const likeButton =
       card.querySelector(".likeBtn");
+
 
     const likeCount =
       card.querySelector(".likeCount");
@@ -541,6 +675,7 @@ function renderVideos(videos){
         liked =
           !liked;
 
+
         if(liked){
 
           likes++;
@@ -548,7 +683,9 @@ function renderVideos(videos){
         }else{
 
           if(likes > 0){
+
             likes--;
+
           }
 
         }
@@ -558,6 +695,7 @@ function renderVideos(videos){
           likeKey,
           likes
         );
+
 
         localStorage.setItem(
           likedKey,
@@ -573,79 +711,9 @@ function renderVideos(videos){
 
         likeButton.innerHTML =
           `${liked ? "♥" : "♡"} Like
-           <span class="likeCount">
-           ${likes}
-           </span>`;
-
-      }
-    );
-
-
-    /* =================================
-       VIEW COUNTER
-       ================================= */
-
-    const videoElement =
-      card.querySelector("video");
-
-    const viewCount =
-      card.querySelector(".viewCount");
-
-
-    let counted =
-      localStorage.getItem(viewedKey)
-      === "true";
-
-
-    let viewTimer;
-
-
-    videoElement.addEventListener(
-      "play",
-      function(){
-
-        if(counted){
-          return;
-        }
-
-
-        clearTimeout(viewTimer);
-
-
-        viewTimer =
-          setTimeout(
-            function(){
-
-              views++;
-
-              localStorage.setItem(
-                viewsKey,
-                views
-              );
-
-              localStorage.setItem(
-                viewedKey,
-                "true"
-              );
-
-              viewCount.textContent =
-                views;
-
-              counted = true;
-
-            },
-            3000
-          );
-
-      }
-    );
-
-
-    videoElement.addEventListener(
-      "pause",
-      function(){
-
-        clearTimeout(viewTimer);
+          <span class="likeCount">
+          ${likes}
+          </span>`;
 
       }
     );
@@ -687,11 +755,15 @@ async function uploadVideo(){
   const input =
     document.getElementById("file");
 
+
   const file =
     input.files[0];
 
+
   if(!file){
+
     return;
+
   }
 
 
@@ -753,6 +825,7 @@ async function uploadVideo(){
   }catch(error){
 
     console.error(error);
+
 
     status.textContent =
       "Upload failed: " +
@@ -887,26 +960,11 @@ function formatSize(bytes){
 function escapeHTML(text){
 
   return text
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
