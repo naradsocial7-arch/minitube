@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MiniTube</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  background:#0f0f0f;
+  color:white;
+  padding-bottom:75px;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#0f0f0f;
+  padding:12px 15px;
+  border-bottom:1px solid #292929;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  color:#ff0033;
+}
+
+.logo span{
+  color:white;
+}
+
+.search{
+  flex:1;
+  max-width:600px;
+  background:#222;
+  border:1px solid #444;
+  border-radius:25px;
+  padding:11px 16px;
+  color:white;
+  outline:none;
+}
+
+.profile{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+}
+
+.categories{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:12px 0 2px;
+}
+
+.categories::-webkit-scrollbar{
+  display:none;
+}
+
+.category{
+  white-space:nowrap;
+  background:#272727;
+  color:white;
+  border:0;
+  border-radius:18px;
+  padding:8px 15px;
+}
+
+.category.active{
+  background:white;
+  color:black;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:18px 12px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#24112d,#171717);
+  border-radius:14px;
+  padding:25px 18px;
+  margin-bottom:22px;
+}
+
+.hero h1{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#aaa;
+  margin-bottom:16px;
+}
+
+.upload{
+  background:#ff0033;
+  color:white;
+  border:0;
+  padding:11px 18px;
+  border-radius:22px;
+  font-weight:bold;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px 12px;
+}
+
+.card{
+  cursor:pointer;
+}
+
+.thumb{
+  width:100%;
+  aspect-ratio:16/9;
+  border-radius:10px;
+  background:linear-gradient(135deg,#333,#111);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:35px;
+  margin-bottom:9px;
+}
+
+.card h3{
+  font-size:15px;
+  line-height:1.35;
+}
+
+.meta{
+  color:#999;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.like{
+  background:none;
+  color:#aaa;
+  border:0;
+  margin-top:7px;
+  font-size:14px;
+}
+
+.like.liked{
+  color:#ff0033;
+}
+
+.empty{
+  text-align:center;
+  padding:50px 10px;
+  color:#888;
+  display:none;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:65px;
+  background:#181818;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.nav{
+  color:#aaa;
+  background:none;
+  border:0;
+  font-size:12px;
+  text-align:center;
+}
+
+.nav b{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
+
+.nav.active{
+  color:white;
+}
+
+@media(max-width:850px){
+  .grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:20px 10px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+
+  .search{
+    max-width:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="top">
+    <div class="logo">▶ <span>MiniTube</span></div>
+
+    <input
+      id="search"
+      class="search"
+      type="search"
+      placeholder="Search videos..."
+      oninput="searchVideos()"
+    >
+
+    <div class="profile">M</div>
+  </div>
+
+  <div class="categories">
+    <button class="category active">All</button>
+    <button class="category">Music</button>
+    <button class="category">Gaming</button>
+    <button class="category">News</button>
+    <button class="category">Sports</button>
+    <button class="category">Shorts</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <h1>Welcome to MiniTube</h1>
+    <p>Your experimental video-sharing platform.</p>
+    <button class="upload" onclick="uploadMessage()">
+      ＋ Upload Video
+    </button>
+  </section>
+
+  <div id="videoGrid" class="grid">
+
+    <article class="card" data-title="Amazing Nature Adventure">
+      <div class="thumb">🌄</div>
+      <h3>Amazing Nature Adventure</h3>
+      <div class="meta">MiniTube Creator • 12K views</div>
+      <button class="like" onclick="likeVideo(this)">♡ Like</button>
+    </article>
+
+    <article class="card" data-title="Ultimate Gaming Challenge">
+      <div class="thumb">🎮</div>
+      <h3>Ultimate Gaming Challenge</h3>
+      <div class="meta">GameZone • 8.4K views</div>
+      <button class="like" onclick="likeVideo(this)">♡ Like</button>
+    </article>
+
+    <article class="card" data-title="Top 10 Amazing Places">
+      <div class="thumb">✈️</div>
+      <h3>Top 10 Amazing Places</h3>
+      <div class="meta">Travel World • 21K views</div>
+      <button class="like" onclick="likeVideo(this)">♡ Like</button>
+    </article>
+
+    <article class="card" data-title="Daily News Update">
+      <div class="thumb">📰</div>
+      <h3>Daily News Update</h3>
+      <div class="meta">Mini News • 5.2K views</div>
+      <button class="like" onclick="likeVideo(this)">♡ Like</button>
+    </article>
+
+    <article class="card" data-title="Street Football Skills">
+      <div class="thumb">⚽</div>
+      <h3>Street Football Skills</h3>
+      <div class="meta">Sports Hub • 15K views</div>
+      <button class="like" onclick="likeVideo(this)">♡ Like</button>
+    </article>
+
+    <article class="card" data-title="Relaxing Music">
+      <div class="thumb">🎵</div>
+      <h3>Relaxing Music</h3>
+      <div class="meta">Music Studio • 31K views</div>
+      <button class="like" onclick="likeVideo(this)">♡ Like</button>
+    </article>
+
+  </div>
+
+  <div id="empty" class="empty">
+    No videos found.
+  </div>
+
+</main>
+
+<nav class="bottom">
+  <button class="nav active" onclick="home()">
+    <b>⌂</b>Home
+  </button>
+
+  <button class="nav" onclick="showShorts()">
+    <b>▶</b>Shorts
+  </button>
+
+  <button class="nav" onclick="uploadMessage()">
+    <b>＋</b>Create
+  </button>
+
+  <button class="nav" onclick="showSubscriptions()">
+    <b>▣</b>Subscriptions
+  </button>
+
+  <button class="nav" onclick="showProfile()">
+    <b>●</b>You
+  </button>
+</nav>
+
+<script>
+
+function likeVideo(button){
+  button.classList.toggle("liked");
+
+  if(button.classList.contains("liked")){
+    button.innerHTML="♥ Liked";
+  }else{
+    button.innerHTML="♡ Like";
+  }
+}
+
+function uploadMessage(){
+  alert("Upload system coming in the next phase!");
+}
+
+function showShorts(){
+  alert("Shorts system will be added in Phase 2.");
+}
+
+function showSubscriptions(){
+  alert("Subscriptions will be added soon.");
+}
+
+function showProfile(){
+  alert("Your creator profile will be added soon.");
+}
+
+function home(){
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+function searchVideos(){
+
+  const query =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
+
+  const cards =
+    document.querySelectorAll(".card");
+
+  let found=0;
+
+  cards.forEach(card=>{
+
+    const title =
+      card.dataset.title.toLowerCase();
+
+    if(title.includes(query)){
+      card.style.display="";
+      found++;
+    }else{
+      card.style.display="none";
+    }
+
+  });
+
+  document.getElementById("empty").style.display =
+    found === 0 ? "block" : "none";
+}
+
+</script>
+
+</body>
+  </html>
