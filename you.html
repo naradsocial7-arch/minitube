@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MiniTube - You</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  height:64px;
+  background:#111;
+  border-bottom:1px solid #292929;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  gap:14px;
+}
+
+.back{
+  border:0;
+  background:none;
+  color:white;
+  font-size:30px;
+  cursor:pointer;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#ff0033;
+}
+
+.spacer{
+  flex:1;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  font-size:18px;
+}
+
+.profile{
+  padding:30px 20px;
+  text-align:center;
+  border-bottom:1px solid #292929;
+}
+
+.profile .bigAvatar{
+  width:86px;
+  height:86px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  margin:auto;
+  font-size:34px;
+  font-weight:bold;
+}
+
+.profile h1{
+  margin:15px 0 5px;
+  font-size:25px;
+}
+
+.profile p{
+  margin:0;
+  color:#999;
+}
+
+.stats{
+  display:flex;
+  justify-content:center;
+  gap:45px;
+  margin-top:22px;
+}
+
+.stat b{
+  display:block;
+  font-size:20px;
+}
+
+.stat span{
+  color:#999;
+  font-size:13px;
+}
+
+.section{
+  padding:22px 18px;
+}
+
+.sectionTitle{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.menu button{
+  width:100%;
+  padding:16px;
+  background:#181818;
+  color:white;
+  border:1px solid #292929;
+  border-radius:12px;
+  text-align:left;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.menu button:active{
+  background:#292929;
+}
+
+.menuIcon{
+  display:inline-block;
+  width:32px;
+  font-size:20px;
+}
+
+.upload{
+  background:#ff0033 !important;
+  border:0 !important;
+  font-weight:bold;
+}
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:30;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+.bottom .active{
+  color:white;
+}
+
+@media(max-width:600px){
+
+  .stats{
+    gap:30px;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <button class="back" onclick="goHome()">
+    ‹
+  </button>
+
+  <div class="logo">
+    <span>▶</span> MiniTube
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="avatar">
+    M
+  </div>
+
+</header>
+
+
+<section class="profile">
+
+  <div class="bigAvatar">
+    M
+  </div>
+
+  <h1>My MiniTube</h1>
+
+  <p>@user</p>
+
+  <div class="stats">
+
+    <div class="stat">
+      <b id="videoCount">0</b>
+      <span>Videos</span>
+    </div>
+
+    <div class="stat">
+      <b>0</b>
+      <span>Subscribers</span>
+    </div>
+
+    <div class="stat">
+      <b>0</b>
+      <span>Following</span>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="section">
+
+  <div class="sectionTitle">
+    Your content
+  </div>
+
+  <div class="menu">
+
+    <button class="upload" onclick="goHome()">
+      <span class="menuIcon">＋</span>
+      Upload a video
+    </button>
+
+    <button onclick="showMessage('Your videos will appear here.')">
+      <span class="menuIcon">▶</span>
+      Your videos
+    </button>
+
+    <button onclick="showMessage('Liked videos will appear here.')">
+      <span class="menuIcon">♡</span>
+      Liked videos
+    </button>
+
+    <button onclick="showMessage('Watch history will appear here.')">
+      <span class="menuIcon">◷</span>
+      Watch history
+    </button>
+
+  </div>
+
+</section>
+
+
+<section class="section">
+
+  <div class="sectionTitle">
+    More
+  </div>
+
+  <div class="menu">
+
+    <button onclick="showMessage('Settings coming soon.')">
+      <span class="menuIcon">⚙</span>
+      Settings
+    </button>
+
+    <button onclick="showMessage('Help center coming soon.')">
+      <span class="menuIcon">?</span>
+      Help & feedback
+    </button>
+
+  </div>
+
+</section>
+
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+  <button onclick="showMessage('Subscriptions coming soon.')">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+  <button class="active">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function showMessage(message){
+
+  alert(message);
+
+}
+
+
+/* Count uploaded videos */
+
+async function loadVideoCount(){
+
+  try{
+
+    const API_BASE =
+      "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+    const response =
+      await fetch(
+        API_BASE + "/api/videos"
+      );
+
+    if(!response.ok){
+      return;
+    }
+
+    const videos =
+      await response.json();
+
+    document.getElementById(
+      "videoCount"
+    ).textContent =
+      videos.length;
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
+loadVideoCount();
+
+</script>
+
+</body>
+</html>
