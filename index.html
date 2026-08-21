@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>MiniTube</title>
 
@@ -18,29 +12,21 @@
   box-sizing:border-box;
 }
 
-html{
-  scroll-behavior:smooth;
-}
-
 body{
   margin:0;
   background:#0f0f0f;
   color:white;
-  font-family:Arial,Helvetica,sans-serif;
-  padding-bottom:85px;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
 }
-
-/* =========================
-   HEADER
-========================= */
 
 header{
   position:sticky;
   top:0;
-  z-index:100;
+  z-index:10;
   background:#111;
   border-bottom:1px solid #292929;
-  padding:12px 16px 10px;
+  padding:12px 16px;
 }
 
 .top{
@@ -63,170 +49,118 @@ header{
   flex:1;
   background:#222;
   border:1px solid #444;
-  border-radius:35px;
+  border-radius:30px;
   padding:13px 17px;
   color:white;
   font-size:16px;
   outline:none;
 }
 
-.search::placeholder{
-  color:#888;
-}
-
 .avatar{
-  width:38px;
-  height:52px;
-  border-radius:22px;
-  background:#7b3cff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
   font-weight:bold;
 }
 
-/* =========================
-   CATEGORIES
-========================= */
-
 .categories{
   display:flex;
-  gap:16px;
+  gap:10px;
   overflow-x:auto;
-  padding:10px 10px 8px;
-  scrollbar-width:none;
+  padding-top:12px;
 }
 
-.categories::-webkit-scrollbar{
-  display:none;
-}
-
-.category{
+.categories button{
   border:0;
-  background:#272727;
+  border-radius:22px;
+  padding:10px 18px;
+  background:#292929;
   color:white;
-  padding:12px 28px;
-  border-radius:30px;
-  font-size:17px;
+  font-size:15px;
   white-space:nowrap;
 }
 
-.category.active{
+.categories button.active{
   background:white;
-  color:#222;
+  color:#111;
 }
-
-/* =========================
-   MAIN
-========================= */
-
-main{
-  padding:24px 25px;
-  max-width:900px;
-  margin:auto;
-}
-
-/* =========================
-   HERO
-========================= */
 
 .hero{
-  background:linear-gradient(
-    110deg,
-    #24112d,
-    #151515
-  );
-  border-radius:48px;
-  padding:42px 38px 38px;
-  margin-bottom:60px;
+  margin:24px 22px;
+  padding:28px;
+  border-radius:30px;
+  background:linear-gradient(120deg,#24132d,#151515);
 }
 
 .hero h1{
-  margin:0 0 28px;
-  font-size:38px;
-  line-height:1.15;
+  margin:0 0 10px;
+  font-size:30px;
 }
 
 .hero p{
   color:#aaa;
-  font-size:22px;
-  margin:0 0 28px;
+  font-size:17px;
 }
 
-.upload-btn{
-  display:inline-block;
+.upload{
   background:#ff0033;
   color:white;
   border:0;
-  border-radius:35px;
-  padding:17px 28px;
-  font-size:18px;
+  border-radius:30px;
+  padding:15px 22px;
+  font-size:16px;
   font-weight:bold;
   cursor:pointer;
 }
 
-.upload-btn:active{
-  transform:scale(.97);
-}
-
-/* hidden file input */
-
-#file{
+.file{
   display:none;
 }
 
-/* =========================
-   STATUS
-========================= */
-
-#status{
+.status{
   text-align:center;
   color:#aaa;
-  font-size:20px;
-  margin:20px 0 35px;
-}
-
-/* =========================
-   VIDEO CARD
-========================= */
-
-.card{
-  background:#191919;
-  border-radius:28px;
-  overflow:hidden;
-  margin-bottom:30px;
-  box-shadow:0 4px 20px rgba(0,0,0,.25);
-}
-
-.card video{
-  display:block;
-  width:100%;
-  max-height:520px;
-  background:#000;
-  object-fit:contain;
-}
-
-.info{
   padding:20px;
 }
 
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:18px;
+  padding:0 22px;
+}
+
+.card{
+  background:#181818;
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.card video{
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+  background:#000;
+}
+
+.info{
+  padding:12px;
+}
+
 .title{
-  font-size:24px;
-  font-weight:700;
-  margin-bottom:10px;
+  font-size:17px;
+  font-weight:bold;
   word-break:break-word;
 }
 
 .meta{
   color:#999;
-  font-size:16px;
-  margin-bottom:12px;
+  font-size:13px;
+  margin-top:7px;
 }
-
-/* =========================
-   ACTIONS
-========================= */
 
 .actions{
   display:flex;
@@ -235,148 +169,93 @@ main{
   margin-top:12px;
 }
 
-.like-btn{
+.likeBtn{
   background:none;
   border:0;
   color:#ccc;
-  font-size:17px;
+  font-size:16px;
   padding:0;
   cursor:pointer;
 }
 
-.like-btn.liked{
+.likeBtn.liked{
   color:#ff0033;
 }
 
 .views{
   color:#aaa;
-  font-size:16px;
+  font-size:15px;
 }
 
 .delete{
-  margin-top:18px;
+  margin-top:12px;
   background:#292929;
-  color:#ff5577;
+  color:#ff4964;
   border:0;
-  border-radius:12px;
-  padding:11px 18px;
-  font-size:15px;
+  padding:8px 12px;
+  border-radius:8px;
   cursor:pointer;
 }
 
-/* =========================
-   BOTTOM NAV
-========================= */
-
-.bottom-nav{
+.bottom{
   position:fixed;
+  bottom:0;
   left:0;
   right:0;
-  bottom:0;
-  height:78px;
+  height:70px;
   background:#151515;
   border-top:1px solid #333;
   display:flex;
   justify-content:space-around;
   align-items:center;
-  z-index:200;
+  z-index:20;
 }
 
-.nav-item{
+.bottom button{
+  background:none;
+  border:0;
   color:#aaa;
-  text-align:center;
-  font-size:14px;
+  font-size:13px;
 }
 
-.nav-icon{
+.bottom button b{
   display:block;
+  font-size:22px;
   color:white;
-  font-size:27px;
-  line-height:30px;
-  margin-bottom:4px;
+  margin-bottom:3px;
 }
-
-.create{
-  font-size:32px;
-}
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:600px){
 
-  header{
-    padding:10px 12px;
-  }
-
   .top{
-    gap:10px;
+    gap:9px;
   }
 
   .logo{
-    font-size:22px;
-  }
-
-  .search{
-    min-width:0;
-    font-size:15px;
-    padding:12px 14px;
-  }
-
-  .avatar{
-    width:35px;
-    height:48px;
-  }
-
-  .categories{
-    gap:14px;
-    padding-left:14px;
-  }
-
-  .category{
-    padding:11px 25px;
-  }
-
-  main{
-    padding:24px 25px;
-  }
-
-  .hero{
-    border-radius:45px;
-    padding:40px 38px 38px;
-    margin-bottom:60px;
-  }
-
-  .hero h1{
-    font-size:36px;
-  }
-
-  .hero p{
     font-size:21px;
   }
 
-  .title{
-    font-size:23px;
+  .avatar{
+    width:38px;
+    height:38px;
   }
 
-  .card{
-    border-radius:28px;
+  .hero{
+    margin:20px 16px;
+    padding:24px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+    padding:0 16px;
   }
 
 }
 
 </style>
-
 </head>
 
-
 <body>
-
-
-<!-- =========================
-     HEADER
-========================= -->
 
 <header>
 
@@ -389,175 +268,98 @@ main{
     <input
       id="search"
       class="search"
-      type="search"
       placeholder="Search videos..."
       oninput="filterVideos()"
     >
 
-    <div class="avatar">
-      M
-    </div>
+    <div class="avatar">M</div>
 
   </div>
 
-
   <div class="categories">
 
-    <button class="category active">
-      All
-    </button>
-
-    <button class="category">
-      Music
-    </button>
-
-    <button class="category">
-      Gaming
-    </button>
-
-    <button class="category">
-      News
-    </button>
-
-    <button class="category">
-      Sports
-    </button>
+    <button class="active">All</button>
+    <button>Music</button>
+    <button>Gaming</button>
+    <button>News</button>
+    <button>Sports</button>
 
   </div>
 
 </header>
 
 
-<!-- =========================
-     MAIN
-========================= -->
+<section class="hero">
 
-<main>
+  <h1>Welcome to MiniTube</h1>
 
+  <p>
+    Your own video-sharing platform.
+  </p>
 
-  <section class="hero">
+  <button
+    class="upload"
+    onclick="document.getElementById('file').click()"
+  >
+    + Upload Video
+  </button>
 
-    <h1>
-      Welcome to MiniTube
-    </h1>
+  <input
+    id="file"
+    class="file"
+    type="file"
+    accept="video/*"
+    onchange="uploadVideo()"
+  >
 
-    <p>
-      Your own video-sharing platform.
-    </p>
-
-    <label
-      for="file"
-      class="upload-btn"
-    >
-      + Upload Video
-    </label>
-
-    <input
-      id="file"
-      type="file"
-      accept="video/*"
-      onchange="uploadVideo()"
-    >
-
-  </section>
+</section>
 
 
-  <div id="status">
-    Loading videos...
-  </div>
+<div id="status" class="status">
+  Loading videos...
+</div>
+
+<div id="videos" class="grid"></div>
 
 
-  <div id="videos"></div>
+<div class="bottom">
 
-
-</main>
-
-
-<!-- =========================
-     BOTTOM NAVIGATION
-========================= -->
-
-<nav class="bottom-nav">
-
-  <div class="nav-item">
-
-    <span class="nav-icon">
-      ⌂
-    </span>
-
+  <button>
+    <b>⌂</b>
     Home
+  </button>
 
-  </div>
-
-
-  <div class="nav-item">
-
-    <span class="nav-icon">
-      ▶
-    </span>
-
+  <button>
+    <b>▶</b>
     Shorts
+  </button>
 
-  </div>
-
-
-  <div class="nav-item">
-
-    <span class="nav-icon create">
-      +
-    </span>
-
+  <button onclick="document.getElementById('file').click()">
+    <b>＋</b>
     Create
+  </button>
 
-  </div>
-
-
-  <div class="nav-item">
-
-    <span class="nav-icon">
-      □
-    </span>
-
+  <button>
+    <b>□</b>
     Subscriptions
+  </button>
 
-  </div>
-
-
-  <div class="nav-item">
-
-    <span class="nav-icon">
-      ●
-    </span>
-
+  <button>
+    <b>●</b>
     You
+  </button>
 
-  </div>
-
-</nav>
+</div>
 
 
 <script>
 
 /* =====================================
-   MINITUBE
-   COMPLETE FRONTEND
-   LIKE + VIEWS + UPLOAD + DELETE + SEARCH
-===================================== */
+   CLOUDFLARE WORKER
+   ===================================== */
 
-
-/*
-   IMPORTANT:
-
-   Replace ONLY YOUR_WORKER_URL
-   with your actual Cloudflare Worker URL.
-
-   Example:
-
-   const API_BASE =
-     "https://minitube-api.example.workers.dev";
-*/
-
-const API_BASE = "YOUR_WORKER_URL";
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
 
 
 let allVideos = [];
@@ -565,7 +367,7 @@ let allVideos = [];
 
 /* =====================================
    LOAD VIDEOS
-===================================== */
+   ===================================== */
 
 async function loadVideos(){
 
@@ -577,67 +379,26 @@ async function loadVideos(){
     status.textContent =
       "Loading videos...";
 
-
     const response =
       await fetch(
         API_BASE + "/api/videos"
       );
 
-
     if(!response.ok){
-
-      throw new Error(
-        "Unable to load videos"
-      );
-
+      throw new Error("API error");
     }
-
-
-    const contentType =
-      response.headers.get(
-        "content-type"
-      ) || "";
-
-
-    if(
-      !contentType.includes(
-        "application/json"
-      )
-    ){
-
-      throw new Error(
-        "Server did not return JSON. Check your Worker URL."
-      );
-
-    }
-
 
     allVideos =
       await response.json();
 
-
-    if(
-      !Array.isArray(allVideos)
-    ){
-
-      throw new Error(
-        "Invalid video data"
-      );
-
-    }
-
-
     renderVideos(allVideos);
-
 
   }catch(error){
 
     console.error(error);
 
-
     status.textContent =
-      "Unable to load videos: " +
-      error.message;
+      "Unable to load videos.";
 
   }
 
@@ -646,20 +407,17 @@ async function loadVideos(){
 
 /* =====================================
    DISPLAY VIDEOS
-===================================== */
+   ===================================== */
 
 function renderVideos(videos){
 
   const container =
     document.getElementById("videos");
 
-
   const status =
     document.getElementById("status");
 
-
   container.innerHTML = "";
-
 
   if(videos.length === 0){
 
@@ -671,70 +429,51 @@ function renderVideos(videos){
 
   }
 
-
   status.textContent =
-    videos.length +
-    " video(s)";
-
+    videos.length + " video(s)";
 
   videos.forEach(video => {
 
     const card =
       document.createElement("div");
 
-
-    card.className =
-      "card";
+    card.className = "card";
 
 
     const videoURL =
       API_BASE +
       "/video/" +
-      encodeURIComponent(
-        video.name
-      );
+      encodeURIComponent(video.name);
 
 
-    const encodedName =
-      encodeURIComponent(
-        video.name
-      );
-
+    /* LIKE DATA */
 
     const likeKey =
-      "liked_" +
-      video.name;
+      "likes_" + video.name;
 
-
-    const likeCountKey =
-      "likes_" +
-      video.name;
-
-
-    const viewKey =
-      "views_" +
-      video.name;
-
-
-    let liked =
-      localStorage.getItem(
-        likeKey
-      ) === "true";
-
+    const likedKey =
+      "liked_" + video.name;
 
     let likes =
       Number(
-        localStorage.getItem(
-          likeCountKey
-        ) || 0
+        localStorage.getItem(likeKey) || 0
       );
 
+    let liked =
+      localStorage.getItem(likedKey) === "true";
+
+
+    /* VIEW DATA */
+
+    const viewsKey =
+      "views_" + video.name;
+
+    const viewedKey =
+      "viewed_" + video.name;
 
     let views =
       Number(
-        localStorage.getItem(
-          viewKey
-        ) || 0
+        localStorage.getItem(viewsKey) || 0
       );
 
 
@@ -743,78 +482,193 @@ function renderVideos(videos){
       <video
         controls
         preload="metadata"
-        src="${videoURL}"
-        onplay="addView('${encodedName}')"
-      ></video>
-
+        src="${videoURL}">
+      </video>
 
       <div class="info">
 
-
         <div class="title">
-
-          ${escapeHTML(
-            video.name
-          )}
-
+          ${escapeHTML(video.name)}
         </div>
-
 
         <div class="meta">
           You • Other
         </div>
 
-
         <div class="actions">
 
-
-          <button
-            class="like-btn ${liked ? "liked" : ""}"
-            onclick="toggleLike('${encodedName}')"
-            id="like-${encodedName}"
-          >
-
-            ${liked ? "♥" : "♡"}
-            Like
-
-            <span
-              id="count-${encodedName}"
-            >
+          <button class="likeBtn ${liked ? "liked" : ""}">
+            ${liked ? "♥" : "♡"} Like
+            <span class="likeCount">
               ${likes}
             </span>
-
           </button>
 
-
-          <span class="views">
-
+          <div class="views">
             👁️
-
-            <span
-              id="views-${encodedName}"
-            >
+            <span class="viewCount">
               ${views}
             </span>
-
             views
-
-          </span>
-
+          </div>
 
         </div>
 
-
-        <button
-          class="delete"
-          onclick="deleteVideo('${encodedName}')"
-        >
+        <button class="delete">
           Delete
         </button>
-
 
       </div>
 
     `;
+
+
+    /* =================================
+       LIKE BUTTON
+       ================================= */
+
+    const likeButton =
+      card.querySelector(".likeBtn");
+
+    const likeCount =
+      card.querySelector(".likeCount");
+
+
+    likeButton.addEventListener(
+      "click",
+      function(){
+
+        liked =
+          !liked;
+
+        if(liked){
+
+          likes++;
+
+        }else{
+
+          if(likes > 0){
+            likes--;
+          }
+
+        }
+
+
+        localStorage.setItem(
+          likeKey,
+          likes
+        );
+
+        localStorage.setItem(
+          likedKey,
+          liked
+        );
+
+
+        likeButton.classList.toggle(
+          "liked",
+          liked
+        );
+
+
+        likeButton.innerHTML =
+          `${liked ? "♥" : "♡"} Like
+           <span class="likeCount">
+           ${likes}
+           </span>`;
+
+      }
+    );
+
+
+    /* =================================
+       VIEW COUNTER
+       ================================= */
+
+    const videoElement =
+      card.querySelector("video");
+
+    const viewCount =
+      card.querySelector(".viewCount");
+
+
+    let counted =
+      localStorage.getItem(viewedKey)
+      === "true";
+
+
+    let viewTimer;
+
+
+    videoElement.addEventListener(
+      "play",
+      function(){
+
+        if(counted){
+          return;
+        }
+
+
+        clearTimeout(viewTimer);
+
+
+        viewTimer =
+          setTimeout(
+            function(){
+
+              views++;
+
+              localStorage.setItem(
+                viewsKey,
+                views
+              );
+
+              localStorage.setItem(
+                viewedKey,
+                "true"
+              );
+
+              viewCount.textContent =
+                views;
+
+              counted = true;
+
+            },
+            3000
+          );
+
+      }
+    );
+
+
+    videoElement.addEventListener(
+      "pause",
+      function(){
+
+        clearTimeout(viewTimer);
+
+      }
+    );
+
+
+    /* =================================
+       DELETE
+       ================================= */
+
+    const deleteButton =
+      card.querySelector(".delete");
+
+
+    deleteButton.addEventListener(
+      "click",
+      async function(){
+
+        await deleteVideo(
+          encodeURIComponent(video.name)
+        );
+
+      }
+    );
 
 
     container.appendChild(card);
@@ -825,175 +679,24 @@ function renderVideos(videos){
 
 
 /* =====================================
-   LIKE SYSTEM
-===================================== */
-
-function toggleLike(name){
-
-  const decodedName =
-    decodeURIComponent(
-      name
-    );
-
-
-  const likeKey =
-    "liked_" +
-    decodedName;
-
-
-  const likeCountKey =
-    "likes_" +
-    decodedName;
-
-
-  let liked =
-    localStorage.getItem(
-      likeKey
-    ) === "true";
-
-
-  let likes =
-    Number(
-      localStorage.getItem(
-        likeCountKey
-      ) || 0
-    );
-
-
-  if(liked){
-
-    liked = false;
-
-
-    if(likes > 0){
-
-      likes--;
-
-    }
-
-  }else{
-
-    liked = true;
-
-    likes++;
-
-  }
-
-
-  localStorage.setItem(
-    likeKey,
-    liked
-  );
-
-
-  localStorage.setItem(
-    likeCountKey,
-    likes
-  );
-
-
-  const button =
-    document.getElementById(
-      "like-" + name
-    );
-
-
-  if(button){
-
-    button.classList.toggle(
-      "liked",
-      liked
-    );
-
-
-    button.innerHTML =
-      `${liked ? "♥" : "♡"} Like
-      <span id="count-${name}">
-        ${likes}
-      </span>`;
-
-  }
-
-}
-
-
-/* =====================================
-   VIEWS SYSTEM
-===================================== */
-
-function addView(name){
-
-  const decodedName =
-    decodeURIComponent(
-      name
-    );
-
-
-  const viewKey =
-    "views_" +
-    decodedName;
-
-
-  let views =
-    Number(
-      localStorage.getItem(
-        viewKey
-      ) || 0
-    );
-
-
-  views++;
-
-
-  localStorage.setItem(
-    viewKey,
-    views
-  );
-
-
-  const viewCount =
-    document.getElementById(
-      "views-" + name
-    );
-
-
-  if(viewCount){
-
-    viewCount.textContent =
-      views;
-
-  }
-
-}
-
-
-/* =====================================
    UPLOAD
-===================================== */
+   ===================================== */
 
 async function uploadVideo(){
 
   const input =
-    document.getElementById(
-      "file"
-    );
-
+    document.getElementById("file");
 
   const file =
     input.files[0];
 
-
   if(!file){
-
     return;
-
   }
 
 
   const status =
-    document.getElementById(
-      "status"
-    );
+    document.getElementById("status");
 
 
   try{
@@ -1006,66 +709,31 @@ async function uploadVideo(){
 
     const response =
       await fetch(
-
         API_BASE +
         "/api/upload?filename=" +
-        encodeURIComponent(
-          file.name
-        ),
-
+        encodeURIComponent(file.name),
         {
-
           method:"POST",
 
           headers:{
-
             "Content-Type":
               file.type ||
               "video/mp4"
-
           },
 
           body:file
-
         }
-
       );
 
 
-    const contentType =
-      response.headers.get(
-        "content-type"
-      ) || "";
-
-
-    let result = null;
-
-
-    if(
-      contentType.includes(
-        "application/json"
-      )
-    ){
-
-      result =
-        await response.json();
-
-    }else{
-
-      const text =
-        await response.text();
-
-      throw new Error(
-        "Server returned HTML instead of JSON. Check your Worker URL."
-      );
-
-    }
+    const result =
+      await response.json();
 
 
     if(!response.ok){
 
       throw new Error(
-        result?.error ||
+        result.error ||
         "Upload failed"
       );
 
@@ -1086,7 +754,6 @@ async function uploadVideo(){
 
     console.error(error);
 
-
     status.textContent =
       "Upload failed: " +
       error.message;
@@ -1098,15 +765,9 @@ async function uploadVideo(){
 
 /* =====================================
    DELETE
-===================================== */
+   ===================================== */
 
 async function deleteVideo(name){
-
-  const decodedName =
-    decodeURIComponent(
-      name
-    );
-
 
   if(
     !confirm(
@@ -1123,17 +784,12 @@ async function deleteVideo(name){
 
     const response =
       await fetch(
-
         API_BASE +
         "/api/delete/" +
-        encodeURIComponent(
-          decodedName
-        ),
-
+        name,
         {
           method:"DELETE"
         }
-
       );
 
 
@@ -1151,9 +807,6 @@ async function deleteVideo(name){
 
   }catch(error){
 
-    console.error(error);
-
-
     alert(
       "Could not delete video."
     );
@@ -1165,18 +818,15 @@ async function deleteVideo(name){
 
 /* =====================================
    SEARCH
-===================================== */
+   ===================================== */
 
 function filterVideos(){
 
   const search =
     document
-      .getElementById(
-        "search"
-      )
+      .getElementById("search")
       .value
-      .toLowerCase()
-      .trim();
+      .toLowerCase();
 
 
   const filtered =
@@ -1184,47 +834,75 @@ function filterVideos(){
       video =>
         video.name
           .toLowerCase()
-          .includes(
-            search
-          )
+          .includes(search)
     );
 
 
-  renderVideos(
-    filtered
+  renderVideos(filtered);
+
+}
+
+
+/* =====================================
+   FORMAT SIZE
+   ===================================== */
+
+function formatSize(bytes){
+
+  if(bytes < 1024){
+
+    return bytes + " B";
+
+  }
+
+
+  if(
+    bytes <
+    1024 * 1024
+  ){
+
+    return (
+      (bytes / 1024)
+        .toFixed(1) +
+      " KB"
+    );
+
+  }
+
+
+  return (
+    (bytes /
+      (1024 * 1024))
+      .toFixed(1) +
+    " MB"
   );
 
 }
 
 
 /* =====================================
-   ESCAPE HTML
-===================================== */
+   SECURITY
+   ===================================== */
 
 function escapeHTML(text){
 
-  return String(text)
-
+  return text
     .replace(
       /&/g,
       "&amp;"
     )
-
     .replace(
       /</g,
       "&lt;"
     )
-
     .replace(
       />/g,
       "&gt;"
     )
-
     .replace(
       /"/g,
       "&quot;"
     )
-
     .replace(
       /'/g,
       "&#039;"
@@ -1235,13 +913,11 @@ function escapeHTML(text){
 
 /* =====================================
    START
-===================================== */
+   ===================================== */
 
 loadVideos();
 
 </script>
 
-
 </body>
-
 </html>
