@@ -23,25 +23,33 @@ body{
   background:#0f0f0f;
   color:white;
   font-family:Arial,sans-serif;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   padding:20px;
 }
 
 .box{
   width:100%;
   max-width:420px;
+
   background:#181818;
+
   border:1px solid #292929;
+
   border-radius:22px;
+
   padding:30px;
 }
 
 .logo{
   text-align:center;
+
   font-size:28px;
   font-weight:800;
+
   margin-bottom:25px;
 }
 
@@ -51,19 +59,29 @@ body{
 
 .tabs{
   display:flex;
+
   gap:8px;
+
   margin-bottom:22px;
 }
 
 .tabs button{
   flex:1;
+
   padding:12px;
+
   border:0;
+
   border-radius:10px;
+
   background:#292929;
+
   color:#aaa;
+
   font-size:15px;
+
   font-weight:bold;
+
   cursor:pointer;
 }
 
@@ -74,20 +92,31 @@ body{
 
 label{
   display:block;
+
   color:#bbb;
+
   font-size:14px;
+
   margin-bottom:7px;
 }
 
 input{
   width:100%;
+
   padding:14px;
+
   margin-bottom:16px;
+
   border-radius:10px;
+
   border:1px solid #444;
+
   background:#222;
+
   color:white;
+
   outline:none;
+
   font-size:16px;
 }
 
@@ -97,36 +126,55 @@ input:focus{
 
 .mainBtn{
   width:100%;
+
   padding:14px;
+
   border:0;
+
   border-radius:25px;
+
   background:#ff0033;
+
   color:white;
+
   font-size:16px;
+
   font-weight:bold;
+
   cursor:pointer;
 }
 
 .mainBtn:disabled{
   opacity:.6;
+
   cursor:not-allowed;
 }
 
 .message{
   min-height:22px;
+
   text-align:center;
+
   margin-top:15px;
+
   color:#aaa;
+
   font-size:14px;
+
   line-height:1.5;
 }
 
 .home{
   display:block;
+
   text-align:center;
+
   margin-top:20px;
+
   color:#aaa;
+
   text-decoration:none;
+
   font-size:14px;
 }
 
@@ -138,9 +186,12 @@ input:focus{
 
 </head>
 
+
 <body>
 
+
 <div class="box">
+
 
   <div class="logo">
     <span>▶</span> MiniTube
@@ -157,6 +208,7 @@ input:focus{
       Login
     </button>
 
+
     <button
       id="signupTab"
       onclick="showSignup()"
@@ -169,7 +221,11 @@ input:focus{
 
   <form id="authForm">
 
-    <div id="nameField" style="display:none;">
+
+    <div
+      id="nameField"
+      style="display:none;"
+    >
 
       <label>
         Display Name
@@ -217,6 +273,7 @@ input:focus{
       Login
     </button>
 
+
   </form>
 
 
@@ -233,48 +290,64 @@ input:focus{
     ← Back to MiniTube
   </a>
 
+
 </div>
 
 
 <script>
 
+
+/* =====================================
+   SUPABASE
+   ===================================== */
+
 const SUPABASE_URL =
   "https://vlzssmuzetcbkmzujecs.supabase.co";
 
-
-/*
-  IMPORTANT:
-  This is the public anon key.
-  NEVER put your Supabase
-  service_role key in website code.
-*/
 
 const SUPABASE_ANON_KEY =
   "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
 
 
+/* =====================================
+   MINI TUBE URL
+   ===================================== */
+
+const MINITUBE_URL =
+  "https://naradsocial7-arch.github.io/minitube/";
+
+
 let mode = "login";
 
+
+/* =====================================
+   LOGIN MODE
+   ===================================== */
 
 function showLogin(){
 
   mode = "login";
 
+
   document
     .getElementById("loginTab")
     .classList.add("active");
 
+
   document
     .getElementById("signupTab")
     .classList.remove("active");
+
 
   document
     .getElementById("nameField")
     .style.display = "none";
 
+
   document
     .getElementById("mainBtn")
     .textContent = "Login";
+
 
   document
     .getElementById("message")
@@ -282,26 +355,35 @@ function showLogin(){
 
 }
 
+
+/* =====================================
+   SIGNUP MODE
+   ===================================== */
 
 function showSignup(){
 
   mode = "signup";
 
+
   document
     .getElementById("signupTab")
     .classList.add("active");
+
 
   document
     .getElementById("loginTab")
     .classList.remove("active");
 
+
   document
     .getElementById("nameField")
     .style.display = "block";
 
+
   document
     .getElementById("mainBtn")
     .textContent = "Create Account";
+
 
   document
     .getElementById("message")
@@ -309,6 +391,10 @@ function showSignup(){
 
 }
 
+
+/* =====================================
+   AUTH FORM
+   ===================================== */
 
 document
   .getElementById("authForm")
@@ -318,16 +404,19 @@ document
 
       event.preventDefault();
 
+
       const email =
         document
           .getElementById("email")
           .value
           .trim();
 
+
       const password =
         document
           .getElementById("password")
           .value;
+
 
       const displayName =
         document
@@ -335,87 +424,129 @@ document
           .value
           .trim();
 
+
       const message =
         document
           .getElementById("message");
+
 
       const button =
         document
           .getElementById("mainBtn");
 
 
-      if(
-        SUPABASE_ANON_KEY ===
-        "PASTE_YOUR_SUPABASE_ANON_KEY_HERE"
-      ){
+      button.disabled = true;
+
+
+      if(mode === "login"){
 
         message.textContent =
-          "Supabase connection key is not added yet.";
+          "Logging in...";
 
-        return;
+      }else{
+
+        message.textContent =
+          "Creating account...";
 
       }
 
 
-      button.disabled = true;
-
-      message.textContent =
-        mode === "login"
-          ? "Logging in..."
-          : "Creating account...";
-
-
       try{
+
 
         let response;
 
 
+        /* =================================
+           SIGN UP
+           ================================= */
+
         if(mode === "signup"){
+
+
+          const signupURL =
+            SUPABASE_URL +
+            "/auth/v1/signup" +
+            "?redirect_to=" +
+            encodeURIComponent(
+              MINITUBE_URL
+            );
+
 
           response =
             await fetch(
-              SUPABASE_URL +
-              "/auth/v1/signup",
+              signupURL,
               {
+
                 method:"POST",
 
                 headers:{
+
                   "Content-Type":
                     "application/json",
 
                   "apikey":
                     SUPABASE_ANON_KEY
+
                 },
 
                 body:JSON.stringify({
+
                   email:email,
-                  password:password
+
+                  password:password,
+
+                  data:{
+                    display_name:
+                      displayName
+                  }
+
                 })
+
               }
             );
 
-        }else{
+
+        }
+
+
+        /* =================================
+           LOGIN
+           ================================= */
+
+        else{
+
 
           response =
             await fetch(
+
               SUPABASE_URL +
               "/auth/v1/token?grant_type=password",
+
               {
+
                 method:"POST",
 
                 headers:{
+
                   "Content-Type":
                     "application/json",
 
                   "apikey":
                     SUPABASE_ANON_KEY
+
                 },
 
                 body:JSON.stringify({
+
                   email:email,
+
                   password:password
+
                 })
+
               }
+
             );
 
         }
@@ -425,51 +556,116 @@ document
           await response.json();
 
 
+        /* =================================
+           ERROR
+           ================================= */
+
         if(!response.ok){
 
           throw new Error(
+
             result.msg ||
+
             result.message ||
+
             result.error_description ||
+
+            result.error ||
+
             "Authentication failed."
+
           );
 
         }
 
 
+        /* =================================
+           SIGNUP SUCCESS
+           ================================= */
+
         if(mode === "signup"){
 
+
           message.textContent =
-            "Account created! Check your email if confirmation is required.";
+            "Account created! Please check your email and confirm your account.";
 
-          /*
-            Profile creation will be connected
-            in the next step.
-          */
 
-        }else{
+          document
+            .getElementById("password")
+            .value = "";
+
+
+        }
+
+
+        /* =================================
+           LOGIN SUCCESS
+           ================================= */
+
+        else{
+
+
+          if(!result.access_token){
+
+            throw new Error(
+              "Login succeeded but no access token was returned."
+            );
+
+          }
+
 
           localStorage.setItem(
+
             "minitube_access_token",
+
             result.access_token
+
           );
 
-          localStorage.setItem(
-            "minitube_refresh_token",
-            result.refresh_token
-          );
+
+          if(result.refresh_token){
+
+            localStorage.setItem(
+
+              "minitube_refresh_token",
+
+              result.refresh_token
+
+            );
+
+          }
+
+
+          if(result.user){
+
+            localStorage.setItem(
+
+              "minitube_user",
+
+              JSON.stringify(
+                result.user
+              )
+
+            );
+
+          }
+
 
           message.textContent =
             "Login successful!";
 
+
           setTimeout(
+
             function(){
 
               window.location.href =
-                "index.html";
+                MINITUBE_URL;
 
             },
+
             700
+
           );
 
         }
@@ -477,21 +673,29 @@ document
 
       }catch(error){
 
+
         console.error(error);
+
 
         message.textContent =
           error.message;
 
+
       }finally{
 
+
         button.disabled = false;
+
 
       }
 
     }
+
   );
 
+
 </script>
+
 
 </body>
 </html>
