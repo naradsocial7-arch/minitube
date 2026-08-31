@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>MiniTube - Shorts</title>
 
@@ -25,29 +29,43 @@ body{
   padding-bottom:70px;
 }
 
-/* HEADER */
+
+/* =========================
+   HEADER
+   ========================= */
 
 header{
   position:fixed;
   top:0;
   left:0;
   right:0;
+
   height:64px;
+
   z-index:20;
+
   background:rgba(15,15,15,.95);
+
   border-bottom:1px solid #292929;
+
   display:flex;
+
   align-items:center;
+
   padding:0 14px;
-  gap:14px;
+
+  gap:12px;
 }
 
 .back{
   border:0;
   background:none;
   color:white;
+
   font-size:30px;
+
   padding:0;
+
   cursor:pointer;
 }
 
@@ -63,19 +81,69 @@ header{
 
 .title{
   margin-left:auto;
-  font-size:17px;
+
+  font-size:16px;
   font-weight:bold;
 }
 
-/* SHORTS AREA */
+
+/* =========================
+   USER
+   ========================= */
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-left:8px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+
+  border-radius:50%;
+
+  background:#7c4dff;
+
+  display:grid;
+  place-items:center;
+
+  font-weight:bold;
+}
+
+.userName{
+  max-width:130px;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+
+  font-size:13px;
+
+  color:#ddd;
+}
+
+
+/* =========================
+   SHORTS AREA
+   ========================= */
 
 .shorts{
   width:100%;
+
   max-width:600px;
+
   height:calc(100vh - 70px);
+
   margin:64px auto 0;
+
   overflow-y:auto;
+
   scroll-snap-type:y mandatory;
+
   scrollbar-width:none;
 }
 
@@ -83,93 +151,143 @@ header{
   display:none;
 }
 
-/* SHORT CARD */
+
+/* =========================
+   SHORT CARD
+   ========================= */
 
 .short{
   position:relative;
+
   width:100%;
+
   height:calc(100vh - 70px);
+
   min-height:500px;
+
   scroll-snap-align:start;
+
   background:#000;
+
   overflow:hidden;
 }
 
 .short video{
   width:100%;
   height:100%;
+
   object-fit:contain;
+
   background:#000;
 }
 
-/* GRADIENT */
+
+/* =========================
+   GRADIENT
+   ========================= */
 
 .gradient{
   position:absolute;
+
   left:0;
   right:0;
   bottom:0;
+
   height:42%;
-  background:linear-gradient(
-    transparent,
-    rgba(0,0,0,.9)
-  );
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(0,0,0,.9)
+    );
+
   pointer-events:none;
 }
 
-/* INFO */
+
+/* =========================
+   INFO
+   ========================= */
 
 .info{
   position:absolute;
+
   left:16px;
   right:85px;
   bottom:25px;
+
   z-index:3;
 }
 
 .videoName{
   font-size:18px;
+
   font-weight:bold;
+
   word-break:break-word;
+
   margin-bottom:8px;
 }
 
 .meta{
   color:#ccc;
+
   font-size:14px;
 }
 
-/* SIDE ACTIONS */
+
+/* =========================
+   SIDE ACTIONS
+   ========================= */
 
 .actions{
   position:absolute;
+
   right:14px;
   bottom:30px;
+
   z-index:5;
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   gap:20px;
 }
 
 .action{
   background:rgba(20,20,20,.7);
+
   border:0;
+
   color:white;
+
   width:52px;
+
   min-height:52px;
+
   border-radius:50%;
+
   font-size:24px;
+
   cursor:pointer;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   flex-direction:column;
 }
 
 .action span{
   font-size:11px;
+
   margin-top:3px;
+
   color:#ddd;
 }
 
@@ -177,68 +295,122 @@ header{
   color:#ff0033;
 }
 
-/* EMPTY */
+
+/* =========================
+   EMPTY
+   ========================= */
 
 .empty{
   height:100%;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   text-align:center;
+
   color:#aaa;
+
   padding:30px;
 }
 
 .empty strong{
   display:block;
+
   color:white;
+
   font-size:22px;
+
   margin-bottom:10px;
 }
 
-/* LOADING */
+
+/* =========================
+   LOADING
+   ========================= */
 
 .loading{
   height:100%;
+
   display:flex;
+
   align-items:center;
+
   justify-content:center;
+
   color:#aaa;
 }
 
-/* BOTTOM NAV */
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
 
 .bottom{
   position:fixed;
+
   left:0;
   right:0;
   bottom:0;
+
   height:70px;
+
   background:#151515;
+
   border-top:1px solid #333;
+
   display:flex;
+
   justify-content:space-around;
+
   align-items:center;
+
   z-index:30;
 }
 
 .bottom button{
   background:none;
+
   border:0;
+
   color:#aaa;
+
   font-size:12px;
+
   cursor:pointer;
 }
 
 .bottom button b{
   display:block;
+
   font-size:22px;
+
   color:white;
+
   margin-bottom:3px;
 }
 
 .bottom .active{
   color:white;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:600px){
+
+  .userName{
+    display:none;
+  }
+
+  .title{
+    font-size:15px;
+  }
+
 }
 
 @media(min-width:601px){
@@ -255,11 +427,16 @@ header{
 }
 
 </style>
+
 </head>
+
 
 <body>
 
-<!-- HEADER -->
+
+<!-- =========================
+     HEADER
+     ========================= -->
 
 <header>
 
@@ -270,18 +447,45 @@ header{
     ‹
   </button>
 
+
   <div class="logo">
-    <span>▶</span> MiniTube
+
+    <span>▶</span>
+
+    MiniTube
+
   </div>
+
 
   <div class="title">
     Shorts
   </div>
 
+
+  <div class="user">
+
+    <div
+      id="avatar"
+      class="avatar"
+    >
+      M
+    </div>
+
+    <div
+      id="userName"
+      class="userName"
+    >
+      User
+    </div>
+
+  </div>
+
 </header>
 
 
-<!-- SHORTS -->
+<!-- =========================
+     SHORTS
+     ========================= -->
 
 <main
   id="shorts"
@@ -295,34 +499,57 @@ header{
 </main>
 
 
-<!-- BOTTOM NAV -->
+<!-- =========================
+     BOTTOM NAV
+     ========================= -->
 
 <nav class="bottom">
 
+
   <button onclick="goHome()">
+
     <b>⌂</b>
+
     Home
+
   </button>
+
 
   <button class="active">
+
     <b>▶</b>
+
     Shorts
+
   </button>
 
-  <button onclick="goHome()">
+
+  <button onclick="createVideo()">
+
     <b>＋</b>
+
     Create
+
   </button>
 
-  <button onclick="goHome()">
+
+  <button onclick="goSubscriptions()">
+
     <b>□</b>
+
     Subscriptions
+
   </button>
 
-  <button onclick="goHome()">
+
+  <button onclick="goYou()">
+
     <b>●</b>
+
     You
+
   </button>
+
 
 </nav>
 
@@ -337,11 +564,117 @@ const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
 
 
-let videos = [];
+/* =====================================
+   USER SYSTEM
+   ===================================== */
+
+let currentUser = null;
+
+let channelName = "User";
+
+
+function loadUser(){
+
+  const savedUser =
+    localStorage.getItem(
+      "minitube_user"
+    );
+
+
+  if(!savedUser){
+
+    window.location.href =
+      "login.html";
+
+    return false;
+
+  }
+
+
+  try{
+
+    currentUser =
+      JSON.parse(
+        savedUser
+      );
+
+
+    const metadata =
+      currentUser.user_metadata ||
+      {};
+
+
+    channelName =
+      metadata.display_name ||
+      currentUser.email ||
+      "User";
+
+
+    channelName =
+      String(channelName)
+        .trim();
+
+
+    if(!channelName){
+
+      channelName =
+        "User";
+
+    }
+
+
+    const firstLetter =
+      channelName
+        .charAt(0)
+        .toUpperCase();
+
+
+    document.getElementById(
+      "avatar"
+    ).textContent =
+      firstLetter;
+
+
+    document.getElementById(
+      "userName"
+    ).textContent =
+      channelName;
+
+
+    return true;
+
+
+  }catch(error){
+
+    console.error(
+      "User data error:",
+      error
+    );
+
+
+    localStorage.removeItem(
+      "minitube_user"
+    );
+
+
+    localStorage.removeItem(
+      "minitube_access_token"
+    );
+
+
+    window.location.href =
+      "login.html";
+
+
+    return false;
+
+  }
+
+}
 
 
 /* =====================================
-   HOME
+   NAVIGATION
    ===================================== */
 
 function goHome(){
@@ -352,36 +685,84 @@ function goHome(){
 }
 
 
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function createVideo(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
 /* =====================================
-   LOAD VIDEOS
+   VIDEOS
+   ===================================== */
+
+let videos = [];
+
+
+/* =====================================
+   LOAD SHORTS
    ===================================== */
 
 async function loadShorts(){
 
   const container =
-    document.getElementById("shorts");
+    document.getElementById(
+      "shorts"
+    );
+
 
   try{
 
     const response =
       await fetch(
-        API_BASE + "/api/videos"
+        API_BASE +
+        "/api/videos"
       );
 
+
     if(!response.ok){
-      throw new Error("API error");
+
+      throw new Error(
+        "API error"
+      );
+
     }
+
 
     const data =
       await response.json();
 
-    videos = data;
+
+    videos =
+      data;
+
 
     renderShorts();
 
+
   }catch(error){
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     container.innerHTML = `
 
@@ -407,15 +788,19 @@ async function loadShorts(){
 
 
 /* =====================================
-   RENDER
+   RENDER SHORTS
    ===================================== */
 
 function renderShorts(){
 
   const container =
-    document.getElementById("shorts");
+    document.getElementById(
+      "shorts"
+    );
 
-  container.innerHTML = "";
+
+  container.innerHTML =
+    "";
 
 
   if(!videos.length){
@@ -430,14 +815,16 @@ function renderShorts(){
             No Shorts yet
           </strong>
 
-          Upload a video from the Home page
-          to start building your Shorts feed 🚀
+          Upload a video from the Home
+          page to start building your
+          Shorts feed 🚀
 
         </div>
 
       </div>
 
     `;
+
 
     return;
 
@@ -473,24 +860,35 @@ function createShort(
 ){
 
   const card =
-    document.createElement("section");
+    document.createElement(
+      "section"
+    );
 
-  card.className = "short";
+
+  card.className =
+    "short";
 
 
   const videoURL =
     API_BASE +
     "/video/" +
-    encodeURIComponent(video.name);
+    encodeURIComponent(
+      video.name
+    );
 
 
-  /* LIKE */
+  /* ===============================
+     LIKE
+     =============================== */
 
   const likeKey =
-    "likes_" + video.name;
+    "likes_" +
+    video.name;
+
 
   const likedKey =
-    "liked_" + video.name;
+    "liked_" +
+    video.name;
 
 
   let likes =
@@ -507,13 +905,18 @@ function createShort(
     ) === "true";
 
 
-  /* VIEWS */
+  /* ===============================
+     VIEWS
+     =============================== */
 
   const viewsKey =
-    "views_" + video.name;
+    "views_" +
+    video.name;
+
 
   const viewedKey =
-    "viewed_" + video.name;
+    "viewed_" +
+    video.name;
 
 
   let views =
@@ -533,17 +936,27 @@ function createShort(
       src="${videoURL}">
     </video>
 
+
     <div class="gradient"></div>
 
 
     <div class="info">
 
       <div class="videoName">
-        ${escapeHTML(video.name)}
+
+        ${escapeHTML(
+          video.name
+        )}
+
       </div>
 
+
       <div class="meta">
-        You • Other
+
+        ${escapeHTML(
+          channelName
+        )}
+
       </div>
 
     </div>
@@ -551,20 +964,32 @@ function createShort(
 
     <div class="actions">
 
-      <button class="action likeBtn">
+
+      <button
+        class="action likeBtn"
+      >
 
         <span class="heart">
-          ${liked ? "♥" : "♡"}
+
+          ${liked
+            ? "♥"
+            : "♡"}
+
         </span>
 
+
         <span class="likeNumber">
+
           ${likes}
+
         </span>
 
       </button>
 
 
-      <button class="action">
+      <button
+        class="action playBtn"
+      >
 
         ▶
 
@@ -575,7 +1000,9 @@ function createShort(
       </button>
 
 
-      <button class="action shareBtn">
+      <button
+        class="action shareBtn"
+      >
 
         ↗
 
@@ -586,50 +1013,70 @@ function createShort(
       </button>
 
 
-      <button class="action">
+      <button
+        class="action viewBtn"
+      >
 
         👁
 
         <span class="shortViews">
+
           ${views}
+
         </span>
 
       </button>
+
 
     </div>
 
   `;
 
 
-  /* =================================
+  /* ===============================
      ELEMENTS
-     ================================= */
+     =============================== */
 
   const videoElement =
-    card.querySelector("video");
+    card.querySelector(
+      "video"
+    );
+
 
   const likeButton =
-    card.querySelector(".likeBtn");
+    card.querySelector(
+      ".likeBtn"
+    );
+
 
   const heart =
-    card.querySelector(".heart");
+    card.querySelector(
+      ".heart"
+    );
+
 
   const likeNumber =
-    card.querySelector(".likeNumber");
+    card.querySelector(
+      ".likeNumber"
+    );
+
 
   const viewNumber =
-    card.querySelector(".shortViews");
+    card.querySelector(
+      ".shortViews"
+    );
 
 
-  /* =================================
+  /* ===============================
      LIKE
-     ================================= */
+     =============================== */
 
   likeButton.addEventListener(
     "click",
     function(){
 
-      liked = !liked;
+      liked =
+        !liked;
 
 
       if(liked){
@@ -639,7 +1086,9 @@ function createShort(
       }else{
 
         if(likes > 0){
+
           likes--;
+
         }
 
       }
@@ -658,7 +1107,9 @@ function createShort(
 
 
       heart.textContent =
-        liked ? "♥" : "♡";
+        liked
+          ? "♥"
+          : "♡";
 
 
       likeNumber.textContent =
@@ -674,23 +1125,29 @@ function createShort(
   );
 
 
-  /* =================================
-     PLAY BUTTON
-     ================================= */
+  /* ===============================
+     PLAY
+     =============================== */
 
   const playButton =
-    card.querySelectorAll(
-      ".action"
-    )[1];
+    card.querySelector(
+      ".playBtn"
+    );
 
 
   playButton.addEventListener(
     "click",
     function(){
 
-      if(videoElement.paused){
+      if(
+        videoElement.paused
+      ){
 
-        videoElement.play();
+        videoElement
+          .play()
+          .catch(
+            () => {}
+          );
 
       }else{
 
@@ -702,12 +1159,14 @@ function createShort(
   );
 
 
-  /* =================================
+  /* ===============================
      SHARE
-     ================================= */
+     =============================== */
 
   const shareButton =
-    card.querySelector(".shareBtn");
+    card.querySelector(
+      ".shareBtn"
+    );
 
 
   shareButton.addEventListener(
@@ -715,7 +1174,12 @@ function createShort(
     async function(){
 
       const shareURL =
-        window.location.href;
+        window.location.origin +
+        window.location.pathname +
+        "?video=" +
+        encodeURIComponent(
+          video.name
+        );
 
 
       try{
@@ -739,9 +1203,12 @@ function createShort(
 
         }else{
 
-          await navigator.clipboard.writeText(
-            shareURL
-          );
+          await navigator
+            .clipboard
+            .writeText(
+              shareURL
+            );
+
 
           alert(
             "MiniTube link copied!"
@@ -761,9 +1228,9 @@ function createShort(
   );
 
 
-  /* =================================
+  /* ===============================
      VIEW COUNTER
-     ================================= */
+     =============================== */
 
   let counted =
     localStorage.getItem(
@@ -779,7 +1246,9 @@ function createShort(
     function(){
 
       if(counted){
+
         return;
+
       }
 
 
@@ -811,7 +1280,8 @@ function createShort(
               views;
 
 
-            counted = true;
+            counted =
+              true;
 
           },
           3000
@@ -833,13 +1303,15 @@ function createShort(
   );
 
 
-  container.appendChild(card);
+  container.appendChild(
+    card
+  );
 
 }
 
 
 /* =====================================
-   AUTOPLAY WHEN VISIBLE
+   AUTOPLAY
    ===================================== */
 
 function setupAutoplay(){
@@ -853,12 +1325,13 @@ function setupAutoplay(){
 
             const video =
               entry.target
-                .querySelector("video");
+                .querySelector(
+                  "video"
+                );
 
 
             if(
-              entry.isIntersecting
-              &&
+              entry.isIntersecting &&
               entry.intersectionRatio > .7
             ){
 
@@ -881,10 +1354,12 @@ function setupAutoplay(){
                 );
 
 
-              video.play()
+              video
+                .play()
                 .catch(
                   () => {}
                 );
+
 
             }else{
 
@@ -898,14 +1373,16 @@ function setupAutoplay(){
       },
       {
         threshold:[
-          0.7
+          .7
         ]
       }
     );
 
 
   document
-    .querySelectorAll(".short")
+    .querySelectorAll(
+      ".short"
+    )
     .forEach(
       card => {
 
@@ -959,9 +1436,16 @@ function escapeHTML(text){
    START
    ===================================== */
 
-loadShorts();
+if(
+  loadUser()
+){
+
+  loadShorts();
+
+}
 
 </script>
 
 </body>
+
 </html>
