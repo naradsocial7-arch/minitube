@@ -14,51 +14,81 @@
 
 <style>
 
+/* =====================================
+   RESET
+   ===================================== */
+
 *{
   box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
 }
 
 body{
   margin:0;
   background:#0f0f0f;
-  color:white;
+  color:#fff;
   font-family:Arial,sans-serif;
-  padding-bottom:80px;
+  padding-bottom:90px;
 }
 
 
-/* =========================
+/* =====================================
    HEADER
-   ========================= */
+   ===================================== */
 
 header{
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:100;
 
   height:64px;
 
-  background:#111;
+  background:rgba(17,17,17,.96);
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
   border-bottom:1px solid #292929;
 
   display:flex;
   align-items:center;
 
   padding:0 16px;
+
   gap:14px;
 }
 
 .back{
+  width:40px;
+  height:40px;
+
+  display:grid;
+  place-items:center;
+
   background:none;
   border:0;
+
   color:white;
-  font-size:30px;
+
+  font-size:32px;
+  line-height:1;
+
   cursor:pointer;
+
+  border-radius:50%;
+}
+
+.back:hover{
+  background:#292929;
 }
 
 .logo{
   font-size:23px;
   font-weight:800;
+  white-space:nowrap;
 }
 
 .logo span{
@@ -74,6 +104,7 @@ header{
   height:42px;
 
   border-radius:50%;
+
   background:#7c4dff;
 
   display:grid;
@@ -83,69 +114,116 @@ header{
 }
 
 
-/* =========================
+/* =====================================
    MAIN
-   ========================= */
+   ===================================== */
 
 .main{
+  width:100%;
   max-width:1100px;
+
   margin:0 auto;
+
   padding:20px;
 }
 
 
-/* =========================
+/* =====================================
    VIDEO
-   ========================= */
+   ===================================== */
 
 .videoBox{
   width:100%;
+
   background:#000;
+
   border-radius:14px;
+
   overflow:hidden;
+
+  position:relative;
 }
 
 .videoBox video{
   width:100%;
+
   display:block;
-  max-height:70vh;
+
+  max-height:72vh;
+
   background:#000;
+
+  object-fit:contain;
 }
 
 
-/* =========================
-   VIDEO INFO
-   ========================= */
+/* =====================================
+   VIDEO TITLE
+   ===================================== */
 
 .title{
   font-size:24px;
-  font-weight:bold;
+
+  font-weight:700;
+
+  line-height:1.35;
+
   margin-top:18px;
+
   word-break:break-word;
 }
 
 .meta{
   color:#999;
+
   font-size:14px;
+
   margin-top:8px;
 }
 
+
+/* =====================================
+   ACTIONS
+   ===================================== */
+
 .actions{
   display:flex;
+
   align-items:center;
-  gap:14px;
-  margin-top:15px;
+
+  gap:10px;
+
+  margin-top:16px;
+
   flex-wrap:wrap;
 }
 
 .actionButton{
   background:#292929;
+
   border:0;
+
   color:white;
+
   border-radius:22px;
-  padding:10px 16px;
+
+  padding:10px 17px;
+
   cursor:pointer;
-  font-size:15px;
+
+  font-size:14px;
+
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.actionButton:hover{
+  background:#3a3a3a;
+}
+
+.actionButton:active{
+  transform:scale(.96);
 }
 
 .actionButton.liked{
@@ -154,93 +232,148 @@ header{
 
 .subscribeButton{
   background:white;
+
   color:#111;
+
   border:0;
+
   border-radius:22px;
-  padding:10px 17px;
+
+  padding:10px 18px;
+
   font-weight:bold;
+
   cursor:pointer;
+
+  transition:.2s;
+}
+
+.subscribeButton:hover{
+  opacity:.9;
+}
+
+.subscribeButton:active{
+  transform:scale(.96);
 }
 
 .subscribeButton.subscribed{
   background:#292929;
+
   color:white;
+
   border:1px solid #555;
 }
 
 
-/* =========================
+/* =====================================
    CHANNEL
-   ========================= */
+   ===================================== */
 
 .channel{
-  margin-top:18px;
-  padding:15px;
+  margin-top:20px;
+
+  padding:16px;
 
   background:#181818;
+
   border-radius:14px;
 
   display:flex;
+
   align-items:center;
-  gap:12px;
+
+  gap:13px;
 }
 
 .channelAvatar{
-  width:48px;
-  height:48px;
+  width:50px;
+  height:50px;
+
+  flex-shrink:0;
 
   border-radius:50%;
+
   background:#7c4dff;
 
   display:grid;
+
   place-items:center;
 
   font-weight:bold;
+
+  font-size:18px;
 }
 
 .channelInfo{
   flex:1;
+
+  min-width:0;
 }
 
 .channelName{
   font-weight:bold;
+
+  font-size:16px;
 }
 
 .channelText{
   color:#999;
+
   font-size:13px;
-  margin-top:4px;
+
+  margin-top:5px;
+}
+
+.channelSubscribe{
+  background:white;
+
+  color:#111;
+
+  border:0;
+
+  border-radius:20px;
+
+  padding:9px 15px;
+
+  font-weight:bold;
+
+  cursor:pointer;
 }
 
 
-/* =========================
+/* =====================================
    COMMENTS
-   ========================= */
+   ===================================== */
 
 .comments{
-  margin-top:30px;
+  margin-top:32px;
 }
 
 .commentsTitle{
   font-size:22px;
+
   font-weight:bold;
+
   margin-bottom:15px;
 }
 
 .commentForm{
   background:#181818;
+
   border-radius:14px;
+
   padding:15px;
 }
 
 .commentInput{
   width:100%;
 
-  min-height:80px;
+  min-height:90px;
 
   resize:vertical;
 
   background:#222;
+
   border:1px solid #444;
 
   border-radius:10px;
@@ -250,7 +383,10 @@ header{
   color:white;
 
   font-family:Arial,sans-serif;
+
   font-size:15px;
+
+  line-height:1.5;
 
   outline:none;
 }
@@ -259,9 +395,15 @@ header{
   border-color:#777;
 }
 
+.commentInput::placeholder{
+  color:#777;
+}
+
 .commentBottom{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
 
   margin-top:10px;
@@ -271,11 +413,13 @@ header{
 
 .commentName{
   color:#999;
+
   font-size:13px;
 }
 
 .postButton{
   background:#ff0033;
+
   color:white;
 
   border:0;
@@ -287,6 +431,10 @@ header{
   font-weight:bold;
 
   cursor:pointer;
+}
+
+.postButton:active{
+  transform:scale(.96);
 }
 
 .commentList{
@@ -305,19 +453,24 @@ header{
 
 .commentTop{
   display:flex;
+
   align-items:center;
+
   gap:9px;
 }
 
 .commentAvatar{
-  width:34px;
-  height:34px;
+  width:36px;
+  height:36px;
+
+  flex-shrink:0;
 
   border-radius:50%;
 
   background:#7c4dff;
 
   display:grid;
+
   place-items:center;
 
   font-size:13px;
@@ -327,15 +480,20 @@ header{
 
 .commentAuthor{
   font-weight:bold;
+
+  font-size:14px;
 }
 
 .commentDate{
   color:#777;
+
   font-size:12px;
+
+  margin-top:2px;
 }
 
 .commentText{
-  margin-top:9px;
+  margin-top:10px;
 
   color:#ddd;
 
@@ -352,6 +510,7 @@ header{
 
 .deleteComment{
   background:none;
+
   border:0;
 
   color:#ff4964;
@@ -365,14 +524,64 @@ header{
 
 .noComments{
   color:#888;
+
   text-align:center;
-  padding:25px;
+
+  padding:28px 15px;
 }
 
 
-/* =========================
-   BOTTOM
-   ========================= */
+/* =====================================
+   LOADING
+   ===================================== */
+
+.loading{
+  color:#999;
+
+  padding:25px;
+
+  text-align:center;
+}
+
+
+/* =====================================
+   ERROR
+   ===================================== */
+
+.errorBox{
+  background:#181818;
+
+  border:1px solid #292929;
+
+  border-radius:14px;
+
+  padding:40px 20px;
+
+  text-align:center;
+
+  margin-top:20px;
+}
+
+.errorIcon{
+  font-size:42px;
+
+  margin-bottom:12px;
+}
+
+.errorBox h2{
+  margin:0 0 8px;
+}
+
+.errorBox p{
+  color:#999;
+
+  margin:0;
+}
+
+
+/* =====================================
+   BOTTOM NAV
+   ===================================== */
 
 .bottom{
   position:fixed;
@@ -390,20 +599,26 @@ header{
   display:flex;
 
   justify-content:space-around;
+
   align-items:center;
 
-  z-index:30;
+  z-index:200;
 }
 
 .bottom button{
+  min-width:55px;
+
   background:none;
+
   border:0;
 
   color:#aaa;
 
-  font-size:13px;
+  font-size:12px;
 
   cursor:pointer;
+
+  padding:5px;
 }
 
 .bottom button b{
@@ -416,27 +631,90 @@ header{
   margin-bottom:3px;
 }
 
+.bottom button.active{
+  color:white;
+}
 
-/* =========================
+
+/* =====================================
+   DESKTOP
+   ===================================== */
+
+@media(min-width:900px){
+
+  .main{
+    padding-top:25px;
+  }
+
+}
+
+
+/* =====================================
    MOBILE
-   ========================= */
+   ===================================== */
 
 @media(max-width:600px){
 
-  .main{
-    padding:14px;
+  header{
+    padding:0 12px;
   }
 
-  .title{
-    font-size:20px;
+  .logo{
+    font-size:21px;
+  }
+
+  .main{
+    padding:12px;
   }
 
   .videoBox{
     border-radius:10px;
   }
 
+  .videoBox video{
+    max-height:65vh;
+  }
+
+  .title{
+    font-size:20px;
+  }
+
+  .channel{
+    padding:14px;
+  }
+
+  .channelSubscribe{
+    display:none;
+  }
+
   .commentBottom{
     align-items:flex-end;
+  }
+
+  .commentName{
+    max-width:55%;
+    line-height:1.3;
+  }
+
+}
+
+
+/* =====================================
+   SMALL MOBILE
+   ===================================== */
+
+@media(max-width:380px){
+
+  .bottom button{
+    font-size:11px;
+  }
+
+  .bottom button b{
+    font-size:20px;
+  }
+
+  .actionButton{
+    padding:9px 13px;
   }
 
 }
@@ -449,35 +727,45 @@ header{
 <body>
 
 
-<!-- =========================
+<!-- =====================================
      HEADER
-     ========================= -->
+     ===================================== -->
 
 <header>
 
   <button
     class="back"
-    onclick="goHome()"
+    onclick="goBack()"
+    aria-label="Back"
   >
     ‹
   </button>
 
+
   <div class="logo">
-    <span>▶</span> MiniTube
+
+    <span>▶</span>
+    MiniTube
+
   </div>
+
 
   <div class="spacer"></div>
 
-  <div class="avatar">
+
+  <div
+    class="avatar"
+    id="headerAvatar"
+  >
     M
   </div>
 
 </header>
 
 
-<!-- =========================
+<!-- =====================================
      MAIN
-     ========================= -->
+     ===================================== -->
 
 <main class="main">
 
@@ -489,8 +777,8 @@ header{
     <video
       id="videoPlayer"
       controls
-      autoplay
       playsinline
+      preload="metadata"
     ></video>
 
   </div>
@@ -505,6 +793,8 @@ header{
     Loading video...
   </div>
 
+
+  <!-- META -->
 
   <div class="meta">
 
@@ -521,15 +811,13 @@ header{
 
   <div class="actions">
 
+
     <button
       id="likeButton"
       class="actionButton"
       onclick="toggleLike()"
     >
-      ♡ Like
-      <span id="likeCount">
-        0
-      </span>
+      ♡ Like 0
     </button>
 
 
@@ -549,6 +837,7 @@ header{
       Subscribe
     </button>
 
+
   </div>
 
 
@@ -556,21 +845,42 @@ header{
 
   <div class="channel">
 
-    <div class="channelAvatar">
+
+    <div
+      class="channelAvatar"
+      id="channelAvatar"
+    >
       M
     </div>
 
+
     <div class="channelInfo">
 
-      <div class="channelName">
+
+      <div
+        class="channelName"
+        id="channelName"
+      >
         My Channel
       </div>
+
 
       <div class="channelText">
         Your MiniTube creator channel
       </div>
 
+
     </div>
+
+
+    <button
+      id="channelSubscribe"
+      class="channelSubscribe"
+      onclick="toggleSubscribe()"
+    >
+      Subscribe
+    </button>
+
 
   </div>
 
@@ -578,6 +888,7 @@ header{
   <!-- COMMENTS -->
 
   <section class="comments">
+
 
     <div class="commentsTitle">
 
@@ -591,6 +902,7 @@ header{
 
     <div class="commentForm">
 
+
       <textarea
         id="commentInput"
         class="commentInput"
@@ -601,7 +913,11 @@ header{
 
       <div class="commentBottom">
 
-        <div class="commentName">
+
+        <div
+          class="commentName"
+          id="commentName"
+        >
           Commenting as Main Player
         </div>
 
@@ -613,7 +929,9 @@ header{
           Post Comment
         </button>
 
+
       </div>
+
 
     </div>
 
@@ -623,48 +941,61 @@ header{
       class="commentList"
     ></div>
 
+
   </section>
 
 
 </main>
 
 
-<!-- =========================
+<!-- =====================================
      BOTTOM NAV
-     ========================= -->
+     ===================================== -->
 
-<div class="bottom">
+<nav class="bottom">
+
 
   <button onclick="goHome()">
+
     <b>⌂</b>
     Home
+
   </button>
 
 
   <button onclick="goShorts()">
+
     <b>▶</b>
     Shorts
+
   </button>
 
 
   <button onclick="goHome()">
+
     <b>＋</b>
     Create
+
   </button>
 
 
   <button onclick="goSubscriptions()">
+
     <b>□</b>
     Subscriptions
+
   </button>
 
 
   <button onclick="goYou()">
+
     <b>●</b>
     You
+
   </button>
 
-</div>
+
+</nav>
 
 
 <script>
@@ -692,27 +1023,36 @@ const videoName =
 
 
 /* =====================================
-   LOCAL STORAGE KEYS
+   STORAGE KEYS
    ===================================== */
+
+const safeVideoName =
+  videoName || "";
+
 
 const commentKey =
   "minitube_comments_" +
-  (videoName || "");
+  safeVideoName;
 
 
 const likeKey =
   "likes_" +
-  (videoName || "");
+  safeVideoName;
 
 
 const likedKey =
   "liked_" +
-  (videoName || "");
+  safeVideoName;
 
 
 const viewKey =
   "views_" +
-  (videoName || "");
+  safeVideoName;
+
+
+const viewedKey =
+  "viewed_" +
+  safeVideoName;
 
 
 const subscribeKey =
@@ -720,16 +1060,124 @@ const subscribeKey =
 
 
 /* =====================================
+   ELEMENTS
+   ===================================== */
+
+const player =
+  document.getElementById(
+    "videoPlayer"
+  );
+
+
+const title =
+  document.getElementById(
+    "videoTitle"
+  );
+
+
+const viewCount =
+  document.getElementById(
+    "viewCount"
+  );
+
+
+const likeButton =
+  document.getElementById(
+    "likeButton"
+  );
+
+
+const subscribeButton =
+  document.getElementById(
+    "subscribeButton"
+  );
+
+
+const channelSubscribe =
+  document.getElementById(
+    "channelSubscribe"
+  );
+
+
+const commentInput =
+  document.getElementById(
+    "commentInput"
+  );
+
+
+/* =====================================
    START
    ===================================== */
 
-loadVideo();
+initialize();
 
-loadComments();
 
-updateLike();
+function initialize(){
 
-updateSubscribe();
+  loadProfile();
+
+  updateLike();
+
+  updateSubscribe();
+
+  loadComments();
+
+  loadVideo();
+
+}
+
+
+/* =====================================
+   PROFILE
+   ===================================== */
+
+function loadProfile(){
+
+  /*
+    If later you add real login,
+    these localStorage values can be
+    filled from your login system.
+  */
+
+  const storedName =
+    localStorage.getItem(
+      "minitube_username"
+    );
+
+
+  const storedAvatar =
+    localStorage.getItem(
+      "minitube_avatar_letter"
+    );
+
+
+  if(storedName){
+
+    document.getElementById(
+      "commentName"
+    ).textContent =
+      "Commenting as " +
+      storedName;
+
+  }
+
+
+  if(storedAvatar){
+
+    document.getElementById(
+      "headerAvatar"
+    ).textContent =
+      storedAvatar;
+
+
+    document.getElementById(
+      "channelAvatar"
+    ).textContent =
+      storedAvatar;
+
+  }
+
+}
 
 
 /* =====================================
@@ -738,33 +1186,28 @@ updateSubscribe();
 
 function loadVideo(){
 
-  const player =
-    document.getElementById(
-      "videoPlayer"
-    );
-
-  const title =
-    document.getElementById(
-      "videoTitle"
-    );
-
-
   if(!videoName){
 
-    title.textContent =
-      "Video not found";
+    showVideoError(
+      "Video not found",
+      "The video link is missing or invalid."
+    );
 
     return;
 
   }
 
 
-  player.src =
+  const videoURL =
     API_BASE +
     "/video/" +
     encodeURIComponent(
       videoName
     );
+
+
+  player.src =
+    videoURL;
 
 
   title.textContent =
@@ -773,11 +1216,68 @@ function loadVideo(){
 
   updateViews();
 
+
+  /*
+    Count a view only once per browser
+    after watching for 3 seconds.
+  */
+
+  setupViewCounter();
+
+
+  /*
+    Try autoplay.
+    Browser may block it.
+  */
+
+  player.play()
+    .catch(
+      () => {}
+    );
+
 }
 
 
 /* =====================================
-   VIEWS
+   VIDEO ERROR
+   ===================================== */
+
+function showVideoError(
+  heading,
+  message
+){
+
+  title.textContent =
+    heading;
+
+
+  document.querySelector(
+    ".videoBox"
+  ).innerHTML = `
+
+    <div class="errorBox">
+
+      <div class="errorIcon">
+        ⚠️
+      </div>
+
+      <h2>
+        ${escapeHTML(heading)}
+      </h2>
+
+      <p>
+        ${escapeHTML(message)}
+      </p>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================
+   VIEW COUNTER
    ===================================== */
 
 function updateViews(){
@@ -790,16 +1290,106 @@ function updateViews(){
     );
 
 
-  document.getElementById(
-    "viewCount"
-  ).textContent =
-    count;
+  viewCount.textContent =
+    formatNumber(count);
+
+}
+
+
+function setupViewCounter(){
+
+  let counted =
+    localStorage.getItem(
+      viewedKey
+    ) === "true";
+
+
+  if(counted){
+    return;
+  }
+
+
+  let timer = null;
+
+
+  player.addEventListener(
+    "play",
+    function(){
+
+      if(counted){
+        return;
+      }
+
+
+      clearTimeout(timer);
+
+
+      timer =
+        setTimeout(
+          function(){
+
+            let views =
+              Number(
+                localStorage.getItem(
+                  viewKey
+                ) || 0
+              );
+
+
+            views++;
+
+
+            localStorage.setItem(
+              viewKey,
+              String(views)
+            );
+
+
+            localStorage.setItem(
+              viewedKey,
+              "true"
+            );
+
+
+            viewCount.textContent =
+              formatNumber(views);
+
+
+            counted = true;
+
+
+          },
+          3000
+        );
+
+    }
+  );
+
+
+  player.addEventListener(
+    "pause",
+    function(){
+
+      clearTimeout(timer);
+
+    }
+  );
+
+
+  player.addEventListener(
+    "ended",
+    function(){
+
+      clearTimeout(timer);
+
+    }
+  );
 
 }
 
 
 /* =====================================
-   LIKE
+   LIKE SYSTEM
    ===================================== */
 
 function toggleLike(){
@@ -856,13 +1446,13 @@ function toggleLike(){
 
 function updateLike(){
 
-  const button =
-    document.getElementById(
-      "likeButton"
-    );
+  const liked =
+    localStorage.getItem(
+      likedKey
+    ) === "true";
 
 
-  const count =
+  const likes =
     Number(
       localStorage.getItem(
         likeKey
@@ -870,19 +1460,13 @@ function updateLike(){
     );
 
 
-  const liked =
-    localStorage.getItem(
-      likedKey
-    ) === "true";
-
-
-  button.textContent =
+  likeButton.textContent =
     (liked ? "♥" : "♡") +
     " Like " +
-    count;
+    formatNumber(likes);
 
 
-  button.classList.toggle(
+  likeButton.classList.toggle(
     "liked",
     liked
   );
@@ -891,7 +1475,7 @@ function updateLike(){
 
 
 /* =====================================
-   SUBSCRIBE
+   SUBSCRIBE SYSTEM
    ===================================== */
 
 function toggleSubscribe(){
@@ -915,28 +1499,53 @@ function toggleSubscribe(){
 
 function updateSubscribe(){
 
-  const button =
-    document.getElementById(
-      "subscribeButton"
-    );
-
-
   const subscribed =
     localStorage.getItem(
       subscribeKey
     ) === "true";
 
 
-  button.textContent =
+  subscribeButton.textContent =
     subscribed
       ? "Subscribed"
       : "Subscribe";
 
 
-  button.classList.toggle(
+  channelSubscribe.textContent =
+    subscribed
+      ? "Subscribed"
+      : "Subscribe";
+
+
+  subscribeButton.classList.toggle(
     "subscribed",
     subscribed
   );
+
+
+  if(subscribed){
+
+    channelSubscribe.style.background =
+      "#292929";
+
+    channelSubscribe.style.color =
+      "white";
+
+    channelSubscribe.style.border =
+      "1px solid #555";
+
+  }else{
+
+    channelSubscribe.style.background =
+      "white";
+
+    channelSubscribe.style.color =
+      "#111";
+
+    channelSubscribe.style.border =
+      "0";
+
+  }
 
 }
 
@@ -949,13 +1558,29 @@ function getComments(){
 
   try{
 
-    return JSON.parse(
+    const saved =
       localStorage.getItem(
         commentKey
-      ) || "[]"
-    );
+      );
+
+
+    if(!saved){
+      return [];
+    }
+
+
+    const parsed =
+      JSON.parse(saved);
+
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+
 
   }catch(error){
+
+    console.error(error);
 
     return [];
 
@@ -970,14 +1595,8 @@ function getComments(){
 
 function postComment(){
 
-  const input =
-    document.getElementById(
-      "commentInput"
-    );
-
-
   const text =
-    input.value.trim();
+    commentInput.value.trim();
 
 
   if(!text){
@@ -985,6 +1604,8 @@ function postComment(){
     alert(
       "Please write a comment first."
     );
+
+    commentInput.focus();
 
     return;
 
@@ -995,13 +1616,20 @@ function postComment(){
     getComments();
 
 
+  const author =
+    localStorage.getItem(
+      "minitube_username"
+    ) ||
+    "Main Player";
+
+
   comments.unshift({
 
     id:
       Date.now(),
 
     author:
-      "Main Player",
+      author,
 
     text:
       text,
@@ -1020,7 +1648,8 @@ function postComment(){
   );
 
 
-  input.value = "";
+  commentInput.value =
+    "";
 
 
   renderComments();
@@ -1062,7 +1691,9 @@ function renderComments(){
 
 
   count.textContent =
-    comments.length;
+    formatNumber(
+      comments.length
+    );
 
 
   if(comments.length === 0){
@@ -1072,7 +1703,7 @@ function renderComments(){
       <div class="noComments">
 
         No comments yet.
-        Be the first to comment!
+        Be the first to comment! 💬
 
       </div>
 
@@ -1083,7 +1714,8 @@ function renderComments(){
   }
 
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
   comments.forEach(
@@ -1099,222 +1731,7 @@ function renderComments(){
         "comment";
 
 
-      element.innerHTML = `
-
-        <div class="commentTop">
-
-          <div class="commentAvatar">
-            M
-          </div>
-
-          <div>
-
-            <div class="commentAuthor">
-
-              ${escapeHTML(
-                comment.author
-              )}
-
-            </div>
-
-            <div class="commentDate">
-
-              ${escapeHTML(
-                comment.date
-              )}
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="commentText">
-
-          ${escapeHTML(
-            comment.text
-          )}
-
-        </div>
-
-
-        <div class="commentActions">
-
-          <button
-            class="deleteComment"
-            onclick="deleteComment(${comment.id})"
-          >
-            Delete
-          </button>
-
-        </div>
-
-      `;
-
-
-      container.appendChild(
-        element
-      );
-
-    }
-  );
-
-}
-
-
-/* =====================================
-   DELETE COMMENT
-   ===================================== */
-
-function deleteComment(id){
-
-  const confirmed =
-    confirm(
-      "Delete this comment?"
-    );
-
-
-  if(!confirmed){
-
-    return;
-
-  }
-
-
-  const comments =
-    getComments().filter(
-      function(comment){
-
-        return comment.id !== id;
-
-      }
-    );
-
-
-  localStorage.setItem(
-    commentKey,
-    JSON.stringify(
-      comments
-    )
-  );
-
-
-  renderComments();
-
-}
-
-
-/* =====================================
-   SHARE
-   ===================================== */
-
-function shareVideo(){
-
-  if(
-    navigator.share
-  ){
-
-    navigator.share({
-
-      title:
-        videoName || "MiniTube Video",
-
-      url:
-        window.location.href
-
-    });
-
-  }else{
-
-    navigator.clipboard.writeText(
-      window.location.href
-    );
-
-
-    alert(
-      "Video link copied!"
-    );
-
-  }
-
-}
-
-
-/* =====================================
-   SECURITY
-   ===================================== */
-
-function escapeHTML(text){
-
-  return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =====================================
-   NAVIGATION
-   ===================================== */
-
-function goHome(){
-
-  window.location.href =
-    "index.html";
-
-}
-
-
-function goShorts(){
-
-  window.location.href =
-    "shorts.html";
-
-}
-
-
-function goSubscriptions(){
-
-  window.location.href =
-    "subscriptions.html";
-
-}
-
-
-function goYou(){
-
-  window.location.href =
-    "you.html";
-
-}
-
-</script>
-
-
-</body>
-
-</html>
+      const author =
+        escapeHTML(
+          comment.author
+    
