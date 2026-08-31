@@ -73,7 +73,106 @@ header{
   display:grid;
   place-items:center;
   font-weight:bold;
+  cursor:pointer;
+  flex-shrink:0;
 }
+
+/* LOGIN ACCOUNT */
+
+.accountArea{
+  position:relative;
+}
+
+.accountMenu{
+  display:none;
+
+  position:absolute;
+  right:0;
+  top:50px;
+
+  width:250px;
+
+  background:#181818;
+  border:1px solid #333;
+  border-radius:14px;
+
+  padding:15px;
+
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+
+  z-index:100;
+}
+
+.accountMenu.show{
+  display:block;
+}
+
+.accountAvatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:#7c4dff;
+
+  display:grid;
+  place-items:center;
+
+  font-size:20px;
+  font-weight:bold;
+
+  margin-bottom:10px;
+}
+
+.accountName{
+  font-weight:bold;
+  font-size:16px;
+  word-break:break-word;
+}
+
+.accountEmail{
+  color:#999;
+  font-size:13px;
+  margin-top:5px;
+  word-break:break-word;
+}
+
+.loginStatus{
+  color:#6ee7b7;
+  font-size:13px;
+  margin-top:8px;
+}
+
+.accountDivider{
+  height:1px;
+  background:#333;
+  margin:14px 0;
+}
+
+.accountButton{
+  width:100%;
+  padding:11px;
+
+  border:0;
+  border-radius:9px;
+
+  background:#292929;
+  color:white;
+
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.accountButton:hover{
+  background:#383838;
+}
+
+.logoutButton{
+  background:#ff0033;
+}
+
+
+/* =========================
+   CATEGORIES
+   ========================= */
 
 .categories{
   display:flex;
@@ -90,6 +189,7 @@ header{
   color:white;
   font-size:15px;
   white-space:nowrap;
+  cursor:pointer;
 }
 
 .categories button.active{
@@ -358,6 +458,11 @@ header{
     padding:8px 14px;
   }
 
+  .accountMenu{
+    right:-5px;
+    width:230px;
+  }
+
 }
 
 </style>
@@ -387,8 +492,68 @@ header{
       oninput="filterVideos()"
     >
 
-    <div class="avatar">
-      M
+    <!-- ACCOUNT -->
+
+    <div class="accountArea">
+
+      <div
+        id="avatar"
+        class="avatar"
+        onclick="toggleAccountMenu()"
+      >
+        M
+      </div>
+
+
+      <div
+        id="accountMenu"
+        class="accountMenu"
+      >
+
+        <div
+          id="accountAvatar"
+          class="accountAvatar"
+        >
+          M
+        </div>
+
+
+        <div
+          id="accountName"
+          class="accountName"
+        >
+          Account
+        </div>
+
+
+        <div
+          id="accountEmail"
+          class="accountEmail"
+        >
+          Not logged in
+        </div>
+
+
+        <div
+          id="loginStatus"
+          class="loginStatus"
+        >
+        </div>
+
+
+        <div class="accountDivider"></div>
+
+
+        <button
+          id="accountAction"
+          class="accountButton"
+          onclick="accountAction()"
+        >
+          Login
+        </button>
+
+      </div>
+
     </div>
 
   </div>
@@ -431,16 +596,18 @@ header{
     Welcome to MiniTube
   </h1>
 
-  <p>
+  <p id="welcomeText">
     Your own video-sharing platform.
   </p>
 
+
   <button
     class="upload"
-    onclick="document.getElementById('file').click()"
+    onclick="startUpload()"
   >
     + Upload Video
   </button>
+
 
   <input
     id="file"
@@ -485,9 +652,7 @@ header{
   </button>
 
 
-  <button
-    onclick="document.getElementById('file').click()"
-  >
+  <button onclick="startUpload()">
     <b>＋</b>
     Create
   </button>
@@ -515,6 +680,20 @@ header{
 
 const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   AUTH STORAGE
+   ===================================== */
+
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
+
+const REFRESH_TOKEN_KEY =
+  "minitube_refresh_token";
+
+const USER_KEY =
+  "minitube_user";
 
 
 /* =====================================
@@ -578,7 +757,412 @@ function updateSubscribeButtons(){
 }
 
 
-let allVideos = [];
+/* =====================================
+   GET LOGGED USER
+   ===================================== */
+
+function getLoggedUser(){
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+  const savedUser =
+    localStorage.getItem(
+      USER_KEY
+    );
+
+
+  if(!token || !savedUser){
+
+    return null;
+
+  }
+
+
+  try{
+
+    return JSON.parse(
+      savedUser
+    );
+
+  }catch(error){
+
+    console.error(
+      "Invalid saved user",
+      error
+    );
+
+    return null;
+
+  }
+
+}
+
+
+/* =====================================
+   AUTH STATE
+   ===================================== */
+
+function isLoggedIn(){
+
+  return !!getLoggedUser();
+
+}
+
+
+/* =====================================
+   GET USER NAME
+   ===================================== */
+
+function getUserName(user){
+
+  if(!user){
+
+    return "Account";
+
+  }
+
+
+  const metadata =
+    user.user_metadata ||
+    user.userMetadata ||
+    {};
+
+
+  return (
+
+    metadata.display_name ||
+
+    metadata.full_name ||
+
+    metadata.name ||
+
+    user.email ||
+
+    "MiniTube User"
+
+  );
+
+}
+
+
+/* =====================================
+   GET INITIAL
+   ===================================== */
+
+function getUserInitial(user){
+
+  const name =
+    getUserName(user);
+
+
+  return name
+    .trim()
+    .charAt(0)
+    .toUpperCase() || "M";
+
+}
+
+
+/* =====================================
+   UPDATE ACCOUNT UI
+   ===================================== */
+
+function updateAccountUI(){
+
+  const user =
+    getLoggedUser();
+
+
+  const avatar =
+    document.getElementById(
+      "avatar"
+    );
+
+
+  const accountAvatar =
+    document.getElementById(
+      "accountAvatar"
+    );
+
+
+  const accountName =
+    document.getElementById(
+      "accountName"
+    );
+
+
+  const accountEmail =
+    document.getElementById(
+      "accountEmail"
+    );
+
+
+  const loginStatus =
+    document.getElementById(
+      "loginStatus"
+    );
+
+
+  const accountAction =
+    document.getElementById(
+      "accountAction"
+    );
+
+
+  const welcomeText =
+    document.getElementById(
+      "welcomeText"
+    );
+
+
+  if(user){
+
+    const name =
+      getUserName(user);
+
+
+    const initial =
+      getUserInitial(user);
+
+
+    avatar.textContent =
+      initial;
+
+
+    accountAvatar.textContent =
+      initial;
+
+
+    accountName.textContent =
+      name;
+
+
+    accountEmail.textContent =
+      user.email ||
+      "";
+
+
+    loginStatus.textContent =
+      "✓ Logged in";
+
+
+    accountAction.textContent =
+      "Logout";
+
+
+    accountAction.classList.add(
+      "logoutButton"
+    );
+
+
+    welcomeText.textContent =
+      "Welcome back, " +
+      name +
+      "!";
+
+
+  }else{
+
+
+    avatar.textContent =
+      "M";
+
+
+    accountAvatar.textContent =
+      "M";
+
+
+    accountName.textContent =
+      "Not logged in";
+
+
+    accountEmail.textContent =
+      "Login to your MiniTube account";
+
+
+    loginStatus.textContent =
+      "";
+
+
+    accountAction.textContent =
+      "Login";
+
+
+    accountAction.classList.remove(
+      "logoutButton"
+    );
+
+
+    welcomeText.textContent =
+      "Your own video-sharing platform.";
+
+  }
+
+}
+
+
+/* =====================================
+   ACCOUNT MENU
+   ===================================== */
+
+function toggleAccountMenu(){
+
+  const menu =
+    document.getElementById(
+      "accountMenu"
+    );
+
+
+  menu.classList.toggle(
+    "show"
+  );
+
+}
+
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const area =
+      document.querySelector(
+        ".accountArea"
+      );
+
+
+    const menu =
+      document.getElementById(
+        "accountMenu"
+      );
+
+
+    if(
+      area &&
+      !area.contains(
+        event.target
+      )
+    ){
+
+      menu.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================
+   ACCOUNT ACTION
+   ===================================== */
+
+function accountAction(){
+
+  if(isLoggedIn()){
+
+    logout();
+
+  }else{
+
+    window.location.href =
+      "login.html";
+
+  }
+
+}
+
+
+/* =====================================
+   LOGOUT
+   ===================================== */
+
+function logout(){
+
+  const confirmed =
+    confirm(
+      "Logout from this MiniTube account?"
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    ACCESS_TOKEN_KEY
+  );
+
+
+  localStorage.removeItem(
+    REFRESH_TOKEN_KEY
+  );
+
+
+  localStorage.removeItem(
+    USER_KEY
+  );
+
+
+  updateAccountUI();
+
+
+  document
+    .getElementById(
+      "accountMenu"
+    )
+    .classList.remove(
+      "show"
+    );
+
+
+  alert(
+    "You have been logged out."
+  );
+
+}
+
+
+/* =====================================
+   UPLOAD BUTTON
+   ===================================== */
+
+function startUpload(){
+
+  if(!isLoggedIn()){
+
+    const go =
+      confirm(
+        "Please login first to upload a video.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "file"
+    )
+    .click();
+
+}
 
 
 /* =====================================
@@ -589,9 +1173,12 @@ function openWatch(videoName){
 
   const url =
     "watch.html?video=" +
-    encodeURIComponent(videoName);
+    encodeURIComponent(
+      videoName
+    );
 
-  window.location.href = url;
+  window.location.href =
+    url;
 
 }
 
@@ -689,7 +1276,9 @@ async function loadVideos(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      error
+    );
 
 
     status.textContent =
@@ -698,6 +1287,9 @@ async function loadVideos(){
   }
 
 }
+
+
+let allVideos = [];
 
 
 /* =====================================
@@ -718,7 +1310,8 @@ function renderVideos(videos){
     );
 
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
   if(videos.length === 0){
@@ -1062,10 +1655,6 @@ function renderVideos(videos){
   });
 
 
-  /* ===============================
-     UPDATE SUBSCRIBE BUTTONS
-     =============================== */
-
   updateSubscribeButtons();
 
 }
@@ -1088,6 +1677,22 @@ async function uploadVideo(){
 
 
   if(!file){
+
+    return;
+
+  }
+
+
+  if(!isLoggedIn()){
+
+    alert(
+      "Please login first."
+    );
+
+
+    input.value =
+      "";
+
 
     return;
 
@@ -1121,7 +1726,14 @@ async function uploadVideo(){
           headers:{
             "Content-Type":
               file.type ||
-              "video/mp4"
+              "video/mp4",
+
+            "Authorization":
+              "Bearer " +
+              localStorage.getItem(
+                ACCESS_TOKEN_KEY
+              )
+
           },
 
           body:file
@@ -1148,7 +1760,8 @@ async function uploadVideo(){
       "Upload successful 🚀";
 
 
-    input.value = "";
+    input.value =
+      "";
 
 
     await loadVideos();
@@ -1176,6 +1789,17 @@ async function uploadVideo(){
 
 async function deleteVideo(name){
 
+  if(!isLoggedIn()){
+
+    alert(
+      "Please login first."
+    );
+
+    return;
+
+  }
+
+
   if(
     !confirm(
       "Delete this video?"
@@ -1195,7 +1819,16 @@ async function deleteVideo(name){
         "/api/delete/" +
         name,
         {
-          method:"DELETE"
+          method:"DELETE",
+
+          headers:{
+            "Authorization":
+              "Bearer " +
+              localStorage.getItem(
+                ACCESS_TOKEN_KEY
+              )
+          }
+
         }
       );
 
@@ -1213,6 +1846,11 @@ async function deleteVideo(name){
 
 
   }catch(error){
+
+    console.error(
+      error
+    );
+
 
     alert(
       "Could not delete video."
@@ -1263,22 +1901,27 @@ function filterVideos(){
 function escapeHTML(text){
 
   return String(text)
+
     .replace(
       /&/g,
       "&amp;"
     )
+
     .replace(
       /</g,
       "&lt;"
     )
+
     .replace(
       />/g,
       "&gt;"
     )
+
     .replace(
       /"/g,
       "&quot;"
     )
+
     .replace(
       /'/g,
       "&#039;"
@@ -1290,6 +1933,8 @@ function escapeHTML(text){
 /* =====================================
    START
    ===================================== */
+
+updateAccountUI();
 
 loadVideos();
 
