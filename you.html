@@ -80,6 +80,7 @@ header{
   place-items:center;
 
   font-weight:bold;
+  font-size:18px;
 }
 
 
@@ -140,6 +141,8 @@ header{
   font-weight:800;
 
   margin-bottom:7px;
+
+  word-break:break-word;
 }
 
 .handle{
@@ -156,6 +159,13 @@ header{
   color:#aaa;
 
   font-size:14px;
+
+  line-height:1.5;
+}
+
+.userEmail{
+  color:#bbb;
+  word-break:break-all;
 }
 
 .channelActions{
@@ -229,7 +239,6 @@ header{
   font-weight:bold;
 
   margin:
-
     25px 0
     15px;
 }
@@ -265,6 +274,8 @@ header{
   display:block;
 
   background:#000;
+
+  cursor:pointer;
 }
 
 .info{
@@ -279,6 +290,13 @@ header{
   font-weight:bold;
 
   word-break:break-word;
+
+  cursor:pointer;
+}
+
+.title:hover{
+
+  text-decoration:underline;
 }
 
 .meta{
@@ -305,6 +323,11 @@ header{
   border-radius:8px;
 
   cursor:pointer;
+}
+
+.watchButton:hover{
+
+  background:#383838;
 }
 
 
@@ -366,6 +389,37 @@ header{
   font-weight:bold;
 
   cursor:pointer;
+}
+
+
+/* =========================
+   LOGOUT
+   ========================= */
+
+.logoutButton{
+
+  margin-top:15px;
+
+  background:transparent;
+
+  color:#ff4964;
+
+  border:1px solid #ff4964;
+
+  border-radius:22px;
+
+  padding:10px 18px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+.logoutButton:hover{
+
+  background:#ff0033;
+
+  color:white;
 }
 
 
@@ -466,6 +520,38 @@ header{
 
 }
 
+
+/* =========================
+   VERY SMALL SCREEN
+   ========================= */
+
+@media(max-width:380px){
+
+  .channelHeader{
+
+    gap:12px;
+  }
+
+  .channelAvatar{
+
+    width:60px;
+    height:60px;
+
+    font-size:23px;
+  }
+
+  .channelName{
+
+    font-size:18px;
+  }
+
+  .handle{
+
+    font-size:13px;
+  }
+
+}
+
 </style>
 
 </head>
@@ -499,10 +585,11 @@ header{
   <div class="spacer"></div>
 
 
-  <div class="avatarSmall">
-
-    M
-
+  <div
+    id="headerAvatar"
+    class="avatarSmall"
+  >
+    ?
   </div>
 
 </header>
@@ -515,43 +602,58 @@ header{
 <section class="channelHeader">
 
 
-  <div class="channelAvatar">
-
-    M
-
+  <div
+    id="channelAvatar"
+    class="channelAvatar"
+  >
+    ?
   </div>
 
 
   <div class="channelDetails">
 
 
-    <div class="channelName">
-
-      My Channel
-
+    <div
+      id="channelName"
+      class="channelName"
+    >
+      Loading...
     </div>
 
 
-    <div class="handle">
-
-      @mychannel
-
+    <div
+      id="handle"
+      class="handle"
+    >
+      @user
     </div>
 
 
     <div class="channelStats">
 
-      <span id="videoCount">
-        0
-      </span>
+      <div
+        id="userEmail"
+        class="userEmail"
+      >
+        Loading...
+      </div>
 
-      videos
 
-      &nbsp; • &nbsp;
+      <div style="margin-top:6px;">
 
-      <span id="subscriberStatus">
-        Not subscribed
-      </span>
+        <span id="videoCount">
+          0
+        </span>
+
+        videos
+
+        &nbsp; • &nbsp;
+
+        <span id="subscriberStatus">
+          Not subscribed
+        </span>
+
+      </div>
 
     </div>
 
@@ -572,10 +674,20 @@ header{
 
       <button
         class="editButton"
-        onclick="alert('Channel editing will be added later')"
+        onclick="editChannel()"
       >
 
         Edit Channel
+
+      </button>
+
+
+      <button
+        class="logoutButton"
+        onclick="logout()"
+      >
+
+        Logout
 
       </button>
 
@@ -663,11 +775,11 @@ header{
 
   </button>
 
-
 </div>
 
 
 <script>
+
 
 /* =====================================
    CLOUDFLARE WORKER
@@ -683,6 +795,239 @@ const API_BASE =
 
 const SUBSCRIBE_KEY =
   "minitube_my_channel_subscribed";
+
+
+/* =====================================
+   LOGIN CHECK + USER INFORMATION
+   ===================================== */
+
+function loadLoggedInUser(){
+
+  const userData =
+    localStorage.getItem(
+      "minitube_user"
+    );
+
+
+  /*
+     Agar login nahi hai
+     to login page par bhejo
+  */
+
+  if(!userData){
+
+    window.location.href =
+      "login.html";
+
+    return false;
+
+  }
+
+
+  try{
+
+    const user =
+      JSON.parse(
+        userData
+      );
+
+
+    const email =
+      user.email ||
+      "";
+
+
+    /*
+       Supabase login ke waqt
+       display_name yahan save hua tha
+    */
+
+    const metadata =
+      user.user_metadata ||
+      {};
+
+
+    let displayName =
+      metadata.display_name ||
+      "";
+
+
+    /*
+       Agar display name nahi mila
+       to email ka username use karo
+    */
+
+    if(!displayName){
+
+      displayName =
+        email.split("@")[0] ||
+        "User";
+
+    }
+
+
+    /*
+       First letter
+    */
+
+    const firstLetter =
+      displayName
+        .trim()
+        .charAt(0)
+        .toUpperCase() ||
+      "U";
+
+
+    /*
+       Handle
+    */
+
+    let cleanHandle =
+      displayName
+        .toLowerCase()
+        .replace(
+          /[^a-z0-9]+/g,
+          ""
+        )
+        .slice(0,20);
+
+
+    /*
+       Agar naam Hindi/special characters
+       ki wajah se empty ho gaya
+    */
+
+    if(!cleanHandle){
+
+      cleanHandle =
+        email
+          .split("@")[0]
+          .toLowerCase()
+          .replace(
+            /[^a-z0-9]+/g,
+            ""
+          )
+          .slice(0,20);
+
+    }
+
+
+    if(!cleanHandle){
+
+      cleanHandle =
+        "user";
+
+    }
+
+
+    /*
+       ==============================
+       UPDATE HEADER AVATAR
+       ==============================
+    */
+
+    document
+      .getElementById(
+        "headerAvatar"
+      )
+      .textContent =
+      firstLetter;
+
+
+    /*
+       ==============================
+       UPDATE CHANNEL AVATAR
+       ==============================
+    */
+
+    document
+      .getElementById(
+        "channelAvatar"
+      )
+      .textContent =
+      firstLetter;
+
+
+    /*
+       ==============================
+       UPDATE CHANNEL NAME
+       ==============================
+    */
+
+    document
+      .getElementById(
+        "channelName"
+      )
+      .textContent =
+      displayName;
+
+
+    /*
+       ==============================
+       UPDATE HANDLE
+       ==============================
+    */
+
+    document
+      .getElementById(
+        "handle"
+      )
+      .textContent =
+      "@" + cleanHandle;
+
+
+    /*
+       ==============================
+       UPDATE EMAIL
+       ==============================
+    */
+
+    document
+      .getElementById(
+        "userEmail"
+      )
+      .textContent =
+      email;
+
+
+    return true;
+
+
+  }catch(error){
+
+    console.error(
+      "User data error:",
+      error
+    );
+
+
+    /*
+       Corrupt login data
+       delete karke login par bhejo
+    */
+
+    localStorage.removeItem(
+      "minitube_user"
+    );
+
+    localStorage.removeItem(
+      "minitube_access_token"
+    );
+
+    localStorage.removeItem(
+      "minitube_refresh_token"
+    );
+
+
+    window.location.href =
+      "login.html";
+
+
+    return false;
+
+  }
+
+}
 
 
 /* =====================================
@@ -708,6 +1053,7 @@ function updateSubscribeButton(){
     document.getElementById(
       "subscribeButton"
     );
+
 
   const status =
     document.getElementById(
@@ -770,6 +1116,68 @@ function toggleSubscribe(){
 
 
 /* =====================================
+   EDIT CHANNEL
+   ===================================== */
+
+function editChannel(){
+
+  alert(
+    "Channel editing will be added later."
+  );
+
+}
+
+
+/* =====================================
+   LOGOUT
+   ===================================== */
+
+function logout(){
+
+  const confirmLogout =
+    confirm(
+      "Are you sure you want to logout?"
+    );
+
+
+  if(!confirmLogout){
+
+    return;
+
+  }
+
+
+  /*
+     Supabase login information
+     remove karo
+  */
+
+  localStorage.removeItem(
+    "minitube_user"
+  );
+
+
+  localStorage.removeItem(
+    "minitube_access_token"
+  );
+
+
+  localStorage.removeItem(
+    "minitube_refresh_token"
+  );
+
+
+  /*
+     Login page
+  */
+
+  window.location.href =
+    "login.html";
+
+}
+
+
+/* =====================================
    LOAD VIDEOS
    ===================================== */
 
@@ -779,6 +1187,7 @@ async function loadVideos(){
     document.getElementById(
       "videos"
     );
+
 
   const count =
     document.getElementById(
@@ -823,7 +1232,14 @@ async function loadVideos(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "Video loading error:",
+      error
+    );
+
+
+    count.textContent =
+      "0";
 
 
     container.innerHTML = `
@@ -861,6 +1277,33 @@ function renderVideos(videos){
     document.getElementById(
       "videos"
     );
+
+
+  if(!Array.isArray(videos)){
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="emptyIcon">
+          ⚠️
+        </div>
+
+        <h2>
+          Something went wrong
+        </h2>
+
+        <p>
+          Invalid video data received.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
 
 
   if(videos.length === 0){
@@ -1087,12 +1530,20 @@ function goSubscriptions(){
 
 
 /* =====================================
-   START
+   START MINI TUBE
    ===================================== */
 
-updateSubscribeButton();
+const loggedIn =
+  loadLoggedInUser();
 
-loadVideos();
+
+if(loggedIn){
+
+  updateSubscribeButton();
+
+  loadVideos();
+
+}
 
 </script>
 
