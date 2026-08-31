@@ -35,28 +35,36 @@ header{
   position:sticky;
   top:0;
   z-index:20;
+
   height:64px;
+
   background:#111;
+
   border-bottom:1px solid #292929;
 
   display:flex;
   align-items:center;
 
   padding:0 16px;
+
   gap:14px;
 }
 
 .back{
   background:none;
   border:0;
+
   color:white;
+
   font-size:30px;
+
   cursor:pointer;
 }
 
 .logo{
   font-size:23px;
   font-weight:800;
+
   white-space:nowrap;
 }
 
@@ -71,13 +79,23 @@ header{
 .avatar{
   width:42px;
   height:42px;
+
   border-radius:50%;
+
   background:#7c4dff;
 
   display:grid;
   place-items:center;
 
   font-weight:bold;
+
+  overflow:hidden;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 
@@ -91,11 +109,13 @@ header{
 
 .pageTitle h1{
   margin:0;
+
   font-size:28px;
 }
 
 .pageTitle p{
   color:#999;
+
   margin-top:8px;
 }
 
@@ -105,49 +125,81 @@ header{
    ========================= */
 
 .channelBox{
+
   margin:10px 20px 25px;
 
   background:#181818;
+
   border-radius:16px;
 
   padding:16px;
 
   display:flex;
+
   align-items:center;
+
   gap:14px;
 }
 
 .channelAvatar{
+
   width:55px;
   height:55px;
 
   border-radius:50%;
+
   background:#7c4dff;
 
   display:grid;
+
   place-items:center;
 
   font-weight:bold;
+
   font-size:20px;
+
+  flex-shrink:0;
+
+  overflow:hidden;
+}
+
+.channelAvatar img{
+
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
 }
 
 .channelInfo{
+
   flex:1;
+
+  min-width:0;
 }
 
 .channelName{
+
   font-weight:bold;
+
   font-size:16px;
+
+  word-break:break-word;
 }
 
 .channelStatus{
+
   color:#999;
+
   font-size:13px;
+
   margin-top:5px;
 }
 
 .unsubscribe{
+
   background:#292929;
+
   color:white;
 
   border:1px solid #555;
@@ -159,6 +211,8 @@ header{
   font-weight:bold;
 
   cursor:pointer;
+
+  white-space:nowrap;
 }
 
 
@@ -167,16 +221,21 @@ header{
    ========================= */
 
 .feed{
+
   padding:0 20px;
 }
 
 .feedTitle{
+
   font-size:20px;
+
   font-weight:bold;
+
   margin-bottom:15px;
 }
 
 .grid{
+
   display:grid;
 
   grid-template-columns:
@@ -189,32 +248,63 @@ header{
 }
 
 .card{
+
   background:#181818;
+
   border-radius:16px;
+
   overflow:hidden;
 }
 
 .card video{
+
   width:100%;
+
   aspect-ratio:16/9;
+
   display:block;
+
   background:#000;
 }
 
 .info{
+
   padding:12px;
 }
 
 .title{
+
   font-size:17px;
+
   font-weight:bold;
+
   word-break:break-word;
 }
 
 .meta{
+
   color:#999;
+
   font-size:13px;
+
   margin-top:7px;
+}
+
+.watchButton{
+
+  margin-top:12px;
+
+  background:#292929;
+
+  color:white;
+
+  border:0;
+
+  padding:9px 14px;
+
+  border-radius:8px;
+
+  cursor:pointer;
 }
 
 
@@ -223,6 +313,7 @@ header{
    ========================= */
 
 .empty{
+
   background:#181818;
 
   border:1px solid #292929;
@@ -235,24 +326,32 @@ header{
 }
 
 .emptyIcon{
+
   font-size:45px;
+
   margin-bottom:15px;
 }
 
 .empty h2{
+
   margin:0 0 8px;
 }
 
 .empty p{
+
   color:#999;
+
   line-height:1.5;
+
   margin:0;
 }
 
 .homeBtn{
+
   margin-top:20px;
 
   background:#ff0033;
+
   color:white;
 
   border:0;
@@ -262,6 +361,7 @@ header{
   padding:13px 22px;
 
   font-size:15px;
+
   font-weight:bold;
 
   cursor:pointer;
@@ -273,6 +373,7 @@ header{
    ========================= */
 
 .bottom{
+
   position:fixed;
 
   bottom:0;
@@ -288,13 +389,16 @@ header{
   display:flex;
 
   justify-content:space-around;
+
   align-items:center;
 
   z-index:30;
 }
 
 .bottom button{
+
   background:none;
+
   border:0;
 
   color:#aaa;
@@ -305,6 +409,7 @@ header{
 }
 
 .bottom button b{
+
   display:block;
 
   font-size:22px;
@@ -315,6 +420,7 @@ header{
 }
 
 .bottom .active{
+
   color:white;
 }
 
@@ -326,21 +432,32 @@ header{
 @media(max-width:600px){
 
   .pageTitle{
+
     padding-left:16px;
     padding-right:16px;
   }
 
   .channelBox{
+
     margin-left:16px;
     margin-right:16px;
   }
 
   .feed{
+
     padding:0 16px;
   }
 
   .grid{
+
     grid-template-columns:1fr;
+  }
+
+  .unsubscribe{
+
+    padding:8px 12px;
+
+    font-size:12px;
   }
 
 }
@@ -369,7 +486,9 @@ header{
 
   <div class="logo">
 
-    <span>▶</span> MiniTube
+    <span>▶</span>
+
+    MiniTube
 
   </div>
 
@@ -377,8 +496,11 @@ header{
   <div class="spacer"></div>
 
 
-  <div class="avatar">
-    M
+  <div
+    id="headerAvatar"
+    class="avatar"
+  >
+    N
   </div>
 
 </header>
@@ -402,7 +524,7 @@ header{
 
 
 <!-- =========================
-     CHANNEL AREA
+     CHANNEL
      ========================= -->
 
 <div id="channelArea"></div>
@@ -419,7 +541,11 @@ header{
   </div>
 
 
-  <div id="videos"></div>
+  <div id="videos">
+
+    Loading videos...
+
+  </div>
 
 </section>
 
@@ -429,6 +555,7 @@ header{
      ========================= -->
 
 <div class="bottom">
+
 
   <button onclick="goHome()">
 
@@ -474,10 +601,12 @@ header{
 
   </button>
 
+
 </div>
 
 
 <script>
+
 
 /* =====================================
    CLOUDFLARE WORKER
@@ -488,18 +617,257 @@ const API_BASE =
 
 
 /* =====================================
-   SUBSCRIBE KEY
+   AUTH STORAGE
+   ===================================== */
+
+const USER_KEY =
+  "minitube_user";
+
+
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
+
+
+/* =====================================
+   SUBSCRIBE STORAGE
    ===================================== */
 
 const SUBSCRIBE_KEY =
   "minitube_my_channel_subscribed";
 
 
-let allVideos = [];
+/* =====================================
+   GET USER
+   ===================================== */
+
+function getUser(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        USER_KEY
+      );
+
+    if(!raw){
+
+      return null;
+
+    }
+
+    return JSON.parse(raw);
+
+  }catch(error){
+
+    console.error(
+      "User data error:",
+      error
+    );
+
+    return null;
+
+  }
+
+}
 
 
 /* =====================================
-   CHECK SUBSCRIPTION
+   USER NAME
+   ===================================== */
+
+function getUserName(){
+
+  const user =
+    getUser();
+
+
+  if(!user){
+
+    return "User";
+
+  }
+
+
+  const metadata =
+    user.user_metadata || {};
+
+
+  return (
+
+    metadata.display_name ||
+
+    metadata.full_name ||
+
+    metadata.name ||
+
+    user.email ||
+
+    "User"
+
+  );
+
+}
+
+
+/* =====================================
+   USER EMAIL
+   ===================================== */
+
+function getUserEmail(){
+
+  const user =
+    getUser();
+
+
+  if(
+    user &&
+    user.email
+  ){
+
+    return user.email;
+
+  }
+
+
+  return "";
+
+}
+
+
+/* =====================================
+   AVATAR INITIAL
+   ===================================== */
+
+function getInitial(){
+
+  const name =
+    getUserName();
+
+
+  const clean =
+    String(name)
+      .trim();
+
+
+  if(!clean){
+
+    return "N";
+
+  }
+
+
+  return clean
+    .charAt(0)
+    .toUpperCase();
+
+}
+
+
+/* =====================================
+   HANDLE
+   ===================================== */
+
+function getHandle(){
+
+  const name =
+    getUserName();
+
+
+  let handle =
+    String(name)
+      .toLowerCase()
+      .trim();
+
+
+  handle =
+    handle.replace(
+      /[^a-z0-9]+/g,
+      ""
+    );
+
+
+  if(!handle){
+
+    const email =
+      getUserEmail();
+
+
+    handle =
+      email
+        .split("@")[0]
+        .replace(
+          /[^a-z0-9]/g,
+          ""
+        );
+
+  }
+
+
+  return "@" + (
+    handle || "user"
+  );
+
+}
+
+
+/* =====================================
+   CHECK LOGIN
+   ===================================== */
+
+function checkLogin(){
+
+  const user =
+    getUser();
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  if(
+    !user ||
+    !token
+  ){
+
+    window.location.href =
+      "login.html";
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =====================================
+   UPDATE HEADER
+   ===================================== */
+
+function updateHeader(){
+
+  const avatar =
+    document.getElementById(
+      "headerAvatar"
+    );
+
+
+  const initial =
+    getInitial();
+
+
+  avatar.textContent =
+    initial;
+
+}
+
+
+/* =====================================
+   SUBSCRIBE STATUS
    ===================================== */
 
 function isSubscribed(){
@@ -522,6 +890,7 @@ function unsubscribe(){
     "false"
   );
 
+
   renderPage();
 
 }
@@ -539,6 +908,18 @@ function renderChannel(){
     );
 
 
+  const name =
+    getUserName();
+
+
+  const handle =
+    getHandle();
+
+
+  const initial =
+    getInitial();
+
+
   if(!isSubscribed()){
 
     area.innerHTML = `
@@ -546,19 +927,35 @@ function renderChannel(){
       <div class="channelBox">
 
         <div class="channelAvatar">
-          M
+
+          ${escapeHTML(
+            initial
+          )}
+
         </div>
 
 
         <div class="channelInfo">
 
           <div class="channelName">
-            My Channel
+
+            ${escapeHTML(
+              name
+            )}
+
           </div>
 
 
           <div class="channelStatus">
+
+            ${escapeHTML(
+              handle
+            )}
+
+            &nbsp; • &nbsp;
+
             You're not subscribed
+
           </div>
 
         </div>
@@ -577,19 +974,35 @@ function renderChannel(){
     <div class="channelBox">
 
       <div class="channelAvatar">
-        M
+
+        ${escapeHTML(
+          initial
+        )}
+
       </div>
 
 
       <div class="channelInfo">
 
         <div class="channelName">
-          My Channel
+
+          ${escapeHTML(
+            name
+          )}
+
         </div>
 
 
         <div class="channelStatus">
+
+          ${escapeHTML(
+            handle
+          )}
+
+          &nbsp; • &nbsp;
+
           Subscribed
+
         </div>
 
       </div>
@@ -599,7 +1012,9 @@ function renderChannel(){
         class="unsubscribe"
         onclick="unsubscribe()"
       >
+
         Subscribed
+
       </button>
 
     </div>
@@ -633,13 +1048,17 @@ async function loadVideos(){
 
 
         <h2>
-          Subscribe to My Channel
+          Subscribe to ${escapeHTML(
+            getUserName()
+          )}
         </h2>
 
 
         <p>
+
           Subscribe to see the latest
           videos from this channel here.
+
         </p>
 
 
@@ -647,7 +1066,9 @@ async function loadVideos(){
           class="homeBtn"
           onclick="goHome()"
         >
+
           Explore videos
+
         </button>
 
       </div>
@@ -681,12 +1102,12 @@ async function loadVideos(){
     }
 
 
-    allVideos =
+    const videos =
       await response.json();
 
 
     renderVideos(
-      allVideos
+      videos
     );
 
 
@@ -726,7 +1147,9 @@ async function loadVideos(){
    DISPLAY VIDEOS
    ===================================== */
 
-function renderVideos(videos){
+function renderVideos(
+  videos
+){
 
   const container =
     document.getElementById(
@@ -734,7 +1157,10 @@ function renderVideos(videos){
     );
 
 
-  if(videos.length === 0){
+  if(
+    !Array.isArray(videos) ||
+    videos.length === 0
+  ){
 
     container.innerHTML = `
 
@@ -751,8 +1177,10 @@ function renderVideos(videos){
 
 
         <p>
+
           This channel hasn't uploaded
           any videos yet.
+
         </p>
 
       </div>
@@ -764,61 +1192,114 @@ function renderVideos(videos){
   }
 
 
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
-  videos.forEach(video => {
+  videos.forEach(
+    video => {
 
-    const card =
-      document.createElement(
-        "div"
-      );
-
-
-    card.className =
-      "card";
+      const card =
+        document.createElement(
+          "div"
+        );
 
 
-    const videoURL =
-      API_BASE +
-      "/video/" +
-      encodeURIComponent(
-        video.name
-      );
+      card.className =
+        "card";
 
 
-    card.innerHTML = `
+      const videoURL =
+        API_BASE +
+        "/video/" +
+        encodeURIComponent(
+          video.name
+        );
 
-      <video
-        controls
-        preload="metadata"
-        src="${videoURL}"
-      ></video>
+
+      card.innerHTML = `
+
+        <video
+          controls
+          preload="metadata"
+          src="${videoURL}"
+        ></video>
 
 
-      <div class="info">
+        <div class="info">
 
-        <div class="title">
-          ${escapeHTML(
+          <div class="title">
+
+            ${escapeHTML(
+              video.name
+            )}
+
+          </div>
+
+
+          <div class="meta">
+
+            ${escapeHTML(
+              getUserName()
+            )}
+
+          </div>
+
+
+          <button
+            class="watchButton"
+          >
+
+            ▶ Watch
+
+          </button>
+
+        </div>
+
+      `;
+
+
+      const videoElement =
+        card.querySelector(
+          "video"
+        );
+
+
+      const watchButton =
+        card.querySelector(
+          ".watchButton"
+        );
+
+
+      function openVideo(){
+
+        window.location.href =
+          "watch.html?video=" +
+          encodeURIComponent(
             video.name
-          )}
-        </div>
+          );
+
+      }
 
 
-        <div class="meta">
-          My Channel
-        </div>
-
-      </div>
-
-    `;
+      videoElement.addEventListener(
+        "click",
+        openVideo
+      );
 
 
-    container.appendChild(
-      card
-    );
+      watchButton.addEventListener(
+        "click",
+        openVideo
+      );
 
-  });
+
+      container.appendChild(
+        card
+      );
+
+    }
+  );
 
 }
 
@@ -888,7 +1369,7 @@ function goYou(){
 
 
 /* =====================================
-   START
+   RENDER PAGE
    ===================================== */
 
 function renderPage(){
@@ -900,7 +1381,20 @@ function renderPage(){
 }
 
 
-renderPage();
+/* =====================================
+   START
+   ===================================== */
+
+if(
+  checkLogin()
+){
+
+  updateHeader();
+
+  renderPage();
+
+}
+
 
 </script>
 
