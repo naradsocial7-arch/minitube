@@ -90,6 +90,8 @@ header{
   font-weight:bold;
 
   overflow:hidden;
+
+  cursor:pointer;
 }
 
 .avatar img{
@@ -265,6 +267,10 @@ header{
   display:block;
 
   background:#000;
+
+  cursor:pointer;
+
+  object-fit:cover;
 }
 
 .info{
@@ -499,6 +505,7 @@ header{
   <div
     id="headerAvatar"
     class="avatar"
+    onclick="window.location.href='settings.html'"
   >
     N
   </div>
@@ -1220,8 +1227,8 @@ function renderVideos(
       card.innerHTML = `
 
         <video
-          controls
           preload="metadata"
+          muted
           src="${videoURL}"
         ></video>
 
