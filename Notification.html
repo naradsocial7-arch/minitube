@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Notifications - MiniTube</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.backButton{
+  background:#222;
+  border:0;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.headerTitle{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+.headerButton{
+  background:#292929;
+  border:0;
+  color:white;
+  font-size:13px;
+  font-weight:bold;
+  padding:9px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.headerButton.danger{
+  color:#ff4964;
+}
+
+
+/* =========================
+   LIST
+   ========================= */
+
+.status{
+  text-align:center;
+  color:#aaa;
+  padding:40px 22px;
+}
+
+.row{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:14px 22px;
+  cursor:pointer;
+  position:relative;
+}
+
+.row:hover{
+  background:#161616;
+}
+
+.row.unread{
+  background:#161018;
+}
+
+.rowIcon{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:#292929;
+  display:grid;
+  place-items:center;
+  font-size:19px;
+  flex-shrink:0;
+}
+
+.rowBody{
+  flex:1;
+  min-width:0;
+}
+
+.rowTitle{
+  font-size:15px;
+  word-break:break-word;
+  line-height:1.4;
+}
+
+.rowTitle b{
+  font-weight:bold;
+}
+
+.rowTime{
+  color:#999;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.unreadDot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#ff0033;
+  flex-shrink:0;
+  margin-top:6px;
+}
+
+.rowThumb{
+  width:64px;
+  aspect-ratio:16/9;
+  border-radius:8px;
+  background:#181818;
+  object-fit:cover;
+  flex-shrink:0;
+}
+
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:600px){
+
+  .row{
+    padding:12px 16px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
+<header>
+
+  <div class="top">
+
+    <button
+      class="backButton"
+      onclick="goBack()"
+    >
+      ←
+    </button>
+
+    <div class="headerTitle">
+      Notifications
+    </div>
+
+    <button
+      id="clearAllButton"
+      class="headerButton danger"
+      onclick="clearAllNotifications()"
+    >
+      Clear all
+    </button>
+
+  </div>
+
+</header>
+
+
+<div
+  id="status"
+  class="status"
+></div>
+
+<div id="notificationList"></div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+     ========================= -->
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+
+  <button onclick="goSubscriptions()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   SUBSCRIBE STATE
+   ===================================== */
+
+const SUBSCRIBE_KEY =
+  "minitube_my_channel_subscribed";
+
+
+function isSubscribed(){
+
+  return localStorage.getItem(
+    SUBSCRIBE_KEY
+  ) === "true";
+
+}
+
+
+/* =====================================
+   NOTIFICATIONS STORAGE
+   ===================================== */
+
+const NOTIFICATIONS_KEY =
+  "minitube_notifications";
+
+const SEEN_VIDEOS_KEY =
+  "minitube_seen_video_names";
+
+const MAX_NOTIFICATIONS =
+  50;
+
+
+function getNotifications(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        NOTIFICATIONS_KEY
+      );
+
+    return saved
+      ? JSON.parse(saved)
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveNotifications(list){
+
+  localStorage.setItem(
+    NOTIFICATIONS_KEY,
+    JSON.stringify(list)
+  );
+
+}
+
+
+function getSeenVideoNames(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        SEEN_VIDEOS_KEY
+      );
+
+    return saved
+      ? JSON.parse(saved)
+      : null;
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function saveSeenVideoNames(names){
+
+  localStorage.setItem(
+    SEEN_VIDEOS_KEY,
+    JSON.stringify(names)
+  );
+
+}
+
+
+function addNotification(notification){
+
+  let list =
+    getNotifications();
+
+
+  list.unshift({
+    id: "n_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+    read: false,
+    createdAt: Date.now(),
+    ...notification
+  });
+
+
+  list =
+    list.slice(
+      0,
+      MAX_NOTIFICATIONS
+    );
+
+
+  saveNotifications(
+    list
+  );
+
+}
+
+
+function markAllRead(){
+
+  const list =
+    getNotifications().map(
+      n => ({ ...n, read: true })
+    );
+
+
+  saveNotifications(
+    list
+  );
+
+}
+
+
+function markOneRead(id){
+
+  const list =
+    getNotifications().map(n =>
+
+      n.id === id
+        ? { ...n, read: true }
+        : n
+
+    );
+
+
+  saveNotifications(
+    list
+  );
+
+}
+
+
+function clearAllNotifications(){
+
+  const confirmed =
+    confirm(
+      "Clear all notifications?"
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    NOTIFICATIONS_KEY
+  );
+
+
+  render();
+
+}
+
+
+/* =====================================
+   DETECT NEW UPLOADS
+   ===================================== */
+
+async function checkForNewVideos(){
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/videos"
+      );
+
+
+    if(!response.ok){
+
+      return;
+
+    }
+
+
+    const videos =
+      await response.json();
+
+
+    const currentNames =
+      videos.map(
+        v => v.name
+      );
+
+
+    const seenNames =
+      getSeenVideoNames();
+
+
+    /*
+      First time ever running:
+      just remember what exists
+      right now, don't spam
+      notifications for videos
+      that were already there.
+    */
+
+    if(seenNames === null){
+
+      saveSeenVideoNames(
+        currentNames
+      );
+
+      return;
+
+    }
+
+
+    const newNames =
+      currentNames.filter(
+        name => !seenNames.includes(name)
+      );
+
+
+    if(
+      newNames.length > 0 &&
+      isSubscribed()
+    ){
+
+      newNames.forEach(name => {
+
+        addNotification({
+          type: "upload",
+          videoName: name,
+          message: "uploaded a new video"
+        });
+
+      });
+
+    }
+
+
+    saveSeenVideoNames(
+      currentNames
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   RENDER
+   ===================================== */
+
+function timeAgo(timestamp){
+
+  const seconds =
+    Math.floor(
+      (Date.now() - timestamp) / 1000
+    );
+
+
+  if(seconds < 60){
+
+    return "just now";
+
+  }
+
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+
+  if(minutes < 60){
+
+    return minutes + "m ago";
+
+  }
+
+
+  const hours =
+    Math.floor(minutes / 60);
+
+
+  if(hours < 24){
+
+    return hours + "h ago";
+
+  }
+
+
+  const days =
+    Math.floor(hours / 24);
+
+
+  return days + "d ago";
+
+}
+
+
+function iconFor(type){
+
+  if(type === "upload"){
+
+    return "🎬";
+
+  }
+
+
+  return "🔔";
+
+}
+
+
+function render(){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  const container =
+    document.getElementById(
+      "notificationList"
+    );
+
+  const clearButton =
+    document.getElementById(
+      "clearAllButton"
+    );
+
+
+  const notifications =
+    getNotifications();
+
+
+  container.innerHTML =
+    "";
+
+
+  if(notifications.length === 0){
+
+    clearButton.style.display =
+      "none";
+
+
+    if(!isSubscribed()){
+
+      status.innerHTML =
+        "No notifications yet.<br><br>" +
+        "Subscribe to My Channel to get notified about new uploads.";
+
+    }else{
+
+      status.innerHTML =
+        "No notifications yet.<br><br>" +
+        "You'll be notified here when new videos are uploaded.";
+
+    }
+
+
+    return;
+
+  }
+
+
+  status.textContent =
+    "";
+
+  clearButton.style.display =
+    "block";
+
+
+  notifications.forEach(n => {
+
+    const row =
+      document.createElement(
+        "div"
+      );
+
+    row.className =
+      "row" +
+      (n.read ? "" : " unread");
+
+
+    const videoURL =
+      n.videoName
+        ? API_BASE +
+          "/video/" +
+          encodeURIComponent(n.videoName)
+        : null;
+
+
+    row.innerHTML = `
+
+      <div class="rowIcon">
+        ${iconFor(n.type)}
+      </div>
+
+      <div class="rowBody">
+
+        <div class="rowTitle">
+          <b>My Channel</b> ${escapeHTML(n.message)}${
+            n.videoName
+              ? ": " + escapeHTML(n.videoName)
+              : ""
+          }
+        </div>
+
+        <div class="rowTime">
+          ${timeAgo(n.createdAt)}
+        </div>
+
+      </div>
+
+      ${
+        videoURL
+          ? `<video class="rowThumb" preload="metadata" muted src="${videoURL}"></video>`
+          : `<div class="unreadDot" style="visibility:${n.read ? "hidden" : "visible"}"></div>`
+      }
+
+    `;
+
+
+    row.addEventListener(
+      "click",
+      function(){
+
+        markOneRead(
+          n.id
+        );
+
+
+        if(n.videoName){
+
+          window.location.href =
+            "watch.html?video=" +
+            encodeURIComponent(
+              n.videoName
+            );
+
+        }else{
+
+          render();
+
+        }
+
+      }
+    );
+
+
+    container.appendChild(
+      row
+    );
+
+  });
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+/* =====================================
+   HELPERS
+   ===================================== */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================
+   INIT
+   ===================================== */
+
+async function init(){
+
+  await checkForNewVideos();
+
+  render();
+
+
+  /*
+    Notifications opened =
+    good moment to mark
+    everything read.
+  */
+
+  setTimeout(
+    function(){
+
+      markAllRead();
+
+      render();
+
+    },
+    1500
+  );
+
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>
+
