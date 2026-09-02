@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Settings - MiniTube</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.backButton{
+  background:#222;
+  border:0;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.headerTitle{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+
+/* =========================
+   ACCOUNT CARD
+   ========================= */
+
+.accountCard{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:20px 22px;
+  border-bottom:1px solid #222;
+}
+
+.accountAvatar{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.accountInfo{
+  flex:1;
+  min-width:0;
+}
+
+.accountName{
+  font-size:17px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.accountEmail{
+  color:#999;
+  font-size:13px;
+  margin-top:4px;
+  word-break:break-word;
+}
+
+.accountActionButton{
+  background:#292929;
+  border:0;
+  color:white;
+  font-size:13px;
+  font-weight:bold;
+  padding:10px 16px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+.accountActionButton.logout{
+  color:#ff4964;
+}
+
+
+/* =========================
+   SECTIONS
+   ========================= */
+
+.sectionTitle{
+  color:#999;
+  font-size:13px;
+  font-weight:bold;
+  padding:22px 22px 10px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.settingRow{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 22px;
+  border-bottom:1px solid #1c1c1c;
+  cursor:pointer;
+}
+
+.settingIcon{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:#1e1e1e;
+  display:grid;
+  place-items:center;
+  font-size:17px;
+  flex-shrink:0;
+}
+
+.settingInfo{
+  flex:1;
+  min-width:0;
+}
+
+.settingLabel{
+  font-size:15px;
+  font-weight:bold;
+}
+
+.settingSub{
+  color:#999;
+  font-size:13px;
+  margin-top:3px;
+}
+
+.settingSub.danger{
+  color:#ff6b7a;
+}
+
+
+/* TOGGLE SWITCH */
+
+.switch{
+  width:46px;
+  height:26px;
+  background:#333;
+  border-radius:20px;
+  position:relative;
+  flex-shrink:0;
+  cursor:pointer;
+  transition:background .15s ease;
+}
+
+.switch.on{
+  background:#ff0033;
+}
+
+.switchKnob{
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:20px;
+  height:20px;
+  background:white;
+  border-radius:50%;
+  transition:left .15s ease;
+}
+
+.switch.on .switchKnob{
+  left:23px;
+}
+
+
+/* CLEAR BUTTON ROW */
+
+.clearButton{
+  background:none;
+  border:0;
+  color:#ff4964;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  padding:0;
+}
+
+
+/* ABOUT */
+
+.aboutBox{
+  padding:18px 22px 8px;
+  color:#999;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.statusPill{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:bold;
+  margin-top:6px;
+}
+
+.statusPill.ok{
+  background:#123a24;
+  color:#6ee7b7;
+}
+
+.statusPill.checking{
+  background:#292929;
+  color:#aaa;
+}
+
+.statusPill.error{
+  background:#3a1218;
+  color:#ff6b7a;
+}
+
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
+<header>
+
+  <div class="top">
+
+    <button
+      class="backButton"
+      onclick="goBack()"
+    >
+      ←
+    </button>
+
+    <div class="headerTitle">
+      Settings
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- =========================
+     ACCOUNT
+     ========================= -->
+
+<div class="accountCard">
+
+  <div
+    id="accountAvatar"
+    class="accountAvatar"
+  >
+    M
+  </div>
+
+  <div class="accountInfo">
+
+    <div
+      id="accountName"
+      class="accountName"
+    >
+      Not logged in
+    </div>
+
+    <div
+      id="accountEmail"
+      class="accountEmail"
+    >
+      Login to sync your account
+    </div>
+
+  </div>
+
+  <button
+    id="accountActionButton"
+    class="accountActionButton"
+    onclick="accountAction()"
+  >
+    Login
+  </button>
+
+</div>
+
+
+<!-- =========================
+     PLAYBACK
+     ========================= -->
+
+<div class="sectionTitle">
+  Playback
+</div>
+
+<div
+  class="settingRow"
+  onclick="toggleAutoplay()"
+>
+
+  <div class="settingIcon">
+    ▶
+  </div>
+
+  <div class="settingInfo">
+
+    <div class="settingLabel">
+      Autoplay
+    </div>
+
+    <div class="settingSub">
+      Automatically play videos when opened
+    </div>
+
+  </div>
+
+  <div
+    id="autoplaySwitch"
+    class="switch"
+  >
+    <div class="switchKnob"></div>
+  </div>
+
+</div>
+
+
+<!-- =========================
+     NOTIFICATIONS
+     ========================= -->
+
+<div class="sectionTitle">
+  Notifications
+</div>
+
+<div
+  class="settingRow"
+  onclick="toggleSubscribeNotifications()"
+>
+
+  <div class="settingIcon">
+    🔔
+  </div>
+
+  <div class="settingInfo">
+
+    <div class="settingLabel">
+      New upload alerts
+    </div>
+
+    <div
+      id="notifSub"
+      class="settingSub"
+    >
+      Based on your subscription to My Channel
+    </div>
+
+  </div>
+
+  <div
+    id="notifSwitch"
+    class="switch"
+  >
+    <div class="switchKnob"></div>
+  </div>
+
+</div>
+
+
+<!-- =========================
+     DATA & STORAGE
+     ========================= -->
+
+<div class="sectionTitle">
+  Data &amp; storage
+</div>
+
+<div
+  class="settingRow"
+  onclick="clearWatchHistory()"
+>
+
+  <div class="settingIcon">
+    🕐
+  </div>
+
+  <div class="settingInfo">
+
+    <div class="settingLabel">
+      Clear watch history
+    </div>
+
+    <div
+      id="historyCount"
+      class="settingSub"
+    >
+      0 videos
+    </div>
+
+  </div>
+
+  <button class="clearButton">
+    Clear
+  </button>
+
+</div>
+
+<div
+  class="settingRow"
+  onclick="clearSearchHistory()"
+>
+
+  <div class="settingIcon">
+    🔍
+  </div>
+
+  <div class="settingInfo">
+
+    <div class="settingLabel">
+      Clear search history
+    </div>
+
+    <div
+      id="searchCount"
+      class="settingSub"
+    >
+      0 searches
+    </div>
+
+  </div>
+
+  <button class="clearButton">
+    Clear
+  </button>
+
+</div>
+
+<div
+  class="settingRow"
+  onclick="clearPlaylists()"
+>
+
+  <div class="settingIcon">
+    ▤
+  </div>
+
+  <div class="settingInfo">
+
+    <div class="settingLabel">
+      Clear playlists
+    </div>
+
+    <div
+      id="playlistCount"
+      class="settingSub"
+    >
+      0 playlists
+    </div>
+
+  </div>
+
+  <button class="clearButton">
+    Clear
+  </button>
+
+</div>
+
+<div
+  class="settingRow"
+  onclick="clearEverything()"
+>
+
+  <div class="settingIcon">
+    🗑
+  </div>
+
+  <div class="settingInfo">
+
+    <div class="settingLabel">
+      Clear all app data
+    </div>
+
+    <div class="settingSub danger">
+      Resets likes, views, playlists, history &amp; login
+    </div>
+
+  </div>
+
+  <button class="clearButton">
+    Clear
+  </button>
+
+</div>
+
+
+<!-- =========================
+     ABOUT
+     ========================= -->
+
+<div class="sectionTitle">
+  About
+</div>
+
+<div class="aboutBox">
+
+  MiniTube — a personal video-sharing app.
+  <br>
+
+  Server status:
+
+  <span
+    id="serverStatus"
+    class="statusPill checking"
+  >
+    Checking...
+  </span>
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+     ========================= -->
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+
+  <button onclick="goSubscriptions()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   AUTH STORAGE
+   ===================================== */
+
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
+
+const REFRESH_TOKEN_KEY =
+  "minitube_refresh_token";
+
+const USER_KEY =
+  "minitube_user";
+
+
+function getLoggedUser(){
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+  const savedUser =
+    localStorage.getItem(
+      USER_KEY
+    );
+
+
+  if(!token || !savedUser){
+
+    return null;
+
+  }
+
+
+  try{
+
+    return JSON.parse(
+      savedUser
+    );
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function isLoggedIn(){
+
+  return !!getLoggedUser();
+
+}
+
+
+function getUserName(user){
+
+  if(!user){
+
+    return "Not logged in";
+
+  }
+
+
+  const metadata =
+    user.user_metadata ||
+    user.userMetadata ||
+    {};
+
+
+  return (
+
+    metadata.display_name ||
+
+    metadata.full_name ||
+
+    metadata.name ||
+
+    user.email ||
+
+    "MiniTube User"
+
+  );
+
+}
+
+
+function getUserInitial(user){
+
+  const name =
+    getUserName(user);
+
+
+  return name
+    .trim()
+    .charAt(0)
+    .toUpperCase() || "M";
+
+}
+
+
+function updateAccountUI(){
+
+  const user =
+    getLoggedUser();
+
+
+  const avatar =
+    document.getElementById(
+      "accountAvatar"
+    );
+
+  const name =
+    document.getElementById(
+      "accountName"
+    );
+
+  const email =
+    document.getElementById(
+      "accountEmail"
+    );
+
+  const actionButton =
+    document.getElementById(
+      "accountActionButton"
+    );
+
+
+  if(user){
+
+    const displayName =
+      getUserName(user);
+
+    avatar.textContent =
+      getUserInitial(user);
+
+    name.textContent =
+      displayName;
+
+    email.textContent =
+      user.email || "";
+
+    actionButton.textContent =
+      "Logout";
+
+    actionButton.classList.add(
+      "logout"
+    );
+
+
+  }else{
+
+    avatar.textContent =
+      "M";
+
+    name.textContent =
+      "Not logged in";
+
+    email.textContent =
+      "Login to sync your account";
+
+    actionButton.textContent =
+      "Login";
+
+    actionButton.classList.remove(
+      "logout"
+    );
+
+  }
+
+}
+
+
+function accountAction(){
+
+  if(isLoggedIn()){
+
+    const confirmed =
+      confirm(
+        "Logout from this MiniTube account?"
+      );
+
+
+    if(!confirmed){
+
+      return;
+
+    }
+
+
+    localStorage.removeItem(
+      ACCESS_TOKEN_KEY
+    );
+
+    localStorage.removeItem(
+      REFRESH_TOKEN_KEY
+    );
+
+    localStorage.removeItem(
+      USER_KEY
+    );
+
+
+    updateAccountUI();
+
+
+  }else{
+
+    window.location.href =
+      "login.html";
+
+  }
+
+}
+
+
+/* =====================================
+   AUTOPLAY SETTING
+   ===================================== */
+
+const AUTOPLAY_KEY =
+  "minitube_autoplay";
+
+
+function isAutoplayOn(){
+
+  const value =
+    localStorage.getItem(
+      AUTOPLAY_KEY
+    );
+
+
+  /*
+    Default to ON, matching
+    the app's current behavior,
+    unless the user has turned
+    it off before.
+  */
+
+  return value === null
+    ? true
+    : value === "true";
+
+}
+
+
+function toggleAutoplay(){
+
+  const current =
+    isAutoplayOn();
+
+
+  localStorage.setItem(
+    AUTOPLAY_KEY,
+    String(!current)
+  );
+
+
+  renderAutoplaySwitch();
+
+}
+
+
+function renderAutoplaySwitch(){
+
+  document
+    .getElementById(
+      "autoplaySwitch"
+    )
+    .classList.toggle(
+      "on",
+      isAutoplayOn()
+    );
+
+}
+
+
+/* =====================================
+   NOTIFICATIONS SETTING
+   (mirrors subscribe state)
+   ===================================== */
+
+const SUBSCRIBE_KEY =
+  "minitube_my_channel_subscribed";
+
+
+function isSubscribed(){
+
+  return localStorage.getItem(
+    SUBSCRIBE_KEY
+  ) === "true";
+
+}
+
+
+function toggleSubscribeNotifications(){
+
+  const current =
+    isSubscribed();
+
+
+  localStorage.setItem(
+    SUBSCRIBE_KEY,
+    String(!current)
+  );
+
+
+  renderNotifSwitch();
+
+}
+
+
+function renderNotifSwitch(){
+
+  const subscribed =
+    isSubscribed();
+
+
+  document
+    .getElementById(
+      "notifSwitch"
+    )
+    .classList.toggle(
+      "on",
+      subscribed
+    );
+
+
+  document.getElementById(
+    "notifSub"
+  ).textContent =
+    subscribed
+      ? "On — you'll be notified about new uploads"
+      : "Off — subscribe to My Channel to enable";
+
+}
+
+
+/* =====================================
+   DATA COUNTS
+   ===================================== */
+
+function readJSON(key, fallback){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        key
+      );
+
+    return saved
+      ? JSON.parse(saved)
+      : fallback;
+
+  }catch(error){
+
+    return fallback;
+
+  }
+
+}
+
+
+function renderCounts(){
+
+  const history =
+    readJSON(
+      "minitube_watch_history",
+      []
+    );
+
+  document.getElementById(
+    "historyCount"
+  ).textContent =
+    history.length +
+    " video" +
+    (history.length === 1 ? "" : "s");
+
+
+  const searches =
+    readJSON(
+      "minitube_recent_searches",
+      []
+    );
+
+  document.getElementById(
+    "searchCount"
+  ).textContent =
+    searches.length +
+    " search" +
+    (searches.length === 1 ? "" : "es");
+
+
+  const playlists =
+    readJSON(
+      "minitube_playlists",
+      []
+    ).filter(
+      p => !p.builtIn
+    );
+
+  document.getElementById(
+    "playlistCount"
+  ).textContent =
+    playlists.length +
+    " playlist" +
+    (playlists.length === 1 ? "" : "s");
+
+}
+
+
+/* =====================================
+   CLEAR ACTIONS
+   ===================================== */
+
+function clearWatchHistory(){
+
+  const confirmed =
+    confirm(
+      "Clear your entire watch history?"
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    "minitube_watch_history"
+  );
+
+
+  renderCounts();
+
+}
+
+
+function clearSearchHistory(){
+
+  const confirmed =
+    confirm(
+      "Clear your recent searches?"
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    "minitube_recent_searches"
+  );
+
+
+  renderCounts();
+
+}
+
+
+function clearPlaylists(){
+
+  const confirmed =
+    confirm(
+      "Delete all your custom playlists? Watch Later will be kept but emptied."
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    "minitube_playlists"
+  );
+
+
+  renderCounts();
+
+}
+
+
+function clearEverything(){
+
+  const confirmed =
+    confirm(
+      "This will erase ALL local MiniTube data on this device — likes, views, history, playlists, and log you out. This can't be undone. Continue?"
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  const keysToKeep =
+    [];
+
+
+  const keysToRemove =
+    [];
+
+
+  for(let i = 0; i < localStorage.length; i++){
+
+    const key =
+      localStorage.key(i);
+
+
+    if(
+      key &&
+      key.startsWith("minitube")
+    ){
+
+      keysToRemove.push(
+        key
+      );
+
+    }
+
+  }
+
+
+  keysToRemove.forEach(key => {
+
+    localStorage.removeItem(
+      key
+    );
+
+  });
+
+
+  alert(
+    "All local MiniTube data has been cleared."
+  );
+
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =====================================
+   SERVER STATUS CHECK
+   ===================================== */
+
+async function checkServerStatus(){
+
+  const pill =
+    document.getElementById(
+      "serverStatus"
+    );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE + "/"
+      );
+
+
+    if(response.ok){
+
+      pill.textContent =
+        "Online";
+
+      pill.className =
+        "statusPill ok";
+
+    }else{
+
+      pill.textContent =
+        "Unreachable";
+
+      pill.className =
+        "statusPill error";
+
+    }
+
+
+  }catch(error){
+
+    pill.textContent =
+      "Unreachable";
+
+    pill.className =
+      "statusPill error";
+
+  }
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+/* =====================================
+   INIT
+   ===================================== */
+
+updateAccountUI();
+renderAutoplaySwitch();
+renderNotifSwitch();
+renderCounts();
+checkServerStatus();
+
+</script>
+
+</body>
+  </html>
+
