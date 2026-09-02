@@ -65,6 +65,63 @@ header{
   outline:none;
 }
 
+.iconButton{
+  background:#222;
+  border:1px solid #444;
+  color:white;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  font-size:19px;
+  cursor:pointer;
+  flex-shrink:0;
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+
+.iconButton .dot{
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#ff0033;
+  display:none;
+}
+
+.iconButton .dot.show{
+  display:block;
+}
+
+.menuLinks{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.menuLink{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 4px;
+  color:white;
+  cursor:pointer;
+  border-radius:8px;
+  font-size:14px;
+}
+
+.menuLink:hover{
+  background:#242424;
+}
+
+.menuLinkIcon{
+  width:20px;
+  text-align:center;
+  font-size:16px;
+}
+
 .avatar{
   width:42px;
   height:42px;
@@ -490,7 +547,21 @@ header{
       class="search"
       placeholder="Search videos..."
       oninput="filterVideos()"
+      onfocus="window.location.href='search.html'"
+      onclick="window.location.href='search.html'"
+      readonly
     >
+
+    <button
+      class="iconButton"
+      onclick="window.location.href='notifications.html'"
+    >
+      🔔
+      <span
+        id="notifDot"
+        class="dot"
+      ></span>
+    </button>
 
     <!-- ACCOUNT -->
 
@@ -538,6 +609,54 @@ header{
           id="loginStatus"
           class="loginStatus"
         >
+        </div>
+
+
+        <div class="accountDivider"></div>
+
+
+        <div class="menuLinks">
+
+          <div
+            class="menuLink"
+            onclick="window.location.href='channel.html'"
+          >
+            <span class="menuLinkIcon">👤</span>
+            Your channel
+          </div>
+
+          <div
+            class="menuLink"
+            onclick="window.location.href='studio.html'"
+          >
+            <span class="menuLinkIcon">🎬</span>
+            Your videos (Studio)
+          </div>
+
+          <div
+            class="menuLink"
+            onclick="window.location.href='playlist.html'"
+          >
+            <span class="menuLinkIcon">▤</span>
+            Playlists
+          </div>
+
+          <div
+            class="menuLink"
+            onclick="window.location.href='history.html'"
+          >
+            <span class="menuLinkIcon">🕐</span>
+            Watch history
+          </div>
+
+          <div
+            class="menuLink"
+            onclick="window.location.href='settings.html'"
+          >
+            <span class="menuLinkIcon">⚙</span>
+            Settings
+          </div>
+
         </div>
 
 
@@ -652,7 +771,7 @@ header{
   </button>
 
 
-  <button onclick="startUpload()">
+  <button onclick="window.location.href='upload.html'">
     <b>＋</b>
     Create
   </button>
@@ -2021,7 +2140,47 @@ updateAccountUI();
 
 loadVideos();
 
+
+/*
+  Show a red dot on the bell icon
+  if there are unread notifications
+  (written by notifications.html).
+*/
+
+try{
+
+  const notifications =
+    JSON.parse(
+      localStorage.getItem(
+        "minitube_notifications"
+      ) || "[]"
+    );
+
+
+  const hasUnread =
+    notifications.some(
+      n => !n.read
+    );
+
+
+  document
+    .getElementById(
+      "notifDot"
+    )
+    .classList.toggle(
+      "show",
+      hasUnread
+    );
+
+
+}catch(error){
+
+  /* ignore */
+
+}
+
 </script>
 
 </body>
-</html>
+        </html>
+          
