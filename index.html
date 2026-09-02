@@ -1664,7 +1664,7 @@ function renderVideos(videos){
    UPLOAD
    ===================================== */
 
-async function uploadVideo(){
+function uploadVideo(){
 
   const input =
     document.getElementById(
@@ -1705,80 +1705,163 @@ async function uploadVideo(){
     );
 
 
-  try{
-
-    status.textContent =
-      "Uploading " +
-      file.name +
-      "...";
+  const xhr =
+    new XMLHttpRequest();
 
 
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/upload?filename=" +
-        encodeURIComponent(
-          file.name
-        ),
-        {
-          method:"POST",
+  /*
+    Hard safety timeout.
+    If nothing happens for
+    5 minutes, stop waiting
+    and show an error instead
+    of hanging forever.
+  */
 
-          headers:{
-            "Content-Type":
-              file.type ||
-              "video/mp4",
-
-            "Authorization":
-              "Bearer " +
-              localStorage.getItem(
-                ACCESS_TOKEN_KEY
-              )
-
-          },
-
-          body:file
-
-        }
-      );
+  xhr.timeout =
+    5 * 60 * 1000;
 
 
-    const result =
-      await response.json();
+  xhr.open(
+    "POST",
+    API_BASE +
+    "/api/upload?filename=" +
+    encodeURIComponent(
+      file.name
+    )
+  );
 
 
-    if(!response.ok){
+  xhr.setRequestHeader(
+    "Content-Type",
+    file.type ||
+    "video/mp4"
+  );
 
-      throw new Error(
-        result.error ||
-        "Upload failed"
-      );
+
+  xhr.setRequestHeader(
+    "Authorization",
+    "Bearer " +
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    )
+  );
+
+
+  /*
+    Real upload progress,
+    so we can SEE it's
+    actually moving instead
+    of guessing.
+  */
+
+  xhr.upload.addEventListener(
+    "progress",
+    function(event){
+
+      if(!event.lengthComputable){
+
+        return;
+
+      }
+
+
+      const percent =
+        Math.round(
+          (event.loaded / event.total) * 100
+        );
+
+
+      status.textContent =
+        "Uploading " +
+        file.name +
+        "... " +
+        percent +
+        "%";
 
     }
+  );
 
 
-    status.textContent =
-      "Upload successful 🚀";
+  xhr.addEventListener(
+    "load",
+    function(){
+
+      let result = {};
+
+      try{
+
+        result =
+          JSON.parse(
+            xhr.responseText
+          );
+
+      }catch(error){
+
+        result = {};
+
+      }
 
 
-    input.value =
-      "";
+      if(
+        xhr.status >= 200 &&
+        xhr.status < 300
+      ){
+
+        status.textContent =
+          "Upload successful 🚀";
 
 
-    await loadVideos();
+        input.value =
+          "";
 
 
-  }catch(error){
-
-    console.error(
-      error
-    );
+        loadVideos();
 
 
-    status.textContent =
-      "Upload failed: " +
-      error.message;
+      }else{
 
-  }
+        status.textContent =
+          "Upload failed: " +
+          (
+            result.error ||
+            ("server returned " + xhr.status)
+          );
+
+      }
+
+    }
+  );
+
+
+  xhr.addEventListener(
+    "error",
+    function(){
+
+      status.textContent =
+        "Upload failed: network error. Check your internet connection.";
+
+    }
+  );
+
+
+  xhr.addEventListener(
+    "timeout",
+    function(){
+
+      status.textContent =
+        "Upload failed: timed out. Try a smaller video or a better connection.";
+
+    }
+  );
+
+
+  status.textContent =
+    "Uploading " +
+    file.name +
+    "... 0%";
+
+
+  xhr.send(file);
 
 }
 
