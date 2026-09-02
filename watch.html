@@ -198,6 +198,104 @@ header{
   flex-wrap:wrap;
 }
 
+.saveModalOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:200;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.saveModalOverlay.show{
+  display:flex;
+}
+
+.saveModal{
+  width:100%;
+  max-width:480px;
+  background:#181818;
+  border-radius:20px 20px 0 0;
+  padding:20px;
+  max-height:70vh;
+  overflow-y:auto;
+}
+
+.saveModalTitle{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:14px;
+}
+
+.playlistCheckRow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:11px 0;
+  cursor:pointer;
+}
+
+.playlistCheckRow input{
+  width:20px;
+  height:20px;
+  flex-shrink:0;
+}
+
+.playlistCheckName{
+  flex:1;
+  font-size:15px;
+  word-break:break-word;
+}
+
+.playlistCheckCount{
+  color:#999;
+  font-size:12px;
+}
+
+.newPlaylistRow{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid #292929;
+}
+
+.newPlaylistInput{
+  flex:1;
+  background:#222;
+  border:1px solid #444;
+  border-radius:20px;
+  padding:10px 15px;
+  color:white;
+  font-size:14px;
+  outline:none;
+}
+
+.newPlaylistButton{
+  background:#ff0033;
+  border:0;
+  color:white;
+  border-radius:20px;
+  padding:10px 16px;
+  font-weight:bold;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.saveModalDone{
+  width:100%;
+  margin-top:16px;
+  background:#292929;
+  border:0;
+  color:white;
+  border-radius:10px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+
 .actionButton{
   background:#292929;
 
@@ -830,6 +928,14 @@ header{
 
 
     <button
+      class="actionButton"
+      onclick="openSaveModal()"
+    >
+      ⊕ Save
+    </button>
+
+
+    <button
       id="subscribeButton"
       class="subscribeButton"
       onclick="toggleSubscribe()"
@@ -837,6 +943,52 @@ header{
       Subscribe
     </button>
 
+
+  </div>
+
+
+  <!-- SAVE TO PLAYLIST MODAL -->
+
+  <div
+    id="saveModalOverlay"
+    class="saveModalOverlay"
+    onclick="closeSaveModalOnOverlay(event)"
+  >
+
+    <div class="saveModal">
+
+      <div class="saveModalTitle">
+        Save video to...
+      </div>
+
+      <div id="playlistCheckList"></div>
+
+      <div class="newPlaylistRow">
+
+        <input
+          id="newPlaylistName"
+          class="newPlaylistInput"
+          placeholder="Create new playlist"
+          onkeydown="if(event.key==='Enter'){createPlaylistFromModal();}"
+        >
+
+        <button
+          class="newPlaylistButton"
+          onclick="createPlaylistFromModal()"
+        >
+          Create
+        </button>
+
+      </div>
+
+      <button
+        class="saveModalDone"
+        onclick="closeSaveModal()"
+      >
+        Done
+      </button>
+
+    </div>
 
   </div>
 
@@ -1181,6 +1333,316 @@ function loadProfile(){
 
 
 /* =====================================
+   AUTOPLAY SETTING
+   (set from settings.html)
+   ===================================== */
+
+const AUTOPLAY_KEY =
+  "minitube_autoplay";
+
+
+function isAutoplayOn(){
+
+  const value =
+    localStorage.getItem(
+      AUTOPLAY_KEY
+    );
+
+
+  return value === null
+    ? true
+    : value === "true";
+
+}
+
+
+/* =====================================
+   PLAYLISTS
+   ===================================== */
+
+const PLAYLIST_KEY =
+  "minitube_playlists";
+
+
+function getPlaylists(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        PLAYLIST_KEY
+      );
+
+    const list =
+      saved
+        ? JSON.parse(saved)
+        : [];
+
+
+    /*
+      Always make sure the
+      built-in "Watch Later"
+      playlist exists.
+    */
+
+    if(
+      !list.some(
+        p => p.id === "watch-later"
+      )
+    ){
+
+      list.unshift({
+        id: "watch-later",
+        name: "Watch Later",
+        builtIn: true,
+        createdAt: Date.now(),
+        videoNames: []
+      });
+
+    }
+
+
+    return list;
+
+  }catch(error){
+
+    return [
+      {
+        id: "watch-later",
+        name: "Watch Later",
+        builtIn: true,
+        createdAt: Date.now(),
+        videoNames: []
+      }
+    ];
+
+  }
+
+}
+
+
+function savePlaylists(list){
+
+  localStorage.setItem(
+    PLAYLIST_KEY,
+    JSON.stringify(list)
+  );
+
+}
+
+
+function openSaveModal(){
+
+  renderPlaylistCheckList();
+
+  document
+    .getElementById(
+      "saveModalOverlay"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+function closeSaveModal(){
+
+  document
+    .getElementById(
+      "saveModalOverlay"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+function closeSaveModalOnOverlay(event){
+
+  if(event.target.id === "saveModalOverlay"){
+
+    closeSaveModal();
+
+  }
+
+}
+
+
+function renderPlaylistCheckList(){
+
+  const container =
+    document.getElementById(
+      "playlistCheckList"
+    );
+
+  const playlists =
+    getPlaylists();
+
+
+  container.innerHTML =
+    "";
+
+
+  playlists.forEach(playlist => {
+
+    const row =
+      document.createElement(
+        "label"
+      );
+
+    row.className =
+      "playlistCheckRow";
+
+
+    const checked =
+      playlist.videoNames.includes(
+        videoName
+      );
+
+
+    row.innerHTML = `
+
+      <input
+        type="checkbox"
+        ${checked ? "checked" : ""}
+      >
+
+      <div class="playlistCheckName">
+        ${escapeHTML(playlist.name)}
+      </div>
+
+      <div class="playlistCheckCount">
+        ${playlist.videoNames.length}
+      </div>
+
+    `;
+
+
+    row.querySelector(
+      "input"
+    ).addEventListener(
+      "change",
+      function(event){
+
+        togglePlaylistVideo(
+          playlist.id,
+          event.target.checked
+        );
+
+      }
+    );
+
+
+    container.appendChild(
+      row
+    );
+
+  });
+
+}
+
+
+function togglePlaylistVideo(playlistId, add){
+
+  const playlists =
+    getPlaylists();
+
+
+  const playlist =
+    playlists.find(
+      p => p.id === playlistId
+    );
+
+
+  if(!playlist){
+
+    return;
+
+  }
+
+
+  if(add){
+
+    if(
+      !playlist.videoNames.includes(
+        videoName
+      )
+    ){
+
+      playlist.videoNames.unshift(
+        videoName
+      );
+
+    }
+
+  }else{
+
+    playlist.videoNames =
+      playlist.videoNames.filter(
+        name => name !== videoName
+      );
+
+  }
+
+
+  savePlaylists(
+    playlists
+  );
+
+
+  renderPlaylistCheckList();
+
+}
+
+
+function createPlaylistFromModal(){
+
+  const input =
+    document.getElementById(
+      "newPlaylistName"
+    );
+
+  const name =
+    input.value.trim();
+
+
+  if(!name){
+
+    return;
+
+  }
+
+
+  const playlists =
+    getPlaylists();
+
+
+  playlists.push({
+    id: "pl_" + Date.now(),
+    name: name,
+    builtIn: false,
+    createdAt: Date.now(),
+    videoNames: [videoName]
+  });
+
+
+  savePlaylists(
+    playlists
+  );
+
+
+  input.value =
+    "";
+
+
+  renderPlaylistCheckList();
+
+}
+
+
+/* =====================================
    WATCH HISTORY
    ===================================== */
 
@@ -1224,8 +1686,6 @@ function recordHistory(){
 
   let history =
     getHistory();
-
-
   /*
     Remove any existing entry
     for this video, then add it
@@ -1310,14 +1770,19 @@ function loadVideo(){
 
 
   /*
-    Try autoplay.
-    Browser may block it.
+    Try autoplay, unless the
+    user turned it off in
+    Settings.
   */
 
-  player.play()
-    .catch(
-      () => {}
-    );
+  if(isAutoplayOn()){
+
+    player.play()
+      .catch(
+        () => {}
+      );
+
+  }
 
 
   /*
