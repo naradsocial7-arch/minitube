@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>History - MiniTube</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.backButton{
+  background:#222;
+  border:0;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.headerTitle{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+.clearAllButton{
+  background:#292929;
+  border:0;
+  color:#ff4964;
+  font-size:13px;
+  font-weight:bold;
+  padding:9px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+
+/* =========================
+   GROUPS
+   ========================= */
+
+.status{
+  text-align:center;
+  color:#aaa;
+  padding:40px 22px;
+}
+
+.groupLabel{
+  color:#999;
+  font-size:14px;
+  font-weight:bold;
+  padding:20px 22px 6px;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:10px 22px;
+  cursor:pointer;
+}
+
+.row:hover{
+  background:#161616;
+}
+
+.thumb{
+  width:120px;
+  aspect-ratio:16/9;
+  border-radius:10px;
+  background:#181818;
+  object-fit:cover;
+  flex-shrink:0;
+}
+
+.rowInfo{
+  flex:1;
+  min-width:0;
+}
+
+.rowTitle{
+  font-size:15px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.rowMeta{
+  color:#999;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.removeButton{
+  background:none;
+  border:0;
+  color:#777;
+  font-size:22px;
+  cursor:pointer;
+  padding:6px 10px;
+  flex-shrink:0;
+}
+
+.removeButton:hover{
+  color:#ff4964;
+}
+
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:600px){
+
+  .thumb{
+    width:96px;
+  }
+
+  .row{
+    padding:10px 16px;
+  }
+
+  .groupLabel{
+    padding:18px 16px 6px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
+<header>
+
+  <div class="top">
+
+    <button
+      class="backButton"
+      onclick="goBack()"
+    >
+      ←
+    </button>
+
+    <div class="headerTitle">
+      Watch history
+    </div>
+
+    <button
+      class="clearAllButton"
+      onclick="clearAllHistory()"
+    >
+      Clear all
+    </button>
+
+  </div>
+
+</header>
+
+
+<div
+  id="status"
+  class="status"
+></div>
+
+<div id="historyList"></div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+     ========================= -->
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+
+  <button onclick="goSubscriptions()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   WATCH HISTORY STORAGE
+   (same key watch.html writes to)
+   ===================================== */
+
+const HISTORY_KEY =
+  "minitube_watch_history";
+
+
+function getHistory(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        HISTORY_KEY
+      );
+
+    return saved
+      ? JSON.parse(saved)
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function removeFromHistory(name, watchedAt){
+
+  let history =
+    getHistory();
+
+
+  history =
+    history.filter(entry =>
+      !(
+        entry.name === name &&
+        entry.watchedAt === watchedAt
+      )
+    );
+
+
+  localStorage.setItem(
+    HISTORY_KEY,
+    JSON.stringify(history)
+  );
+
+
+  renderHistory();
+
+}
+
+
+function clearAllHistory(){
+
+  const confirmed =
+    confirm(
+      "Clear your entire watch history? This can't be undone."
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    HISTORY_KEY
+  );
+
+
+  renderHistory();
+
+}
+
+
+/* =====================================
+   DATE GROUPING
+   ===================================== */
+
+function dayLabel(timestamp){
+
+  const date =
+    new Date(timestamp);
+
+  const today =
+    new Date();
+
+  const yesterday =
+    new Date();
+
+  yesterday.setDate(
+    today.getDate() - 1
+  );
+
+
+  const sameDay = (a, b) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+
+
+  if(sameDay(date, today)){
+
+    return "Today";
+
+  }
+
+
+  if(sameDay(date, yesterday)){
+
+    return "Yesterday";
+
+  }
+
+
+  return date.toLocaleDateString(
+    undefined,
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }
+  );
+
+}
+
+
+function timeAgo(timestamp){
+
+  const seconds =
+    Math.floor(
+      (Date.now() - timestamp) / 1000
+    );
+
+
+  if(seconds < 60){
+
+    return "just now";
+
+  }
+
+
+  const minutes =
+    Math.floor(seconds / 60);
+
+
+  if(minutes < 60){
+
+    return minutes + "m ago";
+
+  }
+
+
+  const hours =
+    Math.floor(minutes / 60);
+
+
+  if(hours < 24){
+
+    return hours + "h ago";
+
+  }
+
+
+  const days =
+    Math.floor(hours / 24);
+
+
+  return days + "d ago";
+
+}
+
+
+/* =====================================
+   RENDER
+   ===================================== */
+
+function renderHistory(){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  const container =
+    document.getElementById(
+      "historyList"
+    );
+
+  const clearButton =
+    document.querySelector(
+      ".clearAllButton"
+    );
+
+
+  const history =
+    getHistory();
+
+
+  container.innerHTML =
+    "";
+
+
+  if(history.length === 0){
+
+    status.innerHTML =
+      "No watch history yet.<br><br>" +
+      "Videos you watch will show up here.";
+
+    clearButton.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  status.textContent =
+    "";
+
+  clearButton.style.display =
+    "block";
+
+
+  /*
+    Group entries by day label,
+    preserving the most-recent-first
+    order already in history.
+  */
+
+  const groups = [];
+
+  let currentLabel =
+    null;
+
+  let currentGroup =
+    null;
+
+
+  history.forEach(entry => {
+
+    const label =
+      dayLabel(
+        entry.watchedAt
+      );
+
+
+    if(label !== currentLabel){
+
+      currentLabel =
+        label;
+
+      currentGroup = {
+        label: label,
+        entries: []
+      };
+
+      groups.push(
+        currentGroup
+      );
+
+    }
+
+
+    currentGroup.entries.push(
+      entry
+    );
+
+  });
+
+
+  groups.forEach(group => {
+
+    const heading =
+      document.createElement(
+        "div"
+      );
+
+    heading.className =
+      "groupLabel";
+
+    heading.textContent =
+      group.label;
+
+    container.appendChild(
+      heading
+    );
+
+
+    group.entries.forEach(entry => {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+      row.className =
+        "row";
+
+
+      const videoURL =
+        API_BASE +
+        "/video/" +
+        encodeURIComponent(
+          entry.name
+        );
+
+
+      row.innerHTML = `
+
+        <video
+          class="thumb"
+          preload="metadata"
+          muted
+          src="${videoURL}"
+        ></video>
+
+        <div class="rowInfo">
+
+          <div class="rowTitle">
+            ${escapeHTML(entry.name)}
+          </div>
+
+          <div class="rowMeta">
+            ${timeAgo(entry.watchedAt)}
+          </div>
+
+        </div>
+
+        <button class="removeButton">
+          ×
+        </button>
+
+      `;
+
+
+      row.querySelector(
+        ".thumb"
+      ).addEventListener(
+        "click",
+        function(){
+
+          openWatch(
+            entry.name
+          );
+
+        }
+      );
+
+
+      row.querySelector(
+        ".rowInfo"
+      ).addEventListener(
+        "click",
+        function(){
+
+          openWatch(
+            entry.name
+          );
+
+        }
+      );
+
+
+      row.querySelector(
+        ".removeButton"
+      ).addEventListener(
+        "click",
+        function(event){
+
+          event.stopPropagation();
+
+          removeFromHistory(
+            entry.name,
+            entry.watchedAt
+          );
+
+        }
+      );
+
+
+      container.appendChild(
+        row
+      );
+
+    });
+
+  });
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
+
+function openWatch(videoName){
+
+  window.location.href =
+    "watch.html?video=" +
+    encodeURIComponent(
+      videoName
+    );
+
+}
+
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+/* =====================================
+   HELPERS
+   ===================================== */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================
+   INIT
+   ===================================== */
+
+renderHistory();
+
+</script>
+
+</body>
+</html>
