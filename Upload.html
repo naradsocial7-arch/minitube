@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Upload - MiniTube</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:40px;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.backButton{
+  background:#222;
+  border:0;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.headerTitle{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+
+/* =========================
+   DROP ZONE
+   ========================= */
+
+.wrap{
+  max-width:560px;
+  margin:0 auto;
+  padding:22px;
+}
+
+.dropZone{
+  border:2px dashed #444;
+  border-radius:20px;
+  padding:50px 24px;
+  text-align:center;
+  cursor:pointer;
+}
+
+.dropZone.drag{
+  border-color:#ff0033;
+  background:#1a1010;
+}
+
+.dropIcon{
+  font-size:40px;
+  margin-bottom:14px;
+}
+
+.dropText{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.dropSubtext{
+  color:#999;
+  font-size:14px;
+  margin-top:8px;
+}
+
+.fileInput{
+  display:none;
+}
+
+
+/* =========================
+   PREVIEW
+   ========================= */
+
+.previewCard{
+  display:none;
+}
+
+.previewCard.show{
+  display:block;
+}
+
+.previewVideo{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#000;
+  border-radius:16px;
+  object-fit:contain;
+}
+
+.fieldLabel{
+  color:#999;
+  font-size:13px;
+  font-weight:bold;
+  margin:18px 0 8px;
+}
+
+.fieldInput{
+  width:100%;
+  background:#222;
+  border:1px solid #444;
+  border-radius:10px;
+  padding:13px 15px;
+  color:white;
+  font-size:15px;
+  outline:none;
+}
+
+.fileMeta{
+  color:#999;
+  font-size:13px;
+  margin-top:8px;
+}
+
+.changeButton{
+  background:none;
+  border:0;
+  color:#6ab0f3;
+  font-size:14px;
+  cursor:pointer;
+  padding:0;
+  margin-top:14px;
+}
+
+
+/* =========================
+   PROGRESS
+   ========================= */
+
+.progressWrap{
+  display:none;
+  margin-top:18px;
+}
+
+.progressWrap.show{
+  display:block;
+}
+
+.progressLabel{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  color:#ccc;
+  margin-bottom:8px;
+}
+
+.progressTrack{
+  height:8px;
+  background:#292929;
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.progressFill{
+  height:100%;
+  width:0%;
+  background:#ff0033;
+  transition:width .15s ease;
+}
+
+
+/* =========================
+   BUTTONS
+   ========================= */
+
+.uploadButton{
+  width:100%;
+  margin-top:22px;
+  background:#ff0033;
+  border:0;
+  color:white;
+  border-radius:26px;
+  padding:15px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.uploadButton:disabled{
+  background:#5a1a24;
+  cursor:not-allowed;
+}
+
+.statusMessage{
+  text-align:center;
+  margin-top:14px;
+  font-size:14px;
+  color:#aaa;
+}
+
+.statusMessage.error{
+  color:#ff6b7a;
+}
+
+.statusMessage.success{
+  color:#6ee7b7;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
+<header>
+
+  <div class="top">
+
+    <button
+      class="backButton"
+      onclick="goBack()"
+    >
+      ←
+    </button>
+
+    <div class="headerTitle">
+      Upload video
+    </div>
+
+  </div>
+
+</header>
+
+
+<div class="wrap">
+
+
+  <!-- DROP ZONE -->
+
+  <div
+    id="dropZone"
+    class="dropZone"
+    onclick="document.getElementById('fileInput').click()"
+  >
+
+    <div class="dropIcon">
+      🎬
+    </div>
+
+    <div class="dropText">
+      Tap to choose a video
+    </div>
+
+    <div class="dropSubtext">
+      or drag and drop a file here
+    </div>
+
+  </div>
+
+  <input
+    id="fileInput"
+    class="fileInput"
+    type="file"
+    accept="video/*"
+  >
+
+
+  <!-- PREVIEW -->
+
+  <div
+    id="previewCard"
+    class="previewCard"
+  >
+
+    <video
+      id="previewVideo"
+      class="previewVideo"
+      controls
+    ></video>
+
+
+    <div class="fieldLabel">
+      File name
+    </div>
+
+    <input
+      id="fileNameInput"
+      class="fieldInput"
+    >
+
+    <div
+      id="fileMeta"
+      class="fileMeta"
+    ></div>
+
+    <button
+      class="changeButton"
+      onclick="document.getElementById('fileInput').click()"
+    >
+      Choose a different video
+    </button>
+
+
+    <div
+      id="progressWrap"
+      class="progressWrap"
+    >
+
+      <div class="progressLabel">
+
+        <span id="progressText">
+          Uploading... 0%
+        </span>
+
+        <span id="progressPercent">
+          0%
+        </span>
+
+      </div>
+
+      <div class="progressTrack">
+        <div
+          id="progressFill"
+          class="progressFill"
+        ></div>
+      </div>
+
+    </div>
+
+
+    <button
+      id="uploadButton"
+      class="uploadButton"
+      onclick="startUpload()"
+    >
+      Upload video
+    </button>
+
+    <div
+      id="statusMessage"
+      class="statusMessage"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   AUTH STORAGE
+   ===================================== */
+
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
+
+const USER_KEY =
+  "minitube_user";
+
+
+function isLoggedIn(){
+
+  return !!(
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    ) &&
+    localStorage.getItem(
+      USER_KEY
+    )
+  );
+
+}
+
+
+/* =====================================
+   LOGIN GATE
+   ===================================== */
+
+if(!isLoggedIn()){
+
+  const go =
+    confirm(
+      "Please login first to upload a video.\n\nGo to Login?"
+    );
+
+
+  if(go){
+
+    window.location.href =
+      "login.html";
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+/* =====================================
+   FILE SELECTION
+   ===================================== */
+
+let selectedFile =
+  null;
+
+
+const fileInput =
+  document.getElementById(
+    "fileInput"
+  );
+
+const dropZone =
+  document.getElementById(
+    "dropZone"
+  );
+
+
+fileInput.addEventListener(
+  "change",
+  function(){
+
+    if(fileInput.files[0]){
+
+      handleFile(
+        fileInput.files[0]
+      );
+
+    }
+
+  }
+);
+
+
+dropZone.addEventListener(
+  "dragover",
+  function(event){
+
+    event.preventDefault();
+
+    dropZone.classList.add(
+      "drag"
+    );
+
+  }
+);
+
+
+dropZone.addEventListener(
+  "dragleave",
+  function(){
+
+    dropZone.classList.remove(
+      "drag"
+    );
+
+  }
+);
+
+
+dropZone.addEventListener(
+  "drop",
+  function(event){
+
+    event.preventDefault();
+
+    dropZone.classList.remove(
+      "drag"
+    );
+
+
+    const file =
+      event.dataTransfer.files[0];
+
+
+    if(
+      file &&
+      file.type.startsWith("video/")
+    ){
+
+      handleFile(
+        file
+      );
+
+    }else{
+
+      showStatus(
+        "Please drop a video file.",
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+function handleFile(file){
+
+  selectedFile =
+    file;
+
+
+  const previewVideo =
+    document.getElementById(
+      "previewVideo"
+    );
+
+  previewVideo.src =
+    URL.createObjectURL(
+      file
+    );
+
+
+  document.getElementById(
+    "fileNameInput"
+  ).value =
+    file.name;
+
+
+  document.getElementById(
+    "fileMeta"
+  ).textContent =
+    formatFileSize(
+      file.size
+    ) +
+    " · " +
+    (file.type || "video");
+
+
+  document.getElementById(
+    "previewCard"
+  ).classList.add(
+    "show"
+  );
+
+
+  document.getElementById(
+    "dropZone"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "statusMessage"
+  ).textContent =
+    "";
+
+  document.getElementById(
+    "statusMessage"
+  ).className =
+    "statusMessage";
+
+
+  document.getElementById(
+    "progressWrap"
+  ).classList.remove(
+    "show"
+  );
+
+
+  const uploadButton =
+    document.getElementById(
+      "uploadButton"
+    );
+
+  uploadButton.disabled =
+    false;
+
+  uploadButton.textContent =
+    "Upload video";
+
+}
+
+
+/* =====================================
+   UPLOAD
+   ===================================== */
+
+function startUpload(){
+
+  if(!selectedFile){
+
+    return;
+
+  }
+
+
+  const rawName =
+    document.getElementById(
+      "fileNameInput"
+    ).value.trim() ||
+    selectedFile.name;
+
+
+  const uploadButton =
+    document.getElementById(
+      "uploadButton"
+    );
+
+  const progressWrap =
+    document.getElementById(
+      "progressWrap"
+    );
+
+  const progressFill =
+    document.getElementById(
+      "progressFill"
+    );
+
+  const progressText =
+    document.getElementById(
+      "progressText"
+    );
+
+  const progressPercent =
+    document.getElementById(
+      "progressPercent"
+    );
+
+  const statusMessage =
+    document.getElementById(
+      "statusMessage"
+    );
+
+
+  uploadButton.disabled =
+    true;
+
+  uploadButton.textContent =
+    "Uploading...";
+
+  progressWrap.classList.add(
+    "show"
+  );
+
+  statusMessage.textContent =
+    "";
+
+  statusMessage.className =
+    "statusMessage";
+
+
+  const xhr =
+    new XMLHttpRequest();
+
+
+  xhr.timeout =
+    5 * 60 * 1000;
+
+
+  xhr.open(
+    "POST",
+    API_BASE +
+    "/api/upload?filename=" +
+    encodeURIComponent(
+      rawName
+    )
+  );
+
+
+  xhr.setRequestHeader(
+    "Content-Type",
+    selectedFile.type ||
+    "video/mp4"
+  );
+
+
+  xhr.setRequestHeader(
+    "Authorization",
+    "Bearer " +
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    )
+  );
+
+
+  xhr.upload.addEventListener(
+    "progress",
+    function(event){
+
+      if(!event.lengthComputable){
+
+        return;
+
+      }
+
+
+      const percent =
+        Math.round(
+          (event.loaded / event.total) * 100
+        );
+
+
+      progressFill.style.width =
+        percent + "%";
+
+      progressText.textContent =
+        "Uploading...";
+
+      progressPercent.textContent =
+        percent + "%";
+
+    }
+  );
+
+
+  xhr.addEventListener(
+    "load",
+    function(){
+
+      let result = {};
+
+      try{
+
+        result =
+          JSON.parse(
+            xhr.responseText
+          );
+
+      }catch(error){
+
+        result = {};
+
+      }
+
+
+      if(
+        xhr.status >= 200 &&
+        xhr.status < 300
+      ){
+
+        progressFill.style.width =
+          "100%";
+
+        progressPercent.textContent =
+          "100%";
+
+        progressText.textContent =
+          "Done";
+
+
+        showStatus(
+          "Upload successful 🚀 Redirecting...",
+          "success"
+        );
+
+
+        setTimeout(
+          function(){
+
+            window.location.href =
+              "watch.html?video=" +
+              encodeURIComponent(
+                result.name || rawName
+              );
+
+          },
+          900
+        );
+
+
+      }else{
+
+        uploadButton.disabled =
+          false;
+
+        uploadButton.textContent =
+          "Try again";
+
+        showStatus(
+          "Upload failed: " +
+          (
+            result.error ||
+            ("server returned " + xhr.status)
+          ),
+          "error"
+        );
+
+      }
+
+    }
+  );
+
+
+  xhr.addEventListener(
+    "error",
+    function(){
+
+      uploadButton.disabled =
+        false;
+
+      uploadButton.textContent =
+        "Try again";
+
+      showStatus(
+        "Upload failed: network error. Check your internet connection.",
+        "error"
+      );
+
+    }
+  );
+
+
+  xhr.addEventListener(
+    "timeout",
+    function(){
+
+      uploadButton.disabled =
+        false;
+
+      uploadButton.textContent =
+        "Try again";
+
+      showStatus(
+        "Upload failed: timed out. Try a smaller video or a better connection.",
+        "error"
+      );
+
+    }
+  );
+
+
+  xhr.send(
+    selectedFile
+  );
+
+}
+
+
+function showStatus(message, type){
+
+  const statusMessage =
+    document.getElementById(
+      "statusMessage"
+    );
+
+  statusMessage.textContent =
+    message;
+
+  statusMessage.className =
+    "statusMessage " +
+    type;
+
+}
+
+
+/* =====================================
+   HELPERS
+   ===================================== */
+
+function formatFileSize(bytes){
+
+  if(bytes >= 1024 * 1024 * 1024){
+
+    return (
+      bytes / (1024 * 1024 * 1024)
+    ).toFixed(1) + " GB";
+
+  }
+
+
+  if(bytes >= 1024 * 1024){
+
+    return (
+      bytes / (1024 * 1024)
+    ).toFixed(1) + " MB";
+
+  }
+
+
+  if(bytes >= 1024){
+
+    return (
+      bytes / 1024
+    ).toFixed(1) + " KB";
+
+  }
+
+
+  return bytes + " bytes";
+
+}
+
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
+
