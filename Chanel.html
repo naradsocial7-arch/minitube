@@ -1,425 +1,1351 @@
-from pathlib import Path
-
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MiniTube - Channel</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Channel - MiniTube</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0f0f0f;color:#fff;font-family:Arial,sans-serif;padding-bottom:80px}
-header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid #292929;padding:12px 16px}
-.top{display:flex;align-items:center;gap:14px}
-.logo{font-size:24px;font-weight:800;white-space:nowrap;cursor:pointer}
-.logo span{color:#ff0033}
-.search{flex:1;background:#222;border:1px solid #444;border-radius:30px;padding:13px 17px;color:#fff;font-size:16px;outline:none}
-.avatar{width:42px;height:42px;border-radius:50%;background:#7c4dff;display:grid;place-items:center;font-weight:bold;cursor:pointer;flex-shrink:0}
-.accountArea{position:relative}
-.accountMenu{display:none;position:absolute;right:0;top:50px;width:250px;background:#181818;border:1px solid #333;border-radius:14px;padding:15px;box-shadow:0 10px 30px rgba(0,0,0,.5);z-index:100}
-.accountMenu.show{display:block}
-.accountAvatar{width:50px;height:50px;border-radius:50%;background:#7c4dff;display:grid;place-items:center;font-size:20px;font-weight:bold;margin-bottom:10px}
-.accountName{font-weight:bold;font-size:16px;word-break:break-word}
-.accountEmail{color:#999;font-size:13px;margin-top:5px;word-break:break-word}
-.loginStatus{color:#6ee7b7;font-size:13px;margin-top:8px}
-.accountDivider{height:1px;background:#333;margin:14px 0}
-.accountButton{width:100%;padding:11px;border:0;border-radius:9px;background:#292929;color:#fff;font-weight:bold;cursor:pointer}
-.logoutButton{background:#ff0033}
 
-.channelHeader{max-width:1100px;margin:0 auto;padding:24px 22px 0}
-.banner{height:230px;border-radius:18px;background:linear-gradient(120deg,#30113d,#171717 55%,#2b0c19);position:relative;overflow:hidden}
-.banner:before,.banner:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.35}
-.banner:before{width:300px;height:300px;background:#7c4dff;right:-70px;top:-130px}
-.banner:after{width:220px;height:220px;background:#ff0033;left:-80px;bottom:-130px}
-.channelInfo{display:flex;gap:20px;align-items:flex-end;padding:0 18px;margin-top:-48px;position:relative}
-.channelAvatar{width:112px;height:112px;border-radius:50%;background:#7c4dff;border:5px solid #0f0f0f;display:grid;place-items:center;font-size:42px;font-weight:800;flex-shrink:0}
-.channelDetails{padding-bottom:7px;min-width:0;flex:1}
-.channelName{font-size:28px;font-weight:800;word-break:break-word}
-.handle{color:#aaa;margin-top:5px;font-size:14px}
-.stats{color:#aaa;margin-top:7px;font-size:14px}
-.channelActions{padding-bottom:8px}
-.subscribeBtn{border:0;border-radius:24px;padding:12px 20px;background:#fff;color:#111;font-weight:bold;cursor:pointer;white-space:nowrap}
-.subscribeBtn.subscribed{background:#292929;color:#fff;border:1px solid #555}
+*{
+  box-sizing:border-box;
+}
 
-.tabs{display:flex;gap:28px;margin-top:25px;border-bottom:1px solid #303030;overflow-x:auto}
-.tabs button{background:none;border:0;color:#aaa;padding:15px 3px;font-size:15px;font-weight:bold;cursor:pointer;white-space:nowrap}
-.tabs button.active{color:#fff;border-bottom:3px solid #fff}
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
 
-.section{max-width:1100px;margin:0 auto;padding:24px 22px}
-.sectionTitle{font-size:22px;font-weight:800;margin-bottom:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
-.card{background:#181818;border-radius:14px;overflow:hidden}
-.cardVideo{width:100%;aspect-ratio:16/9;display:block;background:#000;object-fit:cover;cursor:pointer}
-.info{padding:12px}
-.title{font-size:16px;font-weight:bold;word-break:break-word;cursor:pointer}
-.title:hover{text-decoration:underline}
-.meta{color:#999;font-size:13px;margin-top:8px}
-.actions{display:flex;gap:12px;margin-top:11px}
-.likeBtn,.watchBtn{border:0;border-radius:8px;padding:8px 11px;background:#292929;color:#fff;cursor:pointer}
-.likeBtn.liked{color:#ff0033}
-.empty{text-align:center;color:#888;padding:45px 10px}
-.aboutBox{background:#181818;border-radius:14px;padding:20px;color:#bbb;line-height:1.6}
-.loading{text-align:center;color:#aaa;padding:30px}
+a{
+  color:inherit;
+  text-decoration:none;
+}
 
-.bottom{position:fixed;bottom:0;left:0;right:0;height:70px;background:#151515;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:20}
-.bottom button{background:none;border:0;color:#aaa;font-size:13px;cursor:pointer}
-.bottom button b{display:block;font-size:22px;color:#fff;margin-bottom:3px}
+
+/* =========================
+   HEADER
+   ========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.backButton{
+  background:#222;
+  border:0;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.headerTitle{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+
+/* ACCOUNT MENU */
+
+.accountArea{
+  position:relative;
+}
+
+.accountMenu{
+  display:none;
+  position:absolute;
+  right:0;
+  top:50px;
+  width:250px;
+  background:#181818;
+  border:1px solid #333;
+  border-radius:14px;
+  padding:15px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+  z-index:100;
+}
+
+.accountMenu.show{
+  display:block;
+}
+
+.accountAvatar{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.accountName{
+  font-weight:bold;
+  font-size:16px;
+  word-break:break-word;
+}
+
+.accountEmail{
+  color:#999;
+  font-size:13px;
+  margin-top:5px;
+  word-break:break-word;
+}
+
+.loginStatus{
+  color:#6ee7b7;
+  font-size:13px;
+  margin-top:8px;
+}
+
+.accountDivider{
+  height:1px;
+  background:#333;
+  margin:14px 0;
+}
+
+.accountButton{
+  width:100%;
+  padding:11px;
+  border:0;
+  border-radius:9px;
+  background:#292929;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.accountButton:hover{
+  background:#383838;
+}
+
+.logoutButton{
+  background:#ff0033;
+}
+
+
+/* =========================
+   CHANNEL BANNER
+   ========================= */
+
+.banner{
+  height:110px;
+  background:linear-gradient(120deg,#24132d,#3a1030,#151515);
+}
+
+.channelHeader{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:0 22px;
+  margin-top:-40px;
+}
+
+.channelAvatar{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-size:34px;
+  font-weight:bold;
+  border:4px solid #0f0f0f;
+  flex-shrink:0;
+}
+
+.channelInfo{
+  padding-top:44px;
+}
+
+.channelTitle{
+  font-size:22px;
+  font-weight:800;
+  word-break:break-word;
+}
+
+.channelStats{
+  color:#999;
+  font-size:14px;
+  margin-top:6px;
+}
+
+.channelActions{
+  padding:16px 22px 0;
+  display:flex;
+  gap:10px;
+}
+
+.subscribeBtn{
+  border:0;
+  border-radius:22px;
+  padding:11px 22px;
+  background:#fff;
+  color:#111;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.subscribeBtn.subscribed{
+  background:#292929;
+  color:#fff;
+  border:1px solid #555;
+}
+
+
+/* =========================
+   TABS
+   ========================= */
+
+.tabs{
+  display:flex;
+  gap:8px;
+  padding:20px 22px 0;
+  border-bottom:1px solid #292929;
+}
+
+.tabs button{
+  background:none;
+  border:0;
+  color:#999;
+  font-size:15px;
+  font-weight:bold;
+  padding:0 4px 14px;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+}
+
+.tabs button.active{
+  color:white;
+  border-bottom-color:#ff0033;
+}
+
+
+/* =========================
+   VIDEO GRID
+   ========================= */
+
+.status{
+  text-align:center;
+  color:#aaa;
+  padding:24px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(260px,1fr)
+  );
+  gap:18px;
+  padding:18px 22px;
+}
+
+.card{
+  background:#181818;
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.cardVideo{
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+  background:#000;
+  object-fit:cover;
+}
+
+.card:hover .cardVideo{
+  opacity:.92;
+}
+
+.info{
+  padding:12px;
+}
+
+.title{
+  font-size:16px;
+  font-weight:bold;
+  word-break:break-word;
+}
+
+.meta{
+  color:#999;
+  font-size:13px;
+  margin-top:7px;
+}
+
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
 
 @media(max-width:600px){
- .top{gap:9px}.logo{font-size:21px}.avatar{width:38px;height:38px}
- .search{min-width:0;padding:11px 14px}
- .channelHeader{padding:16px 12px 0}
- .banner{height:150px;border-radius:14px}
- .channelInfo{padding:0 8px;gap:12px;margin-top:-35px;align-items:flex-end}
- .channelAvatar{width:82px;height:82px;font-size:30px;border-width:4px}
- .channelName{font-size:21px}
- .channelActions{position:absolute;right:8px;top:95px}
- .subscribeBtn{padding:9px 14px}
- .tabs{margin-top:72px;gap:22px}
- .section{padding:20px 12px}
- .grid{grid-template-columns:1fr}
- .accountMenu{right:-5px;width:230px}
+
+  .grid{
+    grid-template-columns:1fr;
+    padding:16px;
+  }
+
+  .channelHeader{
+    padding:0 16px;
+  }
+
+  .channelActions{
+    padding:16px 16px 0;
+  }
+
+  .tabs{
+    padding:20px 16px 0;
+  }
+
+  .accountMenu{
+    right:-5px;
+    width:230px;
+  }
+
 }
+
 </style>
+
 </head>
+
+
 <body>
 
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
 <header>
+
   <div class="top">
-    <div class="logo" onclick="goHome()"><span>▶</span> MiniTube</div>
-    <input id="search" class="search" placeholder="Search videos..." onkeydown="searchVideos(event)">
-    <div class="accountArea">
-      <div id="avatar" class="avatar" onclick="toggleAccountMenu()">M</div>
-      <div id="accountMenu" class="accountMenu">
-        <div id="accountAvatar" class="accountAvatar">M</div>
-        <div id="accountName" class="accountName">Account</div>
-        <div id="accountEmail" class="accountEmail">Not logged in</div>
-        <div id="loginStatus" class="loginStatus"></div>
-        <div class="accountDivider"></div>
-        <button id="accountAction" class="accountButton" onclick="accountAction()">Login</button>
-      </div>
+
+    <button
+      class="backButton"
+      onclick="goBack()"
+    >
+      ←
+    </button>
+
+    <div class="headerTitle">
+      Channel
     </div>
+
+    <div class="accountArea">
+
+      <div
+        id="avatar"
+        class="avatar"
+        onclick="toggleAccountMenu()"
+      >
+        M
+      </div>
+
+
+      <div
+        id="accountMenu"
+        class="accountMenu"
+      >
+
+        <div
+          id="accountAvatar"
+          class="accountAvatar"
+        >
+          M
+        </div>
+
+
+        <div
+          id="accountName"
+          class="accountName"
+        >
+          Account
+        </div>
+
+
+        <div
+          id="accountEmail"
+          class="accountEmail"
+        >
+          Not logged in
+        </div>
+
+
+        <div
+          id="loginStatus"
+          class="loginStatus"
+        >
+        </div>
+
+
+        <div class="accountDivider"></div>
+
+
+        <button
+          id="accountAction"
+          class="accountButton"
+          onclick="accountAction()"
+        >
+          Login
+        </button>
+
+      </div>
+
+    </div>
+
   </div>
+
 </header>
 
-<main>
-  <section class="channelHeader">
-    <div class="banner"></div>
 
-    <div class="channelInfo">
-      <div id="channelAvatar" class="channelAvatar">M</div>
+<!-- =========================
+     CHANNEL BANNER + INFO
+     ========================= -->
 
-      <div class="channelDetails">
-        <div id="channelName" class="channelName">My Channel</div>
-        <div id="handle" class="handle">@minitube</div>
-        <div id="stats" class="stats">0 subscribers • 0 videos</div>
-      </div>
+<div class="banner"></div>
 
-      <div class="channelActions">
-        <button id="subscribeButton" class="subscribeBtn" onclick="toggleSubscribe()">Subscribe</button>
-      </div>
+<div class="channelHeader">
+
+  <div
+    id="channelAvatar"
+    class="channelAvatar"
+  >
+    M
+  </div>
+
+  <div class="channelInfo">
+
+    <div
+      id="channelTitle"
+      class="channelTitle"
+    >
+      My Channel
     </div>
 
-    <div class="tabs">
-      <button class="active" onclick="showTab('home',this)">Home</button>
-      <button onclick="showTab('videos',this)">Videos</button>
-      <button onclick="showTab('shorts',this)">Shorts</button>
-      <button onclick="showTab('playlists',this)">Playlists</button>
-      <button onclick="showTab('about',this)">About</button>
+    <div
+      id="channelStats"
+      class="channelStats"
+    >
+      0 subscribers · 0 videos
     </div>
-  </section>
 
-  <section id="homeSection" class="section">
-    <div class="sectionTitle">Videos</div>
-    <div id="status" class="loading">Loading videos...</div>
-    <div id="videos" class="grid"></div>
-  </section>
+  </div>
 
-  <section id="aboutSection" class="section" style="display:none">
-    <div class="sectionTitle">About</div>
-    <div class="aboutBox">
-      <div id="aboutText">Welcome to my MiniTube channel.</div>
-      <br>
-      <div id="aboutStats"></div>
-    </div>
-  </section>
-
-  <section id="otherSection" class="section" style="display:none">
-    <div class="sectionTitle" id="otherTitle"></div>
-    <div class="empty" id="otherText"></div>
-  </section>
-</main>
-
-<div class="bottom">
-  <button onclick="goHome()"><b>⌂</b>Home</button>
-  <button onclick="goShorts()"><b>▶</b>Shorts</button>
-  <button onclick="startUpload()"><b>＋</b>Create</button>
-  <button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
-  <button onclick="goYou()"><b>●</b>You</button>
 </div>
 
+<div class="channelActions">
+
+  <button
+    id="subscribeBtn"
+    class="subscribeBtn"
+    onclick="toggleSubscribe()"
+  >
+    Subscribe
+  </button>
+
+</div>
+
+
+<!-- =========================
+     TABS
+     ========================= -->
+
+<div class="tabs">
+
+  <button class="active">
+    Videos
+  </button>
+
+</div>
+
+
+<div
+  id="status"
+  class="status"
+>
+  Loading videos...
+</div>
+
+
+<div
+  id="videos"
+  class="grid"
+></div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+     ========================= -->
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+
+  <button onclick="goHome()">
+    <b>＋</b>
+    Create
+  </button>
+
+
+  <button onclick="goSubscriptions()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
 <script>
-const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
 
-const ACCESS_TOKEN_KEY="minitube_access_token";
-const REFRESH_TOKEN_KEY="minitube_refresh_token";
-const USER_KEY="minitube_user";
-const SUBSCRIBE_KEY="minitube_my_channel_subscribed";
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
 
-let allVideos=[];
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
 
-function getLoggedUser(){
-  const token=localStorage.getItem(ACCESS_TOKEN_KEY);
-  const savedUser=localStorage.getItem(USER_KEY);
-  if(!token||!savedUser)return null;
-  try{return JSON.parse(savedUser)}catch(e){return null}
-}
 
-function isLoggedIn(){return !!getLoggedUser()}
+/* =====================================
+   AUTH STORAGE
+   ===================================== */
 
-function getUserName(user){
-  if(!user)return "My Channel";
-  const metadata=user.user_metadata||user.userMetadata||{};
-  return metadata.display_name||metadata.full_name||metadata.name||user.email||"MiniTube User";
-}
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
 
-function getUserInitial(user){
-  return getUserName(user).trim().charAt(0).toUpperCase()||"M";
-}
+const REFRESH_TOKEN_KEY =
+  "minitube_refresh_token";
+
+const USER_KEY =
+  "minitube_user";
+
+
+/* =====================================
+   SUBSCRIBE SYSTEM
+   ===================================== */
+
+const SUBSCRIBE_KEY =
+  "minitube_my_channel_subscribed";
+
 
 function isSubscribed(){
-  return localStorage.getItem(SUBSCRIBE_KEY)==="true";
+
+  return localStorage.getItem(
+    SUBSCRIBE_KEY
+  ) === "true";
+
 }
 
-function updateSubscribeButton(){
-  const button=document.getElementById("subscribeButton");
-  const subscribed=isSubscribed();
-  button.classList.toggle("subscribed",subscribed);
-  button.textContent=subscribed?"Subscribed":"Subscribe";
-}
 
 function toggleSubscribe(){
-  localStorage.setItem(SUBSCRIBE_KEY,String(!isSubscribed()));
+
+  const current =
+    isSubscribed();
+
+  localStorage.setItem(
+    SUBSCRIBE_KEY,
+    String(!current)
+  );
+
   updateSubscribeButton();
+
 }
 
-function updateAccountUI(){
-  const user=getLoggedUser();
-  const initial=getUserInitial(user);
 
-  document.getElementById("avatar").textContent=initial;
-  document.getElementById("accountAvatar").textContent=initial;
+function updateSubscribeButton(){
 
-  if(user){
-    document.getElementById("accountName").textContent=getUserName(user);
-    document.getElementById("accountEmail").textContent=user.email||"";
-    document.getElementById("loginStatus").textContent="✓ Logged in";
-    document.getElementById("accountAction").textContent="Logout";
+  const button =
+    document.getElementById(
+      "subscribeBtn"
+    );
 
-    document.getElementById("channelAvatar").textContent=initial;
-    document.getElementById("channelName").textContent=getUserName(user);
+  const subscribed =
+    isSubscribed();
 
-    const handle="@"+getUserName(user).toLowerCase()
-      .replace(/[^a-z0-9]+/g,"")
-      .slice(0,20);
-    document.getElementById("handle").textContent=handle||"@minitube";
-    document.getElementById("aboutText").textContent=
-      "Welcome to "+getUserName(user)+"'s MiniTube channel.";
-  }else{
-    document.getElementById("accountName").textContent="Not logged in";
-    document.getElementById("accountEmail").textContent="Login to your MiniTube account";
-    document.getElementById("loginStatus").textContent="";
-    document.getElementById("accountAction").textContent="Login";
 
-    document.getElementById("channelAvatar").textContent="M";
-    document.getElementById("channelName").textContent="My Channel";
-    document.getElementById("handle").textContent="@minitube";
+  button.classList.toggle(
+    "subscribed",
+    subscribed
+  );
+
+
+  button.textContent =
+    subscribed
+      ? "Subscribed"
+      : "Subscribe";
+
+
+  const stats =
+    document.getElementById(
+      "channelStats"
+    );
+
+
+  const baseCount =
+    subscribed ? 1 : 0;
+
+
+  stats.dataset.subscribers =
+    String(baseCount);
+
+
+  renderStats();
+
+}
+
+
+/* =====================================
+   GET LOGGED USER
+   ===================================== */
+
+function getLoggedUser(){
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+  const savedUser =
+    localStorage.getItem(
+      USER_KEY
+    );
+
+
+  if(!token || !savedUser){
+
+    return null;
+
   }
 
-  document.getElementById("aboutStats").textContent=
-    "Videos on this channel: "+allVideos.length;
-  updateSubscribeButton();
-}
-
-function toggleAccountMenu(){
-  document.getElementById("accountMenu").classList.toggle("show");
-}
-
-document.addEventListener("click",function(event){
-  const area=document.querySelector(".accountArea");
-  const menu=document.getElementById("accountMenu");
-  if(area&&!area.contains(event.target))menu.classList.remove("show");
-});
-
-function accountAction(){
-  if(isLoggedIn()) logout();
-  else window.location.href="login.html";
-}
-
-function logout(){
-  if(!confirm("Logout from this MiniTube account?"))return;
-  localStorage.removeItem(ACCESS_TOKEN_KEY);
-  localStorage.removeItem(REFRESH_TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
-  updateAccountUI();
-  document.getElementById("accountMenu").classList.remove("show");
-}
-
-function startUpload(){
-  if(!isLoggedIn()){
-    if(confirm("Please login first to upload a video.\n\nGo to Login?"))
-      window.location.href="login.html";
-    return;
-  }
-  alert("Use the Create/Upload option from the Home page for now.");
-  window.location.href="index.html";
-}
-
-function openWatch(videoName){
-  window.location.href="watch.html?video="+encodeURIComponent(videoName);
-}
-
-function goHome(){window.location.href="index.html"}
-function goShorts(){window.location.href="shorts.html"}
-function goSubscriptions(){window.location.href="subscriptions.html"}
-function goYou(){window.location.href="you.html"}
-
-function searchVideos(event){
-  if(event.key==="Enter"){
-    const value=event.target.value.trim();
-    if(value)window.location.href="search.html?q="+encodeURIComponent(value);
-  }
-}
-
-async function loadVideos(){
-  const status=document.getElementById("status");
 
   try{
-    status.textContent="Loading videos...";
-    const response=await fetch(API_BASE+"/api/videos");
-    if(!response.ok)throw new Error("API error");
 
-    allVideos=await response.json();
-    renderVideos(allVideos);
+    return JSON.parse(
+      savedUser
+    );
 
-    document.getElementById("stats").textContent=
-      "0 subscribers • "+allVideos.length+" videos";
-    document.getElementById("aboutStats").textContent=
-      "Videos on this channel: "+allVideos.length;
   }catch(error){
-    console.error(error);
-    status.textContent="Unable to load videos.";
+
+    console.error(
+      "Invalid saved user",
+      error
+    );
+
+    return null;
+
   }
+
 }
+
+
+function isLoggedIn(){
+
+  return !!getLoggedUser();
+
+}
+
+
+function getUserName(user){
+
+  if(!user){
+
+    return "My Channel";
+
+  }
+
+
+  const metadata =
+    user.user_metadata ||
+    user.userMetadata ||
+    {};
+
+
+  return (
+
+    metadata.display_name ||
+
+    metadata.full_name ||
+
+    metadata.name ||
+
+    user.email ||
+
+    "MiniTube User"
+
+  );
+
+}
+
+
+function getUserInitial(user){
+
+  const name =
+    getUserName(user);
+
+
+  return name
+    .trim()
+    .charAt(0)
+    .toUpperCase() || "M";
+
+}
+
+
+/* =====================================
+   UPDATE ACCOUNT UI
+   ===================================== */
+
+function updateAccountUI(){
+
+  const user =
+    getLoggedUser();
+
+
+  const avatar =
+    document.getElementById(
+      "avatar"
+    );
+
+
+  const accountAvatar =
+    document.getElementById(
+      "accountAvatar"
+    );
+
+
+  const accountName =
+    document.getElementById(
+      "accountName"
+    );
+
+
+  const accountEmail =
+    document.getElementById(
+      "accountEmail"
+    );
+
+
+  const loginStatus =
+    document.getElementById(
+      "loginStatus"
+    );
+
+
+  const accountAction =
+    document.getElementById(
+      "accountAction"
+    );
+
+
+  const channelAvatar =
+    document.getElementById(
+      "channelAvatar"
+    );
+
+
+  const channelTitle =
+    document.getElementById(
+      "channelTitle"
+    );
+
+
+  if(user){
+
+    const name =
+      getUserName(user);
+
+    const initial =
+      getUserInitial(user);
+
+
+    avatar.textContent =
+      initial;
+
+    accountAvatar.textContent =
+      initial;
+
+    accountName.textContent =
+      name;
+
+    accountEmail.textContent =
+      user.email || "";
+
+    loginStatus.textContent =
+      "✓ Logged in";
+
+    accountAction.textContent =
+      "Logout";
+
+    accountAction.classList.add(
+      "logoutButton"
+    );
+
+    channelAvatar.textContent =
+      initial;
+
+    channelTitle.textContent =
+      name;
+
+
+  }else{
+
+    avatar.textContent =
+      "M";
+
+    accountAvatar.textContent =
+      "M";
+
+    accountName.textContent =
+      "Not logged in";
+
+    accountEmail.textContent =
+      "Login to your MiniTube account";
+
+    loginStatus.textContent =
+      "";
+
+    accountAction.textContent =
+      "Login";
+
+    accountAction.classList.remove(
+      "logoutButton"
+    );
+
+    channelAvatar.textContent =
+      "M";
+
+    channelTitle.textContent =
+      "My Channel";
+
+  }
+
+}
+
+
+/* =====================================
+   ACCOUNT MENU
+   ===================================== */
+
+function toggleAccountMenu(){
+
+  const menu =
+    document.getElementById(
+      "accountMenu"
+    );
+
+
+  menu.classList.toggle(
+    "show"
+  );
+
+}
+
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const area =
+      document.querySelector(
+        ".accountArea"
+      );
+
+    const menu =
+      document.getElementById(
+        "accountMenu"
+      );
+
+    if(
+      area &&
+      !area.contains(
+        event.target
+      )
+    ){
+
+      menu.classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+function accountAction(){
+
+  if(isLoggedIn()){
+
+    logout();
+
+  }else{
+
+    window.location.href =
+      "login.html";
+
+  }
+
+}
+
+
+function logout(){
+
+  const confirmed =
+    confirm(
+      "Logout from this MiniTube account?"
+    );
+
+
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  localStorage.removeItem(
+    ACCESS_TOKEN_KEY
+  );
+
+  localStorage.removeItem(
+    REFRESH_TOKEN_KEY
+  );
+
+  localStorage.removeItem(
+    USER_KEY
+  );
+
+
+  updateAccountUI();
+
+
+  document
+    .getElementById(
+      "accountMenu"
+    )
+    .classList.remove(
+      "show"
+    );
+
+
+  alert(
+    "You have been logged out."
+  );
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+function openWatch(videoName){
+
+  window.location.href =
+    "watch.html?video=" +
+    encodeURIComponent(
+      videoName
+    );
+
+}
+
+
+/* =====================================
+   LOAD CHANNEL VIDEOS
+   ===================================== */
+
+let allVideos = [];
+
+
+async function loadChannel(){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  try{
+
+    status.textContent =
+      "Loading videos...";
+
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/videos"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "API error"
+      );
+
+    }
+
+
+    allVideos =
+      await response.json();
+
+
+    renderVideos(
+      allVideos
+    );
+
+
+    renderStats();
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    status.textContent =
+      "Unable to load videos.";
+
+  }
+
+}
+
+
+function renderStats(){
+
+  const stats =
+    document.getElementById(
+      "channelStats"
+    );
+
+
+  const subscribers =
+    isSubscribed() ? 1 : 0;
+
+
+  stats.textContent =
+    formatNumber(subscribers) +
+    " subscriber" +
+    (subscribers === 1 ? "" : "s") +
+    " · " +
+    allVideos.length +
+    " video" +
+    (allVideos.length === 1 ? "" : "s");
+
+}
+
 
 function renderVideos(videos){
-  const container=document.getElementById("videos");
-  const status=document.getElementById("status");
-  container.innerHTML="";
 
-  if(videos.length===0){
-    status.innerHTML="No videos uploaded yet.";
+  const container =
+    document.getElementById(
+      "videos"
+    );
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  if(videos.length === 0){
+
+    status.innerHTML =
+      "No videos uploaded yet.<br><br>" +
+      "Upload your first video from the home page 🚀";
+
     return;
+
   }
 
-  status.textContent="";
 
-  videos.forEach(video=>{
-    const card=document.createElement("div");
-    card.className="card";
+  status.textContent =
+    "";
 
-    const videoURL=API_BASE+"/video/"+encodeURIComponent(video.name);
-    const likeKey="likes_"+video.name;
-    const likedKey="liked_"+video.name;
 
-    let likes=Number(localStorage.getItem(likeKey)||0);
-    let liked=localStorage.getItem(likedKey)==="true";
+  videos.forEach(video => {
 
-    card.innerHTML=`
-      <video class="cardVideo" preload="metadata" playsinline src="${videoURL}"></video>
+    const card =
+      document.createElement(
+        "div"
+      );
+
+    card.className =
+      "card";
+
+
+    const videoURL =
+      API_BASE +
+      "/video/" +
+      encodeURIComponent(
+        video.name
+      );
+
+
+    const viewsKey =
+      "views_" +
+      video.name;
+
+    const views =
+      Number(
+        localStorage.getItem(
+          viewsKey
+        ) || 0
+      );
+
+
+    card.innerHTML = `
+
+      <video
+        class="cardVideo"
+        preload="metadata"
+        src="${videoURL}"
+      ></video>
+
+
       <div class="info">
-        <div class="title">${escapeHTML(video.name)}</div>
-        <div class="meta">MiniTube • ${likes} likes</div>
-        <div class="actions">
-          <button class="likeBtn ${liked?"liked":""}">
-            ${liked?"♥":"♡"} Like <span class="likeCount">${likes}</span>
-          </button>
-          <button class="watchBtn">▶ Watch</button>
+
+        <div class="title">
+          ${escapeHTML(
+            video.name
+          )}
         </div>
-      </div>`;
 
-    const videoElement=card.querySelector(".cardVideo");
-    const titleElement=card.querySelector(".title");
-    const watchButton=card.querySelector(".watchBtn");
-    const likeButton=card.querySelector(".likeBtn");
-    const likeCount=card.querySelector(".likeCount");
-    const meta=card.querySelector(".meta");
 
-    videoElement.addEventListener("click",()=>openWatch(video.name));
-    titleElement.addEventListener("click",()=>openWatch(video.name));
-    watchButton.addEventListener("click",()=>openWatch(video.name));
+        <div class="meta">
+          ${formatNumber(views)} views
+        </div>
 
-    likeButton.addEventListener("click",()=>{
-      liked=!liked;
-      if(liked)likes++;
-      else if(likes>0)likes--;
+      </div>
 
-      localStorage.setItem(likeKey,likes);
-      localStorage.setItem(likedKey,liked);
+    `;
 
-      likeButton.classList.toggle("liked",liked);
-      likeButton.innerHTML=
-        `${liked?"♥":"♡"} Like <span class="likeCount">${likes}</span>`;
-      meta.textContent="MiniTube • "+likes+" likes";
-    });
 
-    container.appendChild(card);
+    card.addEventListener(
+      "click",
+      function(){
+
+        openWatch(
+          video.name
+        );
+
+      }
+    );
+
+
+    container.appendChild(
+      card
+    );
+
   });
+
 }
 
-function showTab(tab,button){
-  document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
-  button.classList.add("active");
 
-  const home=document.getElementById("homeSection");
-  const about=document.getElementById("aboutSection");
-  const other=document.getElementById("otherSection");
+/* =====================================
+   HELPERS
+   ===================================== */
 
-  home.style.display="none";
-  about.style.display="none";
-  other.style.display="none";
+function formatNumber(num){
 
-  if(tab==="home"||tab==="videos"){
-    home.style.display="block";
-  }else if(tab==="about"){
-    about.style.display="block";
-  }else{
-    other.style.display="block";
-    document.getElementById("otherTitle").textContent=
-      tab.charAt(0).toUpperCase()+tab.slice(1);
-    document.getElementById("otherText").textContent=
-      tab==="shorts"
-      ? "Shorts from this channel will appear here."
-      : "Playlists from this channel will appear here.";
+  if(num >= 1000000){
+
+    return (
+      (num / 1000000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "M"
+    );
+
   }
+
+
+  if(num >= 1000){
+
+    return (
+      (num / 1000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "K"
+    );
+
+  }
+
+
+  return String(num);
+
 }
+
 
 function escapeHTML(text){
+
   return String(text)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
 }
 
+
+/* =====================================
+   INIT
+   ===================================== */
+
 updateAccountUI();
-loadVideos();
+updateSubscribeButton();
+loadChannel();
+
 </script>
+
 </body>
-</html>'''
-
-path = Path("/mnt/data/channel.html")
-path.write_text(html, encoding="utf-8")
-print(f"Created: {path} ({len(html.splitlines())} lines)")
-
+</html>
