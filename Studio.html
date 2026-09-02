@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Studio - MiniTube</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================
+   HEADER
+   ========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#111;
+  border-bottom:1px solid #292929;
+  padding:12px 16px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.backButton{
+  background:#222;
+  border:0;
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.headerTitle{
+  flex:1;
+  font-size:19px;
+  font-weight:bold;
+}
+
+.uploadHeaderButton{
+  background:#ff0033;
+  border:0;
+  color:white;
+  font-size:13px;
+  font-weight:bold;
+  padding:10px 16px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+
+/* =========================
+   STATS
+   ========================= */
+
+.statsGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  padding:20px 22px 0;
+}
+
+.statCard{
+  background:#181818;
+  border-radius:14px;
+  padding:16px 14px;
+  text-align:center;
+}
+
+.statValue{
+  font-size:22px;
+  font-weight:800;
+}
+
+.statLabel{
+  color:#999;
+  font-size:12px;
+  margin-top:5px;
+}
+
+
+/* =========================
+   VIDEO LIST
+   ========================= */
+
+.sectionTitle{
+  color:#999;
+  font-size:13px;
+  font-weight:bold;
+  padding:26px 22px 10px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.status{
+  text-align:center;
+  color:#aaa;
+  padding:40px 22px;
+}
+
+.videoRow{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 22px;
+  border-bottom:1px solid #1c1c1c;
+}
+
+.videoThumb{
+  width:110px;
+  aspect-ratio:16/9;
+  border-radius:10px;
+  background:#181818;
+  object-fit:cover;
+  flex-shrink:0;
+  cursor:pointer;
+}
+
+.videoInfo{
+  flex:1;
+  min-width:0;
+}
+
+.videoName{
+  font-size:15px;
+  font-weight:bold;
+  word-break:break-word;
+  cursor:pointer;
+}
+
+.videoStats{
+  color:#999;
+  font-size:12px;
+  margin-top:6px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.videoActions{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  flex-shrink:0;
+}
+
+.smallButton{
+  background:#292929;
+  border:0;
+  color:white;
+  font-size:12px;
+  font-weight:bold;
+  padding:7px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.smallButton.danger{
+  color:#ff6b7a;
+}
+
+.smallButton:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+
+/* RENAME INLINE EDIT */
+
+.renameRow{
+  display:none;
+  gap:8px;
+  padding:0 22px 14px;
+}
+
+.renameRow.show{
+  display:flex;
+}
+
+.renameInput{
+  flex:1;
+  background:#222;
+  border:1px solid #444;
+  border-radius:8px;
+  padding:9px 12px;
+  color:white;
+  font-size:14px;
+  outline:none;
+}
+
+
+/* LOGIN GATE */
+
+.loginGate{
+  text-align:center;
+  padding:60px 24px;
+}
+
+.loginGate h2{
+  margin-bottom:10px;
+}
+
+.loginGate p{
+  color:#999;
+  margin-bottom:20px;
+}
+
+.loginGateButton{
+  background:#ff0033;
+  border:0;
+  color:white;
+  border-radius:24px;
+  padding:13px 26px;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:15px;
+}
+
+
+/* =========================
+   BOTTOM NAV
+   ========================= */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:20;
+}
+
+.bottom button{
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media(max-width:600px){
+
+  .statsGrid{
+    padding:18px 16px 0;
+  }
+
+  .videoRow{
+    padding:14px 16px;
+    flex-wrap:wrap;
+  }
+
+  .videoThumb{
+    width:90px;
+  }
+
+  .renameRow{
+    padding:0 16px 14px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+     ========================= -->
+
+<header>
+
+  <div class="top">
+
+    <button
+      class="backButton"
+      onclick="goBack()"
+    >
+      ←
+    </button>
+
+    <div class="headerTitle">
+      Studio
+    </div>
+
+    <button
+      class="uploadHeaderButton"
+      onclick="window.location.href='upload.html'"
+    >
+      + Upload
+    </button>
+
+  </div>
+
+</header>
+
+
+<div id="app">
+
+  <!-- Filled by JS: either the login gate,
+       or the studio dashboard -->
+
+</div>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+     ========================= -->
+
+<div class="bottom">
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+
+  <button onclick="goShorts()">
+    <b>▶</b>
+    Shorts
+  </button>
+
+
+  <button onclick="window.location.href='upload.html'">
+    <b>＋</b>
+    Create
+  </button>
+
+
+  <button onclick="goSubscriptions()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   CLOUDFLARE WORKER
+   ===================================== */
+
+const API_BASE =
+  "https://wispy-base-65bb.naradsocial7.workers.dev";
+
+
+/* =====================================
+   AUTH STORAGE
+   ===================================== */
+
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
+
+const USER_KEY =
+  "minitube_user";
+
+
+function getLoggedUser(){
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+  const savedUser =
+    localStorage.getItem(
+      USER_KEY
+    );
+
+
+  if(!token || !savedUser){
+
+    return null;
+
+  }
+
+
+  try{
+
+    return JSON.parse(
+      savedUser
+    );
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function isLoggedIn(){
+
+  return !!getLoggedUser();
+
+}
+
+
+/* =====================================
+   ENTRY POINT
+   ===================================== */
+
+if(!isLoggedIn()){
+
+  renderLoginGate();
+
+}else{
+
+  renderDashboard();
+
+}
+
+
+function renderLoginGate(){
+
+  document.getElementById(
+    "app"
+  ).innerHTML = `
+
+    <div class="loginGate">
+
+      <h2>
+        Manage your channel
+      </h2>
+
+      <p>
+        Login to view your video stats and manage uploads.
+      </p>
+
+      <button
+        class="loginGateButton"
+        onclick="window.location.href='login.html'"
+      >
+        Login
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================
+   DASHBOARD
+   ===================================== */
+
+let allVideos =
+  [];
+
+
+function renderDashboard(){
+
+  document.getElementById(
+    "app"
+  ).innerHTML = `
+
+    <div
+      id="statsGrid"
+      class="statsGrid"
+    ></div>
+
+    <div class="sectionTitle">
+      Your videos
+    </div>
+
+    <div
+      id="status"
+      class="status"
+    >
+      Loading videos...
+    </div>
+
+    <div id="videoList"></div>
+
+  `;
+
+
+  loadVideos();
+
+}
+
+
+async function loadVideos(){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/videos"
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "API error"
+      );
+
+    }
+
+
+    allVideos =
+      await response.json();
+
+
+    renderStats();
+
+    renderVideoList();
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    status.textContent =
+      "Unable to load videos.";
+
+  }
+
+}
+
+
+function renderStats(){
+
+  const statsGrid =
+    document.getElementById(
+      "statsGrid"
+    );
+
+
+  let totalViews =
+    0;
+
+  let totalLikes =
+    0;
+
+
+  allVideos.forEach(video => {
+
+    totalViews +=
+      Number(
+        localStorage.getItem(
+          "views_" + video.name
+        ) || 0
+      );
+
+
+    totalLikes +=
+      Number(
+        localStorage.getItem(
+          "likes_" + video.name
+        ) || 0
+      );
+
+  });
+
+
+  statsGrid.innerHTML = `
+
+    <div class="statCard">
+      <div class="statValue">
+        ${allVideos.length}
+      </div>
+      <div class="statLabel">
+        Videos
+      </div>
+    </div>
+
+    <div class="statCard">
+      <div class="statValue">
+        ${formatNumber(totalViews)}
+      </div>
+      <div class="statLabel">
+        Total views
+      </div>
+    </div>
+
+    <div class="statCard">
+      <div class="statValue">
+        ${formatNumber(totalLikes)}
+      </div>
+      <div class="statLabel">
+        Total likes
+      </div>
+    </div>
+
+  `;
+
+}
+
+
+function renderVideoList(){
+
+  const status =
+    document.getElementById(
+      "status"
+    );
+
+  const container =
+    document.getElementById(
+      "videoList"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  if(allVideos.length === 0){
+
+    status.innerHTML =
+      "No videos uploaded yet.<br><br>" +
+      "Tap + Upload above to get started 🚀";
+
+    return;
+
+  }
+
+
+  status.textContent =
+    "";
+
+
+  allVideos.forEach(video => {
+
+    const wrapper =
+      document.createElement(
+        "div"
+      );
+
+
+    const videoURL =
+      API_BASE +
+      "/video/" +
+      encodeURIComponent(
+        video.name
+      );
+
+
+    const views =
+      Number(
+        localStorage.getItem(
+          "views_" + video.name
+        ) || 0
+      );
+
+
+    const likes =
+      Number(
+        localStorage.getItem(
+          "likes_" + video.name
+        ) || 0
+      );
+
+
+    const commentCount =
+      readJSON(
+        "minitube_comments_" + video.name,
+        []
+      ).length;
+
+
+    const uploadedDate =
+      video.uploaded
+        ? new Date(video.uploaded).toLocaleDateString(
+            undefined,
+            { day:"numeric", month:"short", year:"numeric" }
+          )
+        : "";
+
+
+    const rowId =
+      "row_" +
+      btoa(
+        encodeURIComponent(video.name)
+      ).replace(/[^a-zA-Z0-9]/g, "");
+
+
+    wrapper.innerHTML = `
+
+      <div class="videoRow">
+
+        <video
+          class="videoThumb"
+          preload="metadata"
+          src="${videoURL}"
+        ></video>
+
+        <div class="videoInfo">
+
+          <div class="videoName">
+            ${escapeHTML(video.name)}
+          </div>
+
+          <div class="videoStats">
+            <span>${formatNumber(views)} views</span>
+            <span>${formatNumber(likes)} likes</span>
+            <span>${commentCount} comments</span>
+            ${uploadedDate ? `<span>${uploadedDate}</span>` : ""}
+          </div>
+
+        </div>
+
+        <div class="videoActions">
+
+          <button class="smallButton renameTrigger">
+            Rename
+          </button>
+
+          <button class="smallButton danger deleteTrigger">
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+      <div
+        id="${rowId}"
+        class="renameRow"
+      >
+
+        <input
+          class="renameInput"
+          value="${escapeHTML(video.name)}"
+        >
+
+        <button class="smallButton confirmRename">
+          Save
+        </button>
+
+        <button class="smallButton cancelRename">
+          Cancel
+        </button>
+
+      </div>
+
+    `;
+
+
+    wrapper.querySelector(
+      ".videoThumb"
+    ).addEventListener(
+      "click",
+      function(){
+
+        window.location.href =
+          "watch.html?video=" +
+          encodeURIComponent(video.name);
+
+      }
+    );
+
+
+    wrapper.querySelector(
+      ".videoName"
+    ).addEventListener(
+      "click",
+      function(){
+
+        window.location.href =
+          "watch.html?video=" +
+          encodeURIComponent(video.name);
+
+      }
+    );
+
+
+    wrapper.querySelector(
+      ".deleteTrigger"
+    ).addEventListener(
+      "click",
+      function(){
+
+        deleteVideo(
+          video.name
+        );
+
+      }
+    );
+
+
+    const renameRow =
+      wrapper.querySelector(
+        ".renameRow"
+      );
+
+
+    wrapper.querySelector(
+      ".renameTrigger"
+    ).addEventListener(
+      "click",
+      function(){
+
+        renameRow.classList.toggle(
+          "show"
+        );
+
+      }
+    );
+
+
+    wrapper.querySelector(
+      ".cancelRename"
+    ).addEventListener(
+      "click",
+      function(){
+
+        renameRow.classList.remove(
+          "show"
+        );
+
+      }
+    );
+
+
+    wrapper.querySelector(
+      ".confirmRename"
+    ).addEventListener(
+      "click",
+      function(){
+
+        const newName =
+          wrapper.querySelector(
+            ".renameInput"
+          ).value.trim();
+
+
+        renameVideo(
+          video.name,
+          newName,
+          wrapper
+        );
+
+      }
+    );
+
+
+    container.appendChild(
+      wrapper
+    );
+
+  });
+
+}
+
+
+/* =====================================
+   DELETE
+   ===================================== */
+
+async function deleteVideo(name){
+
+  if(
+    !confirm(
+      "Delete \"" + name + "\"? This can't be undone."
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/delete/" +
+        encodeURIComponent(name),
+        {
+          method: "DELETE",
+
+          headers: {
+            "Authorization":
+              "Bearer " +
+              localStorage.getItem(
+                ACCESS_TOKEN_KEY
+              )
+          }
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "Delete failed"
+      );
+
+    }
+
+
+    await loadVideos();
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    alert(
+      "Could not delete video."
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   RENAME
+   (download the video, re-upload under
+   the new name, then delete the old one —
+   the Worker has no rename endpoint)
+   ===================================== */
+
+async function renameVideo(oldName, newName, wrapper){
+
+  if(
+    !newName ||
+    newName === oldName
+  ){
+
+    return;
+
+  }
+
+
+  const confirmButton =
+    wrapper.querySelector(
+      ".confirmRename"
+    );
+
+
+  confirmButton.disabled =
+    true;
+
+  confirmButton.textContent =
+    "Renaming...";
+
+
+  try{
+
+    const videoResponse =
+      await fetch(
+        API_BASE +
+        "/video/" +
+        encodeURIComponent(oldName)
+      );
+
+
+    if(!videoResponse.ok){
+
+      throw new Error(
+        "Could not read video"
+      );
+
+    }
+
+
+    const blob =
+      await videoResponse.blob();
+
+
+    const uploadResponse =
+      await fetch(
+        API_BASE +
+        "/api/upload?filename=" +
+        encodeURIComponent(newName),
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              blob.type || "video/mp4",
+
+            "Authorization":
+              "Bearer " +
+              localStorage.getItem(
+                ACCESS_TOKEN_KEY
+              )
+          },
+
+          body: blob
+        }
+      );
+
+
+    if(!uploadResponse.ok){
+
+      throw new Error(
+        "Upload of renamed video failed"
+      );
+
+    }
+
+
+    const uploadResult =
+      await uploadResponse.json();
+
+
+    const finalName =
+      uploadResult.name ||
+      newName;
+
+
+    /*
+      Carry over local stats
+      (views/likes/comments/history)
+      to the new key so they aren't
+      lost on rename.
+    */
+
+    moveLocalData(
+      oldName,
+      finalName
+    );
+
+
+    await fetch(
+      API_BASE +
+      "/api/delete/" +
+      encodeURIComponent(oldName),
+      {
+        method: "DELETE",
+
+        headers: {
+          "Authorization":
+            "Bearer " +
+            localStorage.getItem(
+              ACCESS_TOKEN_KEY
+            )
+        }
+      }
+    );
+
+
+    await loadVideos();
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    alert(
+      "Rename failed: " +
+      error.message
+    );
+
+    confirmButton.disabled =
+      false;
+
+    confirmButton.textContent =
+      "Save";
+
+  }
+
+}
+
+
+function moveLocalData(oldName, newName){
+
+  [
+    "views_",
+    "likes_",
+    "liked_",
+    "minitube_comments_"
+  ].forEach(prefix => {
+
+    const value =
+      localStorage.getItem(
+        prefix + oldName
+      );
+
+
+    if(value !== null){
+
+      localStorage.setItem(
+        prefix + newName,
+        value
+      );
+
+      localStorage.removeItem(
+        prefix + oldName
+      );
+
+    }
+
+  });
+
+
+  /*
+    Update this video's name
+    inside history and playlists
+    too, so it isn't orphaned.
+  */
+
+  const history =
+    readJSON(
+      "minitube_watch_history",
+      []
+    ).map(entry =>
+
+      entry.name === oldName
+        ? { ...entry, name: newName }
+        : entry
+
+    );
+
+  localStorage.setItem(
+    "minitube_watch_history",
+    JSON.stringify(history)
+  );
+
+
+  const playlists =
+    readJSON(
+      "minitube_playlists",
+      []
+    ).map(playlist => ({
+      ...playlist,
+      videoNames: playlist.videoNames.map(name =>
+        name === oldName ? newName : name
+      )
+    }));
+
+  localStorage.setItem(
+    "minitube_playlists",
+    JSON.stringify(playlists)
+  );
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+/* =====================================
+   HELPERS
+   ===================================== */
+
+function readJSON(key, fallback){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        key
+      );
+
+    return saved
+      ? JSON.parse(saved)
+      : fallback;
+
+  }catch(error){
+
+    return fallback;
+
+  }
+
+}
+
+
+function formatNumber(num){
+
+  if(num >= 1000000){
+
+    return (
+      (num / 1000000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "M"
+    );
+
+  }
+
+
+  if(num >= 1000){
+
+    return (
+      (num / 1000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "K"
+    );
+
+  }
+
+
+  return String(num);
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+</body>
+  </html>
+
