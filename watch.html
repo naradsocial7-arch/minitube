@@ -1235,6 +1235,26 @@ function loadVideo(){
       () => {}
     );
 
+
+  /*
+    If the video fails to load
+    (deleted, wrong name, network),
+    show a friendly error instead
+    of a blank black box.
+  */
+
+  player.addEventListener(
+    "error",
+    function(){
+
+      showVideoError(
+        "This video isn't available",
+        "It may have been removed, or the link is broken."
+      );
+
+    }
+  );
+
 }
 
 
@@ -1734,4 +1754,293 @@ function renderComments(){
       const author =
         escapeHTML(
           comment.author
-    
+        );
+
+
+      const text =
+        escapeHTML(
+          comment.text
+        );
+
+
+      const initial =
+        (comment.author || "M")
+          .trim()
+          .charAt(0)
+          .toUpperCase() || "M";
+
+
+      element.innerHTML = `
+
+        <div class="commentTop">
+
+          <div class="commentAvatar">
+            ${initial}
+          </div>
+
+          <div>
+
+            <div class="commentAuthor">
+              ${author}
+            </div>
+
+            <div class="commentDate">
+              ${escapeHTML(comment.date || "")}
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="commentText">
+          ${text}
+        </div>
+
+
+        <div class="commentActions">
+          <button class="deleteComment">
+            Delete
+          </button>
+        </div>
+
+      `;
+
+
+      const deleteButton =
+        element.querySelector(
+          ".deleteComment"
+        );
+
+
+      deleteButton.addEventListener(
+        "click",
+        function(){
+
+          deleteComment(
+            comment.id
+          );
+
+        }
+      );
+
+
+      container.appendChild(
+        element
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================
+   DELETE COMMENT
+   ===================================== */
+
+function deleteComment(id){
+
+  if(
+    !confirm(
+      "Delete this comment?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const comments =
+    getComments().filter(
+      comment => comment.id !== id
+    );
+
+
+  localStorage.setItem(
+    commentKey,
+    JSON.stringify(
+      comments
+    )
+  );
+
+
+  renderComments();
+
+}
+
+
+/* =====================================
+   SHARE
+   ===================================== */
+
+function shareVideo(){
+
+  const url =
+    window.location.href;
+
+
+  if(navigator.share){
+
+    navigator.share({
+      title: videoName || "MiniTube video",
+      url: url
+    }).catch(
+      () => {}
+    );
+
+  }else if(
+    navigator.clipboard
+  ){
+
+    navigator.clipboard
+      .writeText(url)
+      .then(
+        () => alert(
+          "Link copied to clipboard!"
+        )
+      )
+      .catch(
+        () => prompt(
+          "Copy this link:",
+          url
+        )
+      );
+
+  }else{
+
+    prompt(
+      "Copy this link:",
+      url
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   NAVIGATION
+   ===================================== */
+
+function goBack(){
+
+  if(
+    window.history.length > 1
+  ){
+
+    window.history.back();
+
+  }else{
+
+    window.location.href =
+      "index.html";
+
+  }
+
+}
+
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+function goShorts(){
+
+  window.location.href =
+    "shorts.html";
+
+}
+
+
+function goSubscriptions(){
+
+  window.location.href =
+    "subscriptions.html";
+
+}
+
+
+function goYou(){
+
+  window.location.href =
+    "you.html";
+
+}
+
+
+/* =====================================
+   HELPERS
+   ===================================== */
+
+function formatNumber(num){
+
+  if(num >= 1000000){
+
+    return (
+      (num / 1000000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "M"
+    );
+
+  }
+
+
+  if(num >= 1000){
+
+    return (
+      (num / 1000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "K"
+    );
+
+  }
+
+
+  return String(num);
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+</script>
+
+</body>
+</html>
