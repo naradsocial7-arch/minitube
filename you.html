@@ -360,6 +360,10 @@ header{
   font-size:13px;
 
   margin-top:7px;
+
+  cursor:pointer;
+
+  display:inline-block;
 }
 
 .watchButton{
@@ -642,7 +646,7 @@ header{
   <div
     id="headerAvatar"
     class="avatarSmall"
-    onclick="window.location.href='notifications.html'"
+    onclick="window.location.href='settings.html'"
   >
     ?
   </div>
@@ -838,9 +842,9 @@ header{
 
   <button onclick="goShorts()">
 
-    <b>▶</b>
+    <b>▭</b>
 
-    Shorts
+    Clips
 
   </button>
 
@@ -1509,6 +1513,23 @@ function renderVideos(videos){
       card.querySelector(
         "video"
       );
+
+
+    const channelLabel =
+      card.querySelector(
+        ".meta"
+      );
+
+
+    channelLabel.addEventListener(
+      "click",
+      function(){
+
+        window.location.href =
+          "channel.html";
+
+      }
+    );
 
 
     const title =
