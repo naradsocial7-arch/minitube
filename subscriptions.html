@@ -163,6 +163,8 @@ header{
   flex-shrink:0;
 
   overflow:hidden;
+
+  cursor:pointer;
 }
 
 .channelAvatar img{
@@ -575,9 +577,9 @@ header{
 
   <button onclick="goShorts()">
 
-    <b>▶</b>
+    <b>▭</b>
 
-    Shorts
+    Clips
 
   </button>
 
@@ -933,7 +935,7 @@ function renderChannel(){
 
       <div class="channelBox">
 
-        <div class="channelAvatar">
+        <div class="channelAvatar" onclick="window.location.href='channel.html'">
 
           ${escapeHTML(
             initial
@@ -942,7 +944,7 @@ function renderChannel(){
         </div>
 
 
-        <div class="channelInfo">
+        <div class="channelInfo" onclick="window.location.href='channel.html'">
 
           <div class="channelName">
 
@@ -980,7 +982,7 @@ function renderChannel(){
 
     <div class="channelBox">
 
-      <div class="channelAvatar">
+      <div class="channelAvatar" onclick="window.location.href='channel.html'">
 
         ${escapeHTML(
           initial
@@ -989,7 +991,7 @@ function renderChannel(){
       </div>
 
 
-      <div class="channelInfo">
+      <div class="channelInfo" onclick="window.location.href='channel.html'">
 
         <div class="channelName">
 
