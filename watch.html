@@ -1169,6 +1169,63 @@ const API_BASE =
 
 
 /* =====================================
+   SUPABASE (video/channel metadata)
+   ===================================== */
+
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+
+/* =====================================
+   AUTH (same keys as index.html)
+   ===================================== */
+
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
+
+const USER_KEY =
+  "minitube_user";
+
+
+function getLoggedUser(){
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+  const savedUser =
+    localStorage.getItem(
+      USER_KEY
+    );
+
+
+  if(!token || !savedUser){
+
+    return null;
+
+  }
+
+
+  try{
+
+    return JSON.parse(
+      savedUser
+    );
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+/* =====================================
    VIDEO NAME
    ===================================== */
 
@@ -1193,6 +1250,74 @@ const safeVideoName =
 const commentKey =
   "minitube_comments_" +
   safeVideoName;
+
+
+/* =====================================
+   VIDEO METADATA (from database)
+   ===================================== */
+
+let videoMeta =
+  null;
+
+
+async function loadVideoMetadata(){
+
+  if(!videoName){
+
+    return null;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/videos?r2_key=eq." +
+        encodeURIComponent(videoName) +
+        "&select=id,title,description,owner_id,profiles(display_name)",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      return null;
+
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    return rows[0] || null;
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    return null;
+
+  }
+
+}
 
 
 const likeKey =
@@ -1732,10 +1857,133 @@ function recordHistory(){
 
 
 /* =====================================
+   APPLY VIDEO METADATA
+   ===================================== */
+
+function applyVideoMeta(){
+
+  const channelAvatar =
+    document.getElementById(
+      "channelAvatar"
+    );
+
+  const channelName =
+    document.getElementById(
+      "channelName"
+    );
+
+  const channelTextEl =
+    document.querySelector(
+      ".channelText"
+    );
+
+  const channelInfo =
+    document.querySelector(
+      ".channelInfo"
+    );
+
+  const channelSubscribe =
+    document.getElementById(
+      "channelSubscribe"
+    );
+
+
+  if(!videoMeta){
+
+    /*
+      No DB row found (maybe an
+      older, pre-database video) —
+      fall back to what we already
+      show, just clean up the title.
+    */
+
+    return;
+
+  }
+
+
+  title.textContent =
+    videoMeta.title ||
+    videoName;
+
+
+  const ownerName =
+    (videoMeta.profiles &&
+      videoMeta.profiles.display_name) ||
+    "Unknown creator";
+
+
+  channelName.textContent =
+    ownerName;
+
+
+  channelAvatar.textContent =
+    ownerName
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "?";
+
+
+  if(channelTextEl){
+
+    channelTextEl.textContent =
+      "MiniTube creator";
+
+  }
+
+
+  const currentUser =
+    getLoggedUser();
+
+  const isOwnVideo =
+    currentUser &&
+    currentUser.id === videoMeta.owner_id;
+
+
+  const channelHref =
+    isOwnVideo
+      ? "channel.html"
+      : "channel.html?id=" +
+        encodeURIComponent(
+          videoMeta.owner_id
+        );
+
+
+  channelAvatar.onclick =
+    function(){
+      window.location.href =
+        channelHref;
+    };
+
+
+  if(channelInfo){
+
+    channelInfo.onclick =
+      function(){
+        window.location.href =
+          channelHref;
+      };
+
+  }
+
+
+  if(channelSubscribe){
+
+    channelSubscribe.style.display =
+      isOwnVideo
+        ? "none"
+        : "block";
+
+  }
+
+}
+
+
+/* =====================================
    LOAD VIDEO
    ===================================== */
 
-function loadVideo(){
+async function loadVideo(){
 
   if(!videoName){
 
@@ -1761,8 +2009,22 @@ function loadVideo(){
     videoURL;
 
 
+  /*
+    Show something immediately
+    (raw filename) while the real
+    title/channel loads from the
+    database.
+  */
+
   title.textContent =
     videoName;
+
+
+  videoMeta =
+    await loadVideoMetadata();
+
+
+  applyVideoMeta();
 
 
   recordHistory();
