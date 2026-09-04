@@ -400,12 +400,16 @@ header{
   font-weight:bold;
 
   font-size:18px;
+
+  cursor:pointer;
 }
 
 .channelInfo{
   flex:1;
 
   min-width:0;
+
+  cursor:pointer;
 }
 
 .channelName{
@@ -1001,12 +1005,16 @@ header{
     <div
       class="channelAvatar"
       id="channelAvatar"
+      onclick="window.location.href='channel.html'"
     >
       M
     </div>
 
 
-    <div class="channelInfo">
+    <div
+      class="channelInfo"
+      onclick="window.location.href='channel.html'"
+    >
 
 
       <div
@@ -1117,8 +1125,8 @@ header{
 
   <button onclick="goShorts()">
 
-    <b>▶</b>
-    Shorts
+    <b>▭</b>
+    Clips
 
   </button>
 
@@ -1686,6 +1694,8 @@ function recordHistory(){
 
   let history =
     getHistory();
+
+
   /*
     Remove any existing entry
     for this video, then add it
