@@ -1498,11 +1498,41 @@ function renderVideos(videos){
       "card";
 
 
+    /*
+      New schema: the Worker now
+      returns database rows, not
+      raw R2 listings. The file
+      lives at r2_key; the human
+      title is `title`; the
+      uploader's name comes from
+      the joined profiles row.
+    */
+
+    const videoKey =
+      video.r2_key;
+
+    const displayTitle =
+      video.title ||
+      video.r2_key;
+
+    const ownerName =
+      (video.profiles &&
+        video.profiles.display_name) ||
+      "Unknown creator";
+
+    const currentUser =
+      getLoggedUser();
+
+    const isOwnVideo =
+      currentUser &&
+      currentUser.id === video.owner_id;
+
+
     const videoURL =
       API_BASE +
       "/video/" +
       encodeURIComponent(
-        video.name
+        videoKey
       );
 
 
@@ -1512,12 +1542,12 @@ function renderVideos(videos){
 
     const likeKey =
       "likes_" +
-      video.name;
+      videoKey;
 
 
     const likedKey =
       "liked_" +
-      video.name;
+      videoKey;
 
 
     let likes =
@@ -1540,7 +1570,7 @@ function renderVideos(videos){
 
     const viewsKey =
       "views_" +
-      video.name;
+      videoKey;
 
 
     let views =
@@ -1569,11 +1599,11 @@ function renderVideos(videos){
         <div
           class="title"
           title="Watch ${escapeHTML(
-            video.name
+            displayTitle
           )}"
         >
           ${escapeHTML(
-            video.name
+            displayTitle
           )}
         </div>
 
@@ -1581,16 +1611,22 @@ function renderVideos(videos){
         <div class="channelRow">
 
           <div class="channelName">
-            My Channel
+            ${escapeHTML(
+              ownerName
+            )}
           </div>
 
 
-          <button
-            class="subscribeBtn"
-            onclick="toggleSubscribe()"
-          >
-            Subscribe
-          </button>
+          ${
+            isOwnVideo
+              ? ""
+              : `<button
+                  class="subscribeBtn"
+                  onclick="toggleSubscribe()"
+                >
+                  Subscribe
+                </button>`
+          }
 
         </div>
 
@@ -1638,9 +1674,13 @@ function renderVideos(videos){
         </button>
 
 
-        <button class="delete">
-          Delete
-        </button>
+        ${
+          isOwnVideo
+            ? `<button class="delete">
+                Delete
+              </button>`
+            : ""
+        }
 
       </div>
 
@@ -1662,7 +1702,7 @@ function renderVideos(videos){
       function(){
 
         openWatch(
-          video.name
+          videoKey
         );
 
       }
@@ -1684,7 +1724,12 @@ function renderVideos(videos){
       function(){
 
         window.location.href =
-          "channel.html";
+          isOwnVideo
+            ? "channel.html"
+            : "channel.html?id=" +
+              encodeURIComponent(
+                video.owner_id
+              );
 
       }
     );
@@ -1705,7 +1750,7 @@ function renderVideos(videos){
       function(){
 
         openWatch(
-          video.name
+          videoKey
         );
 
       }
@@ -1727,7 +1772,7 @@ function renderVideos(videos){
       function(){
 
         openWatch(
-          video.name
+          videoKey
         );
 
       }
@@ -1802,7 +1847,10 @@ function renderVideos(videos){
 
 
     /* ===============================
-       DELETE
+       DELETE (only rendered for
+       your own videos — Worker/DB
+       would reject it anyway, but
+       we don't even show the button)
        =============================== */
 
     const deleteButton =
@@ -1811,18 +1859,22 @@ function renderVideos(videos){
       );
 
 
-    deleteButton.addEventListener(
-      "click",
-      async function(){
+    if(deleteButton){
 
-        await deleteVideo(
-          encodeURIComponent(
-            video.name
-          )
-        );
+      deleteButton.addEventListener(
+        "click",
+        async function(){
 
-      }
-    );
+          await deleteVideo(
+            encodeURIComponent(
+              videoKey
+            )
+          );
+
+        }
+      );
+
+    }
 
 
     container.appendChild(
@@ -2139,7 +2191,7 @@ function filterVideos(){
   const filtered =
     allVideos.filter(
       video =>
-        video.name
+        (video.title || video.r2_key || "")
           .toLowerCase()
           .includes(
             search
