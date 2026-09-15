@@ -717,23 +717,34 @@ header{
 
   <div class="categories">
 
-    <button class="active">
+    <button
+      class="active"
+      onclick="filterByCategory('All', this)"
+    >
       All
     </button>
 
-    <button>
+    <button
+      onclick="filterByCategory('Music', this)"
+    >
       Music
     </button>
 
-    <button>
+    <button
+      onclick="filterByCategory('Gaming', this)"
+    >
       Gaming
     </button>
 
-    <button>
+    <button
+      onclick="filterByCategory('News', this)"
+    >
       News
     </button>
 
-    <button>
+    <button
+      onclick="filterByCategory('Sports', this)"
+    >
       Sports
     </button>
 
@@ -804,13 +815,7 @@ header{
 
   <button onclick="goShorts()">
     <b>▶</b>
-    Shorts
-  </button>
-
-
-  <button onclick="window.location.href='upload.html'">
-    <b>＋</b>
-    Create
+    HORIZONTAL
   </button>
 
 
@@ -2372,6 +2377,64 @@ async function deleteVideo(name){
 /* =====================================
    SEARCH
    ===================================== */
+
+/* =====================================
+   CATEGORY FILTER
+   ===================================== */
+
+function filterByCategory(category, buttonEl){
+
+  document
+    .querySelectorAll(
+      ".categories button"
+    )
+    .forEach(button => {
+
+      button.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  buttonEl.classList.add(
+    "active"
+  );
+
+
+  if(category === "All"){
+
+    renderVideos(
+      allVideos
+    );
+
+    return;
+
+  }
+
+
+  const keyword =
+    category.toLowerCase();
+
+
+  const filtered =
+    allVideos.filter(video =>
+
+      (video.title || video.r2_key || "")
+        .toLowerCase()
+        .includes(
+          keyword
+        )
+
+    );
+
+
+  renderVideos(
+    filtered
+  );
+
+}
+
 
 function filterVideos(){
 
