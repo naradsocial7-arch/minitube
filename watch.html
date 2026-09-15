@@ -1401,8 +1401,6 @@ function initialize(){
 
   loadProfile();
 
-  updateSubscribe();
-
   loadVideo();
 
 }
@@ -1972,6 +1970,16 @@ function applyVideoMeta(){
 
   }
 
+
+  if(subscribeButton){
+
+    subscribeButton.style.display =
+      isOwnVideo
+        ? "none"
+        : "inline-flex";
+
+  }
+
 }
 
 
@@ -2024,6 +2032,9 @@ async function loadVideo(){
 
 
   updateLike();
+
+
+  updateSubscribe();
 
 
   loadComments();
@@ -2465,34 +2476,222 @@ async function updateLike(){
 
 
 /* =====================================
-   SUBSCRIBE SYSTEM
+   SUBSCRIBE SYSTEM (database-backed,
+   tied to the video's owner_id)
    ===================================== */
 
-function toggleSubscribe(){
-
-  const current =
-    localStorage.getItem(
-      subscribeKey
-    ) === "true";
+let isSubscribedToChannel =
+  false;
 
 
-  localStorage.setItem(
-    subscribeKey,
-    String(!current)
-  );
+async function getSubscribeState(){
+
+  if(
+    !videoMeta ||
+    !videoMeta.owner_id
+  ){
+
+    return false;
+
+  }
 
 
-  updateSubscribe();
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    return false;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        videoMeta.owner_id +
+        "&subscriber_id=eq." +
+        user.id +
+        "&select=subscriber_id",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      return false;
+
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    return rows.length > 0;
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    return false;
+
+  }
 
 }
 
 
-function updateSubscribe(){
+async function toggleSubscribe(){
+
+  if(
+    !videoMeta ||
+    !videoMeta.owner_id
+  ){
+
+    return;
+
+  }
+
+
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    const go =
+      confirm(
+        "Please login first to subscribe.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(user.id === videoMeta.owner_id){
+
+    return;
+
+  }
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  try{
+
+    if(isSubscribedToChannel){
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        videoMeta.owner_id +
+        "&subscriber_id=eq." +
+        user.id,
+
+        {
+          method:"DELETE",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token
+          }
+        }
+
+      );
+
+
+    }else{
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions",
+
+        {
+          method:"POST",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            channel_id: videoMeta.owner_id,
+            subscriber_id: user.id
+          })
+        }
+
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+
+  await updateSubscribe();
+
+}
+
+
+async function updateSubscribe(){
+
+  isSubscribedToChannel =
+    await getSubscribeState();
+
 
   const subscribed =
-    localStorage.getItem(
-      subscribeKey
-    ) === "true";
+    isSubscribedToChannel;
 
 
   subscribeButton.textContent =
