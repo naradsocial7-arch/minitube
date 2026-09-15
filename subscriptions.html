@@ -626,6 +626,17 @@ const API_BASE =
 
 
 /* =====================================
+   SUPABASE
+   ===================================== */
+
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+
+/* =====================================
    AUTH STORAGE
    ===================================== */
 
@@ -876,14 +887,116 @@ function updateHeader(){
 
 
 /* =====================================
-   SUBSCRIBE STATUS
+   SUBSCRIBED CHANNELS (database-backed)
    ===================================== */
 
-function isSubscribed(){
+async function loadSubscribedChannels(){
 
-  return localStorage.getItem(
-    SUBSCRIBE_KEY
-  ) === "true";
+  const user =
+    getUser();
+
+
+  if(!user){
+
+    return [];
+
+  }
+
+
+  try{
+
+    const subsResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?subscriber_id=eq." +
+        user.id +
+        "&select=channel_id",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
+
+
+    if(!subsResponse.ok){
+
+      return [];
+
+    }
+
+
+    const subs =
+      await subsResponse.json();
+
+
+    const channelIds =
+      subs.map(
+        row => row.channel_id
+      );
+
+
+    if(channelIds.length === 0){
+
+      return [];
+
+    }
+
+
+    const idFilter =
+      "(" +
+      channelIds.join(",") +
+      ")";
+
+
+    const profilesResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/profiles?id=in." +
+        idFilter +
+        "&select=id,display_name",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
+
+
+    const profiles =
+      profilesResponse.ok
+        ? await profilesResponse.json()
+        : [];
+
+
+    return profiles;
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    return [];
+
+  }
 
 }
 
@@ -892,12 +1005,58 @@ function isSubscribed(){
    UNSUBSCRIBE
    ===================================== */
 
-function unsubscribe(){
+async function unsubscribeFromChannel(channelId){
 
-  localStorage.setItem(
-    SUBSCRIBE_KEY,
-    "false"
-  );
+  const user =
+    getUser();
+
+
+  if(!user){
+
+    return;
+
+  }
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  try{
+
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/subscriptions?channel_id=eq." +
+      channelId +
+      "&subscriber_id=eq." +
+      user.id,
+
+      {
+        method:"DELETE",
+
+        headers:{
+          "apikey":
+            SUPABASE_ANON_KEY,
+
+          "Authorization":
+            "Bearer " +
+            token
+        }
+      }
+
+    );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
 
 
   renderPage();
@@ -906,10 +1065,10 @@ function unsubscribe(){
 
 
 /* =====================================
-   CHANNEL
+   CHANNELS LIST
    ===================================== */
 
-function renderChannel(){
+function renderChannels(channels){
 
   const area =
     document.getElementById(
@@ -917,127 +1076,136 @@ function renderChannel(){
     );
 
 
-  const name =
-    getUserName();
+  if(channels.length === 0){
 
-
-  const handle =
-    getHandle();
-
-
-  const initial =
-    getInitial();
-
-
-  if(!isSubscribed()){
-
-    area.innerHTML = `
-
-      <div class="channelBox">
-
-        <div class="channelAvatar" onclick="window.location.href='channel.html'">
-
-          ${escapeHTML(
-            initial
-          )}
-
-        </div>
-
-
-        <div class="channelInfo" onclick="window.location.href='channel.html'">
-
-          <div class="channelName">
-
-            ${escapeHTML(
-              name
-            )}
-
-          </div>
-
-
-          <div class="channelStatus">
-
-            ${escapeHTML(
-              handle
-            )}
-
-            &nbsp; • &nbsp;
-
-            You're not subscribed
-
-          </div>
-
-        </div>
-
-      </div>
-
-    `;
+    area.innerHTML =
+      "";
 
     return;
 
   }
 
 
-  area.innerHTML = `
+  area.innerHTML =
+    "";
 
-    <div class="channelBox">
 
-      <div class="channelAvatar" onclick="window.location.href='channel.html'">
+  channels.forEach(channel => {
 
-        ${escapeHTML(
-          initial
-        )}
+    const name =
+      channel.display_name ||
+      "MiniTube user";
 
+
+    const initial =
+      name
+        .trim()
+        .charAt(0)
+        .toUpperCase() || "M";
+
+
+    const box =
+      document.createElement(
+        "div"
+      );
+
+    box.className =
+      "channelBox";
+
+
+    box.innerHTML = `
+
+      <div class="channelAvatar">
+        ${escapeHTML(initial)}
       </div>
 
 
-      <div class="channelInfo" onclick="window.location.href='channel.html'">
+      <div class="channelInfo">
 
         <div class="channelName">
-
-          ${escapeHTML(
-            name
-          )}
-
+          ${escapeHTML(name)}
         </div>
 
 
         <div class="channelStatus">
-
-          ${escapeHTML(
-            handle
-          )}
-
-          &nbsp; • &nbsp;
-
           Subscribed
-
         </div>
 
       </div>
 
 
-      <button
-        class="unsubscribe"
-        onclick="unsubscribe()"
-      >
-
+      <button class="unsubscribe">
         Subscribed
-
       </button>
 
-    </div>
+    `;
 
-  `;
+
+    const channelInfo =
+      box.querySelector(
+        ".channelInfo"
+      );
+
+    const channelAvatar =
+      box.querySelector(
+        ".channelAvatar"
+      );
+
+
+    const goToChannel =
+      function(){
+
+        window.location.href =
+          "channel.html?id=" +
+          encodeURIComponent(
+            channel.id
+          );
+
+      };
+
+
+    channelInfo.addEventListener(
+      "click",
+      goToChannel
+    );
+
+    channelAvatar.addEventListener(
+      "click",
+      goToChannel
+    );
+
+
+    box.querySelector(
+      ".unsubscribe"
+    ).addEventListener(
+      "click",
+      function(event){
+
+        event.stopPropagation();
+
+        unsubscribeFromChannel(
+          channel.id
+        );
+
+      }
+    );
+
+
+    area.appendChild(
+      box
+    );
+
+  });
 
 }
 
 
 /* =====================================
-   LOAD VIDEOS
+   LOAD VIDEOS (from all subscribed
+   channels, combined)
    ===================================== */
 
-async function loadVideos(){
+async function loadVideos(channels){
 
   const container =
     document.getElementById(
@@ -1045,7 +1213,7 @@ async function loadVideos(){
     );
 
 
-  if(!isSubscribed()){
+  if(channels.length === 0){
 
     container.innerHTML = `
 
@@ -1057,16 +1225,16 @@ async function loadVideos(){
 
 
         <h2>
-          Subscribe to ${escapeHTML(
-            getUserName()
-          )}
+          No subscriptions yet
         </h2>
 
 
         <p>
 
-          Subscribe to see the latest
-          videos from this channel here.
+          Subscribe to channels from
+          their videos or channel page
+          to see their latest uploads
+          here.
 
         </p>
 
@@ -1095,10 +1263,37 @@ async function loadVideos(){
 
   try{
 
+    const channelIds =
+      channels.map(
+        channel => channel.id
+      );
+
+
+    const idFilter =
+      "(" +
+      channelIds.join(",") +
+      ")";
+
+
     const response =
       await fetch(
-        API_BASE +
-        "/api/videos"
+
+        SUPABASE_URL +
+        "/rest/v1/videos?owner_id=in." +
+        idFilter +
+        "&select=id,r2_key,title,owner_id,created_at&order=created_at.desc",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
       );
 
 
@@ -1115,8 +1310,21 @@ async function loadVideos(){
       await response.json();
 
 
+    const namesById = {};
+
+
+    channels.forEach(channel => {
+
+      namesById[channel.id] =
+        channel.display_name ||
+        "MiniTube user";
+
+    });
+
+
     renderVideos(
-      videos
+      videos,
+      namesById
     );
 
 
@@ -1156,9 +1364,7 @@ async function loadVideos(){
    DISPLAY VIDEOS
    ===================================== */
 
-function renderVideos(
-  videos
-){
+function renderVideos(videos, namesById){
 
   const container =
     document.getElementById(
@@ -1187,8 +1393,8 @@ function renderVideos(
 
         <p>
 
-          This channel hasn't uploaded
-          any videos yet.
+          Channels you're subscribed to
+          haven't uploaded anything yet.
 
         </p>
 
@@ -1222,8 +1428,13 @@ function renderVideos(
         API_BASE +
         "/video/" +
         encodeURIComponent(
-          video.name
+          video.r2_key
         );
+
+
+      const channelName =
+        namesById[video.owner_id] ||
+        "MiniTube user";
 
 
       card.innerHTML = `
@@ -1240,7 +1451,7 @@ function renderVideos(
           <div class="title">
 
             ${escapeHTML(
-              video.name
+              video.title || video.r2_key
             )}
 
           </div>
@@ -1249,7 +1460,7 @@ function renderVideos(
           <div class="meta">
 
             ${escapeHTML(
-              getUserName()
+              channelName
             )}
 
           </div>
@@ -1285,7 +1496,7 @@ function renderVideos(
         window.location.href =
           "watch.html?video=" +
           encodeURIComponent(
-            video.name
+            video.r2_key
           );
 
       }
@@ -1381,11 +1592,20 @@ function goYou(){
    RENDER PAGE
    ===================================== */
 
-function renderPage(){
+async function renderPage(){
 
-  renderChannel();
+  const channels =
+    await loadSubscribedChannels();
 
-  loadVideos();
+
+  renderChannels(
+    channels
+  );
+
+
+  loadVideos(
+    channels
+  );
 
 }
 
