@@ -1401,11 +1401,7 @@ function initialize(){
 
   loadProfile();
 
-  updateLike();
-
   updateSubscribe();
-
-  loadComments();
 
   loadVideo();
 
@@ -2027,6 +2023,12 @@ async function loadVideo(){
   applyVideoMeta();
 
 
+  updateLike();
+
+
+  loadComments();
+
+
   recordHistory();
 
 
@@ -2230,54 +2232,211 @@ function setupViewCounter(){
 
 
 /* =====================================
-   LIKE SYSTEM
+   LIKE SYSTEM (database-backed)
    ===================================== */
 
-function toggleLike(){
+async function getLikeState(){
 
-  let liked =
-    localStorage.getItem(
-      likedKey
-    ) === "true";
+  if(
+    !videoMeta ||
+    !videoMeta.id
+  ){
 
-
-  let likes =
-    Number(
-      localStorage.getItem(
-        likeKey
-      ) || 0
-    );
-
-
-  liked =
-    !liked;
-
-
-  if(liked){
-
-    likes++;
-
-  }else{
-
-    if(likes > 0){
-
-      likes--;
-
-    }
+    return {
+      count: 0,
+      likedByMe: false
+    };
 
   }
 
 
-  localStorage.setItem(
-    likedKey,
-    String(liked)
-  );
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/likes?video_id=eq." +
+        videoMeta.id +
+        "&select=user_id",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
 
 
-  localStorage.setItem(
-    likeKey,
-    String(likes)
-  );
+    if(!response.ok){
+
+      return {
+        count: 0,
+        likedByMe: false
+      };
+
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    const user =
+      getLoggedUser();
+
+
+    const likedByMe =
+      !!(
+        user &&
+        rows.some(
+          row => row.user_id === user.id
+        )
+      );
+
+
+    return {
+      count: rows.length,
+      likedByMe: likedByMe
+    };
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+    return {
+      count: 0,
+      likedByMe: false
+    };
+
+  }
+
+}
+
+
+async function toggleLike(){
+
+  if(
+    !videoMeta ||
+    !videoMeta.id
+  ){
+
+    return;
+
+  }
+
+
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    const go =
+      confirm(
+        "Please login first to like videos.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  const state =
+    await getLikeState();
+
+
+  try{
+
+    if(state.likedByMe){
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/likes?video_id=eq." +
+        videoMeta.id +
+        "&user_id=eq." +
+        user.id,
+
+        {
+          method:"DELETE",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token
+          }
+        }
+
+      );
+
+
+    }else{
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/likes",
+
+        {
+          method:"POST",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            video_id: videoMeta.id,
+            user_id: user.id
+          })
+        }
+
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
 
 
   updateLike();
@@ -2285,31 +2444,21 @@ function toggleLike(){
 }
 
 
-function updateLike(){
+async function updateLike(){
 
-  const liked =
-    localStorage.getItem(
-      likedKey
-    ) === "true";
-
-
-  const likes =
-    Number(
-      localStorage.getItem(
-        likeKey
-      ) || 0
-    );
+  const state =
+    await getLikeState();
 
 
   likeButton.textContent =
-    (liked ? "♥" : "♡") +
+    (state.likedByMe ? "♥" : "♡") +
     " Like " +
-    formatNumber(likes);
+    formatNumber(state.count);
 
 
   likeButton.classList.toggle(
     "liked",
-    liked
+    state.likedByMe
   );
 
 }
@@ -2392,38 +2541,82 @@ function updateSubscribe(){
 
 
 /* =====================================
-   COMMENTS
+   COMMENTS (database-backed)
    ===================================== */
 
-function getComments(){
+let commentsCache =
+  [];
+
+
+async function loadComments(){
+
+  if(
+    !videoMeta ||
+    !videoMeta.id
+  ){
+
+    renderComments(
+      []
+    );
+
+    return;
+
+  }
+
 
   try{
 
-    const saved =
-      localStorage.getItem(
-        commentKey
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/comments?video_id=eq." +
+        videoMeta.id +
+        "&select=id,text,created_at,user_id,profiles(display_name)&order=created_at.desc",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
       );
 
 
-    if(!saved){
-      return [];
+    if(!response.ok){
+
+      renderComments(
+        []
+      );
+
+      return;
+
     }
 
 
-    const parsed =
-      JSON.parse(saved);
+    commentsCache =
+      await response.json();
 
 
-    return Array.isArray(parsed)
-      ? parsed
-      : [];
+    renderComments(
+      commentsCache
+    );
 
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      error
+    );
 
-    return [];
+    renderComments(
+      []
+    );
 
   }
 
@@ -2434,7 +2627,7 @@ function getComments(){
    POST COMMENT
    ===================================== */
 
-function postComment(){
+async function postComment(){
 
   const text =
     commentInput.value.trim();
@@ -2453,58 +2646,115 @@ function postComment(){
   }
 
 
-  const comments =
-    getComments();
+  const user =
+    getLoggedUser();
 
 
-  const author =
+  if(!user){
+
+    const go =
+      confirm(
+        "Please login first to comment.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(
+    !videoMeta ||
+    !videoMeta.id
+  ){
+
+    alert(
+      "Comments aren't available for this video."
+    );
+
+    return;
+
+  }
+
+
+  const token =
     localStorage.getItem(
-      "minitube_username"
-    ) ||
-    "Main Player";
+      ACCESS_TOKEN_KEY
+    );
 
 
-  comments.unshift({
+  try{
 
-    id:
-      Date.now(),
+    const response =
+      await fetch(
 
-    author:
-      author,
+        SUPABASE_URL +
+        "/rest/v1/comments",
 
-    text:
-      text,
+        {
+          method:"POST",
 
-    date:
-      new Date().toLocaleString()
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
 
-  });
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            video_id: videoMeta.id,
+            user_id: user.id,
+            text: text
+          })
+        }
+
+      );
 
 
-  localStorage.setItem(
-    commentKey,
-    JSON.stringify(
-      comments
-    )
-  );
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      alert(
+        "Could not post comment: " +
+        errorText
+      );
+
+      return;
+
+    }
+
+
+  }catch(error){
+
+    alert(
+      "Could not post comment: network error."
+    );
+
+    return;
+
+  }
 
 
   commentInput.value =
     "";
 
 
-  renderComments();
-
-}
-
-
-/* =====================================
-   LOAD COMMENTS
-   ===================================== */
-
-function loadComments(){
-
-  renderComments();
+  loadComments();
 
 }
 
@@ -2513,7 +2763,7 @@ function loadComments(){
    DISPLAY COMMENTS
    ===================================== */
 
-function renderComments(){
+function renderComments(comments){
 
   const container =
     document.getElementById(
@@ -2525,10 +2775,6 @@ function renderComments(){
     document.getElementById(
       "commentCount"
     );
-
-
-  const comments =
-    getComments();
 
 
   count.textContent =
@@ -2559,6 +2805,10 @@ function renderComments(){
     "";
 
 
+  const currentUser =
+    getLoggedUser();
+
+
   comments.forEach(
     function(comment){
 
@@ -2572,9 +2822,15 @@ function renderComments(){
         "comment";
 
 
+      const authorName =
+        (comment.profiles &&
+          comment.profiles.display_name) ||
+        "MiniTube user";
+
+
       const author =
         escapeHTML(
-          comment.author
+          authorName
         );
 
 
@@ -2585,10 +2841,23 @@ function renderComments(){
 
 
       const initial =
-        (comment.author || "M")
+        authorName
           .trim()
           .charAt(0)
           .toUpperCase() || "M";
+
+
+      const dateLabel =
+        comment.created_at
+          ? new Date(
+              comment.created_at
+            ).toLocaleString()
+          : "";
+
+
+      const canDelete =
+        currentUser &&
+        currentUser.id === comment.user_id;
 
 
       element.innerHTML = `
@@ -2606,7 +2875,7 @@ function renderComments(){
             </div>
 
             <div class="commentDate">
-              ${escapeHTML(comment.date || "")}
+              ${escapeHTML(dateLabel)}
             </div>
 
           </div>
@@ -2619,31 +2888,39 @@ function renderComments(){
         </div>
 
 
-        <div class="commentActions">
-          <button class="deleteComment">
-            Delete
-          </button>
-        </div>
+        ${
+          canDelete
+            ? `<div class="commentActions">
+                <button class="deleteComment">
+                  Delete
+                </button>
+              </div>`
+            : ""
+        }
 
       `;
 
 
-      const deleteButton =
-        element.querySelector(
-          ".deleteComment"
-        );
+      if(canDelete){
 
-
-      deleteButton.addEventListener(
-        "click",
-        function(){
-
-          deleteComment(
-            comment.id
+        const deleteButton =
+          element.querySelector(
+            ".deleteComment"
           );
 
-        }
-      );
+
+        deleteButton.addEventListener(
+          "click",
+          function(){
+
+            deleteComment(
+              comment.id
+            );
+
+          }
+        );
+
+      }
 
 
       container.appendChild(
@@ -2660,7 +2937,7 @@ function renderComments(){
    DELETE COMMENT
    ===================================== */
 
-function deleteComment(id){
+async function deleteComment(id){
 
   if(
     !confirm(
@@ -2673,21 +2950,46 @@ function deleteComment(id){
   }
 
 
-  const comments =
-    getComments().filter(
-      comment => comment.id !== id
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
     );
 
 
-  localStorage.setItem(
-    commentKey,
-    JSON.stringify(
-      comments
-    )
-  );
+  try{
+
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/comments?id=eq." +
+      id,
+
+      {
+        method:"DELETE",
+
+        headers:{
+          "apikey":
+            SUPABASE_ANON_KEY,
+
+          "Authorization":
+            "Bearer " +
+            token
+        }
+      }
+
+    );
 
 
-  renderComments();
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+
+  loadComments();
 
 }
 
