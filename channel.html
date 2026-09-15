@@ -598,6 +598,17 @@ const API_BASE =
 
 
 /* =====================================
+   SUPABASE
+   ===================================== */
+
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+
+/* =====================================
    AUTH STORAGE
    ===================================== */
 
@@ -612,33 +623,211 @@ const USER_KEY =
 
 
 /* =====================================
-   SUBSCRIBE SYSTEM
+   SUBSCRIBE SYSTEM (database-backed,
+   per channel — set once we know
+   which channel we're viewing)
    ===================================== */
 
-const SUBSCRIBE_KEY =
-  "minitube_my_channel_subscribed";
+let targetChannelId =
+  null;
+
+let isSubscribedToChannel =
+  false;
+
+let subscriberCount =
+  0;
 
 
-function isSubscribed(){
+async function loadSubscribeState(){
 
-  return localStorage.getItem(
-    SUBSCRIBE_KEY
-  ) === "true";
+  if(!targetChannelId){
+
+    return;
+
+  }
+
+
+  try{
+
+    const countResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        targetChannelId +
+        "&select=subscriber_id",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
+
+
+    const rows =
+      countResponse.ok
+        ? await countResponse.json()
+        : [];
+
+
+    subscriberCount =
+      rows.length;
+
+
+    const user =
+      getLoggedUser();
+
+
+    isSubscribedToChannel =
+      !!(
+        user &&
+        rows.some(
+          row => row.subscriber_id === user.id
+        )
+      );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
 
 }
 
 
-function toggleSubscribe(){
+async function toggleSubscribe(){
 
-  const current =
-    isSubscribed();
+  if(!targetChannelId){
 
-  localStorage.setItem(
-    SUBSCRIBE_KEY,
-    String(!current)
-  );
+    return;
+
+  }
+
+
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    const go =
+      confirm(
+        "Please login first to subscribe.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(user.id === targetChannelId){
+
+    return;
+
+  }
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  try{
+
+    if(isSubscribedToChannel){
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        targetChannelId +
+        "&subscriber_id=eq." +
+        user.id,
+
+        {
+          method:"DELETE",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token
+          }
+        }
+
+      );
+
+
+    }else{
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions",
+
+        {
+          method:"POST",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            channel_id: targetChannelId,
+            subscriber_id: user.id
+          })
+        }
+
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+
+  await loadSubscribeState();
+
 
   updateSubscribeButton();
+
+
+  renderStats();
 
 }
 
@@ -650,37 +839,48 @@ function updateSubscribeButton(){
       "subscribeBtn"
     );
 
-  const subscribed =
-    isSubscribed();
+
+  if(
+    !targetChannelId ||
+    !button
+  ){
+
+    return;
+
+  }
+
+
+  const user =
+    getLoggedUser();
+
+
+  if(
+    user &&
+    user.id === targetChannelId
+  ){
+
+    button.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  button.style.display =
+    "block";
 
 
   button.classList.toggle(
     "subscribed",
-    subscribed
+    isSubscribedToChannel
   );
 
 
   button.textContent =
-    subscribed
+    isSubscribedToChannel
       ? "Subscribed"
       : "Subscribe";
-
-
-  const stats =
-    document.getElementById(
-      "channelStats"
-    );
-
-
-  const baseCount =
-    subscribed ? 1 : 0;
-
-
-  stats.dataset.subscribers =
-    String(baseCount);
-
-
-  renderStats();
 
 }
 
@@ -828,18 +1028,6 @@ function updateAccountUI(){
     );
 
 
-  const channelAvatar =
-    document.getElementById(
-      "channelAvatar"
-    );
-
-
-  const channelTitle =
-    document.getElementById(
-      "channelTitle"
-    );
-
-
   if(user){
 
     const name =
@@ -871,12 +1059,6 @@ function updateAccountUI(){
       "logoutButton"
     );
 
-    channelAvatar.textContent =
-      initial;
-
-    channelTitle.textContent =
-      name;
-
 
   }else{
 
@@ -901,12 +1083,6 @@ function updateAccountUI(){
     accountAction.classList.remove(
       "logoutButton"
     );
-
-    channelAvatar.textContent =
-      "M";
-
-    channelTitle.textContent =
-      "My Channel";
 
   }
 
@@ -1092,10 +1268,11 @@ function openWatch(videoName){
 
 
 /* =====================================
-   LOAD CHANNEL VIDEOS
+   LOAD CHANNEL (own, or ?id=<owner>)
    ===================================== */
 
-let allVideos = [];
+let allVideos =
+  [];
 
 
 async function loadChannel(){
@@ -1106,35 +1283,134 @@ async function loadChannel(){
     );
 
 
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  const paramId =
+    params.get(
+      "id"
+    );
+
+
+  const currentUser =
+    getLoggedUser();
+
+
+  targetChannelId =
+    paramId ||
+    (currentUser && currentUser.id) ||
+    null;
+
+
+  if(!targetChannelId){
+
+    document.getElementById(
+      "headerTitle"
+    ).textContent =
+      "Channel";
+
+    document.getElementById(
+      "channelTitle"
+    ).textContent =
+      "Not logged in";
+
+    status.innerHTML =
+      "Login to see your channel.";
+
+    document.getElementById(
+      "subscribeBtn"
+    ).style.display =
+      "none";
+
+    return;
+
+  }
+
+
   try{
 
     status.textContent =
-      "Loading videos...";
+      "Loading channel...";
 
 
-    const response =
+    const profileResponse =
       await fetch(
-        API_BASE +
-        "/api/videos"
+
+        SUPABASE_URL +
+        "/rest/v1/profiles?id=eq." +
+        targetChannelId +
+        "&select=id,display_name",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
       );
 
 
-    if(!response.ok){
+    const profiles =
+      profileResponse.ok
+        ? await profileResponse.json()
+        : [];
 
-      throw new Error(
-        "API error"
+
+    const profile =
+      profiles[0] ||
+      null;
+
+
+    renderChannelHeader(
+      profile
+    );
+
+
+    const videosResponse =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/videos?owner_id=eq." +
+        targetChannelId +
+        "&select=id,r2_key,title,created_at&order=created_at.desc",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
       );
-
-    }
 
 
     allVideos =
-      await response.json();
+      videosResponse.ok
+        ? await videosResponse.json()
+        : [];
 
 
     renderVideos(
       allVideos
     );
+
+
+    await loadSubscribeState();
+
+
+    updateSubscribeButton();
 
 
     renderStats();
@@ -1147,9 +1423,44 @@ async function loadChannel(){
     );
 
     status.textContent =
-      "Unable to load videos.";
+      "Unable to load this channel.";
 
   }
+
+}
+
+
+function renderChannelHeader(profile){
+
+  const name =
+    (profile &&
+      profile.display_name) ||
+    "MiniTube user";
+
+
+  const initial =
+    name
+      .trim()
+      .charAt(0)
+      .toUpperCase() || "M";
+
+
+  document.getElementById(
+    "channelAvatar"
+  ).textContent =
+    initial;
+
+
+  document.getElementById(
+    "channelTitle"
+  ).textContent =
+    name;
+
+
+  document.getElementById(
+    "headerTitle"
+  ).textContent =
+    name;
 
 }
 
@@ -1162,14 +1473,10 @@ function renderStats(){
     );
 
 
-  const subscribers =
-    isSubscribed() ? 1 : 0;
-
-
   stats.textContent =
-    formatNumber(subscribers) +
+    formatNumber(subscriberCount) +
     " subscriber" +
-    (subscribers === 1 ? "" : "s") +
+    (subscriberCount === 1 ? "" : "s") +
     " · " +
     allVideos.length +
     " video" +
@@ -1198,8 +1505,7 @@ function renderVideos(videos){
   if(videos.length === 0){
 
     status.innerHTML =
-      "No videos uploaded yet.<br><br>" +
-      "Upload your first video from the home page 🚀";
+      "No videos uploaded yet.";
 
     return;
 
@@ -1225,13 +1531,13 @@ function renderVideos(videos){
       API_BASE +
       "/video/" +
       encodeURIComponent(
-        video.name
+        video.r2_key
       );
 
 
     const viewsKey =
       "views_" +
-      video.name;
+      video.r2_key;
 
     const views =
       Number(
@@ -1254,7 +1560,7 @@ function renderVideos(videos){
 
         <div class="title">
           ${escapeHTML(
-            video.name
+            video.title || video.r2_key
           )}
         </div>
 
@@ -1273,7 +1579,7 @@ function renderVideos(videos){
       function(){
 
         openWatch(
-          video.name
+          video.r2_key
         );
 
       }
@@ -1342,7 +1648,6 @@ function escapeHTML(text){
    ===================================== */
 
 updateAccountUI();
-updateSubscribeButton();
 loadChannel();
 
 </script>
