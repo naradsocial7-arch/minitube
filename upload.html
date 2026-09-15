@@ -325,6 +325,21 @@ header{
       placeholder="Give your video a title"
     >
 
+    <div class="fieldLabel">
+      Category
+    </div>
+
+    <select
+      id="categorySelect"
+      class="fieldInput"
+    >
+      <option value="">No category</option>
+      <option value="Music">Music</option>
+      <option value="Gaming">Gaming</option>
+      <option value="News">News</option>
+      <option value="Sports">Sports</option>
+    </select>
+
     <div
       id="fileMeta"
       class="fileMeta"
@@ -641,6 +656,12 @@ function startUpload(){
     selectedFile.name;
 
 
+  const category =
+    document.getElementById(
+      "categorySelect"
+    ).value;
+
+
   const uploadButton =
     document.getElementById(
       "uploadButton"
@@ -703,6 +724,10 @@ function startUpload(){
     "/api/upload?filename=" +
     encodeURIComponent(
       rawName
+    ) +
+    "&category=" +
+    encodeURIComponent(
+      category
     )
   );
 
