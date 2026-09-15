@@ -839,6 +839,17 @@ const API_BASE =
 
 
 /* =====================================
+   SUPABASE
+   ===================================== */
+
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+
+/* =====================================
    AUTH STORAGE
    ===================================== */
 
@@ -853,49 +864,233 @@ const USER_KEY =
 
 
 /* =====================================
-   SUBSCRIBE SYSTEM
+   SUBSCRIBE SYSTEM (database-backed,
+   per channel)
    ===================================== */
 
-const SUBSCRIBE_KEY =
-  "minitube_my_channel_subscribed";
+let mySubscriptions =
+  new Set();
 
 
-function isSubscribed(){
+async function loadMySubscriptions(){
 
-  return localStorage.getItem(
-    SUBSCRIBE_KEY
-  ) === "true";
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    mySubscriptions =
+      new Set();
+
+    return;
+
+  }
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?subscriber_id=eq." +
+        user.id +
+        "&select=channel_id",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      return;
+
+    }
+
+
+    const rows =
+      await response.json();
+
+
+    mySubscriptions =
+      new Set(
+        rows.map(
+          row => row.channel_id
+        )
+      );
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
 
 }
 
 
-function toggleSubscribe(){
+async function toggleSubscribeChannel(channelId){
 
-  const current =
-    isSubscribed();
+  const user =
+    getLoggedUser();
 
-  localStorage.setItem(
-    SUBSCRIBE_KEY,
-    String(!current)
-  );
 
-  updateSubscribeButtons();
+  if(!user){
+
+    const go =
+      confirm(
+        "Please login first to subscribe.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(user.id === channelId){
+
+    return;
+
+  }
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  const alreadySubscribed =
+    mySubscriptions.has(
+      channelId
+    );
+
+
+  try{
+
+    if(alreadySubscribed){
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        channelId +
+        "&subscriber_id=eq." +
+        user.id,
+
+        {
+          method:"DELETE",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token
+          }
+        }
+
+      );
+
+
+      mySubscriptions.delete(
+        channelId
+      );
+
+
+    }else{
+
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions",
+
+        {
+          method:"POST",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            channel_id: channelId,
+            subscriber_id: user.id
+          })
+        }
+
+      );
+
+
+      mySubscriptions.add(
+        channelId
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+
+  applySubscribeStates();
 
 }
 
 
-function updateSubscribeButtons(){
+function applySubscribeStates(){
 
   const buttons =
     document.querySelectorAll(
       ".subscribeBtn"
     );
 
-  const subscribed =
-    isSubscribed();
-
 
   buttons.forEach(button => {
+
+    const channelId =
+      button.dataset.channelId;
+
+
+    const subscribed =
+      mySubscriptions.has(
+        channelId
+      );
+
 
     button.classList.toggle(
       "subscribed",
@@ -1622,7 +1817,8 @@ function renderVideos(videos){
               ? ""
               : `<button
                   class="subscribeBtn"
-                  onclick="toggleSubscribe()"
+                  data-channel-id="${video.owner_id}"
+                  onclick="toggleSubscribeChannel('${video.owner_id}')"
                 >
                   Subscribe
                 </button>`
@@ -1884,7 +2080,7 @@ function renderVideos(videos){
   });
 
 
-  updateSubscribeButtons();
+  applySubscribeStates();
 
 }
 
@@ -2249,6 +2445,10 @@ function escapeHTML(text){
 updateAccountUI();
 
 loadVideos();
+
+loadMySubscriptions().then(
+  applySubscribeStates
+);
 
 
 /*
