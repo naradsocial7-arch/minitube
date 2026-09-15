@@ -2413,18 +2413,10 @@ function filterByCategory(category, buttonEl){
   }
 
 
-  const keyword =
-    category.toLowerCase();
-
-
   const filtered =
     allVideos.filter(video =>
 
-      (video.title || video.r2_key || "")
-        .toLowerCase()
-        .includes(
-          keyword
-        )
+      video.category === category
 
     );
 
