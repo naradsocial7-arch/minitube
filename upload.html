@@ -361,7 +361,7 @@ header{
       <div class="progressLabel">
 
         <span id="progressText">
-          Uploading... 0%
+          Preparing video...
         </span>
 
         <span id="progressPercent">
@@ -392,6 +392,15 @@ header{
       id="statusMessage"
       class="statusMessage"
     ></div>
+
+    <button
+      id="skipCompressionButton"
+      class="changeButton"
+      style="display:none; margin-top:10px;"
+      onclick="uploadOriginalInstead()"
+    >
+      Upload without compression instead
+    </button>
 
   </div>
 
@@ -465,6 +474,12 @@ if(!isLoggedIn()){
    ===================================== */
 
 let selectedFile =
+  null;
+
+let selectedVideoWidth =
+  null;
+
+let selectedVideoHeight =
   null;
 
 
@@ -563,6 +578,12 @@ function handleFile(file){
   selectedFile =
     file;
 
+  selectedVideoWidth =
+    null;
+
+  selectedVideoHeight =
+    null;
+
 
   const previewVideo =
     document.getElementById(
@@ -573,6 +594,32 @@ function handleFile(file){
     URL.createObjectURL(
       file
     );
+
+
+  previewVideo.addEventListener(
+    "loadedmetadata",
+    function onMeta(){
+
+      selectedVideoWidth =
+        previewVideo.videoWidth;
+
+      selectedVideoHeight =
+        previewVideo.videoHeight;
+
+
+      previewVideo.removeEventListener(
+        "loadedmetadata",
+        onMeta
+      );
+
+    }
+  );
+
+
+  document.getElementById(
+    "skipCompressionButton"
+  ).style.display =
+    "none";
 
 
   document.getElementById(
@@ -637,10 +684,83 @@ function handleFile(file){
 
 
 /* =====================================
-   UPLOAD
+   UPLOAD ORCHESTRATION
+   (Preparing -> Compressing -> Uploading)
    ===================================== */
 
-function startUpload(){
+const COMPRESSION_THRESHOLD =
+  360;
+
+let lastRawName =
+  "";
+
+let lastCategory =
+  "";
+
+
+function waitForVideoMetadata(){
+
+  return new Promise(function(resolve){
+
+    if(
+      selectedVideoWidth &&
+      selectedVideoHeight
+    ){
+
+      resolve();
+
+      return;
+
+    }
+
+
+    const previewVideo =
+      document.getElementById(
+        "previewVideo"
+      );
+
+
+    if(previewVideo.readyState >= 1){
+
+      selectedVideoWidth =
+        previewVideo.videoWidth;
+
+      selectedVideoHeight =
+        previewVideo.videoHeight;
+
+      resolve();
+
+      return;
+
+    }
+
+
+    previewVideo.addEventListener(
+      "loadedmetadata",
+      function once(){
+
+        selectedVideoWidth =
+          previewVideo.videoWidth;
+
+        selectedVideoHeight =
+          previewVideo.videoHeight;
+
+        previewVideo.removeEventListener(
+          "loadedmetadata",
+          once
+        );
+
+        resolve();
+
+      }
+    );
+
+  });
+
+}
+
+
+async function startUpload(){
 
   if(!selectedFile){
 
@@ -649,14 +769,14 @@ function startUpload(){
   }
 
 
-  const rawName =
+  lastRawName =
     document.getElementById(
       "fileNameInput"
     ).value.trim() ||
     selectedFile.name;
 
 
-  const category =
+  lastCategory =
     document.getElementById(
       "categorySelect"
     ).value;
@@ -687,9 +807,201 @@ function startUpload(){
       "progressPercent"
     );
 
-  const statusMessage =
+
+  uploadButton.disabled =
+    true;
+
+  uploadButton.textContent =
+    "Preparing...";
+
+  progressWrap.classList.add(
+    "show"
+  );
+
+  progressFill.style.width =
+    "0%";
+
+  progressPercent.textContent =
+    "";
+
+  progressText.textContent =
+    "Preparing video...";
+
+  showStatus(
+    "",
+    ""
+  );
+
+  document.getElementById(
+    "skipCompressionButton"
+  ).style.display =
+    "none";
+
+
+  /*
+    PHASE 1: figure out the
+    video's real resolution.
+  */
+
+  await waitForVideoMetadata();
+
+
+  const shortSide =
+    (selectedVideoWidth && selectedVideoHeight)
+      ? Math.min(
+          selectedVideoWidth,
+          selectedVideoHeight
+        )
+      : null;
+
+
+  let fileToSend =
+    selectedFile;
+
+  let contentTypeToSend =
+    selectedFile.type ||
+    "video/mp4";
+
+
+  /*
+    PHASE 2: compress only if
+    the video is ABOVE 360p on
+    its shorter side. Videos at
+    or below 360p are uploaded
+    as-is (never upscaled).
+  */
+
+  if(
+    shortSide &&
+    shortSide > COMPRESSION_THRESHOLD
+  ){
+
+    progressText.textContent =
+      "Compressing to 360p...";
+
+    uploadButton.textContent =
+      "Compressing...";
+
+
+    try{
+
+      const compressed =
+        await compressTo360p(
+          selectedFile,
+          selectedVideoWidth,
+          selectedVideoHeight,
+          function(percent){
+
+            progressFill.style.width =
+              percent + "%";
+
+            progressPercent.textContent =
+              percent + "%";
+
+          }
+        );
+
+
+      fileToSend =
+        compressed;
+
+      contentTypeToSend =
+        "video/mp4";
+
+
+    }catch(error){
+
+      console.error(
+        error
+      );
+
+
+      uploadButton.disabled =
+        false;
+
+      uploadButton.textContent =
+        "Try again";
+
+      progressWrap.classList.remove(
+        "show"
+      );
+
+
+      showStatus(
+        "Couldn't compress this video on your device (" +
+        (error && error.message ? error.message : "compression error") +
+        "). You can still upload it at its original quality.",
+        "error"
+      );
+
+
+      document.getElementById(
+        "skipCompressionButton"
+      ).style.display =
+        "inline-block";
+
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+    PHASE 3: upload.
+  */
+
+  progressFill.style.width =
+    "0%";
+
+  progressPercent.textContent =
+    "0%";
+
+  progressText.textContent =
+    "Uploading...";
+
+  uploadButton.textContent =
+    "Uploading...";
+
+
+  performUpload(
+    fileToSend,
+    contentTypeToSend,
+    lastRawName,
+    lastCategory
+  );
+
+}
+
+
+/*
+  Fallback when compression fails:
+  upload the original file at its
+  native resolution instead.
+*/
+
+function uploadOriginalInstead(){
+
+  document.getElementById(
+    "skipCompressionButton"
+  ).style.display =
+    "none";
+
+
+  const uploadButton =
     document.getElementById(
-      "statusMessage"
+      "uploadButton"
+    );
+
+  const progressWrap =
+    document.getElementById(
+      "progressWrap"
+    );
+
+  const progressText =
+    document.getElementById(
+      "progressText"
     );
 
 
@@ -702,6 +1014,57 @@ function startUpload(){
   progressWrap.classList.add(
     "show"
   );
+
+  progressText.textContent =
+    "Uploading...";
+
+  showStatus(
+    "",
+    ""
+  );
+
+
+  performUpload(
+    selectedFile,
+    selectedFile.type || "video/mp4",
+    lastRawName,
+    lastCategory
+  );
+
+}
+
+
+/* =====================================
+   ACTUAL UPLOAD (unchanged XHR logic)
+   ===================================== */
+
+function performUpload(fileToSend, contentType, rawName, category){
+
+  const uploadButton =
+    document.getElementById(
+      "uploadButton"
+    );
+
+  const progressFill =
+    document.getElementById(
+      "progressFill"
+    );
+
+  const progressText =
+    document.getElementById(
+      "progressText"
+    );
+
+  const progressPercent =
+    document.getElementById(
+      "progressPercent"
+    );
+
+  const statusMessage =
+    document.getElementById(
+      "statusMessage"
+    );
+
 
   statusMessage.textContent =
     "";
@@ -734,7 +1097,7 @@ function startUpload(){
 
   xhr.setRequestHeader(
     "Content-Type",
-    selectedFile.type ||
+    contentType ||
     "video/mp4"
   );
 
@@ -810,11 +1173,11 @@ function startUpload(){
           "100%";
 
         progressText.textContent =
-          "Done";
+          "Upload complete";
 
 
         showStatus(
-          "Upload successful 🚀 Redirecting...",
+          "Upload complete 🚀 Redirecting...",
           "success"
         );
 
@@ -895,7 +1258,7 @@ function startUpload(){
 
 
   xhr.send(
-    selectedFile
+    fileToSend
   );
 
 }
@@ -952,6 +1315,249 @@ function formatFileSize(bytes){
 
 
   return bytes + " bytes";
+
+}
+
+
+/* =====================================
+   360p COMPRESSION (ffmpeg.wasm,
+   single-threaded core — this build
+   works on GitHub Pages with no
+   special server headers required)
+   ===================================== */
+
+let ffmpegLibraryPromise =
+  null;
+
+let ffmpegInstance =
+  null;
+
+
+function loadFFmpegLibrary(){
+
+  if(ffmpegLibraryPromise){
+
+    return ffmpegLibraryPromise;
+
+  }
+
+
+  ffmpegLibraryPromise =
+    new Promise(function(resolve, reject){
+
+      if(
+        window.FFmpeg &&
+        window.FFmpeg.createFFmpeg
+      ){
+
+        resolve();
+
+        return;
+
+      }
+
+
+      const script =
+        document.createElement(
+          "script"
+        );
+
+      script.src =
+        "https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js";
+
+      script.onload =
+        function(){
+
+          resolve();
+
+        };
+
+      script.onerror =
+        function(){
+
+          reject(
+            new Error(
+              "Could not load the video compression library."
+            )
+          );
+
+        };
+
+      document.head.appendChild(
+        script
+      );
+
+    });
+
+
+  return ffmpegLibraryPromise;
+
+}
+
+
+async function compressTo360p(file, width, height, onProgress){
+
+  await loadFFmpegLibrary();
+
+
+  if(
+    !window.FFmpeg ||
+    !window.FFmpeg.createFFmpeg
+  ){
+
+    throw new Error(
+      "compression library unavailable"
+    );
+
+  }
+
+
+  const { createFFmpeg, fetchFile } =
+    window.FFmpeg;
+
+
+  if(!ffmpegInstance){
+
+    ffmpegInstance =
+      createFFmpeg({
+
+        log: false,
+
+        corePath:
+          "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"
+
+      });
+
+  }
+
+
+  if(!ffmpegInstance.isLoaded()){
+
+    await ffmpegInstance.load();
+
+  }
+
+
+  ffmpegInstance.setProgress(
+    function(progress){
+
+      if(
+        !progress ||
+        typeof progress.ratio !== "number"
+      ){
+
+        return;
+
+      }
+
+
+      const percent =
+        Math.max(
+          0,
+          Math.min(
+            100,
+            Math.round(
+              progress.ratio * 100
+            )
+          )
+        );
+
+
+      if(onProgress){
+
+        onProgress(
+          percent
+        );
+
+      }
+
+    }
+  );
+
+
+  /*
+    Scale to a 360px SHORT side,
+    keeping the video's own
+    orientation (landscape or
+    portrait) and aspect ratio.
+    -2 keeps the other side even
+    (required by the h264 encoder).
+  */
+
+  const scaleFilter =
+    width >= height
+      ? "scale=-2:360"
+      : "scale=360:-2";
+
+
+  const extensionMatch =
+    (file.name || "").match(
+      /\.([a-zA-Z0-9]+)$/
+    );
+
+  const inputName =
+    "input." +
+    (extensionMatch ? extensionMatch[1] : "mp4");
+
+
+  ffmpegInstance.FS(
+    "writeFile",
+    inputName,
+    await fetchFile(
+      file
+    )
+  );
+
+
+  await ffmpegInstance.run(
+    "-i", inputName,
+    "-vf", scaleFilter,
+    "-c:v", "libx264",
+    "-preset", "veryfast",
+    "-crf", "28",
+    "-c:a", "aac",
+    "-b:a", "96k",
+    "-movflags", "+faststart",
+    "output.mp4"
+  );
+
+
+  const data =
+    ffmpegInstance.FS(
+      "readFile",
+      "output.mp4"
+    );
+
+
+  /*
+    Free the in-memory files so a
+    second upload on the same page
+    doesn't accumulate memory.
+  */
+
+  try{
+
+    ffmpegInstance.FS(
+      "unlink",
+      inputName
+    );
+
+    ffmpegInstance.FS(
+      "unlink",
+      "output.mp4"
+    );
+
+  }catch(error){
+
+    /* ignore cleanup errors */
+
+  }
+
+
+  return new Blob(
+    [data.buffer],
+    { type: "video/mp4" }
+  );
 
 }
 
