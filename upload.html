@@ -684,6 +684,278 @@ function handleFile(file){
 
 
 /* =====================================
+   CONTENT SAFETY CHECK
+   ===================================== */
+
+function extractFrames(file){
+
+  return new Promise(function(resolve, reject){
+
+    const video =
+      document.createElement(
+        "video"
+      );
+
+    video.preload =
+      "auto";
+
+    video.muted =
+      true;
+
+    video.playsInline =
+      true;
+
+
+    const objectURL =
+      URL.createObjectURL(
+        file
+      );
+
+    video.src =
+      objectURL;
+
+
+    const fractions =
+      [0.1, 0.4, 0.7];
+
+    let index =
+      0;
+
+    const frames =
+      [];
+
+
+    function cleanup(){
+
+      URL.revokeObjectURL(
+        objectURL
+      );
+
+    }
+
+
+    function captureNext(){
+
+      if(index >= fractions.length){
+
+        cleanup();
+
+        resolve(
+          frames
+        );
+
+        return;
+
+      }
+
+
+      video.currentTime =
+        Math.max(
+          0,
+          video.duration * fractions[index]
+        );
+
+    }
+
+
+    video.addEventListener(
+      "loadedmetadata",
+      function(){
+
+        if(
+          !video.duration ||
+          !isFinite(video.duration)
+        ){
+
+          cleanup();
+
+          reject(
+            new Error(
+              "Could not read this video."
+            )
+          );
+
+          return;
+
+        }
+
+
+        captureNext();
+
+      }
+    );
+
+
+    video.addEventListener(
+      "seeked",
+      function(){
+
+        try{
+
+          const canvas =
+            document.createElement(
+              "canvas"
+            );
+
+          const maxWidth =
+            480;
+
+          const scale =
+            Math.min(
+              1,
+              maxWidth / video.videoWidth
+            );
+
+          canvas.width =
+            Math.max(
+              1,
+              Math.round(video.videoWidth * scale)
+            );
+
+          canvas.height =
+            Math.max(
+              1,
+              Math.round(video.videoHeight * scale)
+            );
+
+
+          const ctx =
+            canvas.getContext(
+              "2d"
+            );
+
+          ctx.drawImage(
+            video,
+            0, 0,
+            canvas.width,
+            canvas.height
+          );
+
+
+          const dataURL =
+            canvas.toDataURL(
+              "image/jpeg",
+              0.6
+            );
+
+
+          frames.push(
+            dataURL.split(",")[1]
+          );
+
+
+        }catch(error){
+
+          /* skip this frame */
+
+        }
+
+
+        index++;
+
+        captureNext();
+
+      }
+    );
+
+
+    video.addEventListener(
+      "error",
+      function(){
+
+        cleanup();
+
+        reject(
+          new Error(
+            "Could not load this video for the safety check."
+          )
+        );
+
+      }
+    );
+
+  });
+
+}
+
+
+async function checkVideoSafety(file){
+
+  const frames =
+    await extractFrames(
+      file
+    );
+
+
+  if(!frames.length){
+
+    throw new Error(
+      "Could not analyze this video."
+    );
+
+  }
+
+
+  const response =
+    await fetch(
+
+      API_BASE +
+      "/api/moderate-video",
+
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json",
+
+          "Authorization":
+            "Bearer " +
+            localStorage.getItem(
+              ACCESS_TOKEN_KEY
+            )
+        },
+
+        body: JSON.stringify({
+          images: frames
+        })
+      }
+
+    );
+
+
+  let result = {};
+
+  try{
+
+    result =
+      await response.json();
+
+  }catch(error){
+
+    throw new Error(
+      "Unexpected response from the safety check."
+    );
+
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      result.error ||
+      "Safety check failed."
+    );
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =====================================
    UPLOAD ORCHESTRATION
    (Preparing -> Compressing -> Uploading)
    ===================================== */
@@ -695,6 +967,9 @@ let lastRawName =
   "";
 
 let lastCategory =
+  "";
+
+let lastModerationToken =
   "";
 
 
@@ -864,6 +1139,92 @@ async function startUpload(){
 
 
   /*
+    PHASE 1.5: content safety check.
+    This MUST pass before anything
+    is compressed or uploaded.
+  */
+
+  progressText.textContent =
+    "Checking video safety...";
+
+  uploadButton.textContent =
+    "Checking...";
+
+
+  let moderationResult;
+
+  try{
+
+    moderationResult =
+      await checkVideoSafety(
+        selectedFile
+      );
+
+  }catch(error){
+
+    uploadButton.disabled =
+      false;
+
+    uploadButton.textContent =
+      "Try again";
+
+    progressWrap.classList.remove(
+      "show"
+    );
+
+
+    showStatus(
+      "Could not complete the safety check: " +
+      (error && error.message ? error.message : "unknown error") +
+      ". Please try again.",
+      "error"
+    );
+
+
+    return;
+
+  }
+
+
+  if(!moderationResult.approved){
+
+    /*
+      Blocked or uncertain — do NOT
+      compress or upload. The user
+      must pick a different video;
+      this file stays disabled.
+    */
+
+    uploadButton.disabled =
+      true;
+
+    uploadButton.textContent =
+      moderationResult.verdict === "BLOCKED"
+        ? "Blocked"
+        : "Not approved";
+
+    progressWrap.classList.remove(
+      "show"
+    );
+
+
+    showStatus(
+      moderationResult.message ||
+      "This video cannot be uploaded.",
+      "error"
+    );
+
+
+    return;
+
+  }
+
+
+  lastModerationToken =
+    moderationResult.token;
+
+
+  /*
     PHASE 2: compress only if
     the video is ABOVE 360p on
     its shorter side. Videos at
@@ -969,7 +1330,8 @@ async function startUpload(){
     fileToSend,
     contentTypeToSend,
     lastRawName,
-    lastCategory
+    lastCategory,
+    lastModerationToken
   );
 
 }
@@ -1028,7 +1390,8 @@ function uploadOriginalInstead(){
     selectedFile,
     selectedFile.type || "video/mp4",
     lastRawName,
-    lastCategory
+    lastCategory,
+    lastModerationToken
   );
 
 }
@@ -1038,7 +1401,7 @@ function uploadOriginalInstead(){
    ACTUAL UPLOAD (unchanged XHR logic)
    ===================================== */
 
-function performUpload(fileToSend, contentType, rawName, category){
+function performUpload(fileToSend, contentType, rawName, category, moderationToken){
 
   const uploadButton =
     document.getElementById(
@@ -1091,6 +1454,10 @@ function performUpload(fileToSend, contentType, rawName, category){
     "&category=" +
     encodeURIComponent(
       category
+    ) +
+    "&moderation_token=" +
+    encodeURIComponent(
+      moderationToken || ""
     )
   );
 
