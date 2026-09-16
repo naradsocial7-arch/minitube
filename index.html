@@ -1512,11 +1512,19 @@ function startUpload(){
   }
 
 
-  document
-    .getElementById(
-      "file"
-    )
-    .click();
+  /*
+    Always go through upload.html —
+    that's the only upload path with
+    360p compression and the content
+    safety check wired in. The old
+    inline file-picker + uploadVideo()
+    flow below is no longer used from
+    here, but is left in place in case
+    anything else still calls it.
+  */
+
+  window.location.href =
+    "upload.html";
 
 }
 
