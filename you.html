@@ -14,6 +14,27 @@
 
 <style>
 
+/* =========================
+   GLOBAL
+   ========================= */
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
+
+
+/* =========================
+   EDIT CHANNEL MODAL
+   ========================= */
+
 .editChannelOverlay{
   display:none;
   position:fixed;
@@ -59,6 +80,10 @@
   outline:none;
 }
 
+.editFieldInput:focus{
+  border-color:#777;
+}
+
 .editChannelButtons{
   display:flex;
   gap:10px;
@@ -90,20 +115,6 @@
 .editSaveButton:disabled{
   opacity:.6;
   cursor:not-allowed;
-}
-
-</style>
-
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  background:#0f0f0f;
-  color:white;
-  font-family:Arial,sans-serif;
-  padding-bottom:80px;
 }
 
 
@@ -171,7 +182,6 @@ header{
    ========================= */
 
 .channelHeader{
-
   margin:20px;
 
   background:
@@ -193,7 +203,6 @@ header{
 }
 
 .channelAvatar{
-
   width:90px;
   height:90px;
 
@@ -214,12 +223,11 @@ header{
 
 .channelDetails{
   flex:1;
+  min-width:0;
 }
 
 .channelName{
-
   font-size:26px;
-
   font-weight:800;
 
   margin-bottom:7px;
@@ -228,7 +236,6 @@ header{
 }
 
 .handle{
-
   color:#aaa;
 
   font-size:14px;
@@ -237,7 +244,6 @@ header{
 }
 
 .channelStats{
-
   color:#aaa;
 
   font-size:14px;
@@ -251,7 +257,6 @@ header{
 }
 
 .channelActions{
-
   margin-top:15px;
 
   display:flex;
@@ -262,7 +267,6 @@ header{
 }
 
 .subscribeButton{
-
   border:0;
 
   border-radius:22px;
@@ -279,7 +283,6 @@ header{
 }
 
 .subscribeButton.subscribed{
-
   background:#292929;
 
   color:white;
@@ -288,7 +291,6 @@ header{
 }
 
 .editButton{
-
   border:1px solid #555;
 
   background:#292929;
@@ -304,13 +306,16 @@ header{
   cursor:pointer;
 }
 
+.editButton:hover{
+  background:#383838;
+}
+
 
 /* =========================
    QUICK LINKS
    ========================= */
 
 .quickLinks{
-
   display:grid;
 
   grid-template-columns:repeat(4,1fr);
@@ -323,7 +328,6 @@ header{
 }
 
 .quickLink{
-
   background:#181818;
 
   border-radius:14px;
@@ -336,19 +340,16 @@ header{
 }
 
 .quickLink:hover{
-
   background:#1f1f1f;
 }
 
 .quickLinkIcon{
-
   font-size:22px;
 
   margin-bottom:8px;
 }
 
 .quickLinkLabel{
-
   font-size:12px;
 
   color:#ccc;
@@ -362,12 +363,10 @@ header{
    ========================= */
 
 .content{
-
   padding:0 20px;
 }
 
 .sectionTitle{
-
   font-size:21px;
 
   font-weight:bold;
@@ -378,7 +377,6 @@ header{
 }
 
 .grid{
-
   display:grid;
 
   grid-template-columns:
@@ -391,7 +389,6 @@ header{
 }
 
 .card{
-
   background:#181818;
 
   border-radius:16px;
@@ -400,7 +397,6 @@ header{
 }
 
 .card video{
-
   width:100%;
 
   aspect-ratio:16/9;
@@ -413,12 +409,10 @@ header{
 }
 
 .info{
-
   padding:12px;
 }
 
 .title{
-
   font-size:17px;
 
   font-weight:bold;
@@ -429,12 +423,10 @@ header{
 }
 
 .title:hover{
-
   text-decoration:underline;
 }
 
 .meta{
-
   color:#999;
 
   font-size:13px;
@@ -447,7 +439,6 @@ header{
 }
 
 .watchButton{
-
   margin-top:12px;
 
   background:#292929;
@@ -464,7 +455,6 @@ header{
 }
 
 .watchButton:hover{
-
   background:#383838;
 }
 
@@ -474,7 +464,6 @@ header{
    ========================= */
 
 .empty{
-
   background:#181818;
 
   border:1px solid #292929;
@@ -487,20 +476,17 @@ header{
 }
 
 .emptyIcon{
-
   font-size:45px;
 
   margin-bottom:15px;
 }
 
 .empty h2{
-
   margin:
     0 0 8px;
 }
 
 .empty p{
-
   color:#999;
 
   line-height:1.5;
@@ -509,7 +495,6 @@ header{
 }
 
 .homeButton{
-
   margin-top:20px;
 
   background:#ff0033;
@@ -535,7 +520,6 @@ header{
    ========================= */
 
 .logoutButton{
-
   margin-top:15px;
 
   background:transparent;
@@ -554,7 +538,6 @@ header{
 }
 
 .logoutButton:hover{
-
   background:#ff0033;
 
   color:white;
@@ -566,7 +549,6 @@ header{
    ========================= */
 
 .bottom{
-
   position:fixed;
 
   bottom:0;
@@ -589,7 +571,6 @@ header{
 }
 
 .bottom button{
-
   background:none;
 
   border:0;
@@ -602,7 +583,6 @@ header{
 }
 
 .bottom button b{
-
   display:block;
 
   font-size:22px;
@@ -613,7 +593,6 @@ header{
 }
 
 .bottom .active{
-
   color:white;
 }
 
@@ -625,7 +604,6 @@ header{
 @media(max-width:600px){
 
   .channelHeader{
-
     margin:16px;
 
     padding:20px;
@@ -634,7 +612,6 @@ header{
   }
 
   .channelAvatar{
-
     width:70px;
     height:70px;
 
@@ -642,17 +619,14 @@ header{
   }
 
   .channelName{
-
     font-size:21px;
   }
 
   .content{
-
     padding:0 16px;
   }
 
   .grid{
-
     grid-template-columns:1fr;
   }
 
@@ -666,12 +640,10 @@ header{
 @media(max-width:380px){
 
   .channelHeader{
-
     gap:12px;
   }
 
   .channelAvatar{
-
     width:60px;
     height:60px;
 
@@ -679,12 +651,10 @@ header{
   }
 
   .channelName{
-
     font-size:18px;
   }
 
   .handle{
-
     font-size:13px;
   }
 
@@ -711,17 +681,12 @@ header{
     ‹
   </button>
 
-
   <div class="logo">
-
     <span>▶</span>
     MiniTube
-
   </div>
 
-
   <div class="spacer"></div>
-
 
   <div
     id="headerAvatar"
@@ -740,7 +705,6 @@ header{
 
 <section class="channelHeader">
 
-
   <div
     id="channelAvatar"
     class="channelAvatar"
@@ -748,9 +712,7 @@ header{
     ?
   </div>
 
-
   <div class="channelDetails">
-
 
     <div
       id="channelName"
@@ -759,14 +721,12 @@ header{
       Loading...
     </div>
 
-
     <div
       id="handle"
       class="handle"
     >
       @user
     </div>
-
 
     <div class="channelStats">
 
@@ -776,7 +736,6 @@ header{
       >
         Loading...
       </div>
-
 
       <div style="margin-top:6px;">
 
@@ -798,32 +757,23 @@ header{
 
     </div>
 
-
     <div class="channelActions">
-
 
       <button
         class="editButton"
         onclick="editChannel()"
       >
-
         Edit Channel
-
       </button>
-
 
       <button
         class="logoutButton"
         onclick="logout()"
       >
-
         Logout
-
       </button>
 
-
     </div>
-
 
   </div>
 
@@ -877,20 +827,13 @@ header{
 
 <section class="content">
 
-
   <div class="sectionTitle">
-
     Your Videos
-
   </div>
-
 
   <div id="videos">
-
     Loading videos...
-
   </div>
-
 
 </section>
 
@@ -901,49 +844,29 @@ header{
 
 <div class="bottom">
 
-
   <button onclick="goHome()">
-
     <b>⌂</b>
-
     Home
-
   </button>
-
 
   <button onclick="goShorts()">
-
     <b>▶</b>
-
     Shorts
-
   </button>
-
 
   <button onclick="window.location.href='upload.html'">
-
     <b>＋</b>
-
     Create
-
   </button>
-
 
   <button onclick="goSubscriptions()">
-
     <b>□</b>
-
     Subscriptions
-
   </button>
 
-
   <button class="active">
-
     <b>●</b>
-
     You
-
   </button>
 
 </div>
@@ -1001,7 +924,6 @@ header{
 
 <script>
 
-
 /* =====================================
    CLOUDFLARE WORKER
    ===================================== */
@@ -1040,13 +962,9 @@ function getRawUser(){
       "minitube_user"
     );
 
-
   if(!userData){
-
     return null;
-
   }
-
 
   try{
 
@@ -1074,12 +992,6 @@ function loadLoggedInUser(){
       "minitube_user"
     );
 
-
-  /*
-     Agar login nahi hai
-     to login page par bhejo
-  */
-
   if(!userData){
 
     window.location.href =
@@ -1089,7 +1001,6 @@ function loadLoggedInUser(){
 
   }
 
-
   try{
 
     const user =
@@ -1097,31 +1008,17 @@ function loadLoggedInUser(){
         userData
       );
 
-
     const email =
       user.email ||
       "";
-
-
-    /*
-       Supabase login ke waqt
-       display_name yahan save hua tha
-    */
 
     const metadata =
       user.user_metadata ||
       {};
 
-
     let displayName =
       metadata.display_name ||
       "";
-
-
-    /*
-       Agar display name nahi mila
-       to email ka username use karo
-    */
 
     if(!displayName){
 
@@ -1131,22 +1028,12 @@ function loadLoggedInUser(){
 
     }
 
-
-    /*
-       First letter
-    */
-
     const firstLetter =
       displayName
         .trim()
         .charAt(0)
         .toUpperCase() ||
       "U";
-
-
-    /*
-       Handle
-    */
 
     let cleanHandle =
       displayName
@@ -1156,12 +1043,6 @@ function loadLoggedInUser(){
           ""
         )
         .slice(0,20);
-
-
-    /*
-       Agar naam Hindi/special characters
-       ki wajah se empty ho gaya
-    */
 
     if(!cleanHandle){
 
@@ -1177,20 +1058,12 @@ function loadLoggedInUser(){
 
     }
 
-
     if(!cleanHandle){
 
       cleanHandle =
         "user";
 
     }
-
-
-    /*
-       ==============================
-       UPDATE HEADER AVATAR
-       ==============================
-    */
 
     document
       .getElementById(
@@ -1199,26 +1072,12 @@ function loadLoggedInUser(){
       .textContent =
       firstLetter;
 
-
-    /*
-       ==============================
-       UPDATE CHANNEL AVATAR
-       ==============================
-    */
-
     document
       .getElementById(
         "channelAvatar"
       )
       .textContent =
       firstLetter;
-
-
-    /*
-       ==============================
-       UPDATE CHANNEL NAME
-       ==============================
-    */
 
     document
       .getElementById(
@@ -1227,26 +1086,12 @@ function loadLoggedInUser(){
       .textContent =
       displayName;
 
-
-    /*
-       ==============================
-       UPDATE HANDLE
-       ==============================
-    */
-
     document
       .getElementById(
         "handle"
       )
       .textContent =
       "@" + cleanHandle;
-
-
-    /*
-       ==============================
-       UPDATE EMAIL
-       ==============================
-    */
 
     document
       .getElementById(
@@ -1255,9 +1100,7 @@ function loadLoggedInUser(){
       .textContent =
       email;
 
-
     return true;
-
 
   }catch(error){
 
@@ -1265,12 +1108,6 @@ function loadLoggedInUser(){
       "User data error:",
       error
     );
-
-
-    /*
-       Corrupt login data
-       delete karke login par bhejo
-    */
 
     localStorage.removeItem(
       "minitube_user"
@@ -1284,10 +1121,8 @@ function loadLoggedInUser(){
       "minitube_refresh_token"
     );
 
-
     window.location.href =
       "login.html";
-
 
     return false;
 
@@ -1307,13 +1142,9 @@ async function loadSubscriberCount(userId){
       "subscriberCount"
     );
 
-
   if(!userId){
-
     return;
-
   }
-
 
   try{
 
@@ -1338,21 +1169,15 @@ async function loadSubscriberCount(userId){
 
       );
 
-
     if(!response.ok){
-
       return;
-
     }
-
 
     const rows =
       await response.json();
 
-
     countEl.textContent =
       rows.length;
-
 
   }catch(error){
 
@@ -1374,29 +1199,22 @@ function editChannel(){
   const user =
     getRawUser();
 
-
   if(!user){
-
     return;
-
   }
-
 
   const metadata =
     user.user_metadata ||
     {};
 
-
   const currentName =
     metadata.display_name ||
     "";
-
 
   document.getElementById(
     "editNameInput"
   ).value =
     currentName;
-
 
   document
     .getElementById(
@@ -1427,13 +1245,9 @@ async function saveChannelEdit(){
   const user =
     getRawUser();
 
-
   if(!user){
-
     return;
-
   }
-
 
   const newName =
     document
@@ -1441,7 +1255,6 @@ async function saveChannelEdit(){
         "editNameInput"
       )
       .value.trim();
-
 
   if(!newName){
 
@@ -1453,12 +1266,10 @@ async function saveChannelEdit(){
 
   }
 
-
   const saveButton =
     document.getElementById(
       "saveChannelButton"
     );
-
 
   saveButton.disabled =
     true;
@@ -1466,12 +1277,10 @@ async function saveChannelEdit(){
   saveButton.textContent =
     "Saving...";
 
-
   const token =
     localStorage.getItem(
       "minitube_access_token"
     );
-
 
   try{
 
@@ -1507,7 +1316,6 @@ async function saveChannelEdit(){
 
       );
 
-
     if(!response.ok){
 
       const errorText =
@@ -1528,16 +1336,6 @@ async function saveChannelEdit(){
 
     }
 
-
-    /*
-      Also keep the local
-      auth-session copy of the
-      user in sync, so the name
-      updates everywhere right
-      away without needing to
-      log in again.
-    */
-
     if(!user.user_metadata){
 
       user.user_metadata = {};
@@ -1552,12 +1350,9 @@ async function saveChannelEdit(){
       JSON.stringify(user)
     );
 
-
     closeEditChannel();
 
-
     loadLoggedInUser();
-
 
   }catch(error){
 
@@ -1587,37 +1382,21 @@ function logout(){
       "Are you sure you want to logout?"
     );
 
-
   if(!confirmLogout){
-
     return;
-
   }
-
-
-  /*
-     Supabase login information
-     remove karo
-  */
 
   localStorage.removeItem(
     "minitube_user"
   );
 
-
   localStorage.removeItem(
     "minitube_access_token"
   );
 
-
   localStorage.removeItem(
     "minitube_refresh_token"
   );
-
-
-  /*
-     Login page
-  */
 
   window.location.href =
     "login.html";
@@ -1636,36 +1415,28 @@ async function loadVideos(){
       "videos"
     );
 
-
   const count =
     document.getElementById(
       "videoCount"
     );
 
-
   const user =
     getRawUser();
 
-
   if(!user){
-
     return;
-
   }
-
 
   try{
 
     container.innerHTML =
       "Loading videos...";
 
-
     const response =
       await fetch(
         API_BASE +
         "/api/videos"
       );
-
 
     if(!response.ok){
 
@@ -1675,25 +1446,21 @@ async function loadVideos(){
 
     }
 
-
     const allVideos =
       await response.json();
 
-
     const myVideos =
       allVideos.filter(
-        video => video.owner_id === user.id
+        video =>
+          video.owner_id === user.id
       );
-
 
     count.textContent =
       myVideos.length;
 
-
     renderVideos(
       myVideos
     );
-
 
   }catch(error){
 
@@ -1702,10 +1469,8 @@ async function loadVideos(){
       error
     );
 
-
     count.textContent =
       "0";
-
 
     container.innerHTML = `
 
@@ -1743,7 +1508,6 @@ function renderVideos(videos){
       "videos"
     );
 
-
   if(!Array.isArray(videos)){
 
     container.innerHTML = `
@@ -1770,7 +1534,6 @@ function renderVideos(videos){
 
   }
 
-
   if(videos.length === 0){
 
     container.innerHTML = `
@@ -1781,17 +1544,14 @@ function renderVideos(videos){
           📹
         </div>
 
-
         <h2>
           No videos yet
         </h2>
-
 
         <p>
           Upload a video from the Home
           page and it will appear here.
         </p>
-
 
         <button
           class="homeButton"
@@ -1808,22 +1568,17 @@ function renderVideos(videos){
 
   }
 
-
   container.innerHTML = "";
 
-
   videos.forEach(video => {
-
 
     const card =
       document.createElement(
         "div"
       );
 
-
     card.className =
       "card";
-
 
     const videoURL =
       API_BASE +
@@ -1831,7 +1586,6 @@ function renderVideos(videos){
       encodeURIComponent(
         video.r2_key
       );
-
 
     const viewsKey =
       "views_" +
@@ -1844,7 +1598,6 @@ function renderVideos(videos){
         ) || 0
       );
 
-
     card.innerHTML = `
 
       <video
@@ -1852,9 +1605,7 @@ function renderVideos(videos){
         src="${videoURL}"
       ></video>
 
-
       <div class="info">
-
 
         <div class="title">
 
@@ -1864,13 +1615,11 @@ function renderVideos(videos){
 
         </div>
 
-
         <div class="meta">
 
           ${formatNumber(views)} views
 
         </div>
-
 
         <button
           class="watchButton"
@@ -1880,29 +1629,24 @@ function renderVideos(videos){
 
         </button>
 
-
       </div>
 
     `;
-
 
     const videoElement =
       card.querySelector(
         "video"
       );
 
-
     const title =
       card.querySelector(
         ".title"
       );
 
-
     const watchButton =
       card.querySelector(
         ".watchButton"
       );
-
 
     function openVideo(){
 
@@ -1914,24 +1658,20 @@ function renderVideos(videos){
 
     }
 
-
     videoElement.addEventListener(
       "click",
       openVideo
     );
-
 
     title.addEventListener(
       "click",
       openVideo
     );
 
-
     watchButton.addEventListener(
       "click",
       openVideo
     );
-
 
     container.appendChild(
       card
@@ -1959,7 +1699,6 @@ function formatNumber(num){
 
   }
 
-
   if(num >= 1000){
 
     return (
@@ -1970,7 +1709,6 @@ function formatNumber(num){
     );
 
   }
-
 
   return String(num);
 
@@ -2044,12 +1782,10 @@ function goSubscriptions(){
 const loggedIn =
   loadLoggedInUser();
 
-
 if(loggedIn){
 
   const rawUser =
     getRawUser();
-
 
   if(rawUser){
 
@@ -2058,7 +1794,6 @@ if(loggedIn){
     );
 
   }
-
 
   loadVideos();
 
