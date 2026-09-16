@@ -261,6 +261,51 @@ header{
 
 
 /* =========================
+   TAB PANELS
+   ========================= */
+
+.tabPanel{
+  display:none;
+}
+
+.tabPanel.show{
+  display:block;
+}
+
+.comingSoon{
+  text-align:center;
+  color:#aaa;
+  padding:60px 24px;
+}
+
+.comingSoon strong{
+  display:block;
+  color:white;
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.aboutBox{
+  padding:22px;
+  color:#ccc;
+  font-size:14px;
+  line-height:1.8;
+}
+
+.aboutBox .aboutLabel{
+  color:#999;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin-top:18px;
+}
+
+.aboutBox .aboutLabel:first-child{
+  margin-top:0;
+}
+
+
+/* =========================
    VIDEO GRID
    ========================= */
 
@@ -403,7 +448,10 @@ header{
       ←
     </button>
 
-    <div class="headerTitle">
+    <div
+      id="headerTitle"
+      class="headerTitle"
+    >
       Channel
     </div>
 
@@ -528,25 +576,102 @@ header{
 
 <div class="tabs">
 
-  <button class="active">
+  <button
+    class="active"
+    onclick="switchTab('videos', this)"
+  >
     Videos
+  </button>
+
+  <button
+    onclick="switchTab('posts', this)"
+  >
+    Posts
+  </button>
+
+  <button
+    onclick="switchTab('ratings', this)"
+  >
+    Ratings
+  </button>
+
+  <button
+    onclick="switchTab('about', this)"
+  >
+    About
   </button>
 
 </div>
 
 
+<!-- VIDEOS PANEL -->
+
 <div
-  id="status"
-  class="status"
+  id="videosPanel"
+  class="tabPanel show"
 >
-  Loading videos...
+
+  <div
+    id="status"
+    class="status"
+  >
+    Loading videos...
+  </div>
+
+
+  <div
+    id="videos"
+    class="grid"
+  ></div>
+
 </div>
 
 
+<!-- POSTS PANEL -->
+
 <div
-  id="videos"
-  class="grid"
-></div>
+  id="postsPanel"
+  class="tabPanel"
+>
+
+  <div class="comingSoon">
+    <strong>No posts yet</strong>
+    This channel hasn't shared any posts.
+  </div>
+
+</div>
+
+
+<!-- RATINGS PANEL -->
+
+<div
+  id="ratingsPanel"
+  class="tabPanel"
+>
+
+  <div class="comingSoon">
+    <strong>No ratings yet</strong>
+    Video ratings will show up here.
+  </div>
+
+</div>
+
+
+<!-- ABOUT PANEL -->
+
+<div
+  id="aboutPanel"
+  class="tabPanel"
+>
+
+  <div
+    id="aboutBox"
+    class="aboutBox"
+  >
+    Loading...
+  </div>
+
+</div>
 
 
 <!-- =========================
@@ -629,6 +754,9 @@ const USER_KEY =
    ===================================== */
 
 let targetChannelId =
+  null;
+
+let currentProfile =
   null;
 
 let isSubscribedToChannel =
@@ -1342,7 +1470,7 @@ async function loadChannel(){
         SUPABASE_URL +
         "/rest/v1/profiles?id=eq." +
         targetChannelId +
-        "&select=id,display_name",
+        "&select=id,display_name,bio,created_at",
 
         {
           headers:{
@@ -1367,6 +1495,10 @@ async function loadChannel(){
     const profile =
       profiles[0] ||
       null;
+
+
+    currentProfile =
+      profile;
 
 
     renderChannelHeader(
@@ -1416,6 +1548,11 @@ async function loadChannel(){
     renderStats();
 
 
+    renderAboutPanel(
+      currentProfile
+    );
+
+
   }catch(error){
 
     console.error(
@@ -1429,6 +1566,134 @@ async function loadChannel(){
 
 }
 
+
+/* =====================================
+   TABS
+   ===================================== */
+
+function switchTab(name, buttonEl){
+
+  document
+    .querySelectorAll(
+      ".tabs button"
+    )
+    .forEach(button => {
+
+      button.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  buttonEl.classList.add(
+    "active"
+  );
+
+
+  document
+    .querySelectorAll(
+      ".tabPanel"
+    )
+    .forEach(panel => {
+
+      panel.classList.remove(
+        "show"
+      );
+
+    });
+
+
+  document
+    .getElementById(
+      name + "Panel"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+function renderAboutPanel(profile){
+
+  const box =
+    document.getElementById(
+      "aboutBox"
+    );
+
+
+  if(!profile){
+
+    box.innerHTML =
+      "Channel information isn't available.";
+
+    return;
+
+  }
+
+
+  const name =
+    profile.display_name ||
+    "MiniTube user";
+
+
+  const bio =
+    profile.bio ||
+    "This creator hasn't added a bio yet.";
+
+
+  const joined =
+    profile.created_at
+      ? new Date(
+          profile.created_at
+        ).toLocaleDateString(
+          undefined,
+          {
+            day:"numeric",
+            month:"long",
+            year:"numeric"
+          }
+        )
+      : "";
+
+
+  box.innerHTML = `
+
+    <div class="aboutLabel">
+      Description
+    </div>
+
+    <div>
+      ${escapeHTML(bio)}
+    </div>
+
+
+    <div class="aboutLabel">
+      Stats
+    </div>
+
+    <div>
+      ${formatNumber(subscriberCount)} subscribers
+      · ${allVideos.length} videos
+    </div>
+
+
+    ${
+      joined
+        ? `<div class="aboutLabel">Joined</div>
+           <div>${escapeHTML(joined)}</div>`
+        : ""
+    }
+
+  `;
+
+}
+
+
+/* =====================================
+   CHANNEL HEADER
+   ===================================== */
 
 function renderChannelHeader(profile){
 
