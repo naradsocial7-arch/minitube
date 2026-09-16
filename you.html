@@ -14,6 +14,86 @@
 
 <style>
 
+.editChannelOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:200;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.editChannelOverlay.show{
+  display:flex;
+}
+
+.editChannelBox{
+  width:100%;
+  max-width:480px;
+  background:#181818;
+  border-radius:20px 20px 0 0;
+  padding:20px;
+}
+
+.editChannelTitle{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:16px;
+}
+
+.editFieldLabel{
+  color:#999;
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.editFieldInput{
+  width:100%;
+  background:#222;
+  border:1px solid #444;
+  border-radius:10px;
+  padding:12px 14px;
+  color:white;
+  font-size:15px;
+  outline:none;
+}
+
+.editChannelButtons{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+
+.editCancelButton{
+  flex:1;
+  background:#292929;
+  border:0;
+  color:white;
+  border-radius:10px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.editSaveButton{
+  flex:1;
+  background:#ff0033;
+  border:0;
+  color:white;
+  border-radius:10px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.editSaveButton:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+</style>
+
 *{
   box-sizing:border-box;
 }
@@ -708,9 +788,11 @@ header{
 
         &nbsp; • &nbsp;
 
-        <span id="subscriberStatus">
-          Not subscribed
+        <span id="subscriberCount">
+          0
         </span>
+
+        subscribers
 
       </div>
 
@@ -718,17 +800,6 @@ header{
 
 
     <div class="channelActions">
-
-
-      <button
-        id="subscribeButton"
-        class="subscribeButton"
-        onclick="toggleSubscribe()"
-      >
-
-        Subscribe
-
-      </button>
 
 
       <button
@@ -878,6 +949,56 @@ header{
 </div>
 
 
+<!-- =========================
+     EDIT CHANNEL MODAL
+     ========================= -->
+
+<div
+  id="editChannelOverlay"
+  class="editChannelOverlay"
+  onclick="if(event.target === this){ closeEditChannel(); }"
+>
+
+  <div class="editChannelBox">
+
+    <div class="editChannelTitle">
+      Edit channel
+    </div>
+
+    <div class="editFieldLabel">
+      Channel name
+    </div>
+
+    <input
+      id="editNameInput"
+      class="editFieldInput"
+      placeholder="Your channel name"
+    >
+
+    <div class="editChannelButtons">
+
+      <button
+        class="editCancelButton"
+        onclick="closeEditChannel()"
+      >
+        Cancel
+      </button>
+
+      <button
+        id="saveChannelButton"
+        class="editSaveButton"
+        onclick="saveChannelEdit()"
+      >
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
 
 
@@ -890,11 +1011,56 @@ const API_BASE =
 
 
 /* =====================================
+   SUPABASE
+   ===================================== */
+
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+
+/* =====================================
    SUBSCRIBE SYSTEM
    ===================================== */
 
 const SUBSCRIBE_KEY =
   "minitube_my_channel_subscribed";
+
+
+/* =====================================
+   RAW USER OBJECT
+   ===================================== */
+
+function getRawUser(){
+
+  const userData =
+    localStorage.getItem(
+      "minitube_user"
+    );
+
+
+  if(!userData){
+
+    return null;
+
+  }
+
+
+  try{
+
+    return JSON.parse(
+      userData
+    );
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
 
 
 /* =====================================
@@ -1131,86 +1297,70 @@ function loadLoggedInUser(){
 
 
 /* =====================================
-   CHECK SUBSCRIPTION
+   REAL SUBSCRIBER COUNT
    ===================================== */
 
-function isSubscribed(){
+async function loadSubscriberCount(userId){
 
-  return localStorage.getItem(
-    SUBSCRIBE_KEY
-  ) === "true";
-
-}
-
-
-/* =====================================
-   UPDATE SUBSCRIBE BUTTON
-   ===================================== */
-
-function updateSubscribeButton(){
-
-  const button =
+  const countEl =
     document.getElementById(
-      "subscribeButton"
+      "subscriberCount"
     );
 
 
-  const status =
-    document.getElementById(
-      "subscriberStatus"
-    );
+  if(!userId){
 
-
-  const subscribed =
-    isSubscribed();
-
-
-  if(subscribed){
-
-    button.textContent =
-      "Subscribed";
-
-    button.classList.add(
-      "subscribed"
-    );
-
-    status.textContent =
-      "Subscribed";
-
-  }else{
-
-    button.textContent =
-      "Subscribe";
-
-    button.classList.remove(
-      "subscribed"
-    );
-
-    status.textContent =
-      "Not subscribed";
+    return;
 
   }
 
-}
+
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        userId +
+        "&select=subscriber_id",
+
+        {
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              SUPABASE_ANON_KEY
+          }
+        }
+
+      );
 
 
-/* =====================================
-   TOGGLE SUBSCRIBE
-   ===================================== */
+    if(!response.ok){
 
-function toggleSubscribe(){
+      return;
 
-  const subscribed =
-    isSubscribed();
+    }
 
 
-  localStorage.setItem(
-    SUBSCRIBE_KEY,
-    String(!subscribed)
-  );
+    const rows =
+      await response.json();
 
 
-  updateSubscribeButton();
+    countEl.textContent =
+      rows.length;
+
+
+  }catch(error){
+
+    console.error(
+      error
+    );
+
+  }
 
 }
 
@@ -1221,9 +1371,207 @@ function toggleSubscribe(){
 
 function editChannel(){
 
-  alert(
-    "Channel editing will be added later."
-  );
+  const user =
+    getRawUser();
+
+
+  if(!user){
+
+    return;
+
+  }
+
+
+  const metadata =
+    user.user_metadata ||
+    {};
+
+
+  const currentName =
+    metadata.display_name ||
+    "";
+
+
+  document.getElementById(
+    "editNameInput"
+  ).value =
+    currentName;
+
+
+  document
+    .getElementById(
+      "editChannelOverlay"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+function closeEditChannel(){
+
+  document
+    .getElementById(
+      "editChannelOverlay"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+async function saveChannelEdit(){
+
+  const user =
+    getRawUser();
+
+
+  if(!user){
+
+    return;
+
+  }
+
+
+  const newName =
+    document
+      .getElementById(
+        "editNameInput"
+      )
+      .value.trim();
+
+
+  if(!newName){
+
+    alert(
+      "Please enter a channel name."
+    );
+
+    return;
+
+  }
+
+
+  const saveButton =
+    document.getElementById(
+      "saveChannelButton"
+    );
+
+
+  saveButton.disabled =
+    true;
+
+  saveButton.textContent =
+    "Saving...";
+
+
+  const token =
+    localStorage.getItem(
+      "minitube_access_token"
+    );
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/profiles?id=eq." +
+        user.id,
+
+        {
+          method:"PATCH",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=minimal"
+          },
+
+          body: JSON.stringify({
+            display_name: newName
+          })
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+      alert(
+        "Could not save changes: " +
+        errorText
+      );
+
+      saveButton.disabled =
+        false;
+
+      saveButton.textContent =
+        "Save";
+
+      return;
+
+    }
+
+
+    /*
+      Also keep the local
+      auth-session copy of the
+      user in sync, so the name
+      updates everywhere right
+      away without needing to
+      log in again.
+    */
+
+    if(!user.user_metadata){
+
+      user.user_metadata = {};
+
+    }
+
+    user.user_metadata.display_name =
+      newName;
+
+    localStorage.setItem(
+      "minitube_user",
+      JSON.stringify(user)
+    );
+
+
+    closeEditChannel();
+
+
+    loadLoggedInUser();
+
+
+  }catch(error){
+
+    alert(
+      "Could not save changes: network error."
+    );
+
+    saveButton.disabled =
+      false;
+
+    saveButton.textContent =
+      "Save";
+
+  }
 
 }
 
@@ -1295,6 +1643,17 @@ async function loadVideos(){
     );
 
 
+  const user =
+    getRawUser();
+
+
+  if(!user){
+
+    return;
+
+  }
+
+
   try{
 
     container.innerHTML =
@@ -1317,16 +1676,22 @@ async function loadVideos(){
     }
 
 
-    const videos =
+    const allVideos =
       await response.json();
 
 
+    const myVideos =
+      allVideos.filter(
+        video => video.owner_id === user.id
+      );
+
+
     count.textContent =
-      videos.length;
+      myVideos.length;
 
 
     renderVideos(
-      videos
+      myVideos
     );
 
 
@@ -1464,7 +1829,19 @@ function renderVideos(videos){
       API_BASE +
       "/video/" +
       encodeURIComponent(
-        video.name
+        video.r2_key
+      );
+
+
+    const viewsKey =
+      "views_" +
+      video.r2_key;
+
+    const views =
+      Number(
+        localStorage.getItem(
+          viewsKey
+        ) || 0
       );
 
 
@@ -1482,7 +1859,7 @@ function renderVideos(videos){
         <div class="title">
 
           ${escapeHTML(
-            video.name
+            video.title || video.r2_key
           )}
 
         </div>
@@ -1490,7 +1867,7 @@ function renderVideos(videos){
 
         <div class="meta">
 
-          My Channel
+          ${formatNumber(views)} views
 
         </div>
 
@@ -1515,23 +1892,6 @@ function renderVideos(videos){
       );
 
 
-    const channelLabel =
-      card.querySelector(
-        ".meta"
-      );
-
-
-    channelLabel.addEventListener(
-      "click",
-      function(){
-
-        window.location.href =
-          "channel.html";
-
-      }
-    );
-
-
     const title =
       card.querySelector(
         ".title"
@@ -1549,7 +1909,7 @@ function renderVideos(videos){
       window.location.href =
         "watch.html?video=" +
         encodeURIComponent(
-          video.name
+          video.r2_key
         );
 
     }
@@ -1585,6 +1945,37 @@ function renderVideos(videos){
 /* =====================================
    SECURITY
    ===================================== */
+
+function formatNumber(num){
+
+  if(num >= 1000000){
+
+    return (
+      (num / 1000000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "M"
+    );
+
+  }
+
+
+  if(num >= 1000){
+
+    return (
+      (num / 1000)
+        .toFixed(1)
+        .replace(/\.0$/, "")
+      + "K"
+    );
+
+  }
+
+
+  return String(num);
+
+}
+
 
 function escapeHTML(text){
 
@@ -1656,7 +2047,18 @@ const loggedIn =
 
 if(loggedIn){
 
-  updateSubscribeButton();
+  const rawUser =
+    getRawUser();
+
+
+  if(rawUser){
+
+    loadSubscriberCount(
+      rawUser.id
+    );
+
+  }
+
 
   loadVideos();
 
