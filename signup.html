@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MiniTube - Sign Up</title>
+  <title>MiniTube - Login</title>
 
   <style>
     * {
@@ -58,7 +58,36 @@
       text-align: center;
       color: #aaa;
       font-size: 14px;
-      margin-bottom: 25px;
+      margin-bottom: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      background: #101010;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: #999;
+      padding: 11px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .tab.active {
+      background: #292929;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .field {
+      margin-bottom: 17px;
     }
 
     label {
@@ -66,10 +95,6 @@
       margin-bottom: 7px;
       font-size: 14px;
       color: #ddd;
-    }
-
-    .field {
-      margin-bottom: 17px;
     }
 
     input {
@@ -109,52 +134,23 @@
       font-size: 12px;
     }
 
-    .show-btn:hover {
-      background: #383838;
-    }
-
-    .terms {
-      display: flex;
-      align-items: flex-start;
-      gap: 9px;
-      margin: 5px 0 18px;
-      color: #999;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .terms input {
-      width: auto;
-      margin-top: 3px;
-      accent-color: red;
-    }
-
-    .terms a {
-      color: #ddd;
-      text-decoration: none;
-    }
-
-    .terms a:hover {
-      text-decoration: underline;
-    }
-
-    .signup-btn {
+    .main-btn {
       width: 100%;
       padding: 14px;
       border: 0;
       border-radius: 10px;
       background: #ff0000;
-      color: white;
+      color: #fff;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .signup-btn:hover {
+    .main-btn:hover {
       background: #d90000;
     }
 
-    .signup-btn:disabled {
+    .main-btn:disabled {
       opacity: .6;
       cursor: not-allowed;
     }
@@ -182,20 +178,20 @@
       color: #ffb1b1;
     }
 
-    .login-link {
+    .signup-box {
       text-align: center;
       margin-top: 22px;
       color: #999;
       font-size: 14px;
     }
 
-    .login-link a {
-      color: white;
+    .signup-box a {
+      color: #fff;
       font-weight: bold;
       text-decoration: none;
     }
 
-    .login-link a:hover {
+    .signup-box a:hover {
       text-decoration: underline;
     }
 
@@ -211,7 +207,7 @@
     }
 
     .back a:hover {
-      color: white;
+      color: #fff;
     }
 
     .loading {
@@ -219,7 +215,7 @@
       width: 17px;
       height: 17px;
       border: 2px solid rgba(255,255,255,.35);
-      border-top-color: white;
+      border-top-color: #fff;
       border-radius: 50%;
       animation: spin .7s linear infinite;
       vertical-align: middle;
@@ -258,17 +254,577 @@
 
     <div class="card">
 
-      <h1>Create your account</h1>
+      <h1>Welcome back</h1>
 
       <div class="subtitle">
-        Join MiniTube and start sharing videos.
+        Login to your MiniTube account
       </div>
 
-      <form id="signupForm">
+      <!-- LOGIN / SIGNUP TABS -->
+
+      <div class="tabs">
+
+        <button
+          type="button"
+          class="tab active"
+          id="loginTab"
+          onclick="showLogin()"
+        >
+          Login
+        </button>
+
+        <button
+          type="button"
+          class="tab"
+          id="signupTab"
+          onclick="goToSignup()"
+        >
+          Create Account
+        </button>
+
+      </div>
+
+
+      <!-- LOGIN FORM -->
+
+      <form id="loginForm">
 
         <div class="field">
-          <label for="displayName">Display Name</label>
+
+          <label for="email">
+            Email
+          </label>
+
           <input
-            id="displayName"
-            type="text"
-            placeholder
+            id="email"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="password">
+            Password
+          </label>
+
+          <div class="password-wrap">
+
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            >
+
+            <button
+              type="button"
+              class="show-btn"
+              onclick="togglePassword()"
+            >
+              Show
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="loginBtn"
+          class="main-btn"
+          type="submit"
+        >
+
+          <span
+            id="loading"
+            class="loading"
+          ></span>
+
+          <span id="btnText">
+            Login
+          </span>
+
+        </button>
+
+
+        <div
+          id="message"
+          class="message"
+        ></div>
+
+      </form>
+
+
+      <div class="signup-box">
+
+        Don't have an account?
+
+        <a
+          href="signup.html"
+          onclick="goToSignup(event)"
+        >
+          Create Account
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="back">
+
+      <a href="index.html">
+        ← Back to MiniTube
+      </a>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+  /* =========================
+     SUPABASE CONFIG
+  ========================= */
+
+  const SUPABASE_URL =
+    "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+  const SUPABASE_ANON_KEY =
+    "sb_publishable_tM8cIA2W3eZVc9AOtCtCtKWg_Suywus3I";
+
+  const MINITUBE_URL =
+    "https://naradsocial7-arch.github.io/minitube/";
+
+
+  /* =========================
+     ELEMENTS
+  ========================= */
+
+  const loginForm =
+    document.getElementById("loginForm");
+
+  const loginBtn =
+    document.getElementById("loginBtn");
+
+  const btnText =
+    document.getElementById("btnText");
+
+  const loading =
+    document.getElementById("loading");
+
+  const message =
+    document.getElementById("message");
+
+
+  /* =========================
+     SIGNUP CONNECTION
+  ========================= */
+
+  function goToSignup(event) {
+
+    if (event) {
+      event.preventDefault();
+    }
+
+    window.location.href = "signup.html";
+
+  }
+
+
+  function showLogin() {
+
+    document.getElementById("loginTab")
+      .classList.add("active");
+
+    document.getElementById("signupTab")
+      .classList.remove("active");
+
+  }
+
+
+  /* =========================
+     PASSWORD SHOW / HIDE
+  ========================= */
+
+  function togglePassword() {
+
+    const password =
+      document.getElementById("password");
+
+    const button =
+      document.querySelector(".show-btn");
+
+
+    if (password.type === "password") {
+
+      password.type = "text";
+      button.textContent = "Hide";
+
+    } else {
+
+      password.type = "password";
+      button.textContent = "Show";
+
+    }
+
+  }
+
+
+  /* =========================
+     MESSAGE
+  ========================= */
+
+  function showMessage(text, type) {
+
+    message.textContent = text;
+    message.className =
+      "message " + type;
+
+  }
+
+
+  function clearMessage() {
+
+    message.textContent = "";
+    message.className = "message";
+
+  }
+
+
+  /* =========================
+     LOADING
+  ========================= */
+
+  function setLoading(isLoading) {
+
+    loginBtn.disabled = isLoading;
+
+
+    if (isLoading) {
+
+      loading.style.display =
+        "inline-block";
+
+      btnText.textContent =
+        "Logging in...";
+
+    } else {
+
+      loading.style.display =
+        "none";
+
+      btnText.textContent =
+        "Login";
+
+    }
+
+  }
+
+
+  /* =========================
+     SAFE REDIRECT
+  ========================= */
+
+  function getRedirectTarget() {
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    const next =
+      params.get("next");
+
+
+    /*
+      Only allow internal MiniTube
+      relative pages.
+    */
+
+    if (
+      next &&
+      next.startsWith("/") &&
+      !next.startsWith("//") &&
+      !next.includes("://")
+    ) {
+
+      return next;
+
+    }
+
+
+    return MINITUBE_URL;
+
+  }
+
+
+  /* =========================
+     SAVE SESSION
+  ========================= */
+
+  function saveSession(data) {
+
+    if (!data?.access_token) {
+      return false;
+    }
+
+    localStorage.setItem(
+      "minitube_access_token",
+      data.access_token
+    );
+
+
+    localStorage.setItem(
+      "minitube_refresh_token",
+      data.refresh_token || ""
+    );
+
+
+    if (data.user) {
+
+      localStorage.setItem(
+        "minitube_user",
+        JSON.stringify(data.user)
+      );
+
+    }
+
+
+    return true;
+
+  }
+
+
+  /* =========================
+     FRIENDLY ERRORS
+  ========================= */
+
+  function getAuthError(error) {
+
+    const msg =
+      String(
+        error?.message ||
+        error?.msg ||
+        error ||
+        ""
+      ).toLowerCase();
+
+
+    if (
+      msg.includes("invalid login") ||
+      msg.includes("invalid credentials")
+    ) {
+
+      return "Incorrect email or password.";
+
+    }
+
+
+    if (
+      msg.includes("email not confirmed")
+    ) {
+
+      return "Please confirm your email before logging in.";
+
+    }
+
+
+    if (
+      msg.includes("too many requests") ||
+      msg.includes("rate limit")
+    ) {
+
+      return "Too many login attempts. Please wait and try again.";
+
+    }
+
+
+    return (
+      error?.message ||
+      "Login failed. Please try again."
+    );
+
+  }
+
+
+  /* =========================
+     LOGIN
+  ========================= */
+
+  loginForm.addEventListener(
+    "submit",
+    async function(e) {
+
+      e.preventDefault();
+
+      clearMessage();
+
+
+      const email =
+        document
+          .getElementById("email")
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById("password")
+          .value;
+
+
+      if (!email || !password) {
+
+        showMessage(
+          "Please enter your email and password.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      setLoading(true);
+
+
+      try {
+
+        const response =
+          await fetch(
+            SUPABASE_URL +
+            "/auth/v1/token?grant_type=password",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPABASE_ANON_KEY
+              },
+
+              body: JSON.stringify({
+                email: email,
+                password: password
+              })
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data?.error_description ||
+            data?.msg ||
+            data?.message ||
+            "Login failed."
+          );
+
+        }
+
+
+        if (!saveSession(data)) {
+
+          throw new Error(
+            "Login succeeded but session data was not received."
+          );
+
+        }
+
+
+        showMessage(
+          "Login successful! Opening MiniTube...",
+          "success"
+        );
+
+
+        setTimeout(
+          function() {
+
+            window.location.href =
+              getRedirectTarget();
+
+          },
+          700
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "MiniTube login error:",
+          error
+        );
+
+
+        showMessage(
+          getAuthError(error),
+          "error"
+        );
+
+
+        setLoading(false);
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     ALREADY LOGGED IN
+  ========================= */
+
+  function checkExistingSession() {
+
+    const token =
+      localStorage.getItem(
+        "minitube_access_token"
+      );
+
+    const user =
+      localStorage.getItem(
+        "minitube_user"
+      );
+
+
+    if (token && user) {
+
+      showMessage(
+        "You are already logged in. Opening MiniTube...",
+        "success"
+      );
+
+
+      setTimeout(
+        function() {
+
+          window.location.href =
+            getRedirectTarget();
+
+        },
+        600
+      );
+
+    }
+
+  }
+
+
+  checkExistingSession();
+
+</script>
+
+</body>
+</html>
