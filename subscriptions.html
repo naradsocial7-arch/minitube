@@ -18,12 +18,17 @@
   box-sizing:border-box;
 }
 
+html,
 body{
   margin:0;
+  padding:0;
+}
+
+body{
   background:#0f0f0f;
   color:white;
   font-family:Arial,sans-serif;
-  padding-bottom:80px;
+  padding-bottom:70px;
 }
 
 
@@ -59,6 +64,10 @@ header{
   font-size:30px;
 
   cursor:pointer;
+
+  padding:0;
+
+  line-height:1;
 }
 
 .logo{
@@ -92,6 +101,8 @@ header{
   overflow:hidden;
 
   cursor:pointer;
+
+  flex-shrink:0;
 }
 
 .avatar img{
@@ -377,6 +388,7 @@ header{
 
 
 /* =========================
+   STANDARD MINI TUBE
    BOTTOM NAV
    ========================= */
 
@@ -396,14 +408,27 @@ header{
 
   display:flex;
 
-  justify-content:space-around;
-
   align-items:center;
 
-  z-index:30;
+  justify-content:space-around;
+
+  z-index:100;
+
+  padding:0;
 }
 
 .bottom button{
+
+  flex:1;
+
+  width:25%;
+  max-width:25%;
+
+  height:70px;
+
+  padding:5px 2px;
+
+  margin:0;
 
   background:none;
 
@@ -413,7 +438,19 @@ header{
 
   font-size:13px;
 
+  font-family:Arial,sans-serif;
+
   cursor:pointer;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
 }
 
 .bottom button b{
@@ -422,12 +459,23 @@ header{
 
   font-size:22px;
 
-  color:white;
+  line-height:22px;
+
+  height:25px;
 
   margin-bottom:3px;
+
+  color:white;
+
+  font-weight:normal;
 }
 
-.bottom .active{
+.bottom button.active{
+
+  color:white;
+}
+
+.bottom button.active b{
 
   color:white;
 }
@@ -470,6 +518,25 @@ header{
 
 }
 
+
+/* =========================
+   SMALL MOBILE
+   ========================= */
+
+@media(max-width:380px){
+
+  .bottom button{
+
+    font-size:12px;
+  }
+
+  .bottom button b{
+
+    font-size:21px;
+  }
+
+}
+
 </style>
 
 </head>
@@ -487,6 +554,7 @@ header{
   <button
     class="back"
     onclick="goHome()"
+    aria-label="Go back"
   >
     ‹
   </button>
@@ -507,7 +575,7 @@ header{
   <div
     id="headerAvatar"
     class="avatar"
-    onclick="window.location.href='settings.html'"
+    onclick="window.location.href='setting.html'"
   >
     N
   </div>
@@ -560,13 +628,16 @@ header{
 
 
 <!-- =========================
-     BOTTOM NAV
+     STANDARD BOTTOM NAVIGATION
      ========================= -->
 
 <div class="bottom">
 
 
-  <button onclick="goHome()">
+  <button
+    onclick="goHome()"
+    aria-label="Home"
+  >
 
     <b>⌂</b>
 
@@ -575,25 +646,22 @@ header{
   </button>
 
 
-  <button onclick="goShorts()">
+  <button
+    onclick="goShorts()"
+    aria-label="Horizontal videos"
+  >
 
     <b>▶</b>
 
-    Shorts
+    HORIZONTAL
 
   </button>
 
 
-  <button onclick="goHome()">
-
-    <b>＋</b>
-
-    Create
-
-  </button>
-
-
-  <button class="active">
+  <button
+    class="active"
+    aria-label="Subscriptions"
+  >
 
     <b>□</b>
 
@@ -602,7 +670,10 @@ header{
   </button>
 
 
-  <button onclick="goYou()">
+  <button
+    onclick="goYou()"
+    aria-label="You"
+  >
 
     <b>●</b>
 
@@ -887,7 +958,7 @@ function updateHeader(){
 
 
 /* =====================================
-   SUBSCRIBED CHANNELS (database-backed)
+   SUBSCRIBED CHANNELS
    ===================================== */
 
 async function loadSubscribedChannels(){
@@ -1201,8 +1272,7 @@ function renderChannels(channels){
 
 
 /* =====================================
-   LOAD VIDEOS (from all subscribed
-   channels, combined)
+   LOAD VIDEOS
    ===================================== */
 
 async function loadVideos(channels){
