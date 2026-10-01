@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MiniTube - Login</title>
+  <title>MiniTube - Sign Up</title>
 
   <style>
     * {
@@ -58,36 +58,7 @@
       text-align: center;
       color: #aaa;
       font-size: 14px;
-      margin-bottom: 24px;
-    }
-
-    .tabs {
-      display: flex;
-      background: #101010;
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 22px;
-    }
-
-    .tab {
-      flex: 1;
-      border: 0;
-      background: transparent;
-      color: #999;
-      padding: 11px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .tab.active {
-      background: #292929;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .field {
-      margin-bottom: 17px;
+      margin-bottom: 25px;
     }
 
     label {
@@ -95,6 +66,10 @@
       margin-bottom: 7px;
       font-size: 14px;
       color: #ddd;
+    }
+
+    .field {
+      margin-bottom: 17px;
     }
 
     input {
@@ -134,23 +109,52 @@
       font-size: 12px;
     }
 
-    .main-btn {
+    .show-btn:hover {
+      background: #383838;
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 5px 0 18px;
+      color: #999;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .terms input {
+      width: auto;
+      margin-top: 3px;
+      accent-color: red;
+    }
+
+    .terms a {
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    .signup-btn {
       width: 100%;
       padding: 14px;
       border: 0;
       border-radius: 10px;
       background: #ff0000;
-      color: #fff;
+      color: white;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
-    .main-btn:hover {
+    .signup-btn:hover {
       background: #d90000;
     }
 
-    .main-btn:disabled {
+    .signup-btn:disabled {
       opacity: .6;
       cursor: not-allowed;
     }
@@ -178,20 +182,20 @@
       color: #ffb1b1;
     }
 
-    .signup-box {
+    .login-link {
       text-align: center;
       margin-top: 22px;
       color: #999;
       font-size: 14px;
     }
 
-    .signup-box a {
-      color: #fff;
+    .login-link a {
+      color: white;
       font-weight: bold;
       text-decoration: none;
     }
 
-    .signup-box a:hover {
+    .login-link a:hover {
       text-decoration: underline;
     }
 
@@ -207,7 +211,7 @@
     }
 
     .back a:hover {
-      color: #fff;
+      color: white;
     }
 
     .loading {
@@ -215,7 +219,7 @@
       width: 17px;
       height: 17px;
       border: 2px solid rgba(255,255,255,.35);
-      border-top-color: #fff;
+      border-top-color: white;
       border-radius: 50%;
       animation: spin .7s linear infinite;
       vertical-align: middle;
@@ -254,47 +258,28 @@
 
     <div class="card">
 
-      <h1>Welcome back</h1>
+      <h1>Create your account</h1>
 
       <div class="subtitle">
-        Login to your MiniTube account
+        Join MiniTube and start sharing videos.
       </div>
 
-      <!-- LOGIN / SIGNUP TABS -->
-
-      <div class="tabs">
-
-        <button
-          type="button"
-          class="tab active"
-          id="loginTab"
-          onclick="showLogin()"
-        >
-          Login
-        </button>
-
-        <button
-          type="button"
-          class="tab"
-          id="signupTab"
-          onclick="goToSignup()"
-        >
-          Create Account
-        </button>
-
-      </div>
-
-
-      <!-- LOGIN FORM -->
-
-      <form id="loginForm">
+      <form id="signupForm">
 
         <div class="field">
+          <label for="displayName">Display Name</label>
+          <input
+            id="displayName"
+            type="text"
+            placeholder="Enter your name"
+            autocomplete="name"
+            maxlength="50"
+            required
+          >
+        </div>
 
-          <label for="email">
-            Email
-          </label>
-
+        <div class="field">
+          <label for="email">Email</label>
           <input
             id="email"
             type="email"
@@ -302,87 +287,85 @@
             autocomplete="email"
             required
           >
-
         </div>
 
-
         <div class="field">
-
-          <label for="password">
-            Password
-          </label>
+          <label for="password">Password</label>
 
           <div class="password-wrap">
-
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
-              autocomplete="current-password"
+              placeholder="Create a password"
+              autocomplete="new-password"
+              minlength="6"
               required
             >
 
             <button
               type="button"
               class="show-btn"
-              onclick="togglePassword()"
+              onclick="togglePassword('password', this)"
             >
               Show
             </button>
-
           </div>
-
         </div>
 
+        <div class="field">
+          <label for="confirmPassword">Confirm Password</label>
+
+          <div class="password-wrap">
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="Enter password again"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            >
+
+            <button
+              type="button"
+              class="show-btn"
+              onclick="togglePassword('confirmPassword', this)"
+            >
+              Show
+            </button>
+          </div>
+        </div>
+
+        <label class="terms">
+          <input id="terms" type="checkbox" required>
+
+          <span>
+            I agree to create a MiniTube account and use the platform
+            according to its rules.
+          </span>
+        </label>
 
         <button
-          id="loginBtn"
-          class="main-btn"
+          id="signupBtn"
+          class="signup-btn"
           type="submit"
         >
-
-          <span
-            id="loading"
-            class="loading"
-          ></span>
-
-          <span id="btnText">
-            Login
-          </span>
-
+          <span id="loading" class="loading"></span>
+          <span id="btnText">Create Account</span>
         </button>
 
-
-        <div
-          id="message"
-          class="message"
-        ></div>
+        <div id="message" class="message"></div>
 
       </form>
 
-
-      <div class="signup-box">
-
-        Don't have an account?
-
-        <a
-          href="signup.html"
-          onclick="goToSignup(event)"
-        >
-          Create Account
-        </a>
-
+      <div class="login-link">
+        Already have an account?
+        <a href="login.html">Log in</a>
       </div>
 
     </div>
 
-
     <div class="back">
-
-      <a href="index.html">
-        ← Back to MiniTube
-      </a>
-
+      <a href="index.html">← Back to MiniTube</a>
     </div>
 
   </div>
@@ -391,7 +374,7 @@
 <script>
 
   /* =========================
-     SUPABASE CONFIG
+     MINITUBE SUPABASE CONFIG
   ========================= */
 
   const SUPABASE_URL =
@@ -408,69 +391,29 @@
      ELEMENTS
   ========================= */
 
-  const loginForm =
-    document.getElementById("loginForm");
-
-  const loginBtn =
-    document.getElementById("loginBtn");
-
-  const btnText =
-    document.getElementById("btnText");
-
-  const loading =
-    document.getElementById("loading");
-
-  const message =
-    document.getElementById("message");
-
-
-  /* =========================
-     SIGNUP CONNECTION
-  ========================= */
-
-  function goToSignup(event) {
-
-    if (event) {
-      event.preventDefault();
-    }
-
-    window.location.href = "signup.html";
-
-  }
-
-
-  function showLogin() {
-
-    document.getElementById("loginTab")
-      .classList.add("active");
-
-    document.getElementById("signupTab")
-      .classList.remove("active");
-
-  }
+  const form = document.getElementById("signupForm");
+  const signupBtn = document.getElementById("signupBtn");
+  const btnText = document.getElementById("btnText");
+  const loading = document.getElementById("loading");
+  const message = document.getElementById("message");
 
 
   /* =========================
      PASSWORD SHOW / HIDE
   ========================= */
 
-  function togglePassword() {
+  function togglePassword(id, button) {
 
-    const password =
-      document.getElementById("password");
+    const input = document.getElementById(id);
 
-    const button =
-      document.querySelector(".show-btn");
+    if (input.type === "password") {
 
-
-    if (password.type === "password") {
-
-      password.type = "text";
+      input.type = "text";
       button.textContent = "Hide";
 
     } else {
 
-      password.type = "password";
+      input.type = "password";
       button.textContent = "Show";
 
     }
@@ -485,8 +428,7 @@
   function showMessage(text, type) {
 
     message.textContent = text;
-    message.className =
-      "message " + type;
+    message.className = "message " + type;
 
   }
 
@@ -505,24 +447,17 @@
 
   function setLoading(isLoading) {
 
-    loginBtn.disabled = isLoading;
-
+    signupBtn.disabled = isLoading;
 
     if (isLoading) {
 
-      loading.style.display =
-        "inline-block";
-
-      btnText.textContent =
-        "Logging in...";
+      loading.style.display = "inline-block";
+      btnText.textContent = "Creating Account...";
 
     } else {
 
-      loading.style.display =
-        "none";
-
-      btnText.textContent =
-        "Login";
+      loading.style.display = "none";
+      btnText.textContent = "Create Account";
 
     }
 
@@ -530,299 +465,257 @@
 
 
   /* =========================
-     SAFE REDIRECT
+     FRIENDLY SUPABASE ERRORS
   ========================= */
 
-  function getRedirectTarget() {
+  function getFriendlyError(error) {
 
-    const params =
-      new URLSearchParams(
-        window.location.search
-      );
-
-    const next =
-      params.get("next");
-
-
-    /*
-      Only allow internal MiniTube
-      relative pages.
-    */
-
-    if (
-      next &&
-      next.startsWith("/") &&
-      !next.startsWith("//") &&
-      !next.includes("://")
-    ) {
-
-      return next;
-
-    }
-
-
-    return MINITUBE_URL;
-
-  }
-
-
-  /* =========================
-     SAVE SESSION
-  ========================= */
-
-  function saveSession(data) {
-
-    if (!data?.access_token) {
-      return false;
-    }
-
-    localStorage.setItem(
-      "minitube_access_token",
-      data.access_token
-    );
-
-
-    localStorage.setItem(
-      "minitube_refresh_token",
-      data.refresh_token || ""
-    );
-
-
-    if (data.user) {
-
-      localStorage.setItem(
-        "minitube_user",
-        JSON.stringify(data.user)
-      );
-
-    }
-
-
-    return true;
-
-  }
-
-
-  /* =========================
-     FRIENDLY ERRORS
-  ========================= */
-
-  function getAuthError(error) {
-
-    const msg =
-      String(
-        error?.message ||
-        error?.msg ||
-        error ||
-        ""
-      ).toLowerCase();
-
-
-    if (
-      msg.includes("invalid login") ||
-      msg.includes("invalid credentials")
-    ) {
-
-      return "Incorrect email or password.";
-
-    }
-
-
-    if (
-      msg.includes("email not confirmed")
-    ) {
-
-      return "Please confirm your email before logging in.";
-
-    }
-
-
-    if (
-      msg.includes("too many requests") ||
-      msg.includes("rate limit")
-    ) {
-
-      return "Too many login attempts. Please wait and try again.";
-
-    }
-
-
-    return (
+    const msg = String(
       error?.message ||
-      "Login failed. Please try again."
-    );
+      error?.msg ||
+      error ||
+      ""
+    ).toLowerCase();
+
+
+    if (msg.includes("already registered")) {
+      return "An account with this email already exists. Please log in.";
+    }
+
+    if (msg.includes("user already registered")) {
+      return "An account with this email already exists. Please log in.";
+    }
+
+    if (msg.includes("invalid email")) {
+      return "Please enter a valid email address.";
+    }
+
+    if (msg.includes("password")) {
+      return "Password must be at least 6 characters long.";
+    }
+
+    if (msg.includes("rate limit")) {
+      return "Too many attempts. Please wait a little and try again.";
+    }
+
+    if (msg.includes("email")) {
+      return "There was a problem with this email address.";
+    }
+
+    return error?.message ||
+           "Unable to create your account. Please try again.";
 
   }
 
 
   /* =========================
-     LOGIN
+     SIGNUP
   ========================= */
 
-  loginForm.addEventListener(
-    "submit",
-    async function(e) {
+  form.addEventListener("submit", async function(e) {
 
-      e.preventDefault();
+    e.preventDefault();
 
-      clearMessage();
+    clearMessage();
 
 
-      const email =
-        document
-          .getElementById("email")
-          .value
-          .trim();
+    const displayName =
+      document.getElementById("displayName").value.trim();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const password =
+      document.getElementById("password").value;
+
+    const confirmPassword =
+      document.getElementById("confirmPassword").value;
+
+    const terms =
+      document.getElementById("terms").checked;
 
 
-      const password =
-        document
-          .getElementById("password")
-          .value;
+    /* VALIDATION */
+
+    if (displayName.length < 2) {
+
+      showMessage(
+        "Please enter a valid display name.",
+        "error"
+      );
+
+      return;
+    }
 
 
-      if (!email || !password) {
+    if (password.length < 6) {
 
-        showMessage(
-          "Please enter your email and password.",
-          "error"
+      showMessage(
+        "Password must be at least 6 characters long.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (password !== confirmPassword) {
+
+      showMessage(
+        "Passwords do not match.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    if (!terms) {
+
+      showMessage(
+        "Please accept the terms before creating your account.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    setLoading(true);
+
+
+    try {
+
+      const redirectUrl =
+        MINITUBE_URL;
+
+
+      const response = await fetch(
+        SUPABASE_URL +
+        "/auth/v1/signup?redirect_to=" +
+        encodeURIComponent(redirectUrl),
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_ANON_KEY
+          },
+
+          body: JSON.stringify({
+
+            email: email,
+
+            password: password,
+
+            data: {
+              display_name: displayName
+            }
+
+          })
+
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data?.msg ||
+          data?.message ||
+          "Signup failed."
         );
-
-        return;
 
       }
 
 
-      setLoading(true);
+      /*
+        If email confirmation is enabled,
+        Supabase normally returns the user
+        without an active session.
+      */
+
+      if (data?.user && !data?.session) {
+
+        showMessage(
+          "Account created successfully! Please check your email and confirm your account before logging in.",
+          "success"
+        );
+
+        form.reset();
+
+        setLoading(false);
+
+        return;
+      }
 
 
-      try {
+      /*
+        If email confirmation is disabled,
+        Supabase may return an active session.
+      */
 
-        const response =
-          await fetch(
-            SUPABASE_URL +
-            "/auth/v1/token?grant_type=password",
-            {
-              method: "POST",
+      if (data?.session && data?.user) {
 
-              headers: {
-                "Content-Type": "application/json",
-                "apikey": SUPABASE_ANON_KEY
-              },
+        localStorage.setItem(
+          "minitube_access_token",
+          data.session.access_token || ""
+        );
 
-              body: JSON.stringify({
-                email: email,
-                password: password
-              })
-            }
-          );
+        localStorage.setItem(
+          "minitube_refresh_token",
+          data.session.refresh_token || ""
+        );
 
-
-        const data =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            data?.error_description ||
-            data?.msg ||
-            data?.message ||
-            "Login failed."
-          );
-
-        }
-
-
-        if (!saveSession(data)) {
-
-          throw new Error(
-            "Login succeeded but session data was not received."
-          );
-
-        }
+        localStorage.setItem(
+          "minitube_user",
+          JSON.stringify(data.user)
+        );
 
 
         showMessage(
-          "Login successful! Opening MiniTube...",
+          "Account created! Opening MiniTube...",
           "success"
         );
 
 
-        setTimeout(
-          function() {
+        setTimeout(function() {
 
-            window.location.href =
-              getRedirectTarget();
+          window.location.href = MINITUBE_URL;
 
-          },
-          700
-        );
+        }, 900);
 
-
-      } catch (error) {
-
-        console.error(
-          "MiniTube login error:",
-          error
-        );
-
-
-        showMessage(
-          getAuthError(error),
-          "error"
-        );
-
-
-        setLoading(false);
-
+        return;
       }
 
-    }
-  );
-
-
-  /* =========================
-     ALREADY LOGGED IN
-  ========================= */
-
-  function checkExistingSession() {
-
-    const token =
-      localStorage.getItem(
-        "minitube_access_token"
-      );
-
-    const user =
-      localStorage.getItem(
-        "minitube_user"
-      );
-
-
-    if (token && user) {
 
       showMessage(
-        "You are already logged in. Opening MiniTube...",
+        "Account created. Please check your email to confirm your account.",
         "success"
       );
 
+      form.reset();
 
-      setTimeout(
-        function() {
+      setLoading(false);
 
-          window.location.href =
-            getRedirectTarget();
 
-        },
-        600
+    } catch (error) {
+
+      console.error("Signup error:", error);
+
+      showMessage(
+        getFriendlyError(error),
+        "error"
       );
+
+      setLoading(false);
 
     }
 
-  }
-
-
-  checkExistingSession();
+  });
 
 </script>
 
