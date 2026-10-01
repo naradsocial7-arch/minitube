@@ -1,778 +1,1389 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>MiniTube - Login</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #0f0f0f;
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+<title>MiniTube - Login</title>
 
-    .container {
-      width: 100%;
-      max-width: 430px;
-    }
+<style>
 
-    .logo {
-      text-align: center;
-      font-size: 30px;
-      font-weight: 800;
-      margin-bottom: 25px;
-      letter-spacing: -1px;
-    }
+/* =====================================================
+   RESET
+   ===================================================== */
 
-    .logo span {
-      color: #ff0000;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .card {
-      background: #181818;
-      border: 1px solid #292929;
-      border-radius: 16px;
-      padding: 28px 24px;
-      box-shadow: 0 10px 35px rgba(0,0,0,.35);
-    }
+html{
+  min-height:100%;
+}
 
-    h1 {
-      text-align: center;
-      font-size: 25px;
-      margin: 0 0 8px;
-    }
+body{
+  margin:0;
 
-    .subtitle {
-      text-align: center;
-      color: #aaa;
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
+  min-height:100vh;
 
-    .tabs {
-      display: flex;
-      background: #101010;
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 22px;
-    }
+  background:
+    radial-gradient(
+      circle at top,
+      #21121a 0,
+      #0f0f0f 42%
+    );
 
-    .tab {
-      flex: 1;
-      border: 0;
-      background: transparent;
-      color: #999;
-      padding: 11px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
+  color:#fff;
 
-    .tab.active {
-      background: #292929;
-      color: #fff;
-      font-weight: bold;
-    }
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    .field {
-      margin-bottom: 17px;
-    }
+  display:flex;
 
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 14px;
-      color: #ddd;
-    }
+  align-items:center;
 
-    input {
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      border: 1px solid #3a3a3a;
-      background: #101010;
-      color: white;
-      font-size: 15px;
-      outline: none;
-    }
+  justify-content:center;
 
-    input:focus {
-      border-color: #ff0000;
-    }
+  padding:20px;
+}
 
-    .password-wrap {
-      position: relative;
-    }
 
-    .password-wrap input {
-      padding-right: 55px;
-    }
+/* =====================================================
+   AUTH BOX
+   ===================================================== */
 
-    .show-btn {
-      position: absolute;
-      right: 8px;
-      top: 7px;
-      height: 38px;
-      padding: 0 10px;
-      border: 0;
-      border-radius: 8px;
-      background: #292929;
-      color: #ddd;
-      cursor: pointer;
-      font-size: 12px;
-    }
+.box{
+  width:100%;
 
-    .main-btn {
-      width: 100%;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      background: #ff0000;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  max-width:430px;
 
-    .main-btn:hover {
-      background: #d90000;
-    }
+  background:#181818;
 
-    .main-btn:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
+  border:1px solid #303030;
 
-    .message {
-      display: none;
-      margin-top: 17px;
-      padding: 12px;
-      border-radius: 9px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
+  border-radius:22px;
 
-    .message.success {
-      display: block;
-      background: #12351e;
-      border: 1px solid #245f34;
-      color: #a9f5bb;
-    }
+  padding:30px;
 
-    .message.error {
-      display: block;
-      background: #351414;
-      border: 1px solid #682727;
-      color: #ffb1b1;
-    }
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.45);
+}
 
-    .signup-box {
-      text-align: center;
-      margin-top: 22px;
-      color: #999;
-      font-size: 14px;
-    }
 
-    .signup-box a {
-      color: #fff;
-      font-weight: bold;
-      text-decoration: none;
-    }
+/* =====================================================
+   LOGO
+   ===================================================== */
 
-    .signup-box a:hover {
-      text-decoration: underline;
-    }
+.logo{
+  text-align:center;
 
-    .back {
-      text-align: center;
-      margin-top: 18px;
-    }
+  font-size:29px;
 
-    .back a {
-      color: #888;
-      text-decoration: none;
-      font-size: 13px;
-    }
+  font-weight:800;
 
-    .back a:hover {
-      color: #fff;
-    }
+  margin-bottom:25px;
 
-    .loading {
-      display: none;
-      width: 17px;
-      height: 17px;
-      border: 2px solid rgba(255,255,255,.35);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .7s linear infinite;
-      vertical-align: middle;
-      margin-right: 7px;
-    }
+  cursor:pointer;
+}
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
+.logo span{
+  color:#ff0033;
+}
 
-    @media (max-width: 480px) {
-      body {
-        padding: 14px;
-      }
 
-      .card {
-        padding: 24px 18px;
-      }
+/* =====================================================
+   TABS
+   ===================================================== */
 
-      .logo {
-        font-size: 27px;
-      }
-    }
-  </style>
+.tabs{
+  display:flex;
+
+  gap:8px;
+
+  margin-bottom:22px;
+}
+
+.tabs button{
+  flex:1;
+
+  padding:12px;
+
+  border:0;
+
+  border-radius:10px;
+
+  background:#292929;
+
+  color:#aaa;
+
+  font-size:14px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+.tabs button:hover{
+  background:#353535;
+  color:#fff;
+}
+
+.tabs button.active{
+  background:#fff;
+  color:#111;
+}
+
+
+/* =====================================================
+   FORM
+   ===================================================== */
+
+.field{
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+
+  color:#bbb;
+
+  font-size:13px;
+
+  margin-bottom:7px;
+}
+
+input{
+  width:100%;
+
+  padding:13px 14px;
+
+  border-radius:10px;
+
+  border:1px solid #444;
+
+  background:#222;
+
+  color:#fff;
+
+  outline:none;
+
+  font-size:16px;
+
+  transition:.15s;
+}
+
+input::placeholder{
+  color:#777;
+}
+
+input:focus{
+  border-color:#ff0033;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(255,0,51,.12);
+}
+
+
+/* =====================================================
+   PASSWORD
+   ===================================================== */
+
+.passwordWrap{
+  position:relative;
+}
+
+.passwordWrap input{
+  padding-right:70px;
+
+  margin-bottom:0;
+}
+
+.passwordToggle{
+  position:absolute;
+
+  right:9px;
+
+  top:50%;
+
+  transform:translateY(-50%);
+
+  border:0;
+
+  background:transparent;
+
+  color:#aaa;
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  padding:7px;
+}
+
+.passwordToggle:hover{
+  color:#fff;
+}
+
+
+/* =====================================================
+   MAIN BUTTON
+   ===================================================== */
+
+.mainBtn{
+  width:100%;
+
+  padding:14px;
+
+  border:0;
+
+  border-radius:25px;
+
+  background:#ff0033;
+
+  color:#fff;
+
+  font-size:16px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  transition:.15s;
+
+  margin-top:4px;
+}
+
+.mainBtn:hover{
+  background:#e6002e;
+
+  transform:translateY(-1px);
+}
+
+.mainBtn:disabled{
+  opacity:.6;
+
+  cursor:not-allowed;
+
+  transform:none;
+}
+
+
+/* =====================================================
+   SPINNER
+   ===================================================== */
+
+.spinner{
+  display:inline-block;
+
+  width:15px;
+  height:15px;
+
+  border:2px solid
+    rgba(255,255,255,.35);
+
+  border-top-color:#fff;
+
+  border-radius:50%;
+
+  vertical-align:-3px;
+
+  margin-right:7px;
+
+  animation:
+    spin .7s linear infinite;
+}
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+
+/* =====================================================
+   MESSAGE
+   ===================================================== */
+
+.message{
+  min-height:24px;
+
+  text-align:center;
+
+  margin-top:15px;
+
+  color:#aaa;
+
+  font-size:13px;
+
+  line-height:1.5;
+}
+
+.message.success{
+  color:#6ee7b7;
+}
+
+.message.error{
+  color:#ff7188;
+}
+
+.message.info{
+  color:#aaa;
+}
+
+
+/* =====================================================
+   SIGNUP INFO
+   ===================================================== */
+
+.confirmBox{
+  display:none;
+
+  margin-top:15px;
+
+  padding:13px;
+
+  border-radius:10px;
+
+  background:#202020;
+
+  border:1px solid #333;
+
+  color:#aaa;
+
+  font-size:13px;
+
+  line-height:1.5;
+
+  text-align:center;
+}
+
+.confirmBox.show{
+  display:block;
+}
+
+.confirmBox strong{
+  color:#fff;
+}
+
+
+/* =====================================================
+   HOME
+   ===================================================== */
+
+.home{
+  display:block;
+
+  text-align:center;
+
+  margin-top:20px;
+
+  color:#aaa;
+
+  text-decoration:none;
+
+  font-size:13px;
+}
+
+.home:hover{
+  color:#fff;
+}
+
+
+/* =====================================================
+   MOBILE
+   ===================================================== */
+
+@media(max-width:480px){
+
+  body{
+    padding:14px;
+  }
+
+  .box{
+    padding:23px 19px;
+
+    border-radius:18px;
+  }
+
+  .logo{
+    font-size:26px;
+  }
+
+  .tabs button{
+    font-size:13px;
+
+    padding:11px 7px;
+  }
+
+  input{
+    font-size:15px;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <div class="container">
 
-    <div class="logo">
-      ▶ <span>MiniTube</span>
-    </div>
-
-    <div class="card">
-
-      <h1>Welcome back</h1>
-
-      <div class="subtitle">
-        Login to your MiniTube account
-      </div>
-
-      <!-- LOGIN / SIGNUP TABS -->
-
-      <div class="tabs">
-
-        <button
-          type="button"
-          class="tab active"
-          id="loginTab"
-          onclick="showLogin()"
-        >
-          Login
-        </button>
-
-        <button
-          type="button"
-          class="tab"
-          id="signupTab"
-          onclick="goToSignup()"
-        >
-          Create Account
-        </button>
-
-      </div>
+<div class="box">
 
 
-      <!-- LOGIN FORM -->
+  <!-- =================================================
+       LOGO
+       ================================================= -->
 
-      <form id="loginForm">
+  <div
+    class="logo"
+    onclick="goHome()"
+  >
 
-        <div class="field">
-
-          <label for="email">
-            Email
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            autocomplete="email"
-            required
-          >
-
-        </div>
-
-
-        <div class="field">
-
-          <label for="password">
-            Password
-          </label>
-
-          <div class="password-wrap">
-
-            <input
-              id="password"
-              type="password"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-              required
-            >
-
-            <button
-              type="button"
-              class="show-btn"
-              onclick="togglePassword()"
-            >
-              Show
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <button
-          id="loginBtn"
-          class="main-btn"
-          type="submit"
-        >
-
-          <span
-            id="loading"
-            class="loading"
-          ></span>
-
-          <span id="btnText">
-            Login
-          </span>
-
-        </button>
-
-
-        <div
-          id="message"
-          class="message"
-        ></div>
-
-      </form>
-
-
-      <div class="signup-box">
-
-        Don't have an account?
-
-        <a
-          href="signup.html"
-          onclick="goToSignup(event)"
-        >
-          Create Account
-        </a>
-
-      </div>
-
-    </div>
-
-
-    <div class="back">
-
-      <a href="index.html">
-        ← Back to MiniTube
-      </a>
-
-    </div>
+    <span>▶</span>
+    MiniTube
 
   </div>
 
 
+  <!-- =================================================
+       TABS
+       ================================================= -->
+
+  <div class="tabs">
+
+
+    <button
+      id="loginTab"
+      class="active"
+      type="button"
+      onclick="showLogin()"
+    >
+      Login
+    </button>
+
+
+    <button
+      id="signupTab"
+      type="button"
+      onclick="showSignup()"
+    >
+      Create Account
+    </button>
+
+
+  </div>
+
+
+  <!-- =================================================
+       FORM
+       ================================================= -->
+
+  <form
+    id="authForm"
+    novalidate
+  >
+
+
+    <!-- DISPLAY NAME -->
+
+    <div
+      id="nameField"
+      class="field"
+      style="display:none;"
+    >
+
+      <label for="displayName">
+        Display Name
+      </label>
+
+      <input
+        id="displayName"
+        type="text"
+        placeholder="Your name"
+        autocomplete="name"
+        maxlength="50"
+      >
+
+    </div>
+
+
+    <!-- EMAIL -->
+
+    <div class="field">
+
+      <label for="email">
+        Email
+      </label>
+
+      <input
+        id="email"
+        type="email"
+        placeholder="you@example.com"
+        autocomplete="email"
+        required
+      >
+
+    </div>
+
+
+    <!-- PASSWORD -->
+
+    <div class="field">
+
+      <label for="password">
+        Password
+      </label>
+
+
+      <div class="passwordWrap">
+
+        <input
+          id="password"
+          type="password"
+          placeholder="Password"
+          autocomplete="current-password"
+          minlength="6"
+          required
+        >
+
+
+        <button
+          id="passwordToggle"
+          class="passwordToggle"
+          type="button"
+          onclick="togglePassword()"
+        >
+          Show
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- SUBMIT -->
+
+    <button
+      id="mainBtn"
+      class="mainBtn"
+      type="submit"
+    >
+      Login
+    </button>
+
+
+  </form>
+
+
+  <!-- =================================================
+       MESSAGE
+       ================================================= -->
+
+  <div
+    id="message"
+    class="message"
+  ></div>
+
+
+  <!-- =================================================
+       EMAIL CONFIRMATION
+       ================================================= -->
+
+  <div
+    id="confirmBox"
+    class="confirmBox"
+  >
+
+    <strong>Check your email</strong>
+    <br><br>
+
+    We sent a confirmation link to
+    <span id="confirmEmail"></span>.
+
+    <br><br>
+
+    Open the email and confirm your account,
+    then come back and login.
+
+  </div>
+
+
+  <!-- =================================================
+       HOME
+       ================================================= -->
+
+  <a
+    class="home"
+    href="index.html"
+  >
+    ← Back to MiniTube
+  </a>
+
+
+</div>
+
+
 <script>
 
-  /* =========================
-     SUPABASE CONFIG
-  ========================= */
+/* =====================================================
+   SUPABASE
+   ===================================================== */
 
-  const SUPABASE_URL =
-    "https://vlzssmuzetcbkmzujecs.supabase.co";
-
-  const SUPABASE_ANON_KEY =
-    "sb_publishable_tM8cIA2W3eZVc9AOtCtCtKWg_Suywus3I";
-
-  const MINITUBE_URL =
-    "https://naradsocial7-arch.github.io/minitube/";
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
 
 
-  /* =========================
-     ELEMENTS
-  ========================= */
-
-  const loginForm =
-    document.getElementById("loginForm");
-
-  const loginBtn =
-    document.getElementById("loginBtn");
-
-  const btnText =
-    document.getElementById("btnText");
-
-  const loading =
-    document.getElementById("loading");
-
-  const message =
-    document.getElementById("message");
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtCtKWg_Suywus3I";
 
 
-  /* =========================
-     SIGNUP CONNECTION
-  ========================= */
+/* =====================================================
+   MINI TUBE URL
+   ===================================================== */
 
-  function goToSignup(event) {
-
-    if (event) {
-      event.preventDefault();
-    }
-
-    window.location.href = "signup.html";
-
-  }
+const MINITUBE_URL =
+  "https://naradsocial7-arch.github.io/minitube/";
 
 
-  function showLogin() {
+/* =====================================================
+   STORAGE KEYS
+   ===================================================== */
 
-    document.getElementById("loginTab")
-      .classList.add("active");
+const ACCESS_TOKEN_KEY =
+  "minitube_access_token";
 
-    document.getElementById("signupTab")
-      .classList.remove("active");
+const REFRESH_TOKEN_KEY =
+  "minitube_refresh_token";
 
-  }
-
-
-  /* =========================
-     PASSWORD SHOW / HIDE
-  ========================= */
-
-  function togglePassword() {
-
-    const password =
-      document.getElementById("password");
-
-    const button =
-      document.querySelector(".show-btn");
+const USER_KEY =
+  "minitube_user";
 
 
-    if (password.type === "password") {
+/* =====================================================
+   MODE
+   ===================================================== */
 
-      password.type = "text";
-      button.textContent = "Hide";
-
-    } else {
-
-      password.type = "password";
-      button.textContent = "Show";
-
-    }
-
-  }
+let mode =
+  "login";
 
 
-  /* =========================
-     MESSAGE
-  ========================= */
+/* =====================================================
+   GET REDIRECT TARGET
+   ===================================================== */
 
-  function showMessage(text, type) {
+function getRedirectTarget(){
 
-    message.textContent = text;
-    message.className =
-      "message " + type;
-
-  }
-
-
-  function clearMessage() {
-
-    message.textContent = "";
-    message.className = "message";
-
-  }
-
-
-  /* =========================
-     LOADING
-  ========================= */
-
-  function setLoading(isLoading) {
-
-    loginBtn.disabled = isLoading;
-
-
-    if (isLoading) {
-
-      loading.style.display =
-        "inline-block";
-
-      btnText.textContent =
-        "Logging in...";
-
-    } else {
-
-      loading.style.display =
-        "none";
-
-      btnText.textContent =
-        "Login";
-
-    }
-
-  }
-
-
-  /* =========================
-     SAFE REDIRECT
-  ========================= */
-
-  function getRedirectTarget() {
+  try{
 
     const params =
       new URLSearchParams(
         window.location.search
       );
 
+
     const next =
       params.get("next");
 
 
     /*
-      Only allow internal MiniTube
-      relative pages.
+      Only allow local MiniTube
+      pages.
+
+      This prevents an external
+      website from being used as
+      a redirect target.
     */
 
-    if (
+    if(
       next &&
-      next.startsWith("/") &&
-      !next.startsWith("//") &&
-      !next.includes("://")
-    ) {
+      !next.startsWith("http://") &&
+      !next.startsWith("https://") &&
+      next.length < 500
+    ){
 
       return next;
 
     }
 
+  }catch(error){
 
-    return MINITUBE_URL;
-
-  }
-
-
-  /* =========================
-     SAVE SESSION
-  ========================= */
-
-  function saveSession(data) {
-
-    if (!data?.access_token) {
-      return false;
-    }
-
-    localStorage.setItem(
-      "minitube_access_token",
-      data.access_token
-    );
-
-
-    localStorage.setItem(
-      "minitube_refresh_token",
-      data.refresh_token || ""
-    );
-
-
-    if (data.user) {
-
-      localStorage.setItem(
-        "minitube_user",
-        JSON.stringify(data.user)
-      );
-
-    }
-
-
-    return true;
-
-  }
-
-
-  /* =========================
-     FRIENDLY ERRORS
-  ========================= */
-
-  function getAuthError(error) {
-
-    const msg =
-      String(
-        error?.message ||
-        error?.msg ||
-        error ||
-        ""
-      ).toLowerCase();
-
-
-    if (
-      msg.includes("invalid login") ||
-      msg.includes("invalid credentials")
-    ) {
-
-      return "Incorrect email or password.";
-
-    }
-
-
-    if (
-      msg.includes("email not confirmed")
-    ) {
-
-      return "Please confirm your email before logging in.";
-
-    }
-
-
-    if (
-      msg.includes("too many requests") ||
-      msg.includes("rate limit")
-    ) {
-
-      return "Too many login attempts. Please wait and try again.";
-
-    }
-
-
-    return (
-      error?.message ||
-      "Login failed. Please try again."
+    console.error(
+      error
     );
 
   }
 
 
-  /* =========================
-     LOGIN
-  ========================= */
+  return MINITUBE_URL;
 
-  loginForm.addEventListener(
+}
+
+
+/* =====================================================
+   GO HOME
+   ===================================================== */
+
+function goHome(){
+
+  window.location.href =
+    "index.html";
+
+}
+
+
+/* =====================================================
+   SHOW LOGIN
+   ===================================================== */
+
+function showLogin(){
+
+  mode =
+    "login";
+
+
+  document
+    .getElementById("loginTab")
+    .classList.add("active");
+
+
+  document
+    .getElementById("signupTab")
+    .classList.remove("active");
+
+
+  document
+    .getElementById("nameField")
+    .style.display =
+      "none";
+
+
+  document
+    .getElementById("displayName")
+    .required =
+      false;
+
+
+  document
+    .getElementById("password")
+    .autocomplete =
+      "current-password";
+
+
+  document
+    .getElementById("mainBtn")
+    .textContent =
+      "Login";
+
+
+  clearMessage();
+
+  hideConfirmation();
+
+}
+
+
+/* =====================================================
+   SHOW SIGNUP
+   ===================================================== */
+
+function showSignup(){
+
+  mode =
+    "signup";
+
+
+  document
+    .getElementById("signupTab")
+    .classList.add("active");
+
+
+  document
+    .getElementById("loginTab")
+    .classList.remove("active");
+
+
+  document
+    .getElementById("nameField")
+    .style.display =
+      "block";
+
+
+  document
+    .getElementById("displayName")
+    .required =
+      true;
+
+
+  document
+    .getElementById("password")
+    .autocomplete =
+      "new-password";
+
+
+  document
+    .getElementById("mainBtn")
+    .textContent =
+      "Create Account";
+
+
+  clearMessage();
+
+  hideConfirmation();
+
+}
+
+
+/* =====================================================
+   PASSWORD TOGGLE
+   ===================================================== */
+
+function togglePassword(){
+
+  const password =
+    document.getElementById(
+      "password"
+    );
+
+  const button =
+    document.getElementById(
+      "passwordToggle"
+    );
+
+
+  if(
+    password.type ===
+    "password"
+  ){
+
+    password.type =
+      "text";
+
+    button.textContent =
+      "Hide";
+
+  }else{
+
+    password.type =
+      "password";
+
+    button.textContent =
+      "Show";
+
+  }
+
+}
+
+
+/* =====================================================
+   MESSAGE HELPERS
+   ===================================================== */
+
+function clearMessage(){
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  message.textContent =
+    "";
+
+  message.className =
+    "message";
+
+}
+
+
+function showMessage(
+  text,
+  type="info"
+){
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  message.textContent =
+    text;
+
+
+  message.className =
+    "message " +
+    type;
+
+}
+
+
+function hideConfirmation(){
+
+  document
+    .getElementById(
+      "confirmBox"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+/* =====================================================
+   LOADING STATE
+   ===================================================== */
+
+function setLoading(
+  loading
+){
+
+  const button =
+    document.getElementById(
+      "mainBtn"
+    );
+
+
+  button.disabled =
+    loading;
+
+
+  if(loading){
+
+    button.innerHTML =
+      `
+        <span class="spinner"></span>
+        ${
+          mode === "login"
+            ? "Logging in..."
+            : "Creating account..."
+        }
+      `;
+
+  }else{
+
+    button.textContent =
+      mode === "login"
+        ? "Login"
+        : "Create Account";
+
+  }
+
+}
+
+
+/* =====================================================
+   VALIDATE FORM
+   ===================================================== */
+
+function validateForm(){
+
+  const email =
+    document
+      .getElementById(
+        "email"
+      )
+      .value
+      .trim();
+
+
+  const password =
+    document
+      .getElementById(
+        "password"
+      )
+      .value;
+
+
+  const displayName =
+    document
+      .getElementById(
+        "displayName"
+      )
+      .value
+      .trim();
+
+
+  if(!email){
+
+    showMessage(
+      "Please enter your email.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+
+  if(
+    !email.includes("@") ||
+    !email.includes(".")
+  ){
+
+    showMessage(
+      "Please enter a valid email address.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+
+  if(
+    !password ||
+    password.length < 6
+  ){
+
+    showMessage(
+      "Password must be at least 6 characters.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+
+  if(
+    mode === "signup" &&
+    !displayName
+  ){
+
+    showMessage(
+      "Please enter your display name.",
+      "error"
+    );
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+/* =====================================================
+   AUTH FORM
+   ===================================================== */
+
+document
+  .getElementById(
+    "authForm"
+  )
+  .addEventListener(
     "submit",
-    async function(e) {
+    async function(event){
 
-      e.preventDefault();
-
-      clearMessage();
+      event.preventDefault();
 
 
-      const email =
-        document
-          .getElementById("email")
-          .value
-          .trim();
-
-
-      const password =
-        document
-          .getElementById("password")
-          .value;
-
-
-      if (!email || !password) {
-
-        showMessage(
-          "Please enter your email and password.",
-          "error"
-        );
+      if(!validateForm()){
 
         return;
 
       }
 
 
+      const email =
+        document
+          .getElementById(
+            "email"
+          )
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById(
+            "password"
+          )
+          .value;
+
+
+      const displayName =
+        document
+          .getElementById(
+            "displayName"
+          )
+          .value
+          .trim();
+
+
+      clearMessage();
+
+      hideConfirmation();
+
       setLoading(true);
 
 
-      try {
+      try{
 
-        const response =
-          await fetch(
+
+        /* =============================================
+           SIGNUP
+           ============================================= */
+
+        if(
+          mode === "signup"
+        ){
+
+          const signupURL =
             SUPABASE_URL +
-            "/auth/v1/token?grant_type=password",
-            {
-              method: "POST",
+            "/auth/v1/signup" +
+            "?redirect_to=" +
+            encodeURIComponent(
+              MINITUBE_URL
+            );
 
-              headers: {
-                "Content-Type": "application/json",
-                "apikey": SUPABASE_ANON_KEY
-              },
 
-              body: JSON.stringify({
-                email: email,
-                password: password
-              })
-            }
+          const response =
+            await fetch(
+              signupURL,
+              {
+
+                method:"POST",
+
+                headers:{
+
+                  "Content-Type":
+                    "application/json",
+
+                  "apikey":
+                    SUPABASE_ANON_KEY
+
+                },
+
+                body:
+                  JSON.stringify({
+
+                    email:
+                      email,
+
+                    password:
+                      password,
+
+                    data:{
+                      display_name:
+                        displayName
+                    }
+
+                  })
+
+              }
+            );
+
+
+          const result =
+            await response.json();
+
+
+          if(!response.ok){
+
+            throw new Error(
+              getAuthError(
+                result
+              )
+            );
+
+          }
+
+
+          /*
+            Supabase may return a user
+            without an access token when
+            email confirmation is enabled.
+          */
+
+          if(
+            result.access_token
+          ){
+
+            saveSession(
+              result
+            );
+
+
+            showMessage(
+              "Account created and logged in!",
+              "success"
+            );
+
+
+            setTimeout(
+              redirectAfterLogin,
+              500
+            );
+
+
+            return;
+
+          }
+
+
+          /*
+            Normal email-confirmation
+            flow.
+          */
+
+          document
+            .getElementById(
+              "password"
+            )
+            .value =
+              "";
+
+
+          document
+            .getElementById(
+              "confirmEmail"
+            )
+            .textContent =
+              email;
+
+
+          document
+            .getElementById(
+              "confirmBox"
+            )
+            .classList.add(
+              "show"
+            );
+
+
+          showMessage(
+            "Account created successfully.",
+            "success"
           );
 
 
-        const data =
-          await response.json();
+        }
 
 
-        if (!response.ok) {
+        /* =============================================
+           LOGIN
+           ============================================= */
 
-          throw new Error(
-            data?.error_description ||
-            data?.msg ||
-            data?.message ||
-            "Login failed."
+        else{
+
+          const response =
+            await fetch(
+
+              SUPABASE_URL +
+              "/auth/v1/token?grant_type=password",
+
+              {
+
+                method:"POST",
+
+                headers:{
+
+                  "Content-Type":
+                    "application/json",
+
+                  "apikey":
+                    SUPABASE_ANON_KEY
+
+                },
+
+                body:
+                  JSON.stringify({
+
+                    email:
+                      email,
+
+                    password:
+                      password
+
+                  })
+
+              }
+
+            );
+
+
+          const result =
+            await response.json();
+
+
+          if(!response.ok){
+
+            throw new Error(
+              getAuthError(
+                result
+              )
+            );
+
+          }
+
+
+          if(
+            !result.access_token
+          ){
+
+            throw new Error(
+              "Login succeeded but no access token was returned."
+            );
+
+          }
+
+
+          saveSession(
+            result
+          );
+
+
+          showMessage(
+            "Login successful! Redirecting...",
+            "success"
+          );
+
+
+          setTimeout(
+            redirectAfterLogin,
+            500
           );
 
         }
 
 
-        if (!saveSession(data)) {
-
-          throw new Error(
-            "Login succeeded but session data was not received."
-          );
-
-        }
-
-
-        showMessage(
-          "Login successful! Opening MiniTube...",
-          "success"
-        );
-
-
-        setTimeout(
-          function() {
-
-            window.location.href =
-              getRedirectTarget();
-
-          },
-          700
-        );
-
-
-      } catch (error) {
+      }catch(error){
 
         console.error(
-          "MiniTube login error:",
+          "Authentication error:",
           error
         );
 
 
         showMessage(
-          getAuthError(error),
+          error.message ||
+          "Authentication failed. Please try again.",
           "error"
         );
 
+
+      }finally{
 
         setLoading(false);
 
@@ -782,49 +1393,221 @@
   );
 
 
-  /* =========================
-     ALREADY LOGGED IN
-  ========================= */
+/* =====================================================
+   SAVE SESSION
+   ===================================================== */
 
-  function checkExistingSession() {
+function saveSession(
+  result
+){
 
-    const token =
-      localStorage.getItem(
-        "minitube_access_token"
-      );
+  if(
+    result.access_token
+  ){
 
-    const user =
-      localStorage.getItem(
-        "minitube_user"
-      );
-
-
-    if (token && user) {
-
-      showMessage(
-        "You are already logged in. Opening MiniTube...",
-        "success"
-      );
-
-
-      setTimeout(
-        function() {
-
-          window.location.href =
-            getRedirectTarget();
-
-        },
-        600
-      );
-
-    }
+    localStorage.setItem(
+      ACCESS_TOKEN_KEY,
+      result.access_token
+    );
 
   }
 
 
-  checkExistingSession();
+  if(
+    result.refresh_token
+  ){
+
+    localStorage.setItem(
+      REFRESH_TOKEN_KEY,
+      result.refresh_token
+    );
+
+  }
+
+
+  if(
+    result.user
+  ){
+
+    localStorage.setItem(
+      USER_KEY,
+      JSON.stringify(
+        result.user
+      )
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   REDIRECT AFTER LOGIN
+   ===================================================== */
+
+function redirectAfterLogin(){
+
+  const target =
+    getRedirectTarget();
+
+
+  window.location.href =
+    target;
+
+}
+
+
+/* =====================================================
+   SUPABASE ERROR HANDLING
+   ===================================================== */
+
+function getAuthError(
+  result
+){
+
+  if(!result){
+
+    return "Authentication failed.";
+
+  }
+
+
+  const message =
+    (
+      result.msg ||
+      result.message ||
+      result.error_description ||
+      result.error ||
+      ""
+    ).toString();
+
+
+  const lower =
+    message.toLowerCase();
+
+
+  if(
+    lower.includes(
+      "invalid login credentials"
+    )
+  ){
+
+    return(
+      "Incorrect email or password."
+    );
+
+  }
+
+
+  if(
+    lower.includes(
+      "email not confirmed"
+    )
+  ){
+
+    return(
+      "Please confirm your email before logging in."
+    );
+
+  }
+
+
+  if(
+    lower.includes(
+      "user already registered"
+    )
+  ){
+
+    return(
+      "This email is already registered. Please login."
+    );
+
+  }
+
+
+  if(
+    lower.includes(
+      "password should be at least"
+    )
+  ){
+
+    return(
+      "Password must be at least 6 characters."
+    );
+
+  }
+
+
+  if(
+    lower.includes(
+      "rate limit"
+    )
+  ){
+
+    return(
+      "Too many attempts. Please wait a moment and try again."
+    );
+
+  }
+
+
+  return(
+    message ||
+    "Authentication failed. Please try again."
+  );
+
+}
+
+
+/* =====================================================
+   START
+   ===================================================== */
+
+(function(){
+
+  /*
+    If already logged in,
+    don't unnecessarily show
+    the login screen.
+  */
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+  const user =
+    localStorage.getItem(
+      USER_KEY
+    );
+
+
+  if(
+    token &&
+    user
+  ){
+
+    /*
+      Small delay avoids a flash
+      while the page loads.
+    */
+
+    setTimeout(
+      function(){
+
+        window.location.href =
+          getRedirectTarget();
+
+      },
+      150
+    );
+
+  }
+
+})();
 
 </script>
+
 
 </body>
 </html>
