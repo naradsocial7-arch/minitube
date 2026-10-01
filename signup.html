@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>MiniTube - Sign Up</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #0f0f0f;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 25px;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #ff0000;
+    }
+
+    .card {
+      background: #181818;
+      border: 1px solid #292929;
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.35);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 25px;
+      margin: 0 0 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 14px;
+      color: #ddd;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border-radius: 10px;
+      border: 1px solid #3a3a3a;
+      background: #101010;
+      color: white;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #ff0000;
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .password-wrap input {
+      padding-right: 55px;
+    }
+
+    .show-btn {
+      position: absolute;
+      right: 8px;
+      top: 7px;
+      height: 38px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 8px;
+      background: #292929;
+      color: #ddd;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .show-btn:hover {
+      background: #383838;
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 5px 0 18px;
+      color: #999;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .terms input {
+      width: auto;
+      margin-top: 3px;
+      accent-color: red;
+    }
+
+    .terms a {
+      color: #ddd;
+      text-decoration: none;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    .signup-btn {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #ff0000;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .signup-btn:hover {
+      background: #d90000;
+    }
+
+    .signup-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 17px;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .message.success {
+      display: block;
+      background: #12351e;
+      border: 1px solid #245f34;
+      color: #a9f5bb;
+    }
+
+    .message.error {
+      display: block;
+      background: #351414;
+      border: 1px solid #682727;
+      color: #ffb1b1;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 22px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .back {
+      text-align: center;
+      margin-top: 18px;
+    }
+
+    .back a {
+      color: #888;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .back a:hover {
+      color: white;
+    }
+
+    .loading {
+      display: none;
+      width: 17px;
+      height: 17px;
+      border: 2px solid rgba(255,255,255,.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      vertical-align: middle;
+      margin-right: 7px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 14px;
+      }
+
+      .card {
+        padding: 24px 18px;
+      }
+
+      .logo {
+        font-size: 27px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">
+      ▶ <span>MiniTube</span>
+    </div>
+
+    <div class="card">
+
+      <h1>Create your account</h1>
+
+      <div class="subtitle">
+        Join MiniTube and start sharing videos.
+      </div>
+
+      <form id="signupForm">
+
+        <div class="field">
+          <label for="displayName">Display Name</label>
+          <input
+            id="displayName"
+            type="text"
+            placeholder
