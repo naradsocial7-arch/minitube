@@ -68,6 +68,8 @@ header{
   padding:0;
 
   cursor:pointer;
+
+  line-height:1;
 }
 
 .logo{
@@ -107,7 +109,7 @@ header{
 
 
 /* =========================
-   SHORTS FEED (vertical swipe)
+   SHORTS FEED
    ========================= */
 
 .shorts{
@@ -375,11 +377,13 @@ header{
 
 
 /* =========================
+   STANDARD MINI TUBE
    BOTTOM NAV
    ========================= */
 
 .bottom{
   position:fixed;
+
   bottom:0;
   left:0;
   right:0;
@@ -392,29 +396,71 @@ header{
 
   display:flex;
 
-  justify-content:space-around;
-
   align-items:center;
 
-  z-index:20;
+  justify-content:space-around;
+
+  z-index:100;
+
+  padding:0;
 }
 
 .bottom button{
+  flex:1;
+
+  width:25%;
+  max-width:25%;
+
+  height:70px;
+
+  padding:5px 2px;
+
+  margin:0;
+
   background:none;
+
   border:0;
+
   color:#aaa;
+
   font-size:13px;
+
+  font-family:Arial,sans-serif;
+
   cursor:pointer;
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
 }
 
 .bottom button b{
   display:block;
+
   font-size:22px;
-  color:white;
+
+  line-height:22px;
+
+  height:25px;
+
   margin-bottom:3px;
+
+  color:white;
+
+  font-weight:normal;
 }
 
-.bottom .active{
+.bottom button.active{
+  color:white;
+}
+
+.bottom button.active b{
   color:white;
 }
 
@@ -436,6 +482,23 @@ header{
 
 }
 
+
+/* =========================
+   SMALL MOBILE
+   ========================= */
+
+@media(max-width:380px){
+
+  .bottom button{
+    font-size:12px;
+  }
+
+  .bottom button b{
+    font-size:21px;
+  }
+
+}
+
 </style>
 
 </head>
@@ -453,6 +516,7 @@ header{
   <button
     class="back"
     onclick="goBack()"
+    aria-label="Go back"
   >
     ‹
   </button>
@@ -468,7 +532,7 @@ header{
   <div
     id="headerAvatar"
     class="avatar"
-    onclick="window.location.href='settings.html'"
+    onclick="window.location.href='setting.html'"
   >
     M
   </div>
@@ -493,32 +557,39 @@ header{
 
 
 <!-- =========================
-     BOTTOM NAVIGATION
+     STANDARD BOTTOM NAVIGATION
      ========================= -->
 
 <div class="bottom">
 
-  <button onclick="goHome()">
+  <button
+    onclick="goHome()"
+    aria-label="Home"
+  >
     <b>⌂</b>
     Home
   </button>
 
-  <button class="active">
+  <button
+    class="active"
+    aria-label="Horizontal videos"
+  >
     <b>▶</b>
-    Shorts
+    HORIZONTAL
   </button>
 
-  <button onclick="window.location.href='upload.html'">
-    <b>＋</b>
-    Create
-  </button>
-
-  <button onclick="goSubscriptions()">
+  <button
+    onclick="goSubscriptions()"
+    aria-label="Subscriptions"
+  >
     <b>□</b>
     Subscriptions
   </button>
 
-  <button onclick="goYou()">
+  <button
+    onclick="goYou()"
+    aria-label="You"
+  >
     <b>●</b>
     You
   </button>
@@ -726,13 +797,6 @@ function checkOrientation(video){
     let done =
       false;
 
-
-    /*
-      Safety timeout — if a video's
-      metadata never loads (broken
-      file, slow network), skip it
-      instead of hanging forever.
-    */
 
     const timer =
       setTimeout(
@@ -1260,8 +1324,7 @@ function createShort(video){
 
 
   /* ===============================
-     VIEW COUNT (counted once per
-     visible entry into this card)
+     VIEW COUNT
      =============================== */
 
   let viewCounted =
