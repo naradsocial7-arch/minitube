@@ -11,6 +11,11 @@
 
 <title>MiniTube</title>
 
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+
 <style>
 
 *{
@@ -851,7 +856,7 @@ const SUPABASE_URL =
   "https://vlzssmuzetcbkmzujecs.supabase.co";
 
 const SUPABASE_ANON_KEY =
-  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
 
 
 /* =====================================
@@ -2508,6 +2513,36 @@ function escapeHTML(text){
 updateAccountUI();
 
 loadVideos();
+
+
+/*
+  Register the service worker
+  (needed for the PWA/Android
+  app wrapper to install this
+  as a standalone app).
+*/
+
+if("serviceWorker" in navigator){
+
+  window.addEventListener(
+    "load",
+    function(){
+
+      navigator.serviceWorker
+        .register("sw.js")
+        .catch(function(error){
+
+          console.error(
+            "Service worker registration failed:",
+            error
+          );
+
+        });
+
+    }
+  );
+
+}
 
 loadMySubscriptions().then(
   applySubscribeStates
