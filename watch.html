@@ -296,6 +296,75 @@ header{
 }
 
 
+.reportOptions{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+
+.reportOption{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:11px 0;
+  font-size:15px;
+  cursor:pointer;
+}
+
+.reportOption input{
+  width:19px;
+  height:19px;
+  flex-shrink:0;
+}
+
+.reportDetailsInput{
+  width:100%;
+  background:#222;
+  border:1px solid #444;
+  border-radius:10px;
+  padding:11px 14px;
+  color:white;
+  font-size:14px;
+  outline:none;
+  margin-top:10px;
+  font-family:inherit;
+  resize:vertical;
+}
+
+.reportButtonRow{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+}
+
+.reportCancelButton{
+  flex:1;
+  background:#292929;
+  border:0;
+  color:white;
+  border-radius:10px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.reportSubmitButton{
+  flex:1;
+  background:#ff0033;
+  border:0;
+  color:white;
+  border-radius:10px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.reportSubmitButton:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+
 .actionButton{
   background:#292929;
 
@@ -940,6 +1009,14 @@ header{
 
 
     <button
+      class="actionButton"
+      onclick="openReportModal()"
+    >
+      ⚑ Report
+    </button>
+
+
+    <button
       id="subscribeButton"
       class="subscribeButton"
       onclick="toggleSubscribe()"
@@ -947,6 +1024,90 @@ header{
       Subscribe
     </button>
 
+
+  </div>
+
+
+  <!-- REPORT MODAL -->
+
+  <div
+    id="reportModalOverlay"
+    class="saveModalOverlay"
+    onclick="closeReportModalOnOverlay(event)"
+  >
+
+    <div class="saveModal">
+
+      <div class="saveModalTitle">
+        Report this video
+      </div>
+
+      <div class="reportOptions">
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Spam or misleading">
+          Spam or misleading
+        </label>
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Sexual or nudity content">
+          Sexual or nudity content
+        </label>
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Violent or harmful content">
+          Violent or harmful content
+        </label>
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Harassment or bullying">
+          Harassment or bullying
+        </label>
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Hate speech">
+          Hate speech
+        </label>
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Copyright infringement">
+          Copyright infringement
+        </label>
+
+        <label class="reportOption">
+          <input type="radio" name="reportReason" value="Other">
+          Other
+        </label>
+
+      </div>
+
+      <textarea
+        id="reportDetails"
+        class="reportDetailsInput"
+        placeholder="Add details (optional)"
+        rows="3"
+      ></textarea>
+
+      <div class="reportButtonRow">
+
+        <button
+          class="reportCancelButton"
+          onclick="closeReportModal()"
+        >
+          Cancel
+        </button>
+
+        <button
+          id="submitReportButton"
+          class="reportSubmitButton"
+          onclick="submitReport()"
+        >
+          Submit report
+        </button>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -1163,7 +1324,7 @@ const SUPABASE_URL =
   "https://vlzssmuzetcbkmzujecs.supabase.co";
 
 const SUPABASE_ANON_KEY =
-  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
 
 
 /* =====================================
@@ -1578,6 +1739,277 @@ function closeSaveModalOnOverlay(event){
   if(event.target.id === "saveModalOverlay"){
 
     closeSaveModal();
+
+  }
+
+}
+
+
+/* =====================================
+   REPORT VIDEO
+   ===================================== */
+
+function openReportModal(){
+
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    const go =
+      confirm(
+        "Please login first to report a video.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  document
+    .querySelectorAll(
+      'input[name="reportReason"]'
+    )
+    .forEach(function(input){
+
+      input.checked =
+        false;
+
+    });
+
+
+  document.getElementById(
+    "reportDetails"
+  ).value =
+    "";
+
+
+  const submitButton =
+    document.getElementById(
+      "submitReportButton"
+    );
+
+  submitButton.disabled =
+    false;
+
+  submitButton.textContent =
+    "Submit report";
+
+
+  document
+    .getElementById(
+      "reportModalOverlay"
+    )
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+function closeReportModal(){
+
+  document
+    .getElementById(
+      "reportModalOverlay"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+function closeReportModalOnOverlay(event){
+
+  if(event.target.id === "reportModalOverlay"){
+
+    closeReportModal();
+
+  }
+
+}
+
+
+async function submitReport(){
+
+  if(
+    !videoMeta ||
+    !videoMeta.id
+  ){
+
+    alert(
+      "This video can't be reported right now."
+    );
+
+    return;
+
+  }
+
+
+  const selected =
+    document.querySelector(
+      'input[name="reportReason"]:checked'
+    );
+
+
+  if(!selected){
+
+    alert(
+      "Please choose a reason first."
+    );
+
+    return;
+
+  }
+
+
+  const user =
+    getLoggedUser();
+
+
+  if(!user){
+
+    closeReportModal();
+
+    const go =
+      confirm(
+        "Please login first to report a video.\n\nGo to Login?"
+      );
+
+
+    if(go){
+
+      window.location.href =
+        "login.html";
+
+    }
+
+
+    return;
+
+  }
+
+
+  const reason =
+    selected.value;
+
+
+  const details =
+    document.getElementById(
+      "reportDetails"
+    ).value.trim();
+
+
+  const token =
+    localStorage.getItem(
+      ACCESS_TOKEN_KEY
+    );
+
+
+  const submitButton =
+    document.getElementById(
+      "submitReportButton"
+    );
+
+
+  submitButton.disabled =
+    true;
+
+  submitButton.textContent =
+    "Submitting...";
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        SUPABASE_URL +
+        "/rest/v1/reports",
+
+        {
+          method:"POST",
+
+          headers:{
+            "apikey":
+              SUPABASE_ANON_KEY,
+
+            "Authorization":
+              "Bearer " +
+              token,
+
+            "Content-Type":
+              "application/json",
+
+            "Prefer":
+              "return=minimal"
+          },
+
+          body: JSON.stringify({
+            video_id: videoMeta.id,
+            reporter_id: user.id,
+            reason: reason,
+            details: details || null
+          })
+        }
+
+      );
+
+
+    if(!response.ok){
+
+      const errorText =
+        await response.text();
+
+
+      alert(
+        "Could not submit report: " +
+        errorText
+      );
+
+
+      submitButton.disabled =
+        false;
+
+      submitButton.textContent =
+        "Submit report";
+
+      return;
+
+    }
+
+
+    closeReportModal();
+
+
+    alert(
+      "Thanks — this video has been reported. Our team will review it."
+    );
+
+
+  }catch(error){
+
+    alert(
+      "Could not submit report: network error."
+    );
+
+
+    submitButton.disabled =
+      false;
+
+    submitButton.textContent =
+      "Submit report";
 
   }
 
