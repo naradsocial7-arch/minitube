@@ -1,228 +1,772 @@
-from pathlib import Path
 
-html = r'''<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f0f0f">
+<meta name="theme-color" content="#101010">
 <title>Settings - MiniTube</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#0f0f0f;color:#f1f1f1;font-family:Arial,sans-serif;padding-bottom:82px}
-header{position:sticky;top:0;z-index:10;background:#0f0f0f;padding:14px 20px;border-bottom:1px solid #292929}
-.top{display:flex;align-items:center;gap:18px;min-height:42px}
-.backButton{border:0;background:transparent;color:#eee;font-size:30px;line-height:1;cursor:pointer;padding:0 4px}
-.headerTitle{font-size:22px;font-weight:500}
-.accountCard{display:flex;align-items:center;gap:15px;padding:22px 24px;border-bottom:1px solid #242424}
-.accountAvatar{width:54px;height:54px;border-radius:50%;background:#7c4dff;display:grid;place-items:center;font-size:23px;font-weight:bold;flex-shrink:0}
-.accountInfo{min-width:0;flex:1}
-.accountName{font-size:18px;font-weight:700;overflow-wrap:anywhere}
-.accountEmail{font-size:14px;color:#aaa;margin-top:5px;overflow-wrap:anywhere}
-.accountActionButton{background:#292929;border:0;color:white;padding:10px 16px;border-radius:22px;font-size:13px;font-weight:bold;cursor:pointer;white-space:nowrap}
-.accountActionButton.logout{color:#ff6b80}
-.sectionTitle{font-size:18px;font-weight:700;padding:25px 24px 10px}
-.settingRow{display:flex;align-items:center;gap:18px;min-height:72px;padding:12px 24px;cursor:pointer;transition:background .15s}
-.settingRow:active{background:#202020}
-.settingIcon{width:34px;height:34px;display:grid;place-items:center;flex-shrink:0;color:#eee}
-.settingIcon svg{width:25px;height:25px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.settingInfo{min-width:0;flex:1}
-.settingLabel{font-size:16px;font-weight:500}
-.settingSub{font-size:13px;color:#999;margin-top:4px;line-height:1.35}
-.rowArrow{color:#888;font-size:22px;padding-left:6px}
-.rowControl{flex-shrink:0}
-.switch{width:46px;height:26px;background:#444;border-radius:20px;position:relative;transition:background .15s}
-.switch:after{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#eee;transition:left .15s}
-.switch.on{background:#7c4dff}
-.switch.on:after{left:23px}
-.divider{height:1px;background:#252525;margin:8px 0}
-.aboutBox{padding:16px 24px 24px;color:#aaa;font-size:13px;line-height:1.6}
-.statusPill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:bold;margin-left:5px;background:#292929;color:#aaa}
-.statusPill.ok{background:#123a24;color:#6ee7b7}.statusPill.error{background:#3a1218;color:#ff8795}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:70px;background:#151515;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:20}
-.bottom button{background:none;border:0;color:#aaa;font-size:12px;cursor:pointer;min-width:62px}
-.bottom button b{display:block;font-size:23px;color:#eee;margin-bottom:3px;font-weight:400}
-.bottom button.active{color:#fff}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.68);z-index:50;align-items:flex-end;justify-content:center}
-.overlay.show{display:flex}
-.sheet{width:100%;max-width:560px;max-height:86vh;overflow:auto;background:#1b1b1b;border-radius:20px 20px 0 0;padding:22px 22px 28px;box-shadow:0 -10px 40px #0008}
-.sheetTop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.sheetTitle{font-size:20px;font-weight:700}
-.closeButton{background:#303030;color:#fff;border:0;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer}
-.sheetText{color:#bbb;font-size:14px;line-height:1.6}
-.sheetOption{padding:14px 0;border-bottom:1px solid #333}
-.sheetOption:last-child{border-bottom:0}
-.sheetOption strong{display:block;font-size:15px;margin-bottom:5px}
-.sheetOption small{display:block;color:#aaa;font-size:13px;line-height:1.5}
-.sheetSelect,.sheetInput{width:100%;margin-top:10px;padding:12px;background:#292929;border:1px solid #494949;border-radius:10px;color:white;font-size:15px}
-.actionButton{margin-top:16px;background:#7c4dff;color:white;border:0;border-radius:22px;padding:12px 18px;font-size:14px;font-weight:bold;cursor:pointer}
-.dangerButton{background:#b32643}
-.sheetButtons{display:flex;gap:10px;flex-wrap:wrap}
-@media(min-width:650px){.overlay{align-items:center;padding:20px}.sheet{border-radius:20px}.settingRow{padding-left:28px;padding-right:28px}.sectionTitle{padding-left:28px}}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f0f0f;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 20px;
+  background: #151515;
+  border-bottom: 1px solid #292929;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.back {
+  color: white;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.logo span {
+  color: #ff3333;
+}
+
+.container {
+  max-width: 850px;
+  margin: 25px auto;
+  padding: 0 16px 50px;
+}
+
+h1 {
+  font-size: 27px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.section {
+  margin-bottom: 25px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 0 0 12px 5px;
+}
+
+.card {
+  background: #191919;
+  border: 1px solid #303030;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.item {
+  min-height: 70px;
+  padding: 15px 17px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #303030;
+  cursor: pointer;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item:active {
+  background: #252525;
+}
+
+.item-info {
+  min-width: 0;
+}
+
+.item-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.item-desc {
+  font-size: 12px;
+  color: #999;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.arrow {
+  color: #888;
+  font-size: 20px;
+}
+
+.switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #555;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.slider:before {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: .2s;
+}
+
+.switch input:checked + .slider {
+  background: #ff3333;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+select {
+  background: #252525;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 9px;
+  max-width: 125px;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  background: #333;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.danger {
+  color: #ff5555;
+}
+
+.version {
+  text-align: center;
+  color: #666;
+  font-size: 12px;
+  margin-top: 35px;
+}
+
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+  padding: 18px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 420px;
+  background: #1d1d1d;
+  border: 1px solid #383838;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.modal h2 {
+  font-size: 19px;
+  margin-top: 0;
+}
+
+.modal p {
+  color: #bbb;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.btn {
+  padding: 11px 17px;
+  border-radius: 8px;
+  background: #333;
+  color: white;
+}
+
+.btn-red {
+  background: #e52d2d;
+  color: white;
+}
+
+.toast {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #292929;
+  border: 1px solid #444;
+  padding: 12px 20px;
+  border-radius: 30px;
+  display: none;
+  z-index: 200;
+  font-size: 13px;
+  max-width: 90%;
+  text-align: center;
+}
+
+@media(max-width: 500px) {
+  .container {
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .item {
+    padding: 14px;
+  }
+}
 </style>
 </head>
+
 <body>
-<header><div class="top">
-<button class="backButton" onclick="goBack()" aria-label="Go back">←</button>
-<div class="headerTitle">Settings</div>
-</div></header>
 
-<div class="accountCard">
-<div id="accountAvatar" class="accountAvatar">M</div>
-<div class="accountInfo">
-<div id="accountName" class="accountName">Not logged in</div>
-<div id="accountEmail" class="accountEmail">Login to sync your account</div>
+<header>
+  <a class="back" href="index.html">‹</a>
+  <div class="logo">Mini<span>Tube</span></div>
+</header>
+
+<main class="container">
+
+  <h1>Settings</h1>
+  <div class="subtitle">Manage your MiniTube account and preferences.</div>
+
+  <!-- ACCOUNT -->
+  <div class="section">
+    <div class="section-title">Account</div>
+    <div class="card">
+
+      <div class="item" id="accountItem">
+        <div class="account">
+          <div class="avatar">👤</div>
+          <div class="item-info">
+            <div class="item-title" id="userName">MiniTube User</div>
+            <div class="item-desc" id="userEmail">Manage your account</div>
+          </div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="item" data-action="login">
+        <div class="item-info">
+          <div class="item-title">Sign in / Account</div>
+          <div class="item-desc">Open your MiniTube account</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="item" data-action="logout">
+        <div class="item-info">
+          <div class="item-title danger">Sign out</div>
+          <div class="item-desc">Sign out from this device</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GENERAL -->
+  <div class="section">
+    <div class="section-title">General</div>
+    <div class="card">
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Language</div>
+          <div class="item-desc">Choose your preferred language</div>
+        </div>
+        <select id="language">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+        </select>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Dark Theme</div>
+          <div class="item-desc">Use the dark appearance</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="darkTheme" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Restricted Mode</div>
+          <div class="item-desc">Preference for limiting potentially mature content. This does not filter videos yet.</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="restricted">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div class="section">
+    <div class="section-title">Notifications</div>
+    <div class="card">
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">General Notifications</div>
+          <div class="item-desc">Save your notification preference</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="notifications">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Subscription Notifications</div>
+          <div class="item-desc">Preference for updates from subscribed channels</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="subNotifications">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Email Notifications</div>
+          <div class="item-desc">Save your email notification preference</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="emailNotifications">
+          <span class="slider"></span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRIVACY -->
+  <div class="section">
+    <div class="section-title">Privacy</div>
+    <div class="card">
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Watch History</div>
+          <div class="item-desc">Manage your watch history preference</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="watchHistory" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <div class="item-title">Search History</div>
+          <div class="item-desc">Manage your search history preference</div>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="searchHistory" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="item" data-action="privacy">
+        <div class="item-info">
+          <div class="item-title">Privacy Information</div>
+          <div class="item-desc">Learn how your settings are stored</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DATA -->
+  <div class="section">
+    <div class="section-title">Data & Storage</div>
+    <div class="card">
+
+      <div class="item" data-action="clearHistory">
+        <div class="item-info">
+          <div class="item-title">Clear Local Preferences</div>
+          <div class="item-desc">Reset settings saved on this device</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="item" data-action="clearCache">
+        <div class="item-info">
+          <div class="item-title">Clear Temporary Cache</div>
+          <div class="item-desc">Clear MiniTube's temporary browser cache, if available</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MORE -->
+  <div class="section">
+    <div class="section-title">More</div>
+    <div class="card">
+
+      <div class="item" data-action="help">
+        <div class="item-info">
+          <div class="item-title">Help & Support</div>
+          <div class="item-desc">Get help with MiniTube</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="item" data-action="about">
+        <div class="item-info">
+          <div class="item-title">About MiniTube</div>
+          <div class="item-desc">App information and version</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+      <div class="item" data-action="terms">
+        <div class="item-info">
+          <div class="item-title">Terms & Privacy Policy</div>
+          <div class="item-desc">Read the app policies</div>
+        </div>
+        <span class="arrow">›</span>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="version">
+    MiniTube · Version 1.0.0
+  </div>
+
+</main>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h2 id="modalTitle">MiniTube</h2>
+    <p id="modalMessage"></p>
+    <div class="modal-actions">
+      <button class="btn" id="cancelBtn">Cancel</button>
+      <button class="btn btn-red" id="confirmBtn">OK</button>
+    </div>
+  </div>
 </div>
-<button id="accountActionButton" class="accountActionButton" onclick="accountAction()">Login</button>
-</div>
 
-<div class="sectionTitle">Account</div>
-<div class="settingRow" onclick="openPanel('general')"><div class="settingIcon">⚙</div><div class="settingInfo"><div class="settingLabel">General</div><div class="settingSub">App preferences and playback</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('accounts')"><div class="settingIcon">▣</div><div class="settingInfo"><div class="settingLabel">Switch or manage account</div><div class="settingSub">Manage your MiniTube sign-in</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('family')"><div class="settingIcon">♧</div><div class="settingInfo"><div class="settingLabel">Family Centre</div><div class="settingSub">Family and supervised account information</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('language')"><div class="settingIcon">文</div><div class="settingInfo"><div class="settingLabel">Languages</div><div class="settingSub" id="languageSummary">Choose your app language</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('time')"><div class="settingIcon">▥</div><div class="settingInfo"><div class="settingLabel">Time management</div><div class="settingSub">Set a reminder to take a break</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('notifications')"><div class="settingIcon">♧</div><div class="settingInfo"><div class="settingLabel">Notifications</div><div class="settingSub">Manage notification preferences</div></div><div class="rowArrow">›</div></div>
-
-<div class="divider"></div>
-<div class="settingRow" onclick="openPanel('premium')"><div class="settingIcon">▣</div><div class="settingInfo"><div class="settingLabel">MiniTube Premium</div><div class="settingSub">Premium features may be available in the future</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('purchases')"><div class="settingIcon">◇</div><div class="settingInfo"><div class="settingLabel">Purchases and memberships</div><div class="settingSub">View purchases and memberships</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('billing')"><div class="settingIcon">▤</div><div class="settingInfo"><div class="settingLabel">Billing and payments</div><div class="settingSub">Payment methods and billing information</div></div><div class="rowArrow">›</div></div>
-
-<div class="divider"></div>
-<div class="sectionTitle">Your data and privacy</div>
-<div class="settingRow" onclick="openPanel('history')"><div class="settingIcon">◷</div><div class="settingInfo"><div class="settingLabel">Manage all history</div><div class="settingSub" id="historySummary">View or clear watch and search history</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('data')"><div class="settingIcon">⬡</div><div class="settingInfo"><div class="settingLabel">Your data in MiniTube</div><div class="settingSub">Understand the data stored by this app</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('privacy')"><div class="settingIcon">♙</div><div class="settingInfo"><div class="settingLabel">Privacy</div><div class="settingSub">Privacy information and local controls</div></div><div class="rowArrow">›</div></div>
-<div class="settingRow" onclick="openPanel('connected')"><div class="settingIcon">◎</div><div class="settingInfo"><div class="settingLabel">Connected apps</div><div class="settingSub">Apps connected to your MiniTube account</div></div><div class="rowArrow">›</div></div>
-
-<div class="divider"></div>
-<div class="sectionTitle">More</div>
-<div class="settingRow" onclick="openPanel('experimental')"><div class="settingIcon">⚗</div><div class="settingInfo"><div class="settingLabel">Try experimental new features</div><div class="settingSub">Preview features that are still in development</div></div><div class="rowArrow">›</div></div>
-
-<div class="sectionTitle">Playback</div>
-<div class="settingRow" onclick="toggleAutoplay()"><div class="settingIcon">▶</div><div class="settingInfo"><div class="settingLabel">Autoplay</div><div class="settingSub">Automatically play videos when opened</div></div><div id="autoplaySwitch" class="switch rowControl"></div></div>
-
-<div class="sectionTitle">Data &amp; storage</div>
-<div class="settingRow" onclick="clearWatchHistory()"><div class="settingIcon">◷</div><div class="settingInfo"><div class="settingLabel">Clear watch history</div><div class="settingSub" id="historyCount">0 videos</div></div><div class="rowArrow">Clear</div></div>
-<div class="settingRow" onclick="clearSearchHistory()"><div class="settingIcon">⌕</div><div class="settingInfo"><div class="settingLabel">Clear search history</div><div class="settingSub" id="searchCount">0 searches</div></div><div class="rowArrow">Clear</div></div>
-<div class="settingRow" onclick="clearPlaylists()"><div class="settingIcon">▤</div><div class="settingInfo"><div class="settingLabel">Clear playlists</div><div class="settingSub" id="playlistCount">0 playlists</div></div><div class="rowArrow">Clear</div></div>
-<div class="settingRow" onclick="clearEverything()"><div class="settingIcon">▧</div><div class="settingInfo"><div class="settingLabel">Clear all app data</div><div class="settingSub" style="color:#ff8795">Resets local app data and signs you out</div></div><div class="rowArrow" style="color:#ff8795">Clear</div></div>
-
-<div class="sectionTitle">About</div>
-<div class="aboutBox">MiniTube — a personal video-sharing app.<br>Server status: <span id="serverStatus" class="statusPill">Checking...</span><br><span id="appVersion">MiniTube settings</span></div>
-
-<nav class="bottom">
-<button onclick="goHome()"><b>⌂</b>Home</button>
-<button onclick="goShorts()"><b>▶</b>HORIZONTAL</button>
-<button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
-<button class="active" onclick="goYou()"><b>●</b>You</button>
-</nav>
-
-<div id="panelOverlay" class="overlay" onclick="if(event.target===this)closePanel()">
-<div class="sheet">
-<div class="sheetTop"><div id="panelTitle" class="sheetTitle">Settings</div><button class="closeButton" onclick="closePanel()" aria-label="Close">×</button></div>
-<div id="panelBody" class="sheetText"></div>
-</div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
-const ACCESS_TOKEN_KEY="minitube_access_token";
-const REFRESH_TOKEN_KEY="minitube_refresh_token";
-const USER_KEY="minitube_user";
-const AUTOPLAY_KEY="minitube_autoplay";
-const SUBSCRIBE_KEY="minitube_my_channel_subscribed";
+const SETTINGS_KEY = "minitube_settings";
 
-function getLoggedUser(){
-  const token=localStorage.getItem(ACCESS_TOKEN_KEY);
-  const savedUser=localStorage.getItem(USER_KEY);
-  if(!token||!savedUser)return null;
-  try{return JSON.parse(savedUser)}catch(e){return null}
+const defaults = {
+  language: "en",
+  darkTheme: true,
+  restricted: false,
+  notifications: true,
+  subNotifications: true,
+  emailNotifications: false,
+  watchHistory: true,
+  searchHistory: true
+};
+
+let settings = { ...defaults };
+
+function loadSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+    settings = { ...defaults, ...saved };
+  } catch (error) {
+    settings = { ...defaults };
+  }
+
+  Object.keys(defaults).forEach(key => {
+    const element = document.getElementById(key);
+    if (!element) return;
+
+    if (element.type === "checkbox") {
+      element.checked = Boolean(settings[key]);
+    } else {
+      element.value = settings[key];
+    }
+  });
 }
-function getUserName(user){
-  if(!user)return "Not logged in";
-  const m=user.user_metadata||user.userMetadata||{};
-  return m.display_name||m.full_name||m.name||user.email||"MiniTube User";
+
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
-function updateAccountUI(){
-  const user=getLoggedUser();
-  document.getElementById("accountAvatar").textContent=user?getUserName(user).trim().charAt(0).toUpperCase()||"M":"M";
-  document.getElementById("accountName").textContent=user?getUserName(user):"Not logged in";
-  document.getElementById("accountEmail").textContent=user?(user.email||"Signed in"):"Login to sync your account";
-  const b=document.getElementById("accountActionButton");
-  b.textContent=user?"Logout":"Login";
-  b.classList.toggle("logout",!!user);
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => {
+    toast.style.display = "none";
+  }, 2500);
 }
-function accountAction(){
-  if(!getLoggedUser()){location.href="login.html";return}
-  if(!confirm("Logout from this MiniTube account?"))return;
-  localStorage.removeItem(ACCESS_TOKEN_KEY);localStorage.removeItem(REFRESH_TOKEN_KEY);localStorage.removeItem(USER_KEY);
-  updateAccountUI();closePanel();alert("You have been logged out.");
+
+function getUser() {
+  try {
+    const raw = localStorage.getItem("minitube_user");
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    return null;
+  }
 }
-function isAutoplayOn(){const v=localStorage.getItem(AUTOPLAY_KEY);return v===null?true:v==="true"}
-function renderAutoplaySwitch(){document.getElementById("autoplaySwitch").classList.toggle("on",isAutoplayOn())}
-function toggleAutoplay(){localStorage.setItem(AUTOPLAY_KEY,String(!isAutoplayOn()));renderAutoplaySwitch()}
-function readJSON(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
-function renderCounts(){
-  const h=readJSON("minitube_watch_history",[]),s=readJSON("minitube_recent_searches",[]),p=readJSON("minitube_playlists",[]).filter(x=>!x.builtIn);
-  document.getElementById("historyCount").textContent=h.length+" video"+(h.length===1?"":"s");
-  document.getElementById("searchCount").textContent=s.length+" search"+(s.length===1?"":"es");
-  document.getElementById("playlistCount").textContent=p.length+" playlist"+(p.length===1?"":"s");
-  document.getElementById("historySummary").textContent=h.length+" watched videos and "+s.length+" searches stored on this device";
+
+function updateAccount() {
+  const token = localStorage.getItem("minitube_access_token");
+  const user = getUser();
+
+  if (token && user) {
+    document.getElementById("userName").textContent =
+      user.name || user.username || user.email || "MiniTube User";
+
+    document.getElementById("userEmail").textContent =
+      user.email || "Signed in";
+  } else {
+    document.getElementById("userName").textContent = "Guest User";
+    document.getElementById("userEmail").textContent = "Not signed in";
+  }
 }
-function clearWatchHistory(){if(!confirm("Clear your entire watch history?"))return;localStorage.removeItem("minitube_watch_history");renderCounts()}
-function clearSearchHistory(){if(!confirm("Clear your recent searches?"))return;localStorage.removeItem("minitube_recent_searches");renderCounts()}
-function clearPlaylists(){if(!confirm("Delete all your custom playlists?"))return;localStorage.removeItem("minitube_playlists");renderCounts()}
-function clearEverything(){
-  if(!confirm("This will erase all local MiniTube data on this device, including login information. It will not delete videos or account data stored on the server. Continue?"))return;
-  const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith("minitube"))keys.push(k)}
-  keys.forEach(k=>localStorage.removeItem(k));alert("Local MiniTube data has been cleared.");location.href="login.html";
-}
-function showPanel(title,html){document.getElementById("panelTitle").textContent=title;document.getElementById("panelBody").innerHTML=html;document.getElementById("panelOverlay").classList.add("show")}
-function closePanel(){document.getElementById("panelOverlay").classList.remove("show")}
-function openPanel(which){
-  const user=getLoggedUser();
-  const panels={
-    general:["General",`<div class="sheetOption"><strong>Autoplay</strong><small>Automatically play videos when opened.</small><div class="sheetButtons"><button class="actionButton" onclick="toggleAutoplay();openPanel('general')">${isAutoplayOn()?"Turn autoplay off":"Turn autoplay on"}</button></div></div><div class="sheetOption"><strong>App language</strong><small>Current language: ${escapeHTML(localStorage.getItem("minitube_language")||"English")}</small><button class="actionButton" onclick="openPanel('language')">Change language</button></div>`],
-    accounts:["Switch or manage account",`<div class="sheetOption"><strong>${user?escapeHTML(getUserName(user)):"Not signed in"}</strong><small>${user?escapeHTML(user.email||""):"Sign in to use your MiniTube account across devices."}</small></div><div class="sheetButtons"><button class="actionButton" onclick="accountAction()">${user?"Logout":"Login"}</button></div><p>To use another account, log out and sign in with the other account.</p>`],
-    family:["Family Centre",`<p>Family Centre is not available in this MiniTube version yet. This section is reserved for future family and supervised-account tools.</p>`],
-    language:["Languages",`<p>Choose the language for MiniTube settings. This saves your preference on this device; it does not automatically translate every page yet.</p><select id="languageSelect" class="sheetSelect"><option>English</option><option>हिन्दी</option></select><button class="actionButton" onclick="saveLanguage()">Save language</button>`],
-    time:["Time management",`<p>Set a local reminder to take a break. This is a preference only; browser notifications or timed alerts are not enabled by this setting.</p><div class="sheetOption"><strong>Break reminder</strong><select id="breakSelect" class="sheetSelect"><option value="off">Off</option><option value="30">Every 30 minutes</option><option value="60">Every 1 hour</option><option value="120">Every 2 hours</option></select></div><button class="actionButton" onclick="saveBreakReminder()">Save</button>`],
-    notifications:["Notifications",`<p>Notification controls will work when MiniTube's push-notification service is connected. These switches currently save your preferences on this device only.</p><div class="sheetOption"><strong>New upload alerts</strong><small>Preference for alerts from channels you follow.</small><button class="actionButton" onclick="togglePreference('minitube_notify_uploads');openPanel('notifications')">${localStorage.getItem("minitube_notify_uploads")==="false"?"Turn on":"Turn off"}</button></div><div class="sheetOption"><strong>Activity alerts</strong><small>Preference for likes, comments and replies.</small><button class="actionButton" onclick="togglePreference('minitube_notify_activity');openPanel('notifications')">${localStorage.getItem("minitube_notify_activity")==="false"?"Turn on":"Turn off"}</button></div>`],
-    premium:["MiniTube Premium",`<p>MiniTube Premium is not available yet. No payment will be taken from this page. Premium plans can be added later with secure payment integration and clear subscription terms.</p>`],
-    purchases:["Purchases and memberships",`<p>You have no MiniTube purchases or memberships to display. This section will become active if paid memberships are introduced.</p>`],
-    billing:["Billing and payments",`<p>Payment methods and billing are not configured in MiniTube yet. Do not enter payment or card details here.</p>`],
-    history:["Manage all history",`<div class="sheetOption"><strong>Watch history</strong><small>${readJSON("minitube_watch_history",[]).length} saved entries on this device.</small><button class="actionButton dangerButton" onclick="clearWatchHistory();openPanel('history')">Clear watch history</button></div><div class="sheetOption"><strong>Search history</strong><small>${readJSON("minitube_recent_searches",[]).length} saved searches on this device.</small><button class="actionButton dangerButton" onclick="clearSearchHistory();openPanel('history')">Clear search history</button></div>`],
-    data:["Your data in MiniTube",`<p>MiniTube stores some preferences and history in this browser's local storage. Your account profile, videos and other server-side records may be stored separately by the services used by MiniTube.</p><p><strong>Clear all app data</strong> removes local keys beginning with “minitube” from this device and signs you out. It does not delete server-side account records or uploaded videos.</p><button class="actionButton dangerButton" onclick="closePanel();clearEverything()">Clear local app data</button>`],
-    privacy:["Privacy",`<p>Keep your login credentials private and sign out when using a shared device. This page does not currently provide controls to make uploaded videos private or change server-side data visibility.</p><p>For account deletion or removal of server-side data, a secure account-management feature or support process must be added.</p>`],
-    connected:["Connected apps",`<p>No third-party app connections are managed from MiniTube at this time.</p>`],
-    experimental:["Try experimental new features",`<p>There are no experimental features available right now. New test features may appear here in a future update.</p>`]
+
+function openModal(title, message, confirmText, callback) {
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalMessage").textContent = message;
+  document.getElementById("confirmBtn").textContent = confirmText || "OK";
+
+  const bg = document.getElementById("modalBg");
+  bg.style.display = "flex";
+
+  const confirm = document.getElementById("confirmBtn");
+
+  confirm.onclick = () => {
+    bg.style.display = "none";
+    if (callback) callback();
   };
-  const item=panels[which];if(!item)return;
-  showPanel(item[0],item[1]);
-  if(which==="language"){document.getElementById("languageSelect").value=localStorage.getItem("minitube_language")||"English"}
-  if(which==="time"){document.getElementById("breakSelect").value=localStorage.getItem("minitube_break_reminder")||"off"}
+
+  document.getElementById("cancelBtn").onclick = () => {
+    bg.style.display = "none";
+  };
 }
-function saveLanguage(){const v=document.getElementById("languageSelect").value;localStorage.setItem("minitube_language",v);document.getElementById("languageSummary").textContent=v;closePanel();alert("Language preference saved. Full translation is not enabled yet.")}
-function saveBreakReminder(){localStorage.setItem("minitube_break_reminder",document.getElementById("breakSelect").value);closePanel();alert("Break reminder preference saved on this device.")}
-function togglePreference(key){localStorage.setItem(key,String(localStorage.getItem(key)!=="false"))}
-function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
-async function checkServerStatus(){
-  const pill=document.getElementById("serverStatus");
-  try{const r=await fetch(API_BASE+"/");if(r.ok){pill.textContent="Online";pill.className="statusPill ok"}else{pill.textContent="Unreachable";pill.className="statusPill error"}}
-  catch(e){pill.textContent="Unreachable";pill.className="statusPill error"}
+
+function logout() {
+  openModal(
+    "Sign out?",
+    "You will be signed out from this device. Your server-side account and uploaded videos will not be deleted.",
+    "Sign out",
+    () => {
+      localStorage.removeItem("minitube_access_token");
+      localStorage.removeItem("minitube_user");
+      showToast("Signed out from this device");
+
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 900);
+    }
+  );
 }
-function goBack(){if(history.length>1)history.back();else location.href="you.html"}
-function goHome(){location.href="index.html"}
-function goShorts(){location.href="shorts.html"}
-function goSubscriptions(){location.href="subscriptions.html"}
-function goYou(){location.href="you.html"}
-updateAccountUI();renderAutoplaySwitch();renderCounts();checkServerStatus();
+
+function resetSettings() {
+  openModal(
+    "Reset settings?",
+    "Your saved MiniTube preferences on this device will return to their default values. Your account and videos will not be deleted.",
+    "Reset",
+    () => {
+      settings = { ...defaults };
+      saveSettings();
+      loadSettings();
+      showToast("Settings reset successfully");
+    }
+  );
+}
+
+function clearTemporaryCache() {
+  openModal(
+    "Clear temporary cache?",
+    "This will attempt to clear MiniTube's browser cache. It will not delete your account or uploaded videos.",
+    "Clear",
+    async () => {
+      if (!("caches" in window)) {
+        showToast("Cache clearing is not supported here");
+        return;
+      }
+
+      try {
+        const names = await caches.keys();
+
+        for (const name of names) {
+          if (name.toLowerCase().includes("minitube")) {
+            await caches.delete(name);
+          }
+        }
+
+        showToast("Temporary cache cleared");
+      } catch (error) {
+        showToast("Could not clear cache");
+      }
+    }
+  );
+}
+
+function handleAction(action) {
+  switch (action) {
+    case "login":
+      window.location.href = "login.html";
+      break;
+
+    case "logout":
+      logout();
+      break;
+
+    case "privacy":
+      openModal(
+        "Privacy Information",
+        "Your preferences on this page are saved in this browser's local storage. These switches do not automatically change server-side data or notification delivery."
+      );
+      break;
+
+    case "clearHistory":
+      resetSettings();
+      break;
+
+    case "clearCache":
+      clearTemporaryCache();
+      break;
+
+    case "help":
+      openModal(
+        "Help & Support",
+        "MiniTube support information can be added here when an official support contact is available."
+      );
+      break;
+
+    case "about":
+      openModal(
+        "About MiniTube",
+        "MiniTube is a video-sharing platform. Version 1.0.0"
+      );
+      break;
+
+    case "terms":
+      openModal(
+        "Terms & Privacy Policy",
+        "Add your official Terms of Service and Privacy Policy links here before public launch."
+      );
+      break;
+  }
+}
+
+// Save preference changes
+Object.keys(defaults).forEach(key => {
+  const element = document.getElementById(key);
+
+  element.addEventListener("change", () => {
+    settings[key] =
+      element.type === "checkbox" ? element.checked : element.value;
+
+    saveSettings();
+    showToast("Preference saved");
+  });
+});
+
+// Clickable settings rows
+document.querySelectorAll("[data-action]").forEach(item => {
+  item.addEventListener("click", () => {
+    handleAction(item.dataset.action);
+  });
+});
+
+// Account row
+document.getElementById("accountItem").addEventListener("click", () => {
+  const token = localStorage.getItem("minitube_access_token");
+
+  if (token) {
+    window.location.href = "you.html";
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+loadSettings();
+updateAccount();
 </script>
+
 </body>
 </html>
-'''
-path = Path("/mnt/data/settings.html")
-path.write_text(html, encoding="utf-8")
-print(f"Created {path} ({len(html):,} characters)")
