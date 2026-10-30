@@ -1,21 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Channel - MiniTube</title>
 
 <style>
-
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -25,15 +17,11 @@ body{
   padding-bottom:80px;
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
-}
+a{color:inherit;text-decoration:none}
 
+button{font-family:inherit}
 
-/* =========================
-   HEADER
-   ========================= */
+/* HEADER */
 
 header{
   position:sticky;
@@ -80,12 +68,7 @@ header{
   flex-shrink:0;
 }
 
-
-/* ACCOUNT MENU */
-
-.accountArea{
-  position:relative;
-}
+.accountArea{position:relative}
 
 .accountMenu{
   display:none;
@@ -101,9 +84,7 @@ header{
   z-index:100;
 }
 
-.accountMenu.show{
-  display:block;
-}
+.accountMenu.show{display:block}
 
 .accountAvatar{
   width:50px;
@@ -153,18 +134,10 @@ header{
   cursor:pointer;
 }
 
-.accountButton:hover{
-  background:#383838;
-}
+.accountButton:hover{background:#383838}
+.logoutButton{background:#ff0033}
 
-.logoutButton{
-  background:#ff0033;
-}
-
-
-/* =========================
-   CHANNEL BANNER
-   ========================= */
+/* CHANNEL BANNER */
 
 .banner{
   height:110px;
@@ -192,9 +165,7 @@ header{
   flex-shrink:0;
 }
 
-.channelInfo{
-  padding-top:44px;
-}
+.channelInfo{padding-top:44px}
 
 .channelTitle{
   font-size:22px;
@@ -231,16 +202,14 @@ header{
   border:1px solid #555;
 }
 
-
-/* =========================
-   TABS
-   ========================= */
+/* TABS */
 
 .tabs{
   display:flex;
   gap:8px;
   padding:20px 22px 0;
   border-bottom:1px solid #292929;
+  overflow-x:auto;
 }
 
 .tabs button{
@@ -252,6 +221,7 @@ header{
   padding:0 4px 14px;
   cursor:pointer;
   border-bottom:3px solid transparent;
+  white-space:nowrap;
 }
 
 .tabs button.active{
@@ -259,18 +229,8 @@ header{
   border-bottom-color:#ff0033;
 }
 
-
-/* =========================
-   TAB PANELS
-   ========================= */
-
-.tabPanel{
-  display:none;
-}
-
-.tabPanel.show{
-  display:block;
-}
+.tabPanel{display:none}
+.tabPanel.show{display:block}
 
 .comingSoon{
   text-align:center;
@@ -300,14 +260,9 @@ header{
   margin-top:18px;
 }
 
-.aboutBox .aboutLabel:first-child{
-  margin-top:0;
-}
+.aboutBox .aboutLabel:first-child{margin-top:0}
 
-
-/* =========================
-   VIDEO GRID
-   ========================= */
+/* VIDEOS */
 
 .status{
   text-align:center;
@@ -317,10 +272,7 @@ header{
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(
-    auto-fit,
-    minmax(260px,1fr)
-  );
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:18px;
   padding:18px 22px;
 }
@@ -340,13 +292,9 @@ header{
   object-fit:cover;
 }
 
-.card:hover .cardVideo{
-  opacity:.92;
-}
+.card:hover .cardVideo{opacity:.92}
 
-.info{
-  padding:12px;
-}
+.info{padding:12px}
 
 .title{
   font-size:16px;
@@ -360,10 +308,202 @@ header{
   margin-top:7px;
 }
 
+/* RATING SYSTEM */
 
-/* =========================
-   BOTTOM NAV
-   ========================= */
+.ratingSection{
+  padding:22px;
+  max-width:900px;
+  margin:auto;
+}
+
+.ratingHeading{
+  font-size:21px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.ratingSummary{
+  background:#181818;
+  border:1px solid #303030;
+  border-radius:15px;
+  padding:20px;
+  display:flex;
+  gap:25px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.ratingAverage{
+  min-width:120px;
+  text-align:center;
+}
+
+.ratingAverage .number{
+  font-size:48px;
+  font-weight:bold;
+}
+
+.stars{
+  color:#ffb800;
+  letter-spacing:2px;
+}
+
+.ratingCount{
+  color:#999;
+  font-size:13px;
+  margin-top:7px;
+}
+
+.ratingBars{
+  flex:1;
+  min-width:190px;
+}
+
+.ratingBar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:8px 0;
+  font-size:13px;
+  color:#ccc;
+}
+
+.barTrack{
+  flex:1;
+  height:8px;
+  background:#333;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.barFill{
+  height:100%;
+  background:#ffb800;
+  border-radius:10px;
+}
+
+.reviewForm{
+  background:#181818;
+  border:1px solid #303030;
+  padding:18px;
+  border-radius:15px;
+  margin-top:22px;
+}
+
+.reviewForm h3{margin:0 0 15px}
+
+.starPicker{
+  display:flex;
+  gap:7px;
+  margin:12px 0;
+}
+
+.starPicker button{
+  background:none;
+  border:0;
+  color:#555;
+  font-size:32px;
+  cursor:pointer;
+  padding:0;
+}
+
+.starPicker button.selected{color:#ffb800}
+
+.reviewSelect,
+.reviewInput{
+  width:100%;
+  background:#101010;
+  border:1px solid #444;
+  color:white;
+  padding:12px;
+  border-radius:9px;
+  margin:8px 0;
+  font-size:14px;
+}
+
+.reviewInput{
+  min-height:100px;
+  resize:vertical;
+}
+
+.reviewSubmit{
+  background:#ff0033;
+  color:white;
+  border:0;
+  border-radius:22px;
+  padding:12px 24px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.reviewSubmit:disabled{opacity:.5}
+
+.reviewList{margin-top:25px}
+
+.reviewCard{
+  background:#181818;
+  border:1px solid #303030;
+  border-radius:13px;
+  padding:16px;
+  margin-bottom:13px;
+}
+
+.reviewUser{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.reviewAvatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#7c4dff;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.reviewUserName{font-weight:bold}
+
+.reviewDate{
+  color:#888;
+  font-size:12px;
+  margin-top:4px;
+}
+
+.reviewProblem{
+  color:#ff8585;
+  font-size:13px;
+  margin-top:13px;
+}
+
+.reviewText{
+  color:#ddd;
+  font-size:14px;
+  line-height:1.6;
+  margin-top:10px;
+  overflow-wrap:anywhere;
+}
+
+.creatorReply{
+  margin:15px 0 0 15px;
+  padding:12px;
+  border-left:3px solid #ff0033;
+  background:#222;
+  border-radius:5px;
+  font-size:13px;
+  color:#ccc;
+}
+
+.noReviews{
+  color:#999;
+  text-align:center;
+  padding:35px 10px;
+}
+
+/* BOTTOM NAV */
 
 .bottom{
   position:fixed;
@@ -394,10 +534,7 @@ header{
   margin-bottom:3px;
 }
 
-
-/* =========================
-   MOBILE
-   ========================= */
+/* MOBILE */
 
 @media(max-width:600px){
 
@@ -406,233 +543,107 @@ header{
     padding:16px;
   }
 
-  .channelHeader{
-    padding:0 16px;
-  }
-
-  .channelActions{
-    padding:16px 16px 0;
-  }
-
-  .tabs{
-    padding:20px 16px 0;
-  }
-
-  .accountMenu{
-    right:-5px;
-    width:230px;
-  }
+  .channelHeader{padding:0 16px}
+  .channelActions{padding:16px 16px 0}
+  .tabs{padding:20px 16px 0}
+  .accountMenu{right:-5px;width:230px}
+  .ratingSection{padding:16px}
+  .ratingSummary{gap:18px}
 
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-     ========================= -->
+<!-- HEADER -->
 
 <header>
-
   <div class="top">
 
-    <button
-      class="backButton"
-      onclick="goBack()"
-    >
-      ←
-    </button>
+    <button class="backButton" onclick="goBack()">←</button>
 
-    <div
-      id="headerTitle"
-      class="headerTitle"
-    >
-      Channel
-    </div>
+    <div id="headerTitle" class="headerTitle">Channel</div>
 
     <div class="accountArea">
 
-      <div
-        id="avatar"
-        class="avatar"
-        onclick="toggleAccountMenu()"
-      >
-        M
-      </div>
+      <div id="avatar" class="avatar" onclick="toggleAccountMenu()">M</div>
 
+      <div id="accountMenu" class="accountMenu">
 
-      <div
-        id="accountMenu"
-        class="accountMenu"
-      >
+        <div id="accountAvatar" class="accountAvatar">M</div>
 
-        <div
-          id="accountAvatar"
-          class="accountAvatar"
-        >
-          M
-        </div>
+        <div id="accountName" class="accountName">Account</div>
 
+        <div id="accountEmail" class="accountEmail">Not logged in</div>
 
-        <div
-          id="accountName"
-          class="accountName"
-        >
-          Account
-        </div>
-
-
-        <div
-          id="accountEmail"
-          class="accountEmail"
-        >
-          Not logged in
-        </div>
-
-
-        <div
-          id="loginStatus"
-          class="loginStatus"
-        >
-        </div>
-
+        <div id="loginStatus" class="loginStatus"></div>
 
         <div class="accountDivider"></div>
 
-
-        <button
-          id="accountAction"
-          class="accountButton"
-          onclick="accountAction()"
-        >
+        <button id="accountAction" class="accountButton" onclick="accountAction()">
           Login
         </button>
 
       </div>
-
     </div>
-
   </div>
-
 </header>
 
-
-<!-- =========================
-     CHANNEL BANNER + INFO
-     ========================= -->
+<!-- CHANNEL -->
 
 <div class="banner"></div>
 
 <div class="channelHeader">
 
-  <div
-    id="channelAvatar"
-    class="channelAvatar"
-  >
-    M
-  </div>
+  <div id="channelAvatar" class="channelAvatar">M</div>
 
   <div class="channelInfo">
 
-    <div
-      id="channelTitle"
-      class="channelTitle"
-    >
-      My Channel
-    </div>
+    <div id="channelTitle" class="channelTitle">My Channel</div>
 
-    <div
-      id="channelStats"
-      class="channelStats"
-    >
+    <div id="channelStats" class="channelStats">
       0 subscribers · 0 videos
     </div>
 
   </div>
-
 </div>
 
 <div class="channelActions">
 
-  <button
-    id="subscribeBtn"
-    class="subscribeBtn"
-    onclick="toggleSubscribe()"
-  >
+  <button id="subscribeBtn" class="subscribeBtn" onclick="toggleSubscribe()">
     Subscribe
   </button>
 
 </div>
 
-
-<!-- =========================
-     TABS
-     ========================= -->
+<!-- TABS -->
 
 <div class="tabs">
 
-  <button
-    class="active"
-    onclick="switchTab('videos', this)"
-  >
-    Videos
-  </button>
+  <button class="active" onclick="switchTab('videos',this)">Videos</button>
 
-  <button
-    onclick="switchTab('posts', this)"
-  >
-    Posts
-  </button>
+  <button onclick="switchTab('posts',this)">Posts</button>
 
-  <button
-    onclick="switchTab('ratings', this)"
-  >
-    Ratings
-  </button>
+  <button onclick="switchTab('ratings',this)">Ratings</button>
 
-  <button
-    onclick="switchTab('about', this)"
-  >
-    About
-  </button>
+  <button onclick="switchTab('about',this)">About</button>
 
 </div>
 
+<!-- VIDEOS -->
 
-<!-- VIDEOS PANEL -->
+<div id="videosPanel" class="tabPanel show">
 
-<div
-  id="videosPanel"
-  class="tabPanel show"
->
+  <div id="status" class="status">Loading videos...</div>
 
-  <div
-    id="status"
-    class="status"
-  >
-    Loading videos...
-  </div>
-
-
-  <div
-    id="videos"
-    class="grid"
-  ></div>
+  <div id="videos" class="grid"></div>
 
 </div>
 
+<!-- POSTS -->
 
-<!-- POSTS PANEL -->
-
-<div
-  id="postsPanel"
-  class="tabPanel"
->
+<div id="postsPanel" class="tabPanel">
 
   <div class="comingSoon">
     <strong>No posts yet</strong>
@@ -641,42 +652,104 @@ header{
 
 </div>
 
+<!-- RATINGS -->
 
-<!-- RATINGS PANEL -->
+<div id="ratingsPanel" class="tabPanel">
 
-<div
-  id="ratingsPanel"
-  class="tabPanel"
->
+  <div class="ratingSection">
 
-  <div class="comingSoon">
-    <strong>No ratings yet</strong>
-    Video ratings will show up here.
+    <div class="ratingHeading">
+      ⭐ Channel Rating & Reviews
+    </div>
+
+    <div class="ratingSummary">
+
+      <div class="ratingAverage">
+
+        <div class="number" id="averageRating">0.0</div>
+
+        <div class="stars" id="averageStars">☆☆☆☆☆</div>
+
+        <div class="ratingCount" id="ratingCount">0 reviews</div>
+
+      </div>
+
+      <div class="ratingBars" id="ratingBars"></div>
+
+    </div>
+
+    <div class="reviewForm">
+
+      <h3>Write a Review</h3>
+
+      <div>How would you rate this channel?</div>
+
+      <div class="starPicker" id="starPicker">
+
+        <button type="button" onclick="selectRating(1)">★</button>
+        <button type="button" onclick="selectRating(2)">★</button>
+        <button type="button" onclick="selectRating(3)">★</button>
+        <button type="button" onclick="selectRating(4)">★</button>
+        <button type="button" onclick="selectRating(5)">★</button>
+
+      </div>
+
+      <select id="reviewCategory" class="reviewSelect">
+
+        <option value="">Select a problem (optional)</option>
+        <option>Good Channel</option>
+        <option>Video Quality Problem</option>
+        <option>Audio Problem</option>
+        <option>Misleading Content</option>
+        <option>Inappropriate Content</option>
+        <option>Creator Behavior</option>
+        <option>Other Problem</option>
+
+      </select>
+
+      <textarea
+        id="reviewText"
+        class="reviewInput"
+        placeholder="Write your experience, feedback or problem..."
+      ></textarea>
+
+      <button class="reviewSubmit" onclick="submitChannelReview()">
+        Submit Review
+      </button>
+
+      <p style="color:#888;font-size:12px">
+        Please share honest and respectful feedback.
+      </p>
+
+    </div>
+
+    <div class="reviewList">
+
+      <h3>All Reviews</h3>
+
+      <div id="reviewList">
+
+        <div class="noReviews">
+          No ratings yet. Be the first to review this channel!
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
 </div>
 
+<!-- ABOUT -->
 
-<!-- ABOUT PANEL -->
+<div id="aboutPanel" class="tabPanel">
 
-<div
-  id="aboutPanel"
-  class="tabPanel"
->
-
-  <div
-    id="aboutBox"
-    class="aboutBox"
-  >
-    Loading...
-  </div>
+  <div id="aboutBox" class="aboutBox">Loading...</div>
 
 </div>
 
-
-<!-- =========================
-     BOTTOM NAVIGATION
-     ========================= -->
+<!-- BOTTOM NAV -->
 
 <div class="bottom">
 
@@ -685,18 +758,15 @@ header{
     Home
   </button>
 
-
   <button onclick="goShorts()">
     <b>▶</b>
     HORIZONTAL
   </button>
 
-
   <button onclick="goSubscriptions()">
     <b>□</b>
     Subscriptions
   </button>
-
 
   <button onclick="goYou()">
     <b>●</b>
@@ -705,20 +775,14 @@ header{
 
 </div>
 
-
 <script>
 
-/* =====================================
-   CLOUDFLARE WORKER
-   ===================================== */
+/* CLOUDFLARE WORKER */
 
 const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
 
-
-/* =====================================
-   SUPABASE
-   ===================================== */
+/* SUPABASE */
 
 const SUPABASE_URL =
   "https://vlzssmuzetcbkmzujecs.supabase.co";
@@ -726,1011 +790,533 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
   "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
 
+/* AUTH STORAGE */
 
-/* =====================================
-   AUTH STORAGE
-   ===================================== */
+const ACCESS_TOKEN_KEY = "minitube_access_token";
+const REFRESH_TOKEN_KEY = "minitube_refresh_token";
+const USER_KEY = "minitube_user";
 
-const ACCESS_TOKEN_KEY =
-  "minitube_access_token";
+/* GLOBAL VARIABLES */
 
-const REFRESH_TOKEN_KEY =
-  "minitube_refresh_token";
+let targetChannelId = null;
+let currentProfile = null;
+let isSubscribedToChannel = false;
+let subscriberCount = 0;
+let allVideos = [];
 
-const USER_KEY =
-  "minitube_user";
+/* TEMPORARY REVIEW STORAGE */
 
+let channelReviews = [];
+let selectedRating = 0;
 
-/* =====================================
-   SUBSCRIBE SYSTEM (database-backed,
-   per channel — set once we know
-   which channel we're viewing)
-   ===================================== */
-
-let targetChannelId =
-  null;
-
-let currentProfile =
-  null;
-
-let isSubscribedToChannel =
-  false;
-
-let subscriberCount =
-  0;
-
-
-async function loadSubscribeState(){
-
-  if(!targetChannelId){
-
-    return;
-
-  }
-
-
-  try{
-
-    const countResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?channel_id=eq." +
-        targetChannelId +
-        "&select=subscriber_id",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    const rows =
-      countResponse.ok
-        ? await countResponse.json()
-        : [];
-
-
-    subscriberCount =
-      rows.length;
-
-
-    const user =
-      getLoggedUser();
-
-
-    isSubscribedToChannel =
-      !!(
-        user &&
-        rows.some(
-          row => row.subscriber_id === user.id
-        )
-      );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-}
-
-
-async function toggleSubscribe(){
-
-  if(!targetChannelId){
-
-    return;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    const go =
-      confirm(
-        "Please login first to subscribe.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  if(user.id === targetChannelId){
-
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-
-  try{
-
-    if(isSubscribedToChannel){
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?channel_id=eq." +
-        targetChannelId +
-        "&subscriber_id=eq." +
-        user.id,
-
-        {
-          method:"DELETE",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token
-          }
-        }
-
-      );
-
-
-    }else{
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions",
-
-        {
-          method:"POST",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            channel_id: targetChannelId,
-            subscriber_id: user.id
-          })
-        }
-
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  await loadSubscribeState();
-
-
-  updateSubscribeButton();
-
-
-  renderStats();
-
-}
-
-
-function updateSubscribeButton(){
-
-  const button =
-    document.getElementById(
-      "subscribeBtn"
-    );
-
-
-  if(
-    !targetChannelId ||
-    !button
-  ){
-
-    return;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(
-    user &&
-    user.id === targetChannelId
-  ){
-
-    button.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  button.style.display =
-    "block";
-
-
-  button.classList.toggle(
-    "subscribed",
-    isSubscribedToChannel
-  );
-
-
-  button.textContent =
-    isSubscribedToChannel
-      ? "Subscribed"
-      : "Subscribe";
-
-}
-
-
-/* =====================================
-   GET LOGGED USER
-   ===================================== */
+/* GET LOGGED USER */
 
 function getLoggedUser(){
 
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+  const savedUser = localStorage.getItem(USER_KEY);
 
-  const savedUser =
-    localStorage.getItem(
-      USER_KEY
-    );
-
-
-  if(!token || !savedUser){
-
-    return null;
-
-  }
-
+  if(!token || !savedUser) return null;
 
   try{
-
-    return JSON.parse(
-      savedUser
-    );
-
+    return JSON.parse(savedUser);
   }catch(error){
-
-    console.error(
-      "Invalid saved user",
-      error
-    );
-
+    console.error("Invalid saved user",error);
     return null;
-
   }
 
 }
 
-
 function isLoggedIn(){
-
   return !!getLoggedUser();
-
 }
-
 
 function getUserName(user){
 
-  if(!user){
-
-    return "My Channel";
-
-  }
-
+  if(!user) return "My Channel";
 
   const metadata =
     user.user_metadata ||
     user.userMetadata ||
     {};
 
-
   return (
-
     metadata.display_name ||
-
     metadata.full_name ||
-
     metadata.name ||
-
     user.email ||
-
     "MiniTube User"
-
   );
 
 }
 
-
 function getUserInitial(user){
 
-  const name =
-    getUserName(user);
-
-
-  return name
+  return getUserName(user)
     .trim()
     .charAt(0)
     .toUpperCase() || "M";
 
 }
 
-
-/* =====================================
-   UPDATE ACCOUNT UI
-   ===================================== */
+/* ACCOUNT UI */
 
 function updateAccountUI(){
 
-  const user =
-    getLoggedUser();
+  const user = getLoggedUser();
 
-
-  const avatar =
-    document.getElementById(
-      "avatar"
-    );
-
-
-  const accountAvatar =
-    document.getElementById(
-      "accountAvatar"
-    );
-
-
-  const accountName =
-    document.getElementById(
-      "accountName"
-    );
-
-
-  const accountEmail =
-    document.getElementById(
-      "accountEmail"
-    );
-
-
-  const loginStatus =
-    document.getElementById(
-      "loginStatus"
-    );
-
-
-  const accountAction =
-    document.getElementById(
-      "accountAction"
-    );
-
+  const avatar = document.getElementById("avatar");
+  const accountAvatar = document.getElementById("accountAvatar");
+  const accountName = document.getElementById("accountName");
+  const accountEmail = document.getElementById("accountEmail");
+  const loginStatus = document.getElementById("loginStatus");
+  const accountAction = document.getElementById("accountAction");
 
   if(user){
 
-    const name =
-      getUserName(user);
+    const name = getUserName(user);
+    const initial = getUserInitial(user);
 
-    const initial =
-      getUserInitial(user);
+    avatar.textContent = initial;
+    accountAvatar.textContent = initial;
+    accountName.textContent = name;
+    accountEmail.textContent = user.email || "";
+    loginStatus.textContent = "✓ Logged in";
 
-
-    avatar.textContent =
-      initial;
-
-    accountAvatar.textContent =
-      initial;
-
-    accountName.textContent =
-      name;
-
-    accountEmail.textContent =
-      user.email || "";
-
-    loginStatus.textContent =
-      "✓ Logged in";
-
-    accountAction.textContent =
-      "Logout";
-
-    accountAction.classList.add(
-      "logoutButton"
-    );
-
+    accountAction.textContent = "Logout";
+    accountAction.classList.add("logoutButton");
 
   }else{
 
-    avatar.textContent =
-      "M";
+    avatar.textContent = "M";
+    accountAvatar.textContent = "M";
+    accountName.textContent = "Not logged in";
+    accountEmail.textContent = "Login to your MiniTube account";
+    loginStatus.textContent = "";
 
-    accountAvatar.textContent =
-      "M";
-
-    accountName.textContent =
-      "Not logged in";
-
-    accountEmail.textContent =
-      "Login to your MiniTube account";
-
-    loginStatus.textContent =
-      "";
-
-    accountAction.textContent =
-      "Login";
-
-    accountAction.classList.remove(
-      "logoutButton"
-    );
+    accountAction.textContent = "Login";
+    accountAction.classList.remove("logoutButton");
 
   }
 
 }
 
-
-/* =====================================
-   ACCOUNT MENU
-   ===================================== */
+/* ACCOUNT MENU */
 
 function toggleAccountMenu(){
 
-  const menu =
-    document.getElementById(
-      "accountMenu"
-    );
-
-
-  menu.classList.toggle(
-    "show"
-  );
+  document.getElementById("accountMenu")
+    .classList.toggle("show");
 
 }
 
+document.addEventListener("click",function(event){
 
-document.addEventListener(
-  "click",
-  function(event){
+  const area = document.querySelector(".accountArea");
+  const menu = document.getElementById("accountMenu");
 
-    const area =
-      document.querySelector(
-        ".accountArea"
-      );
-
-    const menu =
-      document.getElementById(
-        "accountMenu"
-      );
-
-    if(
-      area &&
-      !area.contains(
-        event.target
-      )
-    ){
-
-      menu.classList.remove(
-        "show"
-      );
-
-    }
-
+  if(area && !area.contains(event.target)){
+    menu.classList.remove("show");
   }
-);
 
+});
 
 function accountAction(){
 
   if(isLoggedIn()){
-
     logout();
-
   }else{
-
-    window.location.href =
-      "login.html";
-
+    window.location.href = "login.html";
   }
 
 }
-
 
 function logout(){
 
-  const confirmed =
-    confirm(
-      "Logout from this MiniTube account?"
-    );
+  if(!confirm("Logout from this MiniTube account?")) return;
 
-
-  if(!confirmed){
-
-    return;
-
-  }
-
-
-  localStorage.removeItem(
-    ACCESS_TOKEN_KEY
-  );
-
-  localStorage.removeItem(
-    REFRESH_TOKEN_KEY
-  );
-
-  localStorage.removeItem(
-    USER_KEY
-  );
-
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
 
   updateAccountUI();
 
+  document.getElementById("accountMenu").classList.remove("show");
 
-  document
-    .getElementById(
-      "accountMenu"
-    )
-    .classList.remove(
-      "show"
-    );
-
-
-  alert(
-    "You have been logged out."
-  );
+  alert("You have been logged out.");
 
 }
 
-
-/* =====================================
-   NAVIGATION
-   ===================================== */
+/* NAVIGATION */
 
 function goBack(){
 
-  if(
-    window.history.length > 1
-  ){
-
+  if(window.history.length > 1){
     window.history.back();
-
   }else{
-
-    window.location.href =
-      "index.html";
-
+    window.location.href = "index.html";
   }
 
 }
 
-
 function goHome(){
-
-  window.location.href =
-    "index.html";
-
+  window.location.href = "index.html";
 }
-
 
 function goShorts(){
-
-  window.location.href =
-    "shorts.html";
-
+  window.location.href = "shorts.html";
 }
-
 
 function goSubscriptions(){
-
-  window.location.href =
-    "subscriptions.html";
-
+  window.location.href = "subscriptions.html";
 }
-
 
 function goYou(){
-
-  window.location.href =
-    "you.html";
-
+  window.location.href = "you.html";
 }
-
 
 function openWatch(videoName){
 
   window.location.href =
     "watch.html?video=" +
-    encodeURIComponent(
-      videoName
-    );
+    encodeURIComponent(videoName);
 
 }
 
+/* SUBSCRIBE SYSTEM */
 
-/* =====================================
-   LOAD CHANNEL (own, or ?id=<owner>)
-   ===================================== */
+async function loadSubscribeState(){
 
-let allVideos =
-  [];
+  if(!targetChannelId) return;
 
+  try{
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/subscriptions?channel_id=eq." +
+      encodeURIComponent(targetChannelId) +
+      "&select=subscriber_id",
+      {
+        headers:{
+          "apikey":SUPABASE_ANON_KEY,
+          "Authorization":"Bearer "+SUPABASE_ANON_KEY
+        }
+      }
+    );
+
+    const rows = response.ok ? await response.json() : [];
+
+    subscriberCount = rows.length;
+
+    const user = getLoggedUser();
+
+    isSubscribedToChannel = !!(
+      user &&
+      rows.some(row=>row.subscriber_id === user.id)
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+async function toggleSubscribe(){
+
+  if(!targetChannelId) return;
+
+  const user = getLoggedUser();
+
+  if(!user){
+
+    if(confirm("Please login first to subscribe.\n\nGo to Login?")){
+      window.location.href = "login.html";
+    }
+
+    return;
+
+  }
+
+  if(user.id === targetChannelId) return;
+
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  try{
+
+    let response;
+
+    if(isSubscribedToChannel){
+
+      response = await fetch(
+        SUPABASE_URL +
+        "/rest/v1/subscriptions?channel_id=eq." +
+        encodeURIComponent(targetChannelId) +
+        "&subscriber_id=eq." +
+        encodeURIComponent(user.id),
+        {
+          method:"DELETE",
+          headers:{
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":"Bearer "+token
+          }
+        }
+      );
+
+    }else{
+
+      response = await fetch(
+        SUPABASE_URL + "/rest/v1/subscriptions",
+        {
+          method:"POST",
+          headers:{
+            "apikey":SUPABASE_ANON_KEY,
+            "Authorization":"Bearer "+token,
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            channel_id:targetChannelId,
+            subscriber_id:user.id
+          })
+        }
+      );
+
+    }
+
+    if(!response.ok){
+      alert("Subscription could not be updated. Please try again.");
+    }
+
+  }catch(error){
+
+    console.error(error);
+    alert("Network error. Please try again.");
+
+  }
+
+  await loadSubscribeState();
+
+  updateSubscribeButton();
+  renderStats();
+
+}
+
+function updateSubscribeButton(){
+
+  const button = document.getElementById("subscribeBtn");
+
+  if(!targetChannelId || !button) return;
+
+  const user = getLoggedUser();
+
+  if(user && user.id === targetChannelId){
+    button.style.display = "none";
+    return;
+  }
+
+  button.style.display = "block";
+
+  button.classList.toggle(
+    "subscribed",
+    isSubscribedToChannel
+  );
+
+  button.textContent =
+    isSubscribedToChannel ? "Subscribed" : "Subscribe";
+
+}
+
+/* LOAD CHANNEL */
 
 async function loadChannel(){
 
-  const status =
-    document.getElementById(
-      "status"
-    );
+  const status = document.getElementById("status");
 
+  const params = new URLSearchParams(window.location.search);
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
+  const paramId = params.get("id");
 
-
-  const paramId =
-    params.get(
-      "id"
-    );
-
-
-  const currentUser =
-    getLoggedUser();
-
+  const currentUser = getLoggedUser();
 
   targetChannelId =
     paramId ||
     (currentUser && currentUser.id) ||
     null;
 
-
   if(!targetChannelId){
 
-    document.getElementById(
-      "headerTitle"
-    ).textContent =
-      "Channel";
+    document.getElementById("headerTitle").textContent = "Channel";
+    document.getElementById("channelTitle").textContent = "Not logged in";
 
-    document.getElementById(
-      "channelTitle"
-    ).textContent =
-      "Not logged in";
+    status.textContent = "Login to see your channel.";
 
-    status.innerHTML =
-      "Login to see your channel.";
-
-    document.getElementById(
-      "subscribeBtn"
-    ).style.display =
-      "none";
+    document.getElementById("subscribeBtn").style.display = "none";
 
     return;
 
   }
-
 
   try{
 
-    status.textContent =
-      "Loading channel...";
+    status.textContent = "Loading channel...";
 
-
-    const profileResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles?id=eq." +
-        targetChannelId +
-        "&select=id,display_name,bio,created_at",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
+    const profileResponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/profiles?id=eq." +
+      encodeURIComponent(targetChannelId) +
+      "&select=id,display_name,bio,created_at",
+      {
+        headers:{
+          "apikey":SUPABASE_ANON_KEY,
+          "Authorization":"Bearer "+SUPABASE_ANON_KEY
         }
-
-      );
-
-
-    const profiles =
-      profileResponse.ok
-        ? await profileResponse.json()
-        : [];
-
-
-    const profile =
-      profiles[0] ||
-      null;
-
-
-    currentProfile =
-      profile;
-
-
-    renderChannelHeader(
-      profile
+      }
     );
 
+    if(!profileResponse.ok){
+      throw new Error("Could not load channel profile");
+    }
 
-    const videosResponse =
-      await fetch(
+    const profiles = await profileResponse.json();
 
-        SUPABASE_URL +
-        "/rest/v1/videos?owner_id=eq." +
-        targetChannelId +
-        "&select=id,r2_key,title,created_at&order=created_at.desc",
+    const profile = profiles[0] || null;
 
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
+    currentProfile = profile;
 
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
+    renderChannelHeader(profile);
+
+    const videosResponse = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/videos?owner_id=eq." +
+      encodeURIComponent(targetChannelId) +
+      "&select=id,r2_key,title,created_at&order=created_at.desc",
+      {
+        headers:{
+          "apikey":SUPABASE_ANON_KEY,
+          "Authorization":"Bearer "+SUPABASE_ANON_KEY
         }
-
-      );
-
-
-    allVideos =
-      videosResponse.ok
-        ? await videosResponse.json()
-        : [];
-
-
-    renderVideos(
-      allVideos
+      }
     );
 
+    allVideos = videosResponse.ok
+      ? await videosResponse.json()
+      : [];
+
+    renderVideos(allVideos);
 
     await loadSubscribeState();
 
-
     updateSubscribeButton();
-
 
     renderStats();
 
+    renderAboutPanel(currentProfile);
 
-    renderAboutPanel(
-      currentProfile
-    );
-
+    renderChannelReviews();
 
   }catch(error){
 
-    console.error(
-      error
-    );
+    console.error(error);
 
-    status.textContent =
-      "Unable to load this channel.";
+    status.textContent = "Unable to load this channel.";
 
   }
 
 }
 
+/* TABS */
 
-/* =====================================
-   TABS
-   ===================================== */
+function switchTab(name,buttonEl){
 
-function switchTab(name, buttonEl){
+  document.querySelectorAll(".tabs button")
+    .forEach(button=>button.classList.remove("active"));
 
-  document
-    .querySelectorAll(
-      ".tabs button"
-    )
-    .forEach(button => {
+  buttonEl.classList.add("active");
 
-      button.classList.remove(
-        "active"
-      );
+  document.querySelectorAll(".tabPanel")
+    .forEach(panel=>panel.classList.remove("show"));
 
-    });
-
-
-  buttonEl.classList.add(
-    "active"
-  );
-
-
-  document
-    .querySelectorAll(
-      ".tabPanel"
-    )
-    .forEach(panel => {
-
-      panel.classList.remove(
-        "show"
-      );
-
-    });
-
-
-  document
-    .getElementById(
-      name + "Panel"
-    )
-    .classList.add(
-      "show"
-    );
+  document.getElementById(name+"Panel")
+    .classList.add("show");
 
 }
 
+/* ABOUT */
 
 function renderAboutPanel(profile){
 
-  const box =
-    document.getElementById(
-      "aboutBox"
-    );
-
+  const box = document.getElementById("aboutBox");
 
   if(!profile){
 
-    box.innerHTML =
-      "Channel information isn't available.";
-
+    box.textContent = "Channel information isn't available.";
     return;
 
   }
 
+  const name = profile.display_name || "MiniTube user";
 
-  const name =
-    profile.display_name ||
-    "MiniTube user";
-
-
-  const bio =
-    profile.bio ||
+  const bio = profile.bio ||
     "This creator hasn't added a bio yet.";
 
-
-  const joined =
-    profile.created_at
-      ? new Date(
-          profile.created_at
-        ).toLocaleDateString(
-          undefined,
-          {
-            day:"numeric",
-            month:"long",
-            year:"numeric"
-          }
-        )
-      : "";
-
+  const joined = profile.created_at
+    ? new Date(profile.created_at).toLocaleDateString(
+        undefined,
+        {
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        }
+      )
+    : "";
 
   box.innerHTML = `
 
-    <div class="aboutLabel">
-      Description
-    </div>
+    <div class="aboutLabel">Description</div>
 
-    <div>
-      ${escapeHTML(bio)}
-    </div>
+    <div>${escapeHTML(bio)}</div>
 
-
-    <div class="aboutLabel">
-      Stats
-    </div>
+    <div class="aboutLabel">Stats</div>
 
     <div>
       ${formatNumber(subscriberCount)} subscribers
       · ${allVideos.length} videos
     </div>
 
-
     ${
       joined
-        ? `<div class="aboutLabel">Joined</div>
-           <div>${escapeHTML(joined)}</div>`
-        : ""
+      ? `<div class="aboutLabel">Joined</div>
+         <div>${escapeHTML(joined)}</div>`
+      : ""
     }
 
   `;
 
 }
 
-
-/* =====================================
-   CHANNEL HEADER
-   ===================================== */
+/* CHANNEL HEADER */
 
 function renderChannelHeader(profile){
 
   const name =
-    (profile &&
-      profile.display_name) ||
+    (profile && profile.display_name) ||
     "MiniTube user";
 
-
   const initial =
-    name
-      .trim()
-      .charAt(0)
-      .toUpperCase() || "M";
+    name.trim().charAt(0).toUpperCase() || "M";
 
+  document.getElementById("channelAvatar").textContent = initial;
 
-  document.getElementById(
-    "channelAvatar"
-  ).textContent =
-    initial;
+  document.getElementById("channelTitle").textContent = name;
 
-
-  document.getElementById(
-    "channelTitle"
-  ).textContent =
-    name;
-
-
-  document.getElementById(
-    "headerTitle"
-  ).textContent =
-    name;
+  document.getElementById("headerTitle").textContent = name;
 
 }
 
-
 function renderStats(){
 
-  const stats =
-    document.getElementById(
-      "channelStats"
-    );
-
+  const stats = document.getElementById("channelStats");
 
   stats.textContent =
     formatNumber(subscriberCount) +
@@ -1743,68 +1329,40 @@ function renderStats(){
 
 }
 
+/* VIDEO GRID */
 
 function renderVideos(videos){
 
-  const container =
-    document.getElementById(
-      "videos"
-    );
+  const container = document.getElementById("videos");
+  const status = document.getElementById("status");
 
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-
-  container.innerHTML =
-    "";
-
+  container.innerHTML = "";
 
   if(videos.length === 0){
 
-    status.innerHTML =
-      "No videos uploaded yet.";
-
+    status.textContent = "No videos uploaded yet.";
     return;
 
   }
 
+  status.textContent = "";
 
-  status.textContent =
-    "";
+  videos.forEach(video=>{
 
+    const card = document.createElement("div");
 
-  videos.forEach(video => {
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-    card.className =
-      "card";
-
+    card.className = "card";
 
     const videoURL =
       API_BASE +
       "/video/" +
-      encodeURIComponent(
-        video.r2_key
-      );
+      encodeURIComponent(video.r2_key);
 
+    const viewsKey = "views_" + video.r2_key;
 
-    const viewsKey =
-      "views_" +
-      video.r2_key;
-
-    const views =
-      Number(
-        localStorage.getItem(
-          viewsKey
-        ) || 0
-      );
-
+    const views = Number(
+      localStorage.getItem(viewsKey) || 0
+    );
 
     card.innerHTML = `
 
@@ -1814,15 +1372,11 @@ function renderVideos(videos){
         src="${videoURL}"
       ></video>
 
-
       <div class="info">
 
         <div class="title">
-          ${escapeHTML(
-            video.title || video.r2_key
-          )}
+          ${escapeHTML(video.title || video.r2_key)}
         </div>
-
 
         <div class="meta">
           ${formatNumber(views)} views
@@ -1832,81 +1386,314 @@ function renderVideos(videos){
 
     `;
 
+    card.addEventListener("click",function(){
+      openWatch(video.r2_key);
+    });
 
-    card.addEventListener(
-      "click",
-      function(){
-
-        openWatch(
-          video.r2_key
-        );
-
-      }
-    );
-
-
-    container.appendChild(
-      card
-    );
+    container.appendChild(card);
 
   });
 
 }
 
+/* CHANNEL RATING SYSTEM */
 
-/* =====================================
-   HELPERS
-   ===================================== */
+/*
+  IMPORTANT:
+  This is a frontend-only preview.
+  Reviews are not saved in Supabase yet.
+*/
+
+function selectRating(value){
+
+  selectedRating = value;
+
+  document.querySelectorAll("#starPicker button")
+    .forEach((button,index)=>{
+
+      button.classList.toggle(
+        "selected",
+        index < value
+      );
+
+    });
+
+}
+
+function submitChannelReview(){
+
+  const user = getLoggedUser();
+
+  if(!user){
+
+    alert("Please login first to submit a review.");
+
+    window.location.href = "login.html";
+
+    return;
+
+  }
+
+  if(user.id === targetChannelId){
+
+    alert("You cannot review your own channel.");
+
+    return;
+
+  }
+
+  if(!selectedRating){
+
+    alert("Please select a star rating.");
+
+    return;
+
+  }
+
+  const category =
+    document.getElementById("reviewCategory").value;
+
+  const message =
+    document.getElementById("reviewText").value.trim();
+
+  if(!message && !category){
+
+    alert("Please write a review or select a problem.");
+
+    return;
+
+  }
+
+  const existingIndex = channelReviews.findIndex(
+    review=>review.userId === user.id
+  );
+
+  const review = {
+
+    userId:user.id,
+
+    name:getUserName(user),
+
+    rating:selectedRating,
+
+    category:category,
+
+    message:message,
+
+    date:new Date().toISOString(),
+
+    reply:""
+
+  };
+
+  if(existingIndex >= 0){
+
+    channelReviews[existingIndex] = review;
+
+  }else{
+
+    channelReviews.unshift(review);
+
+  }
+
+  renderChannelReviews();
+
+  document.getElementById("reviewText").value = "";
+
+  document.getElementById("reviewCategory").value = "";
+
+  selectRating(0);
+
+  alert("Review added to this temporary preview.");
+
+}
+
+/* RENDER REVIEWS */
+
+function renderChannelReviews(){
+
+  const total = channelReviews.length;
+
+  const average = total
+    ? channelReviews.reduce(
+        (sum,review)=>sum+review.rating,0
+      ) / total
+    : 0;
+
+  document.getElementById("averageRating")
+    .textContent = average.toFixed(1);
+
+  document.getElementById("averageStars")
+    .textContent =
+      "★".repeat(Math.round(average)) +
+      "☆".repeat(5-Math.round(average));
+
+  document.getElementById("ratingCount")
+    .textContent =
+      total + (total === 1 ? " review" : " reviews");
+
+  const bars = document.getElementById("ratingBars");
+
+  bars.innerHTML = "";
+
+  for(let star=5;star>=1;star--){
+
+    const count = channelReviews.filter(
+      review=>review.rating === star
+    ).length;
+
+    const percentage = total
+      ? (count/total)*100
+      : 0;
+
+    const row = document.createElement("div");
+
+    row.className = "ratingBar";
+
+    row.innerHTML = `
+
+      ${star} ★
+
+      <div class="barTrack">
+        <div class="barFill" style="width:${percentage}%"></div>
+      </div>
+
+      <span>${count}</span>
+
+    `;
+
+    bars.appendChild(row);
+
+  }
+
+  const list = document.getElementById("reviewList");
+
+  list.innerHTML = "";
+
+  if(!total){
+
+    list.innerHTML = `
+      <div class="noReviews">
+        No ratings yet. Be the first to review this channel!
+      </div>
+    `;
+
+    return;
+
+  }
+
+  channelReviews.forEach(review=>{
+
+    const card = document.createElement("div");
+
+    card.className = "reviewCard";
+
+    const date = new Date(review.date).toLocaleDateString();
+
+    card.innerHTML = `
+
+      <div class="reviewUser">
+
+        <div class="reviewAvatar">
+          ${escapeHTML(review.name.charAt(0).toUpperCase())}
+        </div>
+
+        <div>
+
+          <div class="reviewUserName">
+            ${escapeHTML(review.name)}
+          </div>
+
+          <div class="reviewDate">
+            ${escapeHTML(date)}
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="stars" style="margin-top:12px">
+
+        ${"★".repeat(review.rating)}
+        ${"☆".repeat(5-review.rating)}
+
+      </div>
+
+      ${
+        review.category
+        ? `<div class="reviewProblem">
+             Problem: ${escapeHTML(review.category)}
+           </div>`
+        : ""
+      }
+
+      <div class="reviewText">
+        ${escapeHTML(review.message)}
+      </div>
+
+      ${
+        review.reply
+        ? `<div class="creatorReply">
+             <b>Creator Reply</b><br>
+             ${escapeHTML(review.reply)}
+           </div>`
+        : ""
+      }
+
+    `;
+
+    list.appendChild(card);
+
+  });
+
+}
+
+/* HELPERS */
 
 function formatNumber(num){
+
+  num = Number(num) || 0;
 
   if(num >= 1000000){
 
     return (
-      (num / 1000000)
-        .toFixed(1)
-        .replace(/\.0$/, "")
-      + "M"
+      (num/1000000).toFixed(1).replace(/\.0$/,"") +
+      "M"
     );
 
   }
-
 
   if(num >= 1000){
 
     return (
-      (num / 1000)
-        .toFixed(1)
-        .replace(/\.0$/, "")
-      + "K"
+      (num/1000).toFixed(1).replace(/\.0$/,"") +
+      "K"
     );
 
   }
-
 
   return String(num);
 
 }
 
-
 function escapeHTML(text){
 
   return String(text)
 
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
-
-/* =====================================
-   INIT
-   ===================================== */
+/* INIT */
 
 updateAccountUI();
+
+renderChannelReviews();
+
 loadChannel();
 
 </script>
