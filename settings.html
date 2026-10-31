@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +7,7 @@
 <title>Settings - MiniTube</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -32,20 +29,9 @@ header {
   z-index: 10;
 }
 
-.back {
-  color: white;
-  text-decoration: none;
-  font-size: 25px;
-}
-
-.logo {
-  font-size: 21px;
-  font-weight: bold;
-}
-
-.logo span {
-  color: #ff3333;
-}
+.back { color: white; text-decoration: none; font-size: 25px; }
+.logo { font-size: 21px; font-weight: bold; }
+.logo span { color: #ff3333; }
 
 .container {
   max-width: 850px;
@@ -53,26 +39,10 @@ header {
   padding: 0 16px 50px;
 }
 
-h1 {
-  font-size: 27px;
-  margin-bottom: 8px;
-}
-
-.subtitle {
-  color: #aaa;
-  font-size: 14px;
-  margin-bottom: 28px;
-}
-
-.section {
-  margin-bottom: 25px;
-}
-
-.section-title {
-  font-size: 17px;
-  font-weight: bold;
-  margin: 0 0 12px 5px;
-}
+h1 { font-size: 27px; margin-bottom: 8px; }
+.subtitle { color: #aaa; font-size: 14px; margin-bottom: 28px; }
+.section { margin-bottom: 25px; }
+.section-title { font-size: 17px; font-weight: bold; margin: 0 0 12px 5px; }
 
 .card {
   background: #191919;
@@ -92,47 +62,15 @@ h1 {
   cursor: pointer;
 }
 
-.item:last-child {
-  border-bottom: none;
-}
+.item:last-child { border-bottom: none; }
+.item:active { background: #252525; }
+.item-info { min-width: 0; }
+.item-title { font-size: 15px; font-weight: 600; }
+.item-desc { font-size: 12px; color: #999; margin-top: 6px; line-height: 1.5; }
+.arrow { color: #888; font-size: 20px; }
 
-.item:active {
-  background: #252525;
-}
-
-.item-info {
-  min-width: 0;
-}
-
-.item-title {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.item-desc {
-  font-size: 12px;
-  color: #999;
-  margin-top: 6px;
-  line-height: 1.5;
-}
-
-.arrow {
-  color: #888;
-  font-size: 20px;
-}
-
-.switch {
-  position: relative;
-  width: 44px;
-  height: 24px;
-  flex-shrink: 0;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+.switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
 
 .slider {
   position: absolute;
@@ -155,13 +93,8 @@ h1 {
   transition: .2s;
 }
 
-.switch input:checked + .slider {
-  background: #ff3333;
-}
-
-.switch input:checked + .slider:before {
-  transform: translateX(20px);
-}
+.switch input:checked + .slider { background: #ff3333; }
+.switch input:checked + .slider:before { transform: translateX(20px); }
 
 select {
   background: #252525;
@@ -172,12 +105,7 @@ select {
   max-width: 125px;
 }
 
-.account {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
+.account { display: flex; align-items: center; gap: 14px; }
 .avatar {
   height: 48px;
   width: 48px;
@@ -188,22 +116,10 @@ select {
   font-size: 22px;
 }
 
-button {
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-}
+button { border: none; cursor: pointer; font-size: 14px; }
+.danger { color: #ff5555; }
 
-.danger {
-  color: #ff5555;
-}
-
-.version {
-  text-align: center;
-  color: #666;
-  font-size: 12px;
-  margin-top: 35px;
-}
+.version { text-align: center; color: #666; font-size: 12px; margin-top: 35px; }
 
 .modal-bg {
   display: none;
@@ -225,16 +141,8 @@ button {
   padding: 22px;
 }
 
-.modal h2 {
-  font-size: 19px;
-  margin-top: 0;
-}
-
-.modal p {
-  color: #bbb;
-  font-size: 14px;
-  line-height: 1.6;
-}
+.modal h2 { font-size: 19px; margin-top: 0; }
+.modal p { color: #bbb; font-size: 14px; line-height: 1.6; }
 
 .modal-actions {
   display: flex;
@@ -243,17 +151,8 @@ button {
   margin-top: 22px;
 }
 
-.btn {
-  padding: 11px 17px;
-  border-radius: 8px;
-  background: #333;
-  color: white;
-}
-
-.btn-red {
-  background: #e52d2d;
-  color: white;
-}
+.btn { padding: 11px 17px; border-radius: 8px; background: #333; color: white; }
+.btn-red { background: #e52d2d; color: white; }
 
 .toast {
   position: fixed;
@@ -271,18 +170,68 @@ button {
   text-align: center;
 }
 
+/* Creator UPI */
+.upi-card { padding: 18px; }
+
+.upi-heading {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.upi-description {
+  color: #aaa;
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 17px;
+}
+
+.upi-input {
+  width: 100%;
+  padding: 13px;
+  background: #101010;
+  border: 1px solid #444;
+  border-radius: 9px;
+  color: white;
+  font-size: 15px;
+  outline: none;
+}
+
+.upi-input:focus { border-color: #ff3333; }
+
+.upi-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 13px;
+  flex-wrap: wrap;
+}
+
+.upi-save {
+  background: #e52d2d;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.upi-remove {
+  background: #333;
+  color: #ff7777;
+  padding: 12px 18px;
+  border-radius: 8px;
+}
+
+.upi-status {
+  color: #aaa;
+  font-size: 12px;
+  margin-top: 13px;
+  line-height: 1.5;
+}
+
 @media(max-width: 500px) {
-  .container {
-    margin-top: 20px;
-  }
-
-  h1 {
-    font-size: 24px;
-  }
-
-  .item {
-    padding: 14px;
-  }
+  .container { margin-top: 20px; }
+  h1 { font-size: 24px; }
+  .item { padding: 14px; }
 }
 </style>
 </head>
@@ -296,223 +245,256 @@ button {
 
 <main class="container">
 
-  <h1>Settings</h1>
-  <div class="subtitle">Manage your MiniTube account and preferences.</div>
+<h1>Settings</h1>
+<div class="subtitle">Manage your MiniTube account and preferences.</div>
 
-  <!-- ACCOUNT -->
-  <div class="section">
-    <div class="section-title">Account</div>
-    <div class="card">
+<!-- ACCOUNT -->
+<div class="section">
+  <div class="section-title">Account</div>
+  <div class="card">
 
-      <div class="item" id="accountItem">
-        <div class="account">
-          <div class="avatar">👤</div>
-          <div class="item-info">
-            <div class="item-title" id="userName">MiniTube User</div>
-            <div class="item-desc" id="userEmail">Manage your account</div>
-          </div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
-      <div class="item" data-action="login">
+    <div class="item" id="accountItem">
+      <div class="account">
+        <div class="avatar">👤</div>
         <div class="item-info">
-          <div class="item-title">Sign in / Account</div>
-          <div class="item-desc">Open your MiniTube account</div>
+          <div class="item-title" id="userName">MiniTube User</div>
+          <div class="item-desc" id="userEmail">Manage your account</div>
         </div>
-        <span class="arrow">›</span>
       </div>
-
-      <div class="item" data-action="logout">
-        <div class="item-info">
-          <div class="item-title danger">Sign out</div>
-          <div class="item-desc">Sign out from this device</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
+      <span class="arrow">›</span>
     </div>
-  </div>
 
-  <!-- GENERAL -->
-  <div class="section">
-    <div class="section-title">General</div>
-    <div class="card">
-
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Language</div>
-          <div class="item-desc">Choose your preferred language</div>
-        </div>
-        <select id="language">
-          <option value="en">English</option>
-          <option value="hi">हिन्दी</option>
-        </select>
+    <div class="item" data-action="login">
+      <div class="item-info">
+        <div class="item-title">Sign in / Account</div>
+        <div class="item-desc">Open your MiniTube account</div>
       </div>
-
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Dark Theme</div>
-          <div class="item-desc">Use the dark appearance</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="darkTheme" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Restricted Mode</div>
-          <div class="item-desc">Preference for limiting potentially mature content. This does not filter videos yet.</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="restricted">
-          <span class="slider"></span>
-        </label>
-      </div>
-
+      <span class="arrow">›</span>
     </div>
-  </div>
 
-  <!-- NOTIFICATIONS -->
-  <div class="section">
-    <div class="section-title">Notifications</div>
-    <div class="card">
-
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">General Notifications</div>
-          <div class="item-desc">Save your notification preference</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="notifications">
-          <span class="slider"></span>
-        </label>
+    <div class="item" data-action="logout">
+      <div class="item-info">
+        <div class="item-title danger">Sign out</div>
+        <div class="item-desc">Sign out from this device</div>
       </div>
-
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Subscription Notifications</div>
-          <div class="item-desc">Preference for updates from subscribed channels</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="subNotifications">
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Email Notifications</div>
-          <div class="item-desc">Save your email notification preference</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="emailNotifications">
-          <span class="slider"></span>
-        </label>
-      </div>
-
+      <span class="arrow">›</span>
     </div>
+
   </div>
+</div>
 
-  <!-- PRIVACY -->
-  <div class="section">
-    <div class="section-title">Privacy</div>
-    <div class="card">
+<!-- CREATOR UPI -->
+<div class="section">
+  <div class="section-title">Creator Earnings</div>
+  <div class="card upi-card">
 
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Watch History</div>
-          <div class="item-desc">Manage your watch history preference</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="watchHistory" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
+    <div class="upi-heading">❤️ Support Creator - UPI ID</div>
 
-      <div class="item">
-        <div class="item-info">
-          <div class="item-title">Search History</div>
-          <div class="item-desc">Manage your search history preference</div>
-        </div>
-        <label class="switch">
-          <input type="checkbox" id="searchHistory" checked>
-          <span class="slider"></span>
-        </label>
-      </div>
-
-      <div class="item" data-action="privacy">
-        <div class="item-info">
-          <div class="item-title">Privacy Information</div>
-          <div class="item-desc">Learn how your settings are stored</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
+    <div class="upi-description">
+      Add your UPI ID if you want viewers to support you directly.
+      Payments will go directly to your UPI account. Adding a UPI ID is optional.
     </div>
-  </div>
 
-  <!-- DATA -->
-  <div class="section">
-    <div class="section-title">Data & Storage</div>
-    <div class="card">
+    <input
+      type="text"
+      id="creatorUpi"
+      class="upi-input"
+      placeholder="Example: yourname@okaxis"
+      autocomplete="off"
+      autocapitalize="none"
+      spellcheck="false"
+      maxlength="100"
+    >
 
-      <div class="item" data-action="clearHistory">
-        <div class="item-info">
-          <div class="item-title">Clear Local Preferences</div>
-          <div class="item-desc">Reset settings saved on this device</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
-      <div class="item" data-action="clearCache">
-        <div class="item-info">
-          <div class="item-title">Clear Temporary Cache</div>
-          <div class="item-desc">Clear MiniTube's temporary browser cache, if available</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
+    <div class="upi-buttons">
+      <button class="upi-save" id="saveUpiBtn">Save UPI ID</button>
+      <button class="upi-remove" id="removeUpiBtn">Remove UPI ID</button>
     </div>
-  </div>
 
-  <!-- MORE -->
-  <div class="section">
-    <div class="section-title">More</div>
-    <div class="card">
-
-      <div class="item" data-action="help">
-        <div class="item-info">
-          <div class="item-title">Help & Support</div>
-          <div class="item-desc">Get help with MiniTube</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
-      <div class="item" data-action="about">
-        <div class="item-info">
-          <div class="item-title">About MiniTube</div>
-          <div class="item-desc">App information and version</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
-      <div class="item" data-action="terms">
-        <div class="item-info">
-          <div class="item-title">Terms & Privacy Policy</div>
-          <div class="item-desc">Read the app policies</div>
-        </div>
-        <span class="arrow">›</span>
-      </div>
-
+    <div class="upi-status" id="upiStatus">
+      Your UPI ID is optional. It will be shown to viewers only when saved.
     </div>
-  </div>
 
-  <div class="version">
-    MiniTube · Version 1.0.0
   </div>
+</div>
+
+<!-- GENERAL -->
+<div class="section">
+  <div class="section-title">General</div>
+  <div class="card">
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Language</div>
+        <div class="item-desc">Choose your preferred language</div>
+      </div>
+      <select id="language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Dark Theme</div>
+        <div class="item-desc">Use the dark appearance</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="darkTheme" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Restricted Mode</div>
+        <div class="item-desc">Preference for limiting potentially mature content. This does not filter videos yet.</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="restricted">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+  </div>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="section">
+  <div class="section-title">Notifications</div>
+  <div class="card">
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">General Notifications</div>
+        <div class="item-desc">Save your notification preference</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="notifications">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Subscription Notifications</div>
+        <div class="item-desc">Preference for updates from subscribed channels</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="subNotifications">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Email Notifications</div>
+        <div class="item-desc">Save your email notification preference</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="emailNotifications">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+  </div>
+</div>
+
+<!-- PRIVACY -->
+<div class="section">
+  <div class="section-title">Privacy</div>
+  <div class="card">
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Watch History</div>
+        <div class="item-desc">Manage your watch history preference</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="watchHistory" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item">
+      <div class="item-info">
+        <div class="item-title">Search History</div>
+        <div class="item-desc">Manage your search history preference</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="searchHistory" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="item" data-action="privacy">
+      <div class="item-info">
+        <div class="item-title">Privacy Information</div>
+        <div class="item-desc">Learn how your settings are stored</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- DATA -->
+<div class="section">
+  <div class="section-title">Data & Storage</div>
+  <div class="card">
+
+    <div class="item" data-action="clearHistory">
+      <div class="item-info">
+        <div class="item-title">Clear Local Preferences</div>
+        <div class="item-desc">Reset settings saved on this device</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+    <div class="item" data-action="clearCache">
+      <div class="item-info">
+        <div class="item-title">Clear Temporary Cache</div>
+        <div class="item-desc">Clear MiniTube's temporary browser cache, if available</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- MORE -->
+<div class="section">
+  <div class="section-title">More</div>
+  <div class="card">
+
+    <div class="item" data-action="help">
+      <div class="item-info">
+        <div class="item-title">Help & Support</div>
+        <div class="item-desc">Get help with MiniTube</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+    <div class="item" data-action="about">
+      <div class="item-info">
+        <div class="item-title">About MiniTube</div>
+        <div class="item-desc">App information and version</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+    <div class="item" data-action="terms">
+      <div class="item-info">
+        <div class="item-title">Terms & Privacy Policy</div>
+        <div class="item-desc">Read the app policies</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>
+
+  </div>
+</div>
+
+<div class="version">MiniTube · Version 1.0.0</div>
 
 </main>
 
@@ -532,6 +514,9 @@ button {
 
 <script>
 const SETTINGS_KEY = "minitube_settings";
+
+const SUPABASE_URL = "https://vlzssmuzetcbkmzujecs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
 
 const defaults = {
   language: "en",
@@ -590,8 +575,31 @@ function getUser() {
   }
 }
 
+function getUserId() {
+  const user = getUser();
+
+  if (user && (user.id || user.sub)) {
+    return user.id || user.sub;
+  }
+
+  // Fallback: read user ID from the saved access token.
+  try {
+    const token = localStorage.getItem("minitube_access_token");
+    if (token) {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      return payload.sub || null;
+    }
+  } catch (error) {}
+
+  return null;
+}
+
+function getToken() {
+  return localStorage.getItem("minitube_access_token");
+}
+
 function updateAccount() {
-  const token = localStorage.getItem("minitube_access_token");
+  const token = getToken();
   const user = getUser();
 
   if (token && user) {
@@ -605,6 +613,182 @@ function updateAccount() {
     document.getElementById("userEmail").textContent = "Not signed in";
   }
 }
+
+// ---------- CREATOR UPI ----------
+
+function setUpiStatus(message) {
+  document.getElementById("upiStatus").textContent = message;
+}
+
+function validateUpi(upi) {
+  // Basic UPI ID format validation.
+  return /^[a-zA-Z0-9._-]{2,100}@[a-zA-Z0-9.-]{2,50}$/.test(upi);
+}
+
+async function loadCreatorUpi() {
+  const token = getToken();
+  const userId = getUserId();
+
+  if (!token || !userId) {
+    document.getElementById("creatorUpi").disabled = true;
+    document.getElementById("saveUpiBtn").disabled = true;
+    document.getElementById("removeUpiBtn").disabled = true;
+    setUpiStatus("Please sign in to add your Creator UPI ID.");
+    return;
+  }
+
+  try {
+    setUpiStatus("Loading your UPI settings...");
+
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}&select=upi_id`,
+      {
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Could not load UPI settings. Check your profile permissions.");
+    }
+
+    const rows = await response.json();
+
+    if (rows.length > 0 && rows[0].upi_id) {
+      document.getElementById("creatorUpi").value = rows[0].upi_id;
+      setUpiStatus("Your Creator UPI ID is saved.");
+    } else {
+      document.getElementById("creatorUpi").value = "";
+      setUpiStatus("No UPI ID saved yet. Add one if you want viewers to support you.");
+    }
+
+  } catch (error) {
+    setUpiStatus(error.message || "Could not load UPI ID.");
+  }
+}
+
+async function saveCreatorUpi() {
+  const token = getToken();
+  const userId = getUserId();
+  const input = document.getElementById("creatorUpi");
+  const upi = input.value.trim();
+
+  if (!token || !userId) {
+    showToast("Please sign in first");
+    return;
+  }
+
+  if (!validateUpi(upi)) {
+    showToast("Please enter a valid UPI ID");
+    input.focus();
+    return;
+  }
+
+  const button = document.getElementById("saveUpiBtn");
+  button.disabled = true;
+  button.textContent = "Saving...";
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}`,
+      {
+        method: "PATCH",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({ upi_id: upi })
+      }
+    );
+
+    const result = await response.json().catch(() => []);
+
+    if (!response.ok) {
+      throw new Error(
+        result.message || result.details || "Could not save UPI ID. Check your Supabase profile update policy."
+      );
+    }
+
+    if (!Array.isArray(result) || result.length === 0) {
+      throw new Error("No profile row was updated. Check that your profiles row exists and its update policy allows you to edit it.");
+    }
+
+    setUpiStatus("Your UPI ID has been saved. Viewers can now support you from your videos.");
+    showToast("Creator UPI ID saved successfully");
+
+  } catch (error) {
+    setUpiStatus(error.message || "Could not save UPI ID.");
+    showToast(error.message || "Could not save UPI ID");
+  } finally {
+    button.disabled = false;
+    button.textContent = "Save UPI ID";
+  }
+}
+
+async function removeCreatorUpi() {
+  const token = getToken();
+  const userId = getUserId();
+
+  if (!token || !userId) {
+    showToast("Please sign in first");
+    return;
+  }
+
+  openModal(
+    "Remove UPI ID?",
+    "Your UPI ID will be removed. Viewers will no longer see the Support Creator option on your videos.",
+    "Remove",
+    async () => {
+      const button = document.getElementById("removeUpiBtn");
+      button.disabled = true;
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}`,
+          {
+            method: "PATCH",
+            headers: {
+              "apikey": SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=representation"
+            },
+            body: JSON.stringify({ upi_id: null })
+          }
+        );
+
+        const result = await response.json().catch(() => []);
+
+        if (!response.ok) {
+          throw new Error(result.message || "Could not remove UPI ID.");
+        }
+
+        if (!Array.isArray(result) || result.length === 0) {
+          throw new Error("No profile row was updated. Check your Supabase permissions.");
+        }
+
+        document.getElementById("creatorUpi").value = "";
+        setUpiStatus("Your UPI ID has been removed.");
+        showToast("UPI ID removed");
+
+      } catch (error) {
+        setUpiStatus(error.message || "Could not remove UPI ID.");
+        showToast(error.message || "Could not remove UPI ID");
+      } finally {
+        button.disabled = false;
+      }
+    }
+  );
+}
+
+document.getElementById("saveUpiBtn").addEventListener("click", saveCreatorUpi);
+document.getElementById("removeUpiBtn").addEventListener("click", removeCreatorUpi);
+
+// ---------- MODALS AND SETTINGS ----------
 
 function openModal(title, message, confirmText, callback) {
   document.getElementById("modalTitle").textContent = title;
@@ -633,6 +817,7 @@ function logout() {
     "Sign out",
     () => {
       localStorage.removeItem("minitube_access_token");
+      localStorage.removeItem("minitube_refresh_token");
       localStorage.removeItem("minitube_user");
       showToast("Signed out from this device");
 
@@ -698,7 +883,7 @@ function handleAction(action) {
     case "privacy":
       openModal(
         "Privacy Information",
-        "Your preferences on this page are saved in this browser's local storage. These switches do not automatically change server-side data or notification delivery."
+        "Your preferences on this page are saved in this browser's local storage. These switches do not automatically change server-side data or notification delivery. Your Creator UPI ID is saved in your MiniTube profile."
       );
       break;
 
@@ -755,17 +940,13 @@ document.querySelectorAll("[data-action]").forEach(item => {
 
 // Account row
 document.getElementById("accountItem").addEventListener("click", () => {
-  const token = localStorage.getItem("minitube_access_token");
-
-  if (token) {
-    window.location.href = "you.html";
-  } else {
-    window.location.href = "login.html";
-  }
+  const token = getToken();
+  window.location.href = token ? "you.html" : "login.html";
 });
 
 loadSettings();
 updateAccount();
+loadCreatorUpi();
 </script>
 
 </body>
