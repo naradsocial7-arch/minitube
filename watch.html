@@ -1,3787 +1,1324 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MiniTube - Watch</title>
 
 <style>
-
-/* =====================================
-   RESET
-   ===================================== */
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;
-  background:#0f0f0f;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  padding-bottom:90px;
+  margin:0;background:#0f0f0f;color:#fff;
+  font-family:Arial,sans-serif;padding-bottom:90px
 }
-
-
-/* =====================================
-   HEADER
-   ===================================== */
-
 header{
-  position:sticky;
-  top:0;
-  z-index:100;
-
-  height:64px;
-
-  background:rgba(17,17,17,.96);
-
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-
-  border-bottom:1px solid #292929;
-
-  display:flex;
-  align-items:center;
-
-  padding:0 16px;
-
-  gap:14px;
+  position:sticky;top:0;z-index:100;height:64px;
+  background:rgba(17,17,17,.96);backdrop-filter:blur(12px);
+  border-bottom:1px solid #292929;display:flex;
+  align-items:center;padding:0 16px;gap:14px
 }
-
 .back{
-  width:40px;
-  height:40px;
-
-  display:grid;
-  place-items:center;
-
-  background:none;
-  border:0;
-
-  color:white;
-
-  font-size:32px;
-  line-height:1;
-
-  cursor:pointer;
-
-  border-radius:50%;
+  width:40px;height:40px;background:none;border:0;
+  color:white;font-size:32px;cursor:pointer;border-radius:50%
 }
-
-.back:hover{
-  background:#292929;
+.back:hover{background:#292929}
+.logo{font-size:23px;font-weight:800;white-space:nowrap}
+.logo span{color:#ff0033}
+.spacer{flex:1}
+.avatar,.channelAvatar,.commentAvatar,.reviewAvatar{
+  border-radius:50%;background:#7c4dff;display:grid;
+  place-items:center;font-weight:bold;flex-shrink:0
 }
-
-.logo{
-  font-size:23px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.logo span{
-  color:#ff0033;
-}
-
-.spacer{
-  flex:1;
-}
-
-.avatar{
-  width:42px;
-  height:42px;
-
-  border-radius:50%;
-
-  background:#7c4dff;
-
-  display:grid;
-  place-items:center;
-
-  font-weight:bold;
-}
-
-
-/* =====================================
-   MAIN
-   ===================================== */
-
-.main{
-  width:100%;
-  max-width:1100px;
-
-  margin:0 auto;
-
-  padding:20px;
-}
-
-
-/* =====================================
-   VIDEO
-   ===================================== */
-
-.videoBox{
-  width:100%;
-
-  background:#000;
-
-  border-radius:14px;
-
-  overflow:hidden;
-
-  position:relative;
-}
-
-.videoBox video{
-  width:100%;
-
-  display:block;
-
-  max-height:72vh;
-
-  background:#000;
-
-  object-fit:contain;
-}
-
-
-/* =====================================
-   VIDEO TITLE
-   ===================================== */
-
-.title{
-  font-size:24px;
-
-  font-weight:700;
-
-  line-height:1.35;
-
-  margin-top:18px;
-
-  word-break:break-word;
-}
-
-.meta{
-  color:#999;
-
-  font-size:14px;
-
-  margin-top:8px;
-}
-
-
-/* =====================================
-   ACTIONS
-   ===================================== */
-
-.actions{
-  display:flex;
-
-  align-items:center;
-
-  gap:10px;
-
-  margin-top:16px;
-
-  flex-wrap:wrap;
-}
-
-.saveModalOverlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:200;
-  align-items:flex-end;
-  justify-content:center;
-}
-
-.saveModalOverlay.show{
-  display:flex;
-}
-
-.saveModal{
-  width:100%;
-  max-width:480px;
-  background:#181818;
-  border-radius:20px 20px 0 0;
-  padding:20px;
-  max-height:70vh;
-  overflow-y:auto;
-}
-
-.saveModalTitle{
-  font-size:17px;
-  font-weight:bold;
-  margin-bottom:14px;
-}
-
-.playlistCheckRow{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:11px 0;
-  cursor:pointer;
-}
-
-.playlistCheckRow input{
-  width:20px;
-  height:20px;
-  flex-shrink:0;
-}
-
-.playlistCheckName{
-  flex:1;
-  font-size:15px;
-  word-break:break-word;
-}
-
-.playlistCheckCount{
-  color:#999;
-  font-size:12px;
-}
-
-.newPlaylistRow{
-  display:flex;
-  gap:8px;
-  margin-top:14px;
-  padding-top:14px;
-  border-top:1px solid #292929;
-}
-
-.newPlaylistInput{
-  flex:1;
-  background:#222;
-  border:1px solid #444;
-  border-radius:20px;
-  padding:10px 15px;
-  color:white;
-  font-size:14px;
-  outline:none;
-}
-
-.newPlaylistButton{
-  background:#ff0033;
-  border:0;
-  color:white;
-  border-radius:20px;
-  padding:10px 16px;
-  font-weight:bold;
-  cursor:pointer;
-  white-space:nowrap;
-}
-
-.saveModalDone{
-  width:100%;
-  margin-top:16px;
-  background:#292929;
-  border:0;
-  color:white;
-  border-radius:10px;
-  padding:13px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-
-.reportOptions{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.reportOption{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:11px 0;
-  font-size:15px;
-  cursor:pointer;
-}
-
-.reportOption input{
-  width:19px;
-  height:19px;
-  flex-shrink:0;
-}
-
-.reportDetailsInput{
-  width:100%;
-  background:#222;
-  border:1px solid #444;
-  border-radius:10px;
-  padding:11px 14px;
-  color:white;
-  font-size:14px;
-  outline:none;
-  margin-top:10px;
-  font-family:inherit;
-  resize:vertical;
-}
-
-.reportButtonRow{
-  display:flex;
-  gap:10px;
-  margin-top:16px;
-}
-
-.reportCancelButton{
-  flex:1;
-  background:#292929;
-  border:0;
-  color:white;
-  border-radius:10px;
-  padding:13px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.reportSubmitButton{
-  flex:1;
-  background:#ff0033;
-  border:0;
-  color:white;
-  border-radius:10px;
-  padding:13px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.reportSubmitButton:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-
+.avatar{width:42px;height:42px}
+.main{width:100%;max-width:1100px;margin:0 auto;padding:20px}
+.videoBox{width:100%;background:#000;border-radius:14px;overflow:hidden}
+.videoBox video{width:100%;display:block;max-height:72vh;background:#000;object-fit:contain}
+.title{font-size:24px;font-weight:700;line-height:1.35;margin-top:18px;word-break:break-word}
+.meta{color:#999;font-size:14px;margin-top:8px}
+.actions{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
 .actionButton{
-  background:#292929;
-
-  border:0;
-
-  color:white;
-
-  border-radius:22px;
-
-  padding:10px 17px;
-
-  cursor:pointer;
-
-  font-size:14px;
-
-  font-weight:600;
-
-  transition:.2s;
+  background:#292929;border:0;color:white;border-radius:22px;
+  padding:10px 17px;cursor:pointer;font-size:14px;font-weight:600
 }
-
-.actionButton:hover{
-  background:#3a3a3a;
+.actionButton:hover{background:#3a3a3a}
+.actionButton.liked{color:#ff0033}
+.subscribeButton,.channelSubscribe{
+  background:white;color:#111;border:0;border-radius:22px;
+  padding:10px 18px;font-weight:bold;cursor:pointer
 }
-
-.actionButton:active{
-  transform:scale(.96);
-}
-
-.actionButton.liked{
-  color:#ff0033;
-}
-
-.subscribeButton{
-  background:white;
-
-  color:#111;
-
-  border:0;
-
-  border-radius:22px;
-
-  padding:10px 18px;
-
-  font-weight:bold;
-
-  cursor:pointer;
-
-  transition:.2s;
-}
-
-.subscribeButton:hover{
-  opacity:.9;
-}
-
-.subscribeButton:active{
-  transform:scale(.96);
-}
-
-.subscribeButton.subscribed{
-  background:#292929;
-
-  color:white;
-
-  border:1px solid #555;
-}
-
-
-/* =====================================
-   CHANNEL
-   ===================================== */
-
+.subscribeButton.subscribed{background:#292929;color:white;border:1px solid #555}
 .channel{
-  margin-top:20px;
-
-  padding:16px;
-
-  background:#181818;
-
-  border-radius:14px;
-
-  display:flex;
-
-  align-items:center;
-
-  gap:13px;
+  margin-top:20px;padding:16px;background:#181818;border-radius:14px;
+  display:flex;align-items:center;gap:13px
 }
-
-.channelAvatar{
-  width:50px;
-  height:50px;
-
-  flex-shrink:0;
-
-  border-radius:50%;
-
-  background:#7c4dff;
-
-  display:grid;
-
-  place-items:center;
-
-  font-weight:bold;
-
-  font-size:18px;
-
-  cursor:pointer;
+.channelAvatar{width:50px;height:50px;font-size:18px;cursor:pointer}
+.channelInfo{flex:1;min-width:0;cursor:pointer}
+.channelName{font-weight:bold;font-size:16px}
+.channelText{color:#999;font-size:13px;margin-top:5px}
+.panel{
+  margin-top:24px;padding:18px;background:#181818;
+  border:1px solid #292929;border-radius:14px
 }
-
-.channelInfo{
-  flex:1;
-
-  min-width:0;
-
-  cursor:pointer;
+.panelTitle{font-size:21px;font-weight:bold;margin-bottom:14px}
+.muted{color:#999;font-size:13px}
+.supportAmountRow{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.amountButton{
+  background:#292929;color:white;border:1px solid #444;
+  padding:10px 16px;border-radius:20px;cursor:pointer
 }
-
-.channelName{
-  font-weight:bold;
-
-  font-size:16px;
+.amountButton.selected{background:#ff0033;border-color:#ff0033}
+.textInput,.textArea{
+  width:100%;background:#222;border:1px solid #444;
+  border-radius:10px;padding:12px;color:white;
+  font-size:14px;outline:none;font-family:inherit
 }
-
-.channelText{
-  color:#999;
-
-  font-size:13px;
-
-  margin-top:5px;
+.textArea{resize:vertical;min-height:85px}
+.primaryButton{
+  background:#ff0033;color:white;border:0;border-radius:22px;
+  padding:11px 18px;font-weight:bold;cursor:pointer
 }
-
-.channelSubscribe{
-  background:white;
-
-  color:#111;
-
-  border:0;
-
-  border-radius:20px;
-
-  padding:9px 15px;
-
-  font-weight:bold;
-
-  cursor:pointer;
+.secondaryButton{
+  background:#292929;color:white;border:1px solid #444;
+  border-radius:22px;padding:10px 16px;cursor:pointer
 }
-
-
-/* =====================================
-   COMMENTS
-   ===================================== */
-
-.comments{
-  margin-top:32px;
+.supportRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ratingSummary{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.averageRating{font-size:42px;font-weight:bold}
+.stars{color:#ffbf00;letter-spacing:2px}
+.ratingBars{flex:1;min-width:180px}
+.ratingBarRow{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px;color:#bbb}
+.ratingBarTrack{height:8px;background:#333;border-radius:10px;overflow:hidden;flex:1}
+.ratingBarFill{height:100%;background:#ffbf00}
+.starPicker{display:flex;gap:5px;margin:12px 0}
+.starPicker button{
+  background:none;border:0;color:#555;font-size:32px;
+  cursor:pointer;padding:0
 }
-
-.commentsTitle{
-  font-size:22px;
-
-  font-weight:bold;
-
-  margin-bottom:15px;
+.starPicker button.active{color:#ffbf00}
+.reviewForm{margin-top:18px;padding-top:16px;border-top:1px solid #333}
+.reviewForm select{
+  width:100%;background:#222;color:white;border:1px solid #444;
+  padding:11px;border-radius:10px;margin:10px 0
 }
-
-.commentForm{
-  background:#181818;
-
-  border-radius:14px;
-
-  padding:15px;
+.reviewCard{padding:15px 0;border-bottom:1px solid #333}
+.reviewTop{display:flex;align-items:center;gap:10px}
+.reviewAvatar{width:38px;height:38px}
+.reviewAuthor{font-weight:bold;font-size:14px}
+.reviewDate{color:#777;font-size:12px;margin-top:3px}
+.reviewText{white-space:pre-wrap;line-height:1.5;color:#ddd;margin-top:10px;word-break:break-word}
+.reviewCategory{display:inline-block;background:#292929;color:#bbb;padding:5px 9px;border-radius:12px;font-size:12px;margin-top:8px}
+.creatorReply{
+  margin:12px 0 0 18px;padding:12px;
+  background:#222;border-left:3px solid #ff0033;border-radius:8px
 }
-
+.creatorReply strong{font-size:13px}
+.reviewActions{margin-top:10px;display:flex;gap:12px}
+.smallButton{background:none;border:0;color:#ff647d;cursor:pointer;padding:4px 0}
+.comments{margin-top:32px}
+.commentsTitle{font-size:22px;font-weight:bold;margin-bottom:15px}
+.commentForm{background:#181818;border-radius:14px;padding:15px}
 .commentInput{
-  width:100%;
-
-  min-height:90px;
-
-  resize:vertical;
-
-  background:#222;
-
-  border:1px solid #444;
-
-  border-radius:10px;
-
-  padding:12px;
-
-  color:white;
-
-  font-family:Arial,sans-serif;
-
-  font-size:15px;
-
-  line-height:1.5;
-
-  outline:none;
+  width:100%;min-height:90px;resize:vertical;background:#222;
+  border:1px solid #444;border-radius:10px;padding:12px;
+  color:white;font-family:Arial;font-size:15px;outline:none
 }
-
-.commentInput:focus{
-  border-color:#777;
+.commentBottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}
+.commentName{color:#999;font-size:13px}
+.postButton{background:#ff0033;color:white;border:0;border-radius:22px;padding:10px 18px;font-weight:bold;cursor:pointer}
+.commentList{margin-top:18px}
+.comment{background:#181818;border-radius:12px;padding:14px;margin-bottom:10px}
+.commentTop{display:flex;align-items:center;gap:9px}
+.commentAvatar{width:36px;height:36px;font-size:13px}
+.commentAuthor{font-weight:bold;font-size:14px}
+.commentDate{color:#777;font-size:12px;margin-top:2px}
+.commentText{margin-top:10px;color:#ddd;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.deleteComment{background:none;border:0;color:#ff4964;padding:0;cursor:pointer;font-size:13px}
+.noComments,.emptyState{color:#888;text-align:center;padding:25px 10px}
+.saveModalOverlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
+  z-index:300;align-items:flex-end;justify-content:center
 }
-
-.commentInput::placeholder{
-  color:#777;
+.saveModalOverlay.show{display:flex}
+.saveModal{
+  width:100%;max-width:480px;background:#181818;
+  border-radius:20px 20px 0 0;padding:20px;max-height:75vh;overflow:auto
 }
-
-.commentBottom{
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  margin-top:10px;
-
-  gap:10px;
-}
-
-.commentName{
-  color:#999;
-
-  font-size:13px;
-}
-
-.postButton{
-  background:#ff0033;
-
-  color:white;
-
-  border:0;
-
-  border-radius:22px;
-
-  padding:10px 18px;
-
-  font-weight:bold;
-
-  cursor:pointer;
-}
-
-.postButton:active{
-  transform:scale(.96);
-}
-
-.commentList{
-  margin-top:18px;
-}
-
-.comment{
-  background:#181818;
-
-  border-radius:12px;
-
-  padding:14px;
-
-  margin-bottom:10px;
-}
-
-.commentTop{
-  display:flex;
-
-  align-items:center;
-
-  gap:9px;
-}
-
-.commentAvatar{
-  width:36px;
-  height:36px;
-
-  flex-shrink:0;
-
-  border-radius:50%;
-
-  background:#7c4dff;
-
-  display:grid;
-
-  place-items:center;
-
-  font-size:13px;
-
-  font-weight:bold;
-}
-
-.commentAuthor{
-  font-weight:bold;
-
-  font-size:14px;
-}
-
-.commentDate{
-  color:#777;
-
-  font-size:12px;
-
-  margin-top:2px;
-}
-
-.commentText{
-  margin-top:10px;
-
-  color:#ddd;
-
-  line-height:1.5;
-
-  white-space:pre-wrap;
-
-  word-break:break-word;
-}
-
-.commentActions{
-  margin-top:10px;
-}
-
-.deleteComment{
-  background:none;
-
-  border:0;
-
-  color:#ff4964;
-
-  padding:0;
-
-  cursor:pointer;
-
-  font-size:13px;
-}
-
-.noComments{
-  color:#888;
-
-  text-align:center;
-
-  padding:28px 15px;
-}
-
-
-/* =====================================
-   LOADING
-   ===================================== */
-
-.loading{
-  color:#999;
-
-  padding:25px;
-
-  text-align:center;
-}
-
-
-/* =====================================
-   ERROR
-   ===================================== */
-
-.errorBox{
-  background:#181818;
-
-  border:1px solid #292929;
-
-  border-radius:14px;
-
-  padding:40px 20px;
-
-  text-align:center;
-
-  margin-top:20px;
-}
-
-.errorIcon{
-  font-size:42px;
-
-  margin-bottom:12px;
-}
-
-.errorBox h2{
-  margin:0 0 8px;
-}
-
-.errorBox p{
-  color:#999;
-
-  margin:0;
-}
-
-
-/* =====================================
-   BOTTOM NAV
-   ===================================== */
-
+.saveModalTitle{font-size:17px;font-weight:bold;margin-bottom:14px}
+.playlistCheckRow{display:flex;align-items:center;gap:12px;padding:11px 0;cursor:pointer}
+.playlistCheckRow input{width:20px;height:20px}
+.playlistCheckName{flex:1;font-size:15px;word-break:break-word}
+.playlistCheckCount{color:#999;font-size:12px}
+.newPlaylistRow{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid #292929}
+.newPlaylistInput{flex:1;background:#222;border:1px solid #444;border-radius:20px;padding:10px 15px;color:white;min-width:0}
+.saveModalDone{width:100%;margin-top:16px;background:#292929;border:0;color:white;border-radius:10px;padding:13px;font-weight:bold}
+.reportOptions{display:flex;flex-direction:column;gap:2px}
+.reportOption{display:flex;align-items:center;gap:12px;padding:11px 0;font-size:15px}
+.reportOption input{width:19px;height:19px}
+.reportButtonRow{display:flex;gap:10px;margin-top:16px}
+.reportButtonRow button{flex:1}
+.errorBox{background:#181818;border:1px solid #292929;border-radius:14px;padding:40px 20px;text-align:center}
+.errorBox p{color:#999}
 .bottom{
-  position:fixed;
-
-  bottom:0;
-  left:0;
-  right:0;
-
-  height:70px;
-
-  background:#151515;
-
-  border-top:1px solid #333;
-
-  display:flex;
-
-  justify-content:space-around;
-
-  align-items:center;
-
-  z-index:200;
+  position:fixed;bottom:0;left:0;right:0;height:70px;
+  background:#151515;border-top:1px solid #333;
+  display:flex;justify-content:space-around;align-items:center;z-index:200
 }
-
-.bottom button{
-  min-width:55px;
-
-  background:none;
-
-  border:0;
-
-  color:#aaa;
-
-  font-size:12px;
-
-  cursor:pointer;
-
-  padding:5px;
-}
-
-.bottom button b{
-  display:block;
-
-  font-size:22px;
-
-  color:white;
-
-  margin-bottom:3px;
-}
-
-.bottom button.active{
-  color:white;
-}
-
-
-/* =====================================
-   DESKTOP
-   ===================================== */
-
-@media(min-width:900px){
-
-  .main{
-    padding-top:25px;
-  }
-
-}
-
-
-/* =====================================
-   MOBILE
-   ===================================== */
-
+.bottom button{min-width:55px;background:none;border:0;color:#aaa;font-size:12px;cursor:pointer;padding:5px}
+.bottom button b{display:block;font-size:22px;color:white;margin-bottom:3px}
 @media(max-width:600px){
-
-  header{
-    padding:0 12px;
-  }
-
-  .logo{
-    font-size:21px;
-  }
-
-  .main{
-    padding:12px;
-  }
-
-  .videoBox{
-    border-radius:10px;
-  }
-
-  .videoBox video{
-    max-height:65vh;
-  }
-
-  .title{
-    font-size:20px;
-  }
-
-  .channel{
-    padding:14px;
-  }
-
-  .channelSubscribe{
-    display:none;
-  }
-
-  .commentBottom{
-    align-items:flex-end;
-  }
-
-  .commentName{
-    max-width:55%;
-    line-height:1.3;
-  }
-
+  header{padding:0 12px}.logo{font-size:21px}
+  .main{padding:12px}.videoBox{border-radius:10px}
+  .videoBox video{max-height:65vh}.title{font-size:20px}
+  .channel{padding:14px}.channelSubscribe{display:none}
+  .commentBottom{align-items:flex-end}
+  .commentName{max-width:55%;line-height:1.3}
 }
-
-
-/* =====================================
-   SMALL MOBILE
-   ===================================== */
-
-@media(max-width:380px){
-
-  .bottom button{
-    font-size:11px;
-  }
-
-  .bottom button b{
-    font-size:20px;
-  }
-
-  .actionButton{
-    padding:9px 13px;
-  }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================
-     HEADER
-     ===================================== -->
-
 <header>
-
-  <button
-    class="back"
-    onclick="goBack()"
-    aria-label="Back"
-  >
-    ‹
-  </button>
-
-
-  <div class="logo">
-
-    <span>▶</span>
-    MiniTube
-
-  </div>
-
-
+  <button class="back" onclick="goBack()" aria-label="Back">‹</button>
+  <div class="logo"><span>▶</span> MiniTube</div>
   <div class="spacer"></div>
-
-
-  <div
-    class="avatar"
-    id="headerAvatar"
-  >
-    M
-  </div>
-
+  <div class="avatar" id="headerAvatar">M</div>
 </header>
-
-
-<!-- =====================================
-     MAIN
-     ===================================== -->
 
 <main class="main">
 
-
-  <!-- VIDEO -->
-
   <div class="videoBox">
-
-    <video
-      id="videoPlayer"
-      controls
-      playsinline
-      preload="metadata"
-    ></video>
-
+    <video id="videoPlayer" controls playsinline preload="metadata"></video>
   </div>
 
-
-  <!-- TITLE -->
-
-  <div
-    id="videoTitle"
-    class="title"
-  >
-    Loading video...
-  </div>
-
-
-  <!-- META -->
-
-  <div class="meta">
-
-    <span id="viewCount">
-      0
-    </span>
-
-    views
-
-  </div>
-
-
-  <!-- ACTIONS -->
+  <div id="videoTitle" class="title">Loading video...</div>
+  <div class="meta"><span id="viewCount">0</span> views</div>
 
   <div class="actions">
-
-
-    <button
-      id="likeButton"
-      class="actionButton"
-      onclick="toggleLike()"
-    >
-      ♡ Like 0
-    </button>
-
-
-    <button
-      class="actionButton"
-      onclick="shareVideo()"
-    >
-      ↗ Share
-    </button>
-
-
-    <button
-      class="actionButton"
-      onclick="openSaveModal()"
-    >
-      ⊕ Save
-    </button>
-
-
-    <button
-      class="actionButton"
-      onclick="openReportModal()"
-    >
-      ⚑ Report
-    </button>
-
-
-    <button
-      id="subscribeButton"
-      class="subscribeButton"
-      onclick="toggleSubscribe()"
-    >
-      Subscribe
-    </button>
-
-
+    <button id="likeButton" class="actionButton" onclick="toggleLike()">♡ Like 0</button>
+    <button class="actionButton" onclick="shareVideo()">↗ Share</button>
+    <button class="actionButton" onclick="openSaveModal()">⊕ Save</button>
+    <button class="actionButton" onclick="openReportModal()">⚑ Report</button>
+    <button id="subscribeButton" class="subscribeButton" onclick="toggleSubscribe()">Subscribe</button>
   </div>
-
 
   <!-- REPORT MODAL -->
-
-  <div
-    id="reportModalOverlay"
-    class="saveModalOverlay"
-    onclick="closeReportModalOnOverlay(event)"
-  >
-
+  <div id="reportModalOverlay" class="saveModalOverlay" onclick="closeReportModalOnOverlay(event)">
     <div class="saveModal">
-
-      <div class="saveModalTitle">
-        Report this video
-      </div>
-
+      <div class="saveModalTitle">Report this video</div>
       <div class="reportOptions">
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Spam or misleading">
-          Spam or misleading
-        </label>
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Sexual or nudity content">
-          Sexual or nudity content
-        </label>
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Violent or harmful content">
-          Violent or harmful content
-        </label>
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Harassment or bullying">
-          Harassment or bullying
-        </label>
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Hate speech">
-          Hate speech
-        </label>
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Copyright infringement">
-          Copyright infringement
-        </label>
-
-        <label class="reportOption">
-          <input type="radio" name="reportReason" value="Other">
-          Other
-        </label>
-
+        <label class="reportOption"><input type="radio" name="reportReason" value="Spam or misleading"> Spam or misleading</label>
+        <label class="reportOption"><input type="radio" name="reportReason" value="Sexual or nudity content"> Sexual or nudity content</label>
+        <label class="reportOption"><input type="radio" name="reportReason" value="Violent or harmful content"> Violent or harmful content</label>
+        <label class="reportOption"><input type="radio" name="reportReason" value="Harassment or bullying"> Harassment or bullying</label>
+        <label class="reportOption"><input type="radio" name="reportReason" value="Hate speech"> Hate speech</label>
+        <label class="reportOption"><input type="radio" name="reportReason" value="Copyright infringement"> Copyright infringement</label>
+        <label class="reportOption"><input type="radio" name="reportReason" value="Other"> Other</label>
       </div>
-
-      <textarea
-        id="reportDetails"
-        class="reportDetailsInput"
-        placeholder="Add details (optional)"
-        rows="3"
-      ></textarea>
-
+      <textarea id="reportDetails" class="textArea" placeholder="Add details (optional)" rows="3"></textarea>
       <div class="reportButtonRow">
-
-        <button
-          class="reportCancelButton"
-          onclick="closeReportModal()"
-        >
-          Cancel
-        </button>
-
-        <button
-          id="submitReportButton"
-          class="reportSubmitButton"
-          onclick="submitReport()"
-        >
-          Submit report
-        </button>
-
+        <button class="secondaryButton" onclick="closeReportModal()">Cancel</button>
+        <button id="submitReportButton" class="primaryButton" onclick="submitReport()">Submit report</button>
       </div>
-
     </div>
-
   </div>
 
-
-  <!-- SAVE TO PLAYLIST MODAL -->
-
-  <div
-    id="saveModalOverlay"
-    class="saveModalOverlay"
-    onclick="closeSaveModalOnOverlay(event)"
-  >
-
+  <!-- SAVE MODAL -->
+  <div id="saveModalOverlay" class="saveModalOverlay" onclick="closeSaveModalOnOverlay(event)">
     <div class="saveModal">
-
-      <div class="saveModalTitle">
-        Save video to...
-      </div>
-
+      <div class="saveModalTitle">Save video to...</div>
       <div id="playlistCheckList"></div>
-
       <div class="newPlaylistRow">
-
-        <input
-          id="newPlaylistName"
-          class="newPlaylistInput"
-          placeholder="Create new playlist"
-          onkeydown="if(event.key==='Enter'){createPlaylistFromModal();}"
-        >
-
-        
-
+        <input id="newPlaylistName" class="newPlaylistInput" placeholder="Create new playlist"
+          onkeydown="if(event.key==='Enter')createPlaylistFromModal()">
+        <button class="primaryButton" onclick="createPlaylistFromModal()">Create</button>
       </div>
-
-      <button
-        class="saveModalDone"
-        onclick="closeSaveModal()"
-      >
-        Done
-      </button>
-
+      <button class="saveModalDone" onclick="closeSaveModal()">Done</button>
     </div>
-
   </div>
-
 
   <!-- CHANNEL -->
-
   <div class="channel">
-
-
-    <div
-      class="channelAvatar"
-      id="channelAvatar"
-      onclick="window.location.href='channel.html'"
-    >
-      M
+    <div class="channelAvatar" id="channelAvatar">M</div>
+    <div class="channelInfo" id="channelInfo">
+      <div class="channelName" id="channelName">My Channel</div>
+      <div class="channelText">MiniTube creator</div>
     </div>
-
-
-    <div
-      class="channelInfo"
-      onclick="window.location.href='channel.html'"
-    >
-
-
-      <div
-        class="channelName"
-        id="channelName"
-      >
-        My Channel
-      </div>
-
-
-      <div class="channelText">
-        Your MiniTube creator channel
-      </div>
-
-
-    </div>
-
-
-    <button
-      id="channelSubscribe"
-      class="channelSubscribe"
-      onclick="toggleSubscribe()"
-    >
-      Subscribe
-    </button>
-
-
+    <button id="channelSubscribe" class="channelSubscribe" onclick="toggleSubscribe()">Subscribe</button>
   </div>
 
-
-  <!-- COMMENTS -->
-
-  <section class="comments">
-
-
-    <div class="commentsTitle">
-
-      Comments
-      <span id="commentCount">
-        0
-      </span>
-
+  <!-- DIRECT CREATOR SUPPORT -->
+  <section class="panel" id="supportPanel" style="display:none">
+    <div class="panelTitle">❤️ Support this Creator</div>
+    <div class="muted">Support the creator directly using UPI.</div>
+    <div class="supportAmountRow">
+      <button class="amountButton selected" onclick="selectSupportAmount(10,this)">₹10</button>
+      <button class="amountButton" onclick="selectSupportAmount(20,this)">₹20</button>
+      <button class="amountButton" onclick="selectSupportAmount(50,this)">₹50</button>
+      <button class="amountButton" onclick="selectSupportAmount(100,this)">₹100</button>
     </div>
-
-
-    <div class="commentForm">
-
-
-      <textarea
-        id="commentInput"
-        class="commentInput"
-        placeholder="Add a comment..."
-        maxlength="500"
-      ></textarea>
-
-
-      <div class="commentBottom">
-
-
-        <div
-          class="commentName"
-          id="commentName"
-        >
-          Commenting as Main Player
-        </div>
-
-
-        <button
-          class="postButton"
-          onclick="postComment()"
-        >
-          Post Comment
-        </button>
-
-
-      </div>
-
-
+    <div class="supportRow">
+      <input id="customSupportAmount" class="textInput" type="number" min="1" step="1" placeholder="Custom amount (₹)">
+      <button class="primaryButton" onclick="supportCreator()">Support</button>
     </div>
-
-
-    <div
-      id="commentList"
-      class="commentList"
-    ></div>
-
-
+    <p class="muted">Payment will open in your UPI app. MiniTube cannot automatically verify whether the payment is completed.</p>
   </section>
 
+  <!-- VIDEO RATINGS -->
+  <section class="panel" id="ratingPanel">
+    <div class="panelTitle">⭐ Video Ratings & Reviews</div>
+    <div class="ratingSummary">
+      <div>
+        <div class="averageRating" id="averageRating">0.0</div>
+        <div class="stars" id="averageStars">☆☆☆☆☆</div>
+        <div class="muted" id="ratingTotal">0 ratings</div>
+      </div>
+      <div class="ratingBars" id="ratingBars">
+        <div class="muted">Loading ratings...</div>
+      </div>
+    </div>
+
+    <div class="reviewForm">
+      <strong id="reviewFormTitle">Rate this video</strong>
+      <div class="starPicker" id="starPicker">
+        <button type="button" data-star="1" onclick="chooseRating(1)">★</button>
+        <button type="button" data-star="2" onclick="chooseRating(2)">★</button>
+        <button type="button" data-star="3" onclick="chooseRating(3)">★</button>
+        <button type="button" data-star="4" onclick="chooseRating(4)">★</button>
+        <button type="button" data-star="5" onclick="chooseRating(5)">★</button>
+      </div>
+      <select id="reviewCategory">
+        <option value="">Choose feedback category (optional)</option>
+        <option value="Good video">Good video</option>
+        <option value="Audio quality">Audio quality</option>
+        <option value="Video quality">Video quality</option>
+        <option value="Informative">Informative</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Needs improvement">Needs improvement</option>
+        <option value="Other">Other</option>
+      </select>
+      <textarea id="reviewText" class="textArea" maxlength="1000" placeholder="Write your review (optional)..."></textarea>
+      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+        <button id="submitRatingButton" class="primaryButton" onclick="submitRating()">Submit Rating</button>
+        <button class="secondaryButton" onclick="resetRatingForm()">Clear</button>
+      </div>
+      <div class="muted" style="margin-top:9px">You can update your rating and review later.</div>
+    </div>
+
+    <div style="margin-top:22px;font-weight:bold">Viewer Reviews</div>
+    <div id="reviewList"><div class="emptyState">Loading reviews...</div></div>
+  </section>
+
+  <!-- COMMENTS -->
+  <section class="comments">
+    <div class="commentsTitle">Comments <span id="commentCount">0</span></div>
+    <div class="commentForm">
+      <textarea id="commentInput" class="commentInput" placeholder="Add a comment..." maxlength="500"></textarea>
+      <div class="commentBottom">
+        <div class="commentName" id="commentName">Commenting as MiniTube user</div>
+        <button class="postButton" onclick="postComment()">Post Comment</button>
+      </div>
+    </div>
+    <div id="commentList" class="commentList"></div>
+  </section>
 
 </main>
 
-
-<!-- =====================================
-     BOTTOM NAV
-     ===================================== -->
-
 <nav class="bottom">
-
-
-  <button onclick="goHome()">
-
-    <b>⌂</b>
-    Home
-
-  </button>
-
-
-  <button onclick="goShorts()">
-
-    <b>▶</b>
-    HORIZONTAL
-
-  </button>
-
-
-  <button onclick="goSubscriptions()">
-
-    <b>□</b>
-    Subscriptions
-
-  </button>
-
-
-  <button onclick="goYou()">
-
-    <b>●</b>
-    You
-
-  </button>
-
-
+  <button onclick="goHome()"><b>⌂</b>Home</button>
+  <button onclick="goShorts()"><b>▶</b>HORIZONTAL</button>
+  <button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
+  <button onclick="goYou()"><b>●</b>You</button>
 </nav>
 
-
 <script>
-
 /* =====================================
-   CLOUDFLARE WORKER
-   ===================================== */
+   CONFIGURATION
+===================================== */
 
-const API_BASE =
-  "https://wispy-base-65bb.naradsocial7.workers.dev";
+const API_BASE = "https://wispy-base-65bb.naradsocial7.workers.dev";
+const SUPABASE_URL = "https://vlzssmuzetcbkmzujecs.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
 
+const ACCESS_TOKEN_KEY = "minitube_access_token";
+const USER_KEY = "minitube_user";
+const AUTOPLAY_KEY = "minitube_autoplay";
+const PLAYLIST_KEY = "minitube_playlists";
+const HISTORY_KEY = "minitube_watch_history";
 
-/* =====================================
-   SUPABASE (video/channel metadata)
-   ===================================== */
+const params = new URLSearchParams(window.location.search);
+const videoName = params.get("video");
+const safeVideoName = videoName || "";
 
-const SUPABASE_URL =
-  "https://vlzssmuzetcbkmzujecs.supabase.co";
+const likeKey = "likes_" + safeVideoName;
+const likedKey = "liked_" + safeVideoName;
+const viewKey = "views_" + safeVideoName;
+const viewedKey = "viewed_" + safeVideoName;
 
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
+let videoMeta = null;
+let commentsCache = [];
+let ratingsCache = [];
+let repliesCache = [];
+let isSubscribedToChannel = false;
+let selectedRating = 0;
+let supportAmount = 10;
+let creatorPaymentInfo = null;
 
-
-/* =====================================
-   AUTH (same keys as index.html)
-   ===================================== */
-
-const ACCESS_TOKEN_KEY =
-  "minitube_access_token";
-
-const USER_KEY =
-  "minitube_user";
-
+const player = document.getElementById("videoPlayer");
+const title = document.getElementById("videoTitle");
+const viewCount = document.getElementById("viewCount");
+const likeButton = document.getElementById("likeButton");
+const subscribeButton = document.getElementById("subscribeButton");
+const channelSubscribe = document.getElementById("channelSubscribe");
+const commentInput = document.getElementById("commentInput");
 
 function getLoggedUser(){
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-  const savedUser =
-    localStorage.getItem(
-      USER_KEY
-    );
-
-
-  if(!token || !savedUser){
-
-    return null;
-
-  }
-
-
-  try{
-
-    return JSON.parse(
-      savedUser
-    );
-
-  }catch(error){
-
-    return null;
-
-  }
-
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+  const savedUser = localStorage.getItem(USER_KEY);
+  if(!token || !savedUser) return null;
+  try{return JSON.parse(savedUser)}catch(e){return null}
 }
 
-
-/* =====================================
-   VIDEO NAME
-   ===================================== */
-
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-
-const videoName =
-  params.get("video");
-
-
-/* =====================================
-   STORAGE KEYS
-   ===================================== */
-
-const safeVideoName =
-  videoName || "";
-
-
-const commentKey =
-  "minitube_comments_" +
-  safeVideoName;
-
-
-/* =====================================
-   VIDEO METADATA (from database)
-   ===================================== */
-
-let videoMeta =
-  null;
-
-
-async function loadVideoMetadata(){
-
-  if(!videoName){
-
-    return null;
-
-  }
-
-
-  try{
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/videos?r2_key=eq." +
-        encodeURIComponent(videoName) +
-        "&select=id,title,description,owner_id,profiles(display_name)",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      return null;
-
-    }
-
-
-    const rows =
-      await response.json();
-
-
-    return rows[0] || null;
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-    return null;
-
-  }
-
+function getToken(){
+  return localStorage.getItem(ACCESS_TOKEN_KEY) || SUPABASE_ANON_KEY;
 }
 
+function apiHeaders(extra={}){
+  return {
+    "apikey":SUPABASE_ANON_KEY,
+    "Authorization":"Bearer "+getToken(),
+    ...extra
+  };
+}
 
-const likeKey =
-  "likes_" +
-  safeVideoName;
+async function dbFetch(path, options={}){
+  return fetch(SUPABASE_URL+"/rest/v1/"+path,{
+    ...options,
+    headers:apiHeaders(options.headers || {})
+  });
+}
 
+function loginPrompt(action){
+  const go = confirm("Please login first to "+action+".\n\nGo to Login?");
+  if(go) window.location.href="login.html";
+}
 
-const likedKey =
-  "liked_" +
-  safeVideoName;
+function isAutoplayOn(){
+  const value=localStorage.getItem(AUTOPLAY_KEY);
+  return value===null ? true : value==="true";
+}
 
-
-const viewKey =
-  "views_" +
-  safeVideoName;
-
-
-const viewedKey =
-  "viewed_" +
-  safeVideoName;
-
-
-const subscribeKey =
-  "minitube_my_channel_subscribed";
-
-
-/* =====================================
-   ELEMENTS
-   ===================================== */
-
-const player =
-  document.getElementById(
-    "videoPlayer"
-  );
-
-
-const title =
-  document.getElementById(
-    "videoTitle"
-  );
-
-
-const viewCount =
-  document.getElementById(
-    "viewCount"
-  );
-
-
-const likeButton =
-  document.getElementById(
-    "likeButton"
-  );
-
-
-const subscribeButton =
-  document.getElementById(
-    "subscribeButton"
-  );
-
-
-const channelSubscribe =
-  document.getElementById(
-    "channelSubscribe"
-  );
-
-
-const commentInput =
-  document.getElementById(
-    "commentInput"
-  );
-
-
-/* =====================================
-   START
-   ===================================== */
+function initialize(){
+  loadProfile();
+  loadVideo();
+}
 
 initialize();
 
-
-function initialize(){
-
-  loadProfile();
-
-  loadVideo();
-
-}
-
-
 /* =====================================
    PROFILE
-   ===================================== */
+===================================== */
 
 function loadProfile(){
+  const user=getLoggedUser();
+  const storedName=localStorage.getItem("minitube_username") ||
+    (user && user.user_metadata && user.user_metadata.display_name) ||
+    (user && user.email ? user.email.split("@")[0] : "");
 
-  /*
-    If later you add real login,
-    these localStorage values can be
-    filled from your login system.
-  */
-
-  const storedName =
-    localStorage.getItem(
-      "minitube_username"
-    );
-
-
-  const storedAvatar =
-    localStorage.getItem(
-      "minitube_avatar_letter"
-    );
-
+  const storedAvatar=localStorage.getItem("minitube_avatar_letter") ||
+    (storedName ? storedName.charAt(0).toUpperCase() : "M");
 
   if(storedName){
-
-    document.getElementById(
-      "commentName"
-    ).textContent =
-      "Commenting as " +
-      storedName;
-
+    document.getElementById("commentName").textContent="Commenting as "+storedName;
   }
-
-
-  if(storedAvatar){
-
-    document.getElementById(
-      "headerAvatar"
-    ).textContent =
-      storedAvatar;
-
-
-    document.getElementById(
-      "channelAvatar"
-    ).textContent =
-      storedAvatar;
-
-  }
-
+  document.getElementById("headerAvatar").textContent=storedAvatar;
 }
 
-
 /* =====================================
-   AUTOPLAY SETTING
-   (set from settings.html)
-   ===================================== */
+   VIDEO METADATA
+===================================== */
 
-const AUTOPLAY_KEY =
-  "minitube_autoplay";
-
-
-function isAutoplayOn(){
-
-  const value =
-    localStorage.getItem(
-      AUTOPLAY_KEY
-    );
-
-
-  return value === null
-    ? true
-    : value === "true";
-
-}
-
-
-/* =====================================
-   PLAYLISTS
-   ===================================== */
-
-const PLAYLIST_KEY =
-  "minitube_playlists";
-
-
-function getPlaylists(){
-
+async function loadVideoMetadata(){
+  if(!videoName) return null;
   try{
-
-    const saved =
-      localStorage.getItem(
-        PLAYLIST_KEY
-      );
-
-    const list =
-      saved
-        ? JSON.parse(saved)
-        : [];
-
-
-    /*
-      Always make sure the
-      built-in "Watch Later"
-      playlist exists.
-    */
-
-    if(
-      !list.some(
-        p => p.id === "watch-later"
-      )
-    ){
-
-      list.unshift({
-        id: "watch-later",
-        name: "Watch Later",
-        builtIn: true,
-        createdAt: Date.now(),
-        videoNames: []
-      });
-
-    }
-
-
-    return list;
-
+    const response=await dbFetch(
+      "videos?r2_key=eq."+encodeURIComponent(videoName)+
+      "&select=id,title,description,owner_id,profiles(display_name)"
+    );
+    if(!response.ok) return null;
+    const rows=await response.json();
+    return rows[0] || null;
   }catch(error){
-
-    return [
-      {
-        id: "watch-later",
-        name: "Watch Later",
-        builtIn: true,
-        createdAt: Date.now(),
-        videoNames: []
-      }
-    ];
-
+    console.error("Video metadata:",error);
+    return null;
   }
-
 }
-
-
-function savePlaylists(list){
-
-  localStorage.setItem(
-    PLAYLIST_KEY,
-    JSON.stringify(list)
-  );
-
-}
-
-
-function openSaveModal(){
-
-  renderPlaylistCheckList();
-
-  document
-    .getElementById(
-      "saveModalOverlay"
-    )
-    .classList.add(
-      "show"
-    );
-
-}
-
-
-function closeSaveModal(){
-
-  document
-    .getElementById(
-      "saveModalOverlay"
-    )
-    .classList.remove(
-      "show"
-    );
-
-}
-
-
-function closeSaveModalOnOverlay(event){
-
-  if(event.target.id === "saveModalOverlay"){
-
-    closeSaveModal();
-
-  }
-
-}
-
-
-/* =====================================
-   REPORT VIDEO
-   ===================================== */
-
-function openReportModal(){
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    const go =
-      confirm(
-        "Please login first to report a video.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  document
-    .querySelectorAll(
-      'input[name="reportReason"]'
-    )
-    .forEach(function(input){
-
-      input.checked =
-        false;
-
-    });
-
-
-  document.getElementById(
-    "reportDetails"
-  ).value =
-    "";
-
-
-  const submitButton =
-    document.getElementById(
-      "submitReportButton"
-    );
-
-  submitButton.disabled =
-    false;
-
-  submitButton.textContent =
-    "Submit report";
-
-
-  document
-    .getElementById(
-      "reportModalOverlay"
-    )
-    .classList.add(
-      "show"
-    );
-
-}
-
-
-function closeReportModal(){
-
-  document
-    .getElementById(
-      "reportModalOverlay"
-    )
-    .classList.remove(
-      "show"
-    );
-
-}
-
-
-function closeReportModalOnOverlay(event){
-
-  if(event.target.id === "reportModalOverlay"){
-
-    closeReportModal();
-
-  }
-
-}
-
-
-async function submitReport(){
-
-  if(
-    !videoMeta ||
-    !videoMeta.id
-  ){
-
-    alert(
-      "This video can't be reported right now."
-    );
-
-    return;
-
-  }
-
-
-  const selected =
-    document.querySelector(
-      'input[name="reportReason"]:checked'
-    );
-
-
-  if(!selected){
-
-    alert(
-      "Please choose a reason first."
-    );
-
-    return;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    closeReportModal();
-
-    const go =
-      confirm(
-        "Please login first to report a video.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  const reason =
-    selected.value;
-
-
-  const details =
-    document.getElementById(
-      "reportDetails"
-    ).value.trim();
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-
-  const submitButton =
-    document.getElementById(
-      "submitReportButton"
-    );
-
-
-  submitButton.disabled =
-    true;
-
-  submitButton.textContent =
-    "Submitting...";
-
-
-  try{
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/reports",
-
-        {
-          method:"POST",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=minimal"
-          },
-
-          body: JSON.stringify({
-            video_id: videoMeta.id,
-            reporter_id: user.id,
-            reason: reason,
-            details: details || null
-          })
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      const errorText =
-        await response.text();
-
-
-      alert(
-        "Could not submit report: " +
-        errorText
-      );
-
-
-      submitButton.disabled =
-        false;
-
-      submitButton.textContent =
-        "Submit report";
-
-      return;
-
-    }
-
-
-    closeReportModal();
-
-
-    alert(
-      "Thanks — this video has been reported. Our team will review it."
-    );
-
-
-  }catch(error){
-
-    alert(
-      "Could not submit report: network error."
-    );
-
-
-    submitButton.disabled =
-      false;
-
-    submitButton.textContent =
-      "Submit report";
-
-  }
-
-}
-
-
-function renderPlaylistCheckList(){
-
-  const container =
-    document.getElementById(
-      "playlistCheckList"
-    );
-
-  const playlists =
-    getPlaylists();
-
-
-  container.innerHTML =
-    "";
-
-
-  playlists.forEach(playlist => {
-
-    const row =
-      document.createElement(
-        "label"
-      );
-
-    row.className =
-      "playlistCheckRow";
-
-
-    const checked =
-      playlist.videoNames.includes(
-        videoName
-      );
-
-
-    row.innerHTML = `
-
-      <input
-        type="checkbox"
-        ${checked ? "checked" : ""}
-      >
-
-      <div class="playlistCheckName">
-        ${escapeHTML(playlist.name)}
-      </div>
-
-      <div class="playlistCheckCount">
-        ${playlist.videoNames.length}
-      </div>
-
-    `;
-
-
-    row.querySelector(
-      "input"
-    ).addEventListener(
-      "change",
-      function(event){
-
-        togglePlaylistVideo(
-          playlist.id,
-          event.target.checked
-        );
-
-      }
-    );
-
-
-    container.appendChild(
-      row
-    );
-
-  });
-
-}
-
-
-function togglePlaylistVideo(playlistId, add){
-
-  const playlists =
-    getPlaylists();
-
-
-  const playlist =
-    playlists.find(
-      p => p.id === playlistId
-    );
-
-
-  if(!playlist){
-
-    return;
-
-  }
-
-
-  if(add){
-
-    if(
-      !playlist.videoNames.includes(
-        videoName
-      )
-    ){
-
-      playlist.videoNames.unshift(
-        videoName
-      );
-
-    }
-
-  }else{
-
-    playlist.videoNames =
-      playlist.videoNames.filter(
-        name => name !== videoName
-      );
-
-  }
-
-
-  savePlaylists(
-    playlists
-  );
-
-
-  renderPlaylistCheckList();
-
-}
-
-
-function createPlaylistFromModal(){
-
-  const input =
-    document.getElementById(
-      "newPlaylistName"
-    );
-
-  const name =
-    input.value.trim();
-
-
-  if(!name){
-
-    return;
-
-  }
-
-
-  const playlists =
-    getPlaylists();
-
-
-  playlists.push({
-    id: "pl_" + Date.now(),
-    name: name,
-    builtIn: false,
-    createdAt: Date.now(),
-    videoNames: [videoName]
-  });
-
-
-  savePlaylists(
-    playlists
-  );
-
-
-  input.value =
-    "";
-
-
-  renderPlaylistCheckList();
-
-}
-
-
-/* =====================================
-   WATCH HISTORY
-   ===================================== */
-
-const HISTORY_KEY =
-  "minitube_watch_history";
-
-const MAX_HISTORY =
-  100;
-
-
-function getHistory(){
-
-  try{
-
-    const saved =
-      localStorage.getItem(
-        HISTORY_KEY
-      );
-
-    return saved
-      ? JSON.parse(saved)
-      : [];
-
-  }catch(error){
-
-    return [];
-
-  }
-
-}
-
-
-function recordHistory(){
-
-  if(!videoName){
-
-    return;
-
-  }
-
-
-  let history =
-    getHistory();
-
-
-  /*
-    Remove any existing entry
-    for this video, then add it
-    fresh to the front, so the
-    most recently watched video
-    is always first.
-  */
-
-  history =
-    history.filter(
-      entry => entry.name !== videoName
-    );
-
-
-  history.unshift({
-    name: videoName,
-    watchedAt: Date.now()
-  });
-
-
-  history =
-    history.slice(
-      0,
-      MAX_HISTORY
-    );
-
-
-  localStorage.setItem(
-    HISTORY_KEY,
-    JSON.stringify(history)
-  );
-
-}
-
-
-/* =====================================
-   APPLY VIDEO METADATA
-   ===================================== */
 
 function applyVideoMeta(){
+  if(!videoMeta) return;
 
-  const channelAvatar =
-    document.getElementById(
-      "channelAvatar"
-    );
+  title.textContent=videoMeta.title || videoName;
+  const ownerName=(videoMeta.profiles && videoMeta.profiles.display_name) || "Unknown creator";
 
-  const channelName =
-    document.getElementById(
-      "channelName"
-    );
+  document.getElementById("channelName").textContent=ownerName;
+  document.getElementById("channelAvatar").textContent=
+    ownerName.trim().charAt(0).toUpperCase() || "?";
 
-  const channelTextEl =
-    document.querySelector(
-      ".channelText"
-    );
+  const user=getLoggedUser();
+  const isOwnVideo=!!(user && user.id===videoMeta.owner_id);
+  const channelHref=isOwnVideo
+    ? "channel.html"
+    : "channel.html?id="+encodeURIComponent(videoMeta.owner_id);
 
-  const channelInfo =
-    document.querySelector(
-      ".channelInfo"
-    );
+  document.getElementById("channelAvatar").onclick=()=>window.location.href=channelHref;
+  document.getElementById("channelInfo").onclick=()=>window.location.href=channelHref;
 
-  const channelSubscribe =
-    document.getElementById(
-      "channelSubscribe"
-    );
+  channelSubscribe.style.display=isOwnVideo ? "none" : "block";
+  subscribeButton.style.display=isOwnVideo ? "none" : "inline-flex";
 
-
-  if(!videoMeta){
-
-    /*
-      No DB row found (maybe an
-      older, pre-database video) —
-      fall back to what we already
-      show, just clean up the title.
-    */
-
-    return;
-
-  }
-
-
-  title.textContent =
-    videoMeta.title ||
-    videoName;
-
-
-  const ownerName =
-    (videoMeta.profiles &&
-      videoMeta.profiles.display_name) ||
-    "Unknown creator";
-
-
-  channelName.textContent =
-    ownerName;
-
-
-  channelAvatar.textContent =
-    ownerName
-      .trim()
-      .charAt(0)
-      .toUpperCase() || "?";
-
-
-  if(channelTextEl){
-
-    channelTextEl.textContent =
-      "MiniTube creator";
-
-  }
-
-
-  const currentUser =
-    getLoggedUser();
-
-  const isOwnVideo =
-    currentUser &&
-    currentUser.id === videoMeta.owner_id;
-
-
-  const channelHref =
-    isOwnVideo
-      ? "channel.html"
-      : "channel.html?id=" +
-        encodeURIComponent(
-          videoMeta.owner_id
-        );
-
-
-  channelAvatar.onclick =
-    function(){
-      window.location.href =
-        channelHref;
-    };
-
-
-  if(channelInfo){
-
-    channelInfo.onclick =
-      function(){
-        window.location.href =
-          channelHref;
-      };
-
-  }
-
-
-  if(channelSubscribe){
-
-    channelSubscribe.style.display =
-      isOwnVideo
-        ? "none"
-        : "block";
-
-  }
-
-
-  if(subscribeButton){
-
-    subscribeButton.style.display =
-      isOwnVideo
-        ? "none"
-        : "inline-flex";
-
-  }
-
+  loadCreatorPaymentInfo(isOwnVideo);
 }
-
 
 /* =====================================
    LOAD VIDEO
-   ===================================== */
+===================================== */
 
 async function loadVideo(){
-
   if(!videoName){
-
-    showVideoError(
-      "Video not found",
-      "The video link is missing or invalid."
-    );
-
+    showVideoError("Video not found","The video link is missing or invalid.");
     return;
-
   }
 
+  player.src=API_BASE+"/video/"+encodeURIComponent(videoName);
+  title.textContent=videoName;
 
-  const videoURL =
-    API_BASE +
-    "/video/" +
-    encodeURIComponent(
-      videoName
-    );
-
-
-  player.src =
-    videoURL;
-
-
-  /*
-    Show something immediately
-    (raw filename) while the real
-    title/channel loads from the
-    database.
-  */
-
-  title.textContent =
-    videoName;
-
-
-  videoMeta =
-    await loadVideoMetadata();
-
-
+  videoMeta=await loadVideoMetadata();
   applyVideoMeta();
 
-
   updateLike();
-
-
   updateSubscribe();
-
-
   loadComments();
-
-
+  loadRatings();
   recordHistory();
-
-
   updateViews();
-
-
-  /*
-    Count a view only once per browser
-    after watching for 3 seconds.
-  */
-
   setupViewCounter();
 
+  if(isAutoplayOn()) player.play().catch(()=>{});
 
-  /*
-    Try autoplay, unless the
-    user turned it off in
-    Settings.
-  */
-
-  if(isAutoplayOn()){
-
-    player.play()
-      .catch(
-        () => {}
-      );
-
-  }
-
-
-  /*
-    If the video fails to load
-    (deleted, wrong name, network),
-    show a friendly error instead
-    of a blank black box.
-  */
-
-  player.addEventListener(
-    "error",
-    function(){
-
-      showVideoError(
-        "This video isn't available",
-        "It may have been removed, or the link is broken."
-      );
-
-    }
-  );
-
+  player.addEventListener("error",()=>{
+    showVideoError("This video isn't available","It may have been removed, or the link is broken.");
+  });
 }
 
-
-/* =====================================
-   VIDEO ERROR
-   ===================================== */
-
-function showVideoError(
-  heading,
-  message
-){
-
-  title.textContent =
-    heading;
-
-
-  document.querySelector(
-    ".videoBox"
-  ).innerHTML = `
-
-    <div class="errorBox">
-
-      <div class="errorIcon">
-        ⚠️
-      </div>
-
-      <h2>
-        ${escapeHTML(heading)}
-      </h2>
-
-      <p>
-        ${escapeHTML(message)}
-      </p>
-
-    </div>
-
-  `;
-
+function showVideoError(heading,message){
+  title.textContent=heading;
+  document.querySelector(".videoBox").innerHTML=
+    '<div class="errorBox"><div style="font-size:42px">⚠️</div><h2>'+
+    escapeHTML(heading)+'</h2><p>'+escapeHTML(message)+'</p></div>';
 }
-
 
 /* =====================================
    VIEW COUNTER
-   ===================================== */
+===================================== */
 
 function updateViews(){
-
-  const count =
-    Number(
-      localStorage.getItem(
-        viewKey
-      ) || 0
-    );
-
-
-  viewCount.textContent =
-    formatNumber(count);
-
+  const count=Number(localStorage.getItem(viewKey)||0);
+  viewCount.textContent=formatNumber(count);
 }
-
 
 function setupViewCounter(){
+  let counted=localStorage.getItem(viewedKey)==="true";
+  if(counted) return;
+  let timer=null;
 
-  let counted =
-    localStorage.getItem(
-      viewedKey
-    ) === "true";
+  player.addEventListener("play",()=>{
+    if(counted) return;
+    clearTimeout(timer);
+    timer=setTimeout(()=>{
+      let views=Number(localStorage.getItem(viewKey)||0);
+      views++;
+      localStorage.setItem(viewKey,String(views));
+      localStorage.setItem(viewedKey,"true");
+      viewCount.textContent=formatNumber(views);
+      counted=true;
+    },3000);
+  });
 
-
-  if(counted){
-    return;
-  }
-
-
-  let timer = null;
-
-
-  player.addEventListener(
-    "play",
-    function(){
-
-      if(counted){
-        return;
-      }
-
-
-      clearTimeout(timer);
-
-
-      timer =
-        setTimeout(
-          function(){
-
-            let views =
-              Number(
-                localStorage.getItem(
-                  viewKey
-                ) || 0
-              );
-
-
-            views++;
-
-
-            localStorage.setItem(
-              viewKey,
-              String(views)
-            );
-
-
-            localStorage.setItem(
-              viewedKey,
-              "true"
-            );
-
-
-            viewCount.textContent =
-              formatNumber(views);
-
-
-            counted = true;
-
-
-          },
-          3000
-        );
-
-    }
-  );
-
-
-  player.addEventListener(
-    "pause",
-    function(){
-
-      clearTimeout(timer);
-
-    }
-  );
-
-
-  player.addEventListener(
-    "ended",
-    function(){
-
-      clearTimeout(timer);
-
-    }
-  );
-
+  ["pause","ended"].forEach(eventName=>{
+    player.addEventListener(eventName,()=>clearTimeout(timer));
+  });
 }
 
-
 /* =====================================
-   LIKE SYSTEM (database-backed)
-   ===================================== */
+   LIKE SYSTEM
+===================================== */
 
 async function getLikeState(){
-
-  if(
-    !videoMeta ||
-    !videoMeta.id
-  ){
-
-    return {
-      count: 0,
-      likedByMe: false
-    };
-
-  }
-
-
+  if(!videoMeta || !videoMeta.id) return {count:0,likedByMe:false};
   try{
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/likes?video_id=eq." +
-        videoMeta.id +
-        "&select=user_id",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      return {
-        count: 0,
-        likedByMe: false
-      };
-
-    }
-
-
-    const rows =
-      await response.json();
-
-
-    const user =
-      getLoggedUser();
-
-
-    const likedByMe =
-      !!(
-        user &&
-        rows.some(
-          row => row.user_id === user.id
-        )
-      );
-
-
+    const response=await dbFetch("likes?video_id=eq."+videoMeta.id+"&select=user_id");
+    if(!response.ok) return {count:0,likedByMe:false};
+    const rows=await response.json();
+    const user=getLoggedUser();
     return {
-      count: rows.length,
-      likedByMe: likedByMe
+      count:rows.length,
+      likedByMe:!!(user && rows.some(row=>row.user_id===user.id))
     };
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-    return {
-      count: 0,
-      likedByMe: false
-    };
-
+  }catch(e){
+    return {count:0,likedByMe:false};
   }
-
 }
-
 
 async function toggleLike(){
+  if(!videoMeta || !videoMeta.id) return;
+  const user=getLoggedUser();
+  if(!user){loginPrompt("like videos");return}
 
-  if(
-    !videoMeta ||
-    !videoMeta.id
-  ){
-
-    return;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    const go =
-      confirm(
-        "Please login first to like videos.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-
-  const state =
-    await getLikeState();
-
-
+  const state=await getLikeState();
   try{
-
+    let response;
     if(state.likedByMe){
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/likes?video_id=eq." +
-        videoMeta.id +
-        "&user_id=eq." +
-        user.id,
-
-        {
-          method:"DELETE",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token
-          }
-        }
-
+      response=await dbFetch(
+        "likes?video_id=eq."+videoMeta.id+"&user_id=eq."+user.id,
+        {method:"DELETE"}
       );
-
-
     }else{
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/likes",
-
-        {
-          method:"POST",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            video_id: videoMeta.id,
-            user_id: user.id
-          })
-        }
-
-      );
-
+      response=await dbFetch("likes",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
+        body:JSON.stringify({video_id:videoMeta.id,user_id:user.id})
+      });
     }
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  updateLike();
-
+    if(!response.ok){
+      alert("Like update failed: "+await response.text());
+      return;
+    }
+    updateLike();
+  }catch(e){alert("Network error while updating like.")}
 }
-
 
 async function updateLike(){
-
-  const state =
-    await getLikeState();
-
-
-  likeButton.textContent =
-    (state.likedByMe ? "♥" : "♡") +
-    " Like " +
-    formatNumber(state.count);
-
-
-  likeButton.classList.toggle(
-    "liked",
-    state.likedByMe
-  );
-
+  const state=await getLikeState();
+  likeButton.textContent=(state.likedByMe?"♥":"♡")+" Like "+formatNumber(state.count);
+  likeButton.classList.toggle("liked",state.likedByMe);
 }
 
-
 /* =====================================
-   SUBSCRIBE SYSTEM (database-backed,
-   tied to the video's owner_id)
-   ===================================== */
-
-let isSubscribedToChannel =
-  false;
-
+   SUBSCRIBE SYSTEM
+===================================== */
 
 async function getSubscribeState(){
-
-  if(
-    !videoMeta ||
-    !videoMeta.owner_id
-  ){
-
-    return false;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    return false;
-
-  }
-
-
+  const user=getLoggedUser();
+  if(!videoMeta || !videoMeta.owner_id || !user) return false;
   try{
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?channel_id=eq." +
-        videoMeta.owner_id +
-        "&subscriber_id=eq." +
-        user.id +
-        "&select=subscriber_id",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      return false;
-
-    }
-
-
-    const rows =
-      await response.json();
-
-
-    return rows.length > 0;
-
-
-  }catch(error){
-
-    console.error(
-      error
+    const response=await dbFetch(
+      "subscriptions?channel_id=eq."+videoMeta.owner_id+
+      "&subscriber_id=eq."+user.id+"&select=subscriber_id"
     );
-
-    return false;
-
-  }
-
+    if(!response.ok) return false;
+    return (await response.json()).length>0;
+  }catch(e){return false}
 }
-
 
 async function toggleSubscribe(){
-
-  if(
-    !videoMeta ||
-    !videoMeta.owner_id
-  ){
-
-    return;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    const go =
-      confirm(
-        "Please login first to subscribe.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  if(user.id === videoMeta.owner_id){
-
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
+  if(!videoMeta || !videoMeta.owner_id) return;
+  const user=getLoggedUser();
+  if(!user){loginPrompt("subscribe");return}
+  if(user.id===videoMeta.owner_id) return;
 
   try{
-
+    let response;
     if(isSubscribedToChannel){
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?channel_id=eq." +
-        videoMeta.owner_id +
-        "&subscriber_id=eq." +
-        user.id,
-
-        {
-          method:"DELETE",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token
-          }
-        }
-
+      response=await dbFetch(
+        "subscriptions?channel_id=eq."+videoMeta.owner_id+
+        "&subscriber_id=eq."+user.id,
+        {method:"DELETE"}
       );
-
-
     }else{
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions",
-
-        {
-          method:"POST",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            channel_id: videoMeta.owner_id,
-            subscriber_id: user.id
-          })
-        }
-
-      );
-
+      response=await dbFetch("subscriptions",{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
+        body:JSON.stringify({channel_id:videoMeta.owner_id,subscriber_id:user.id})
+      });
     }
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  await updateSubscribe();
-
+    if(!response.ok){
+      alert("Subscribe update failed: "+await response.text());
+      return;
+    }
+    await updateSubscribe();
+  }catch(e){alert("Network error while subscribing.")}
 }
-
 
 async function updateSubscribe(){
-
-  isSubscribedToChannel =
-    await getSubscribeState();
-
-
-  const subscribed =
-    isSubscribedToChannel;
-
-
-  subscribeButton.textContent =
-    subscribed
-      ? "Subscribed"
-      : "Subscribe";
-
-
-  channelSubscribe.textContent =
-    subscribed
-      ? "Subscribed"
-      : "Subscribe";
-
-
-  subscribeButton.classList.toggle(
-    "subscribed",
-    subscribed
-  );
-
-
+  isSubscribedToChannel=await getSubscribeState();
+  const subscribed=isSubscribedToChannel;
+  subscribeButton.textContent=subscribed?"Subscribed":"Subscribe";
+  channelSubscribe.textContent=subscribed?"Subscribed":"Subscribe";
+  subscribeButton.classList.toggle("subscribed",subscribed);
   if(subscribed){
-
-    channelSubscribe.style.background =
-      "#292929";
-
-    channelSubscribe.style.color =
-      "white";
-
-    channelSubscribe.style.border =
-      "1px solid #555";
-
+    channelSubscribe.style.background="#292929";
+    channelSubscribe.style.color="white";
+    channelSubscribe.style.border="1px solid #555";
   }else{
-
-    channelSubscribe.style.background =
-      "white";
-
-    channelSubscribe.style.color =
-      "#111";
-
-    channelSubscribe.style.border =
-      "0";
-
+    channelSubscribe.style.background="white";
+    channelSubscribe.style.color="#111";
+    channelSubscribe.style.border="0";
   }
-
 }
 
+/* =====================================
+   CREATOR UPI SUPPORT
+===================================== */
+
+async function loadCreatorPaymentInfo(isOwnVideo){
+  const panel=document.getElementById("supportPanel");
+  panel.style.display="none";
+
+  if(isOwnVideo || !videoMeta || !videoMeta.owner_id) return;
+
+  try{
+    const response=await dbFetch("rpc/get_creator_payment_info",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({p_creator_id:videoMeta.owner_id})
+    });
+
+    if(!response.ok){
+      console.warn("Creator payment info unavailable:",await response.text());
+      return;
+    }
+
+    const rows=await response.json();
+    creatorPaymentInfo=Array.isArray(rows)?rows[0]:rows;
+
+    if(creatorPaymentInfo && creatorPaymentInfo.upi_id){
+      panel.style.display="block";
+    }
+  }catch(error){
+    console.error("Creator UPI:",error);
+  }
+}
+
+function selectSupportAmount(amount,button){
+  supportAmount=amount;
+  document.getElementById("customSupportAmount").value="";
+  document.querySelectorAll(".amountButton").forEach(b=>b.classList.remove("selected"));
+  if(button) button.classList.add("selected");
+}
+
+function supportCreator(){
+  if(!creatorPaymentInfo || !creatorPaymentInfo.upi_id){
+    alert("Creator has not added a UPI ID.");
+    return;
+  }
+
+  const custom=document.getElementById("customSupportAmount").value.trim();
+  const amount=custom ? Number(custom) : supportAmount;
+
+  if(!Number.isFinite(amount) || amount<=0 || amount>100000){
+    alert("Please enter a valid amount between ₹1 and ₹1,00,000.");
+    return;
+  }
+
+  const upi=String(creatorPaymentInfo.upi_id).trim();
+  const name=creatorPaymentInfo.display_name || "MiniTube Creator";
+
+  const uri="upi://pay?pa="+encodeURIComponent(upi)+
+    "&pn="+encodeURIComponent(name)+
+    "&am="+encodeURIComponent(amount.toFixed(2))+
+    "&cu=INR&tn="+encodeURIComponent("MiniTube creator support");
+
+  window.location.href=uri;
+
+  setTimeout(()=>{
+    alert("Your UPI app should open. Complete the payment there. MiniTube cannot verify the payment automatically.");
+  },700);
+}
 
 /* =====================================
-   COMMENTS (database-backed)
-   ===================================== */
+   VIDEO RATINGS AND REVIEWS
+===================================== */
 
-let commentsCache =
-  [];
+function chooseRating(value){
+  selectedRating=value;
+  document.querySelectorAll("#starPicker button").forEach(button=>{
+    button.classList.toggle("active",Number(button.dataset.star)<=value);
+  });
+}
 
+function resetRatingForm(){
+  selectedRating=0;
+  chooseRating(0);
+  document.getElementById("reviewText").value="";
+  document.getElementById("reviewCategory").value="";
+  document.getElementById("reviewFormTitle").textContent="Rate this video";
+  document.getElementById("submitRatingButton").textContent="Submit Rating";
+}
+
+async function loadRatings(){
+  if(!videoMeta || !videoMeta.id){
+    document.getElementById("reviewList").innerHTML='<div class="emptyState">Ratings are unavailable for this video.</div>';
+    return;
+  }
+
+  try{
+    const response=await dbFetch(
+      "video_ratings?video_id=eq."+videoMeta.id+
+      "&select=id,user_id,rating,category,review,created_at,updated_at&order=created_at.desc"
+    );
+
+    if(!response.ok){
+      document.getElementById("reviewList").innerHTML=
+        '<div class="emptyState">Could not load ratings. Check Supabase permissions.</div>';
+      return;
+    }
+
+    ratingsCache=await response.json();
+
+    const ids=[...new Set(ratingsCache.map(r=>r.user_id))];
+    let profiles={};
+
+    if(ids.length){
+      const profileResponse=await dbFetch(
+        "profiles?id=in.("+ids.join(",")+")&select=id,display_name"
+      );
+      if(profileResponse.ok){
+        const profileRows=await profileResponse.json();
+        profileRows.forEach(p=>profiles[p.id]=p.display_name);
+      }
+    }
+
+    ratingsCache.forEach(r=>{
+      r.reviewer_name=profiles[r.user_id] || "MiniTube user";
+    });
+
+    const ratingIds=ratingsCache.map(r=>r.id);
+    repliesCache=[];
+
+    if(ratingIds.length){
+      const replyResponse=await dbFetch(
+        "video_rating_replies?rating_id=in.("+ratingIds.join(",")+")"+
+        "&select=id,rating_id,creator_id,reply,created_at,updated_at"
+      );
+      if(replyResponse.ok) repliesCache=await replyResponse.json();
+    }
+
+    renderRatings();
+    loadMyRating();
+  }catch(error){
+    console.error("Ratings:",error);
+    document.getElementById("reviewList").innerHTML=
+      '<div class="emptyState">Unable to load reviews right now.</div>';
+  }
+}
+
+function renderRatings(){
+  const total=ratingsCache.length;
+  const sum=ratingsCache.reduce((n,r)=>n+Number(r.rating),0);
+  const average=total ? sum/total : 0;
+
+  document.getElementById("averageRating").textContent=average.toFixed(1);
+  document.getElementById("averageStars").textContent=starString(Math.round(average));
+  document.getElementById("ratingTotal").textContent=total+" rating"+(total===1?"":"s");
+
+  const bars=document.getElementById("ratingBars");
+  bars.innerHTML="";
+
+  for(let n=5;n>=1;n--){
+    const count=ratingsCache.filter(r=>Number(r.rating)===n).length;
+    const percent=total ? (count/total)*100 : 0;
+    const row=document.createElement("div");
+    row.className="ratingBarRow";
+    row.innerHTML='<span>'+n+' ★</span><div class="ratingBarTrack"><div class="ratingBarFill" style="width:'+percent+'%"></div></div><span>'+count+'</span>';
+    bars.appendChild(row);
+  }
+
+  const list=document.getElementById("reviewList");
+  list.innerHTML="";
+
+  if(!total){
+    list.innerHTML='<div class="emptyState">No reviews yet. Be the first to rate this video!</div>';
+    return;
+  }
+
+  const user=getLoggedUser();
+  const isCreator=!!(user && videoMeta && user.id===videoMeta.owner_id);
+
+  ratingsCache.forEach(rating=>{
+    const reply=repliesCache.find(r=>r.rating_id===rating.id);
+    const card=document.createElement("div");
+    card.className="reviewCard";
+
+    const name=rating.reviewer_name || "MiniTube user";
+    const initial=escapeHTML(name.trim().charAt(0).toUpperCase()||"M");
+    const date=rating.updated_at || rating.created_at;
+    const dateText=date ? new Date(date).toLocaleDateString() : "";
+
+    let replyHTML="";
+    if(reply){
+      replyHTML='<div class="creatorReply"><strong>Creator reply</strong><div class="reviewText">'+
+        escapeHTML(reply.reply)+'</div></div>';
+    }
+
+    const own=user && user.id===rating.user_id;
+
+    card.innerHTML=
+      '<div class="reviewTop">'+
+        '<div class="reviewAvatar">'+initial+'</div>'+
+        '<div><div class="reviewAuthor">'+escapeHTML(name)+'</div>'+
+        '<div class="reviewDate">'+escapeHTML(dateText)+'</div></div>'+
+      '</div>'+
+      '<div class="stars" style="margin-top:10px">'+starString(Number(rating.rating))+'</div>'+
+      (rating.category?'<div class="reviewCategory">'+escapeHTML(rating.category)+'</div>':'')+
+      (rating.review?'<div class="reviewText">'+escapeHTML(rating.review)+'</div>':'')+
+      replyHTML+
+      '<div class="reviewActions">'+
+      (own?'<button class="smallButton editReviewButton">Edit my review</button>':'')+
+      (isCreator?'<button class="smallButton replyReviewButton">'+(reply?"Edit creator reply":"Reply as creator")+'</button>':'')+
+      '</div>';
+
+    if(own){
+      card.querySelector(".editReviewButton").onclick=()=>editMyRating(rating);
+    }
+    if(isCreator){
+      card.querySelector(".replyReviewButton").onclick=()=>replyToReview(rating,reply);
+    }
+
+    list.appendChild(card);
+  });
+}
+
+function loadMyRating(){
+  const user=getLoggedUser();
+  if(!user) return;
+
+  const mine=ratingsCache.find(r=>r.user_id===user.id);
+  if(!mine) return;
+
+  selectedRating=Number(mine.rating);
+  chooseRating(selectedRating);
+  document.getElementById("reviewCategory").value=mine.category || "";
+  document.getElementById("reviewText").value=mine.review || "";
+  document.getElementById("reviewFormTitle").textContent="Update your rating";
+  document.getElementById("submitRatingButton").textContent="Update Rating";
+}
+
+function editMyRating(rating){
+  selectedRating=Number(rating.rating);
+  chooseRating(selectedRating);
+  document.getElementById("reviewCategory").value=rating.category || "";
+  document.getElementById("reviewText").value=rating.review || "";
+  document.getElementById("reviewFormTitle").textContent="Update your rating";
+  document.getElementById("submitRatingButton").textContent="Update Rating";
+  document.getElementById("ratingPanel").scrollIntoView({behavior:"smooth"});
+}
+
+async function submitRating(){
+  const user=getLoggedUser();
+  if(!user){loginPrompt("rate this video");return}
+  if(!videoMeta || !videoMeta.id){alert("Video information is not available.");return}
+  if(user.id===videoMeta.owner_id){alert("You cannot rate your own video.");return}
+  if(selectedRating<1 || selectedRating>5){alert("Please select 1 to 5 stars.");return}
+
+  const button=document.getElementById("submitRatingButton");
+  button.disabled=true;
+  button.textContent="Saving...";
+
+  const payload={
+    video_id:videoMeta.id,
+    user_id:user.id,
+    rating:selectedRating,
+    category:document.getElementById("reviewCategory").value || null,
+    review:document.getElementById("reviewText").value.trim() || null,
+    updated_at:new Date().toISOString()
+  };
+
+  try{
+    const response=await dbFetch(
+      "video_ratings?on_conflict=video_id,user_id",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Prefer":"resolution=merge-duplicates,return=minimal"
+        },
+        body:JSON.stringify(payload)
+      }
+    );
+
+    if(!response.ok){
+      alert("Could not save rating: "+await response.text());
+      return;
+    }
+
+    alert("Your rating has been saved!");
+    await loadRatings();
+  }catch(error){
+    alert("Network error while saving rating.");
+  }finally{
+    button.disabled=false;
+    button.textContent="Submit Rating";
+  }
+}
+
+async function replyToReview(rating,existingReply){
+  const user=getLoggedUser();
+  if(!user || !videoMeta || user.id!==videoMeta.owner_id){
+    alert("Only this video's creator can reply.");
+    return;
+  }
+
+  const current=existingReply ? existingReply.reply : "";
+  const reply=prompt("Write your reply to this review:",current);
+  if(reply===null) return;
+  if(!reply.trim()){alert("Reply cannot be empty.");return}
+
+  try{
+    const response=await dbFetch(
+      "video_rating_replies?on_conflict=rating_id",
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Prefer":"resolution=merge-duplicates,return=minimal"
+        },
+        body:JSON.stringify({
+          rating_id:rating.id,
+          creator_id:user.id,
+          reply:reply.trim(),
+          updated_at:new Date().toISOString()
+        })
+      }
+    );
+
+    if(!response.ok){
+      alert("Could not save creator reply: "+await response.text());
+      return;
+    }
+
+    alert("Creator reply saved!");
+    await loadRatings();
+  }catch(error){
+    alert("Network error while saving reply.");
+  }
+}
+
+function starString(number){
+  return "★".repeat(Math.max(0,Math.min(5,number)))+
+    "☆".repeat(5-Math.max(0,Math.min(5,number)));
+}
+
+/* =====================================
+   COMMENTS
+===================================== */
 
 async function loadComments(){
-
-  if(
-    !videoMeta ||
-    !videoMeta.id
-  ){
-
-    renderComments(
-      []
-    );
-
+  if(!videoMeta || !videoMeta.id){
+    renderComments([]);
     return;
-
   }
-
 
   try{
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/comments?video_id=eq." +
-        videoMeta.id +
-        "&select=id,text,created_at,user_id,profiles(display_name)&order=created_at.desc",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      renderComments(
-        []
-      );
-
-      return;
-
-    }
-
-
-    commentsCache =
-      await response.json();
-
-
-    renderComments(
-      commentsCache
+    const response=await dbFetch(
+      "comments?video_id=eq."+videoMeta.id+
+      "&select=id,text,created_at,user_id,profiles(display_name)&order=created_at.desc"
     );
 
-
+    if(!response.ok){renderComments([]);return}
+    commentsCache=await response.json();
+    renderComments(commentsCache);
   }catch(error){
-
-    console.error(
-      error
-    );
-
-    renderComments(
-      []
-    );
-
+    console.error(error);
+    renderComments([]);
   }
-
 }
-
-
-/* =====================================
-   POST COMMENT
-   ===================================== */
 
 async function postComment(){
+  const text=commentInput.value.trim();
+  if(!text){alert("Please write a comment first.");commentInput.focus();return}
 
-  const text =
-    commentInput.value.trim();
-
-
-  if(!text){
-
-    alert(
-      "Please write a comment first."
-    );
-
-    commentInput.focus();
-
-    return;
-
-  }
-
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    const go =
-      confirm(
-        "Please login first to comment.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  if(
-    !videoMeta ||
-    !videoMeta.id
-  ){
-
-    alert(
-      "Comments aren't available for this video."
-    );
-
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
+  const user=getLoggedUser();
+  if(!user){loginPrompt("comment");return}
+  if(!videoMeta || !videoMeta.id){alert("Comments aren't available for this video.");return}
 
   try{
+    const response=await dbFetch("comments",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({video_id:videoMeta.id,user_id:user.id,text:text})
+    });
 
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/comments",
-
-        {
-          method:"POST",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            video_id: videoMeta.id,
-            user_id: user.id,
-            text: text
-          })
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      const errorText =
-        await response.text();
-
-      alert(
-        "Could not post comment: " +
-        errorText
-      );
-
-      return;
-
-    }
-
-
-  }catch(error){
-
-    alert(
-      "Could not post comment: network error."
-    );
-
-    return;
-
-  }
-
-
-  commentInput.value =
-    "";
-
-
-  loadComments();
-
+    if(!response.ok){alert("Could not post comment: "+await response.text());return}
+    commentInput.value="";
+    loadComments();
+  }catch(error){alert("Could not post comment: network error.")}
 }
-
-
-/* =====================================
-   DISPLAY COMMENTS
-   ===================================== */
 
 function renderComments(comments){
+  const container=document.getElementById("commentList");
+  document.getElementById("commentCount").textContent=formatNumber(comments.length);
 
-  const container =
-    document.getElementById(
-      "commentList"
-    );
-
-
-  const count =
-    document.getElementById(
-      "commentCount"
-    );
-
-
-  count.textContent =
-    formatNumber(
-      comments.length
-    );
-
-
-  if(comments.length === 0){
-
-    container.innerHTML = `
-
-      <div class="noComments">
-
-        No comments yet.
-        Be the first to comment! 💬
-
-      </div>
-
-    `;
-
+  if(!comments.length){
+    container.innerHTML='<div class="noComments">No comments yet. Be the first to comment! 💬</div>';
     return;
-
   }
 
+  container.innerHTML="";
+  const currentUser=getLoggedUser();
 
-  container.innerHTML =
-    "";
+  comments.forEach(comment=>{
+    const element=document.createElement("div");
+    element.className="comment";
 
+    const authorName=(comment.profiles && comment.profiles.display_name)||"MiniTube user";
+    const initial=authorName.trim().charAt(0).toUpperCase()||"M";
+    const dateLabel=comment.created_at?new Date(comment.created_at).toLocaleString():"";
+    const canDelete=currentUser && currentUser.id===comment.user_id;
 
-  const currentUser =
-    getLoggedUser();
+    element.innerHTML=
+      '<div class="commentTop"><div class="commentAvatar">'+escapeHTML(initial)+'</div>'+
+      '<div><div class="commentAuthor">'+escapeHTML(authorName)+'</div>'+
+      '<div class="commentDate">'+escapeHTML(dateLabel)+'</div></div></div>'+
+      '<div class="commentText">'+escapeHTML(comment.text)+'</div>'+
+      (canDelete?'<div style="margin-top:10px"><button class="deleteComment">Delete</button></div>':"");
 
-
-  comments.forEach(
-    function(comment){
-
-      const element =
-        document.createElement(
-          "div"
-        );
-
-
-      element.className =
-        "comment";
-
-
-      const authorName =
-        (comment.profiles &&
-          comment.profiles.display_name) ||
-        "MiniTube user";
-
-
-      const author =
-        escapeHTML(
-          authorName
-        );
-
-
-      const text =
-        escapeHTML(
-          comment.text
-        );
-
-
-      const initial =
-        authorName
-          .trim()
-          .charAt(0)
-          .toUpperCase() || "M";
-
-
-      const dateLabel =
-        comment.created_at
-          ? new Date(
-              comment.created_at
-            ).toLocaleString()
-          : "";
-
-
-      const canDelete =
-        currentUser &&
-        currentUser.id === comment.user_id;
-
-
-      element.innerHTML = `
-
-        <div class="commentTop">
-
-          <div class="commentAvatar">
-            ${initial}
-          </div>
-
-          <div>
-
-            <div class="commentAuthor">
-              ${author}
-            </div>
-
-            <div class="commentDate">
-              ${escapeHTML(dateLabel)}
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="commentText">
-          ${text}
-        </div>
-
-
-        ${
-          canDelete
-            ? `<div class="commentActions">
-                <button class="deleteComment">
-                  Delete
-                </button>
-              </div>`
-            : ""
-        }
-
-      `;
-
-
-      if(canDelete){
-
-        const deleteButton =
-          element.querySelector(
-            ".deleteComment"
-          );
-
-
-        deleteButton.addEventListener(
-          "click",
-          function(){
-
-            deleteComment(
-              comment.id
-            );
-
-          }
-        );
-
-      }
-
-
-      container.appendChild(
-        element
-      );
-
+    if(canDelete){
+      element.querySelector(".deleteComment").onclick=()=>deleteComment(comment.id);
     }
-  );
-
+    container.appendChild(element);
+  });
 }
-
-
-/* =====================================
-   DELETE COMMENT
-   ===================================== */
 
 async function deleteComment(id){
-
-  if(
-    !confirm(
-      "Delete this comment?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-
+  if(!confirm("Delete this comment?")) return;
   try{
-
-    await fetch(
-
-      SUPABASE_URL +
-      "/rest/v1/comments?id=eq." +
-      id,
-
-      {
-        method:"DELETE",
-
-        headers:{
-          "apikey":
-            SUPABASE_ANON_KEY,
-
-          "Authorization":
-            "Bearer " +
-            token
-        }
-      }
-
-    );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  loadComments();
-
+    const response=await dbFetch("comments?id=eq."+id,{method:"DELETE"});
+    if(!response.ok){alert("Could not delete comment: "+await response.text());return}
+    loadComments();
+  }catch(error){alert("Network error while deleting comment.")}
 }
 
+/* =====================================
+   REPORT VIDEO
+===================================== */
+
+function openReportModal(){
+  if(!getLoggedUser()){loginPrompt("report a video");return}
+  document.querySelectorAll('input[name="reportReason"]').forEach(input=>input.checked=false);
+  document.getElementById("reportDetails").value="";
+  document.getElementById("submitReportButton").disabled=false;
+  document.getElementById("submitReportButton").textContent="Submit report";
+  document.getElementById("reportModalOverlay").classList.add("show");
+}
+
+function closeReportModal(){
+  document.getElementById("reportModalOverlay").classList.remove("show");
+}
+
+function closeReportModalOnOverlay(event){
+  if(event.target.id==="reportModalOverlay") closeReportModal();
+}
+
+async function submitReport(){
+  if(!videoMeta || !videoMeta.id){alert("This video can't be reported right now.");return}
+
+  const selected=document.querySelector('input[name="reportReason"]:checked');
+  if(!selected){alert("Please choose a reason first.");return}
+
+  const user=getLoggedUser();
+  if(!user){closeReportModal();loginPrompt("report a video");return}
+
+  const button=document.getElementById("submitReportButton");
+  button.disabled=true;
+  button.textContent="Submitting...";
+
+  try{
+    const response=await dbFetch("reports",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({
+        video_id:videoMeta.id,
+        reporter_id:user.id,
+        reason:selected.value,
+        details:document.getElementById("reportDetails").value.trim()||null
+      })
+    });
+
+    if(!response.ok){
+      alert("Could not submit report: "+await response.text());
+      return;
+    }
+
+    closeReportModal();
+    alert("Thanks — this video has been reported. Our team will review it.");
+  }catch(error){
+    alert("Could not submit report: network error.");
+  }finally{
+    button.disabled=false;
+    button.textContent="Submit report";
+  }
+}
+
+/* =====================================
+   PLAYLISTS
+===================================== */
+
+function getPlaylists(){
+  try{
+    const saved=localStorage.getItem(PLAYLIST_KEY);
+    const list=saved?JSON.parse(saved):[];
+
+    if(!list.some(p=>p.id==="watch-later")){
+      list.unshift({
+        id:"watch-later",name:"Watch Later",builtIn:true,
+        createdAt:Date.now(),videoNames:[]
+      });
+    }
+    return list;
+  }catch(error){
+    return [{id:"watch-later",name:"Watch Later",builtIn:true,createdAt:Date.now(),videoNames:[]}];
+  }
+}
+
+function savePlaylists(list){
+  localStorage.setItem(PLAYLIST_KEY,JSON.stringify(list));
+}
+
+function openSaveModal(){
+  renderPlaylistCheckList();
+  document.getElementById("saveModalOverlay").classList.add("show");
+}
+
+function closeSaveModal(){
+  document.getElementById("saveModalOverlay").classList.remove("show");
+}
+
+function closeSaveModalOnOverlay(event){
+  if(event.target.id==="saveModalOverlay") closeSaveModal();
+}
+
+function renderPlaylistCheckList(){
+  const container=document.getElementById("playlistCheckList");
+  const playlists=getPlaylists();
+  container.innerHTML="";
+
+  playlists.forEach(playlist=>{
+    const row=document.createElement("label");
+    row.className="playlistCheckRow";
+    const checked=playlist.videoNames.includes(videoName);
+
+    row.innerHTML=
+      '<input type="checkbox" '+(checked?"checked":"")+'>'+
+      '<div class="playlistCheckName">'+escapeHTML(playlist.name)+'</div>'+
+      '<div class="playlistCheckCount">'+playlist.videoNames.length+'</div>';
+
+    row.querySelector("input").addEventListener("change",event=>{
+      togglePlaylistVideo(playlist.id,event.target.checked);
+    });
+    container.appendChild(row);
+  });
+}
+
+function togglePlaylistVideo(playlistId,add){
+  const playlists=getPlaylists();
+  const playlist=playlists.find(p=>p.id===playlistId);
+  if(!playlist) return;
+
+  if(add){
+    if(!playlist.videoNames.includes(videoName)) playlist.videoNames.unshift(videoName);
+  }else{
+    playlist.videoNames=playlist.videoNames.filter(name=>name!==videoName);
+  }
+
+  savePlaylists(playlists);
+  renderPlaylistCheckList();
+}
+
+function createPlaylistFromModal(){
+  const input=document.getElementById("newPlaylistName");
+  const name=input.value.trim();
+  if(!name){alert("Enter a playlist name.");return}
+
+  const playlists=getPlaylists();
+  playlists.push({
+    id:"pl_"+Date.now(),name:name,builtIn:false,
+    createdAt:Date.now(),videoNames:[videoName]
+  });
+  savePlaylists(playlists);
+  input.value="";
+  renderPlaylistCheckList();
+}
+
+/* =====================================
+   WATCH HISTORY
+===================================== */
+
+function getHistory(){
+  try{
+    const saved=localStorage.getItem(HISTORY_KEY);
+    return saved?JSON.parse(saved):[];
+  }catch(error){return []}
+}
+
+function recordHistory(){
+  if(!videoName) return;
+  let history=getHistory();
+  history=history.filter(entry=>entry.name!==videoName);
+  history.unshift({name:videoName,watchedAt:Date.now()});
+  localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)));
+}
 
 /* =====================================
    SHARE
-   ===================================== */
+===================================== */
 
 function shareVideo(){
-
-  const url =
-    window.location.href;
-
-
+  const url=window.location.href;
   if(navigator.share){
-
-    navigator.share({
-      title: videoName || "MiniTube video",
-      url: url
-    }).catch(
-      () => {}
-    );
-
-  }else if(
-    navigator.clipboard
-  ){
-
-    navigator.clipboard
-      .writeText(url)
-      .then(
-        () => alert(
-          "Link copied to clipboard!"
-        )
-      )
-      .catch(
-        () => prompt(
-          "Copy this link:",
-          url
-        )
-      );
-
+    navigator.share({title:videoMeta?.title||"MiniTube video",url:url}).catch(()=>{});
+  }else if(navigator.clipboard){
+    navigator.clipboard.writeText(url)
+      .then(()=>alert("Link copied to clipboard!"))
+      .catch(()=>prompt("Copy this link:",url));
   }else{
-
-    prompt(
-      "Copy this link:",
-      url
-    );
-
+    prompt("Copy this link:",url);
   }
-
 }
-
 
 /* =====================================
    NAVIGATION
-   ===================================== */
+===================================== */
 
 function goBack(){
-
-  if(
-    window.history.length > 1
-  ){
-
-    window.history.back();
-
-  }else{
-
-    window.location.href =
-      "index.html";
-
-  }
-
+  if(window.history.length>1) window.history.back();
+  else window.location.href="index.html";
 }
-
-
-function goHome(){
-
-  window.location.href =
-    "index.html";
-
-}
-
-
-function goShorts(){
-
-  window.location.href =
-    "shorts.html";
-
-}
-
-
-function goSubscriptions(){
-
-  window.location.href =
-    "subscriptions.html";
-
-}
-
-
-function goYou(){
-
-  window.location.href =
-    "you.html";
-
-}
-
+function goHome(){window.location.href="index.html"}
+function goShorts(){window.location.href="shorts.html"}
+function goSubscriptions(){window.location.href="subscriptions.html"}
+function goYou(){window.location.href="you.html"}
 
 /* =====================================
    HELPERS
-   ===================================== */
+===================================== */
 
 function formatNumber(num){
-
-  if(num >= 1000000){
-
-    return (
-      (num / 1000000)
-        .toFixed(1)
-        .replace(/\.0$/, "")
-      + "M"
-    );
-
-  }
-
-
-  if(num >= 1000){
-
-    return (
-      (num / 1000)
-        .toFixed(1)
-        .replace(/\.0$/, "")
-      + "K"
-    );
-
-  }
-
-
+  num=Number(num)||0;
+  if(num>=1000000) return (num/1000000).toFixed(1).replace(/\.0$/,"")+"M";
+  if(num>=1000) return (num/1000).toFixed(1).replace(/\.0$/,"")+"K";
   return String(num);
-
 }
-
 
 function escapeHTML(text){
-
-  return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
+  return String(text??"")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
-
 </script>
-
 </body>
 </html>
