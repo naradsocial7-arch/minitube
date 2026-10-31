@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advertise on MiniTube</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#0f0f0f;color:#fff;
+  font-family:Arial,sans-serif;padding:20px 14px 40px
+}
+.container{max-width:650px;margin:auto}
+.header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.logo{font-size:24px;font-weight:bold;color:#ff0033}
+.back{
+  color:#fff;text-decoration:none;background:#242424;
+  padding:10px 14px;border-radius:8px
+}
+h1{font-size:27px;margin:12px 0}
+.subtitle{color:#aaa;line-height:1.6}
+.card{
+  background:#181818;border:1px solid #303030;
+  border-radius:14px;padding:20px;margin-top:20px
+}
+label{display:block;font-size:14px;margin:17px 0 7px}
+input,select,textarea{
+  width:100%;padding:13px;border-radius:8px;
+  border:1px solid #444;background:#101010;color:white;
+  font-size:15px;outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:#ff0033}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{
+  width:100%;border:0;border-radius:9px;padding:15px;
+  background:#ff0033;color:white;font-size:16px;
+  font-weight:bold;margin-top:22px;cursor:pointer
+}
+button:disabled{opacity:.55;cursor:not-allowed}
+.note{
+  color:#aaa;font-size:13px;line-height:1.6;
+  background:#222;padding:12px;border-radius:8px;margin-top:15px
+}
+#message{
+  display:none;padding:13px;border-radius:8px;
+  margin-top:15px;line-height:1.5
+}
+.success{display:block!important;background:#12351f;color:#b8f5c8}
+.error{display:block!important;background:#421b1b;color:#ffcaca}
+.required{color:#ff526f}
+.footer{text-align:center;color:#777;font-size:12px;margin-top:25px}
+@media(max-width:480px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="header">
+    <a class="back" href="index.html">← Back</a>
+    <div class="logo">▶ MiniTube</div>
+  </div>
+
+  <h1>Advertise on MiniTube</h1>
+  <p class="subtitle">
+    Promote your business, product or service to MiniTube viewers.
+    Submit your campaign details and our team will contact you
+    after reviewing your request.
+  </p>
+
+  <div class="card">
+    <form id="advertiserForm">
+
+      <label>Business / Company Name <span class="required">*</span></label>
+      <input name="business_name" required maxlength="100"
+        placeholder="Your business name">
+
+      <label>Contact Person <span class="required">*</span></label>
+      <input name="contact_name" required maxlength="100"
+        placeholder="Your full name">
+
+      <div class="row">
+        <div>
+          <label>Mobile Number <span class="required">*</span></label>
+          <input name="mobile" type="tel" required
+            pattern="[+]?[0-9]{10,15}" maxlength="16"
+            placeholder="9876543210">
+        </div>
+        <div>
+          <label>Email Address <span class="required">*</span></label>
+          <input name="email" type="email" required maxlength="150"
+            placeholder="you@example.com">
+        </div>
+      </div>
+
+      <label>Business Category <span class="required">*</span></label>
+      <select name="business_category" required>
+        <option value="">Select category</option>
+        <option>Education</option>
+        <option>Food & Restaurant</option>
+        <option>Shopping & Retail</option>
+        <option>Technology</option>
+        <option>Travel & Tourism</option>
+        <option>Real Estate</option>
+        <option>Health & Fitness</option>
+        <option>Entertainment</option>
+        <option>Other</option>
+      </select>
+
+      <label>Ad Video URL <span class="required">*</span></label>
+      <input name="ad_video_url" type="url" required maxlength="1000"
+        placeholder="https://example.com/your-ad.mp4">
+      <div class="note">
+        For now, provide a public HTTPS link to your ad video.
+        Direct video upload will be added later through secure storage.
+        Make sure you own the rights to the advertisement.
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Ad Duration <span class="required">*</span></label>
+          <select name="ad_duration" required>
+            <option value="">Select duration</option>
+            <option value="10">10 seconds</option>
+            <option value="15">15 seconds</option>
+            <option value="30">30 seconds</option>
+            <option value="60">60 seconds</option>
+          </select>
+        </div>
+        <div>
+          <label>Ad Placement <span class="required">*</span></label>
+          <select name="placement" required>
+            <option value="both">Before + During video</option>
+            <option value="preroll">Before video only</option>
+            <option value="midroll">During video only</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Target Location</label>
+      <input name="target_location" maxlength="150"
+        placeholder="e.g. Jamshedpur, Jharkhand or All India">
+
+      <label>Target Audience / Description</label>
+      <textarea name="target_audience" maxlength="1000"
+        placeholder="Describe your target audience or campaign requirements"></textarea>
+
+      <label>Proposed Budget (INR) <span class="required">*</span></label>
+      <input name="budget" type="number" required min="1"
+        max="100000000" step="0.01" placeholder="e.g. 5000">
+
+      <div class="row">
+        <div>
+          <label>Campaign Start Date</label>
+          <input name="start_date" type="date">
+        </div>
+        <div>
+          <label>Campaign End Date</label>
+          <input name="end_date" type="date">
+        </div>
+      </div>
+
+      <div class="note">
+        Submitting this form does not activate your advertisement
+        or confirm a booking. MiniTube will review your request
+        and contact you about pricing, availability and payment.
+        No payment is collected through this form.
+      </div>
+
+      <button id="submitBtn" type="submit">
+        Submit Advertising Request
+      </button>
+
+      <div id="message" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+
+  <div class="footer">
+    © MiniTube — Advertising Enquiries
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+// Public anon key. Never put a service_role key in this file.
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
+
+const form = document.getElementById("advertiserForm");
+const submitBtn = document.getElementById("submitBtn");
+const message = document.getElementById("message");
+
+function showMessage(text, type) {
+  message.textContent = text;
+  message.className = type;
+}
+
+form.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  message.style.display = "none";
+
+  const data = new FormData(form);
+
+  const videoURL = String(data.get("ad_video_url") || "").trim();
+  let parsedURL;
+
+  try {
+    parsedURL = new URL(videoURL);
+  } catch {
+    showMessage("Please enter a valid ad video URL.", "error");
+    return;
+  }
+
+  if (parsedURL.protocol !== "https:") {
+    showMessage("Ad video URL must start with HTTPS.", "error");
+    return;
+  }
+
+  const budget = Number(data.get("budget"));
+  if (!Number.isFinite(budget) || budget <= 0) {
+    showMessage("Please enter a valid campaign budget.", "error");
+    return;
+  }
+
+  const startDate = data.get("start_date") || null;
+  const endDate = data.get("end_date") || null;
+
+  if (startDate && endDate && endDate < startDate) {
+    showMessage("End date cannot be earlier than start date.", "error");
+    return;
+  }
+
+  const payload = {
+    business_name: String(data.get("business_name")).trim(),
+    contact_name: String(data.get("contact_name")).trim(),
+    mobile: String(data.get("mobile")).trim(),
+    email: String(data.get("email")).trim(),
+    business_category: String(data.get("business_category")).trim(),
+    ad_video_url: videoURL,
+    ad_duration: Number(data.get("ad_duration")),
+    placement: String(data.get("placement")),
+    target_location: String(data.get("target_location") || "").trim() || null,
+    target_audience: String(data.get("target_audience") || "").trim() || null,
+    budget: budget,
+    start_date: startDate,
+    end_date: endDate,
+    status: "pending"
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try {
+    const response = await fetch(
+      SUPABASE_URL + "/rest/v1/ad_campaigns",
+      {
+        method: "POST",
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Advertiser submission error:", errorText);
+      throw new Error("Request could not be submitted. Please try again.");
+    }
+
+    form.reset();
+    showMessage(
+      "Thank you! Your advertising request has been submitted successfully. MiniTube will review it and contact you.",
+      "success"
+    );
+
+  } catch (error) {
+    console.error(error);
+    showMessage(
+      error.message || "Something went wrong. Please try again later.",
+      "error"
+    );
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Advertising Request";
+  }
+});
+</script>
+</body>
+</html>
