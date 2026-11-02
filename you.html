@@ -1,18 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MiniTube - You</title>
 
 <style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:80px;
+}
 
 .editChannelOverlay{
   display:none;
@@ -23,10 +26,7 @@
   align-items:flex-end;
   justify-content:center;
 }
-
-.editChannelOverlay.show{
-  display:flex;
-}
+.editChannelOverlay.show{display:flex}
 
 .editChannelBox{
   width:100%;
@@ -35,19 +35,16 @@
   border-radius:20px 20px 0 0;
   padding:20px;
 }
-
 .editChannelTitle{
   font-size:17px;
   font-weight:bold;
   margin-bottom:16px;
 }
-
 .editFieldLabel{
   color:#999;
   font-size:13px;
   margin-bottom:8px;
 }
-
 .editFieldInput{
   width:100%;
   background:#222;
@@ -58,74 +55,45 @@
   font-size:15px;
   outline:none;
 }
-
 .editChannelButtons{
   display:flex;
   gap:10px;
   margin-top:18px;
 }
-
+.editCancelButton,.editSaveButton{
+  flex:1;
+  border:0;
+  border-radius:10px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
 .editCancelButton{
-  flex:1;
   background:#292929;
-  border:0;
   color:white;
-  border-radius:10px;
-  padding:13px;
-  font-weight:bold;
-  cursor:pointer;
 }
-
 .editSaveButton{
-  flex:1;
   background:#ff0033;
-  border:0;
   color:white;
-  border-radius:10px;
-  padding:13px;
-  font-weight:bold;
-  cursor:pointer;
 }
-
 .editSaveButton:disabled{
   opacity:.6;
   cursor:not-allowed;
 }
 
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  background:#0f0f0f;
-  color:white;
-  font-family:Arial,sans-serif;
-  padding-bottom:80px;
-}
-
-
-/* =========================
-   HEADER
-   ========================= */
-
+/* HEADER */
 header{
   position:sticky;
   top:0;
   z-index:20;
-
   height:64px;
-
   background:#111;
   border-bottom:1px solid #292929;
-
   display:flex;
   align-items:center;
-
   padding:0 16px;
   gap:14px;
 }
-
 .back{
   background:none;
   border:0;
@@ -133,863 +101,367 @@ header{
   font-size:30px;
   cursor:pointer;
 }
-
 .logo{
   font-size:23px;
   font-weight:800;
 }
-
-.logo span{
-  color:#ff0033;
-}
-
-.spacer{
-  flex:1;
-}
+.logo span{color:#ff0033}
+.spacer{flex:1}
 
 .avatarSmall{
   width:42px;
   height:42px;
-
   border-radius:50%;
   background:#7c4dff;
-
   display:grid;
   place-items:center;
-
   font-weight:bold;
   font-size:18px;
-
   cursor:pointer;
 }
 
-
-/* =========================
-   CHANNEL HERO
-   ========================= */
-
+/* CHANNEL */
 .channelHeader{
-
   margin:20px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #24132d,
-      #171717
-    );
-
+  background:linear-gradient(135deg,#24132d,#171717);
   border-radius:22px;
-
   padding:25px;
-
   display:flex;
-
   align-items:center;
-
   gap:20px;
 }
-
 .channelAvatar{
-
   width:90px;
   height:90px;
-
   border-radius:50%;
-
   background:#7c4dff;
-
   display:grid;
-
   place-items:center;
-
   font-size:34px;
-
   font-weight:bold;
-
   flex-shrink:0;
 }
-
-.channelDetails{
-  flex:1;
-}
-
+.channelDetails{flex:1;min-width:0}
 .channelName{
-
   font-size:26px;
-
   font-weight:800;
-
   margin-bottom:7px;
-
   word-break:break-word;
 }
-
 .handle{
-
   color:#aaa;
-
   font-size:14px;
-
   margin-bottom:10px;
 }
-
 .channelStats{
-
   color:#aaa;
-
   font-size:14px;
-
   line-height:1.5;
 }
-
 .userEmail{
   color:#bbb;
   word-break:break-all;
 }
-
 .channelActions{
-
   margin-top:15px;
-
   display:flex;
-
   gap:10px;
-
   flex-wrap:wrap;
 }
-
-.subscribeButton{
-
-  border:0;
-
+.editButton,.logoutButton{
   border-radius:22px;
-
   padding:10px 18px;
-
-  background:#fff;
-
-  color:#111;
-
   font-weight:bold;
-
   cursor:pointer;
 }
-
-.subscribeButton.subscribed{
-
-  background:#292929;
-
-  color:white;
-
-  border:1px solid #555;
-}
-
 .editButton{
-
   border:1px solid #555;
-
   background:#292929;
-
   color:white;
-
-  border-radius:22px;
-
-  padding:10px 18px;
-
-  font-weight:bold;
-
-  cursor:pointer;
+}
+.logoutButton{
+  background:transparent;
+  color:#ff4964;
+  border:1px solid #ff4964;
+}
+.logoutButton:hover{
+  background:#ff0033;
+  color:white;
 }
 
-
-/* =========================
-   QUICK LINKS
-   ========================= */
-
+/* QUICK LINKS */
 .quickLinks{
-
   display:grid;
-
-  grid-template-columns:repeat(4,1fr);
-
+  grid-template-columns:repeat(3,1fr);
   gap:10px;
-
   padding:0 20px;
-
   margin-bottom:10px;
 }
-
 .quickLink{
-
   background:#181818;
-
   border-radius:14px;
-
   padding:16px 8px;
-
   text-align:center;
-
   cursor:pointer;
+  min-width:0;
 }
-
-.quickLink:hover{
-
-  background:#1f1f1f;
-}
-
+.quickLink:hover{background:#1f1f1f}
 .quickLinkIcon{
-
   font-size:22px;
-
   margin-bottom:8px;
 }
-
 .quickLinkLabel{
-
   font-size:12px;
-
   color:#ccc;
-
   word-break:break-word;
 }
 
-
-/* =========================
-   CONTENT
-   ========================= */
-
-.content{
-
-  padding:0 20px;
-}
-
+/* CONTENT */
+.content{padding:0 20px}
 .sectionTitle{
-
   font-size:21px;
-
   font-weight:bold;
-
-  margin:
-    25px 0
-    15px;
+  margin:25px 0 15px;
 }
-
 .grid{
-
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(260px,1fr)
-    );
-
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:18px;
 }
-
 .card{
-
   background:#181818;
-
   border-radius:16px;
-
   overflow:hidden;
 }
-
 .card video{
-
   width:100%;
-
   aspect-ratio:16/9;
-
   display:block;
-
   background:#000;
-
   cursor:pointer;
 }
-
-.info{
-
-  padding:12px;
-}
-
+.info{padding:12px}
 .title{
-
   font-size:17px;
-
   font-weight:bold;
-
   word-break:break-word;
-
   cursor:pointer;
 }
-
-.title:hover{
-
-  text-decoration:underline;
-}
-
+.title:hover{text-decoration:underline}
 .meta{
-
   color:#999;
-
   font-size:13px;
-
   margin-top:7px;
-
   cursor:pointer;
-
   display:inline-block;
 }
-
 .watchButton{
-
   margin-top:12px;
-
   background:#292929;
-
   color:white;
-
   border:0;
-
   padding:9px 14px;
-
   border-radius:8px;
-
   cursor:pointer;
 }
+.watchButton:hover{background:#383838}
 
-.watchButton:hover{
-
-  background:#383838;
-}
-
-
-/* =========================
-   EMPTY
-   ========================= */
-
+/* EMPTY */
 .empty{
-
   background:#181818;
-
   border:1px solid #292929;
-
   border-radius:16px;
-
   padding:45px 20px;
-
   text-align:center;
 }
-
 .emptyIcon{
-
   font-size:45px;
-
   margin-bottom:15px;
 }
-
-.empty h2{
-
-  margin:
-    0 0 8px;
-}
-
+.empty h2{margin:0 0 8px}
 .empty p{
-
   color:#999;
-
   line-height:1.5;
-
   margin:0;
 }
-
 .homeButton{
-
   margin-top:20px;
-
   background:#ff0033;
-
   color:white;
-
   border:0;
-
   border-radius:25px;
-
   padding:13px 22px;
-
   font-size:15px;
-
   font-weight:bold;
-
   cursor:pointer;
 }
 
-
-/* =========================
-   LOGOUT
-   ========================= */
-
-.logoutButton{
-
-  margin-top:15px;
-
-  background:transparent;
-
-  color:#ff4964;
-
-  border:1px solid #ff4964;
-
-  border-radius:22px;
-
-  padding:10px 18px;
-
-  font-weight:bold;
-
-  cursor:pointer;
-}
-
-.logoutButton:hover{
-
-  background:#ff0033;
-
-  color:white;
-}
-
-
-/* =========================
-   BOTTOM NAV
-   ========================= */
-
+/* BOTTOM NAV */
 .bottom{
-
   position:fixed;
-
   bottom:0;
   left:0;
   right:0;
-
   height:70px;
-
   background:#151515;
-
   border-top:1px solid #333;
-
   display:flex;
-
   justify-content:space-around;
-
   align-items:center;
-
   z-index:30;
 }
-
 .bottom button{
-
   background:none;
-
   border:0;
-
   color:#aaa;
-
   font-size:13px;
-
   cursor:pointer;
 }
-
 .bottom button b{
-
   display:block;
-
   font-size:22px;
-
   color:white;
-
   margin-bottom:3px;
 }
-
-.bottom .active{
-
-  color:white;
-}
-
-
-/* =========================
-   MOBILE
-   ========================= */
+.bottom .active{color:white}
 
 @media(max-width:600px){
-
   .channelHeader{
-
     margin:16px;
-
     padding:20px;
-
     align-items:flex-start;
   }
-
   .channelAvatar{
-
     width:70px;
     height:70px;
-
     font-size:27px;
   }
-
-  .channelName{
-
-    font-size:21px;
-  }
-
-  .content{
-
-    padding:0 16px;
-  }
-
-  .grid{
-
-    grid-template-columns:1fr;
-  }
-
+  .channelName{font-size:21px}
+  .content{padding:0 16px}
+  .grid{grid-template-columns:1fr}
 }
-
-
-/* =========================
-   VERY SMALL SCREEN
-   ========================= */
 
 @media(max-width:380px){
-
-  .channelHeader{
-
-    gap:12px;
-  }
-
+  .channelHeader{gap:12px}
   .channelAvatar{
-
     width:60px;
     height:60px;
-
     font-size:23px;
   }
-
-  .channelName{
-
-    font-size:18px;
-  }
-
-  .handle{
-
-    font-size:13px;
-  }
-
+  .channelName{font-size:18px}
+  .handle{font-size:13px}
+  .quickLinks{padding:0 12px;gap:8px}
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-     ========================= -->
-
+<!-- HEADER -->
 <header>
-
-  <button
-    class="back"
-    onclick="goHome()"
-  >
-    ‹
-  </button>
-
-
-  <div class="logo">
-
-    <span>▶</span>
-    MiniTube
-
-  </div>
-
-
+  <button class="back" onclick="goHome()">‹</button>
+  <div class="logo"><span>▶</span> MiniTube</div>
   <div class="spacer"></div>
-
-
-  <div
-    id="headerAvatar"
-    class="avatarSmall"
-    onclick="window.location.href='settings.html'"
-  >
-    ?
-  </div>
-
+  <div id="headerAvatar" class="avatarSmall"
+       onclick="window.location.href='settings.html'">?</div>
 </header>
 
-
-<!-- =========================
-     CHANNEL HEADER
-     ========================= -->
-
+<!-- CHANNEL HEADER -->
 <section class="channelHeader">
-
-
-  <div
-    id="channelAvatar"
-    class="channelAvatar"
-  >
-    ?
-  </div>
-
+  <div id="channelAvatar" class="channelAvatar">?</div>
 
   <div class="channelDetails">
-
-
-    <div
-      id="channelName"
-      class="channelName"
-    >
-      Loading...
-    </div>
-
-
-    <div
-      id="handle"
-      class="handle"
-    >
-      @user
-    </div>
-
+    <div id="channelName" class="channelName">Loading...</div>
+    <div id="handle" class="handle">@user</div>
 
     <div class="channelStats">
-
-      <div
-        id="userEmail"
-        class="userEmail"
-      >
-        Loading...
-      </div>
-
-
+      <div id="userEmail" class="userEmail">Loading...</div>
       <div style="margin-top:6px;">
-
-        <span id="videoCount">
-          0
-        </span>
-
-        videos
-
+        <span id="videoCount">0</span> videos
         &nbsp; • &nbsp;
-
-        <span id="subscriberCount">
-          0
-        </span>
-
-        subscribers
-
+        <span id="subscriberCount">0</span> subscribers
       </div>
-
     </div>
-
 
     <div class="channelActions">
-
-
-      <button
-        class="editButton"
-        onclick="editChannel()"
-      >
-
-        Edit Channel
-
-      </button>
-
-
-      <button
-        class="logoutButton"
-        onclick="logout()"
-      >
-
-        Logout
-
-      </button>
-
-
+      <button class="editButton" onclick="editChannel()">Edit Channel</button>
+      <button class="logoutButton" onclick="logout()">Logout</button>
     </div>
-
-
   </div>
-
 </section>
 
-
-<!-- =========================
-     QUICK LINKS
-     ========================= -->
-
+<!-- QUICK LINKS -->
 <div class="quickLinks">
 
-  <div
-    class="quickLink"
-    onclick="window.location.href='studio.html'"
-  >
+  <div class="quickLink" onclick="window.location.href='studio.html'">
     <div class="quickLinkIcon">🎬</div>
     <div class="quickLinkLabel">Studio</div>
   </div>
 
-  <div
-    class="quickLink"
-    onclick="window.location.href='playlist.html'"
-  >
+  <div class="quickLink" onclick="window.location.href='playlist.html'">
     <div class="quickLinkIcon">▤</div>
     <div class="quickLinkLabel">Playlists</div>
   </div>
 
-  <div
-    class="quickLink"
-    onclick="window.location.href='history.html'"
-  >
+  <div class="quickLink" onclick="window.location.href='history.html'">
     <div class="quickLinkIcon">🕐</div>
     <div class="quickLinkLabel">History</div>
   </div>
 
-  <div
-    class="quickLink"
-    onclick="window.location.href='settings.html'"
-  >
-    <div class="quickLinkIcon">⚙</div>
+  <div class="quickLink" onclick="window.location.href='settings.html'">
+    <div class="quickLinkIcon">⚙️</div>
     <div class="quickLinkLabel">Settings</div>
   </div>
 
+  <!-- ADVERTISE OPTION: ALL USERS -->
+  <div class="quickLink" onclick="window.location.href='advertise.html'">
+    <div class="quickLinkIcon">📢</div>
+    <div class="quickLinkLabel">Advertise</div>
+  </div>
+
+  <!-- ADMIN OPTION: ONLY ADMIN UID -->
+  <div class="quickLink" id="adminAdsLink"
+       style="display:none;"
+       onclick="window.location.href='admin-ads.html'">
+    <div class="quickLinkIcon">🛡️</div>
+    <div class="quickLinkLabel">Admin Ads</div>
+  </div>
+
 </div>
 
-
-<!-- =========================
-     VIDEOS
-     ========================= -->
-
+<!-- VIDEOS -->
 <section class="content">
-
-
-  <div class="sectionTitle">
-
-    Your Videos
-
-  </div>
-
-
-  <div id="videos">
-
-    Loading videos...
-
-  </div>
-
-
+  <div class="sectionTitle">Your Videos</div>
+  <div id="videos">Loading videos...</div>
 </section>
 
-
-<!-- =========================
-     BOTTOM NAV
-     ========================= -->
-
+<!-- BOTTOM NAV -->
 <div class="bottom">
-
-
-  <button onclick="goHome()">
-
-    <b>⌂</b>
-
-    Home
-
-  </button>
-
-
-  <button onclick="goShorts()">
-
-    <b>▶</b>
-
-    HORIZONTAL
-
-  </button>
-
-
-  <button onclick="goSubscriptions()">
-
-    <b>□</b>
-
-    Subscriptions
-
-  </button>
-
-
-  <button class="active">
-
-    <b>●</b>
-
-    You
-
-  </button>
-
+  <button onclick="goHome()"><b>⌂</b>Home</button>
+  <button onclick="goShorts()"><b>▶</b>HORIZONTAL</button>
+  <button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
+  <button class="active"><b>●</b>You</button>
 </div>
 
-
-<!-- =========================
-     EDIT CHANNEL MODAL
-     ========================= -->
-
-<div
-  id="editChannelOverlay"
-  class="editChannelOverlay"
-  onclick="if(event.target === this){ closeEditChannel(); }"
->
-
+<!-- EDIT CHANNEL MODAL -->
+<div id="editChannelOverlay" class="editChannelOverlay"
+     onclick="if(event.target === this){closeEditChannel();}">
   <div class="editChannelBox">
+    <div class="editChannelTitle">Edit channel</div>
+    <div class="editFieldLabel">Channel name</div>
 
-    <div class="editChannelTitle">
-      Edit channel
-    </div>
-
-    <div class="editFieldLabel">
-      Channel name
-    </div>
-
-    <input
-      id="editNameInput"
-      class="editFieldInput"
-      placeholder="Your channel name"
-    >
+    <input id="editNameInput" class="editFieldInput"
+           placeholder="Your channel name">
 
     <div class="editChannelButtons">
-
-      <button
-        class="editCancelButton"
-        onclick="closeEditChannel()"
-      >
-        Cancel
-      </button>
-
-      <button
-        id="saveChannelButton"
-        class="editSaveButton"
-        onclick="saveChannelEdit()"
-      >
-        Save
-      </button>
-
+      <button class="editCancelButton" onclick="closeEditChannel()">Cancel</button>
+      <button id="saveChannelButton" class="editSaveButton"
+              onclick="saveChannelEdit()">Save</button>
     </div>
-
   </div>
-
 </div>
 
-
 <script>
-
 
 /* =====================================
    CLOUDFLARE WORKER
@@ -997,7 +469,6 @@ header{
 
 const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
-
 
 /* =====================================
    SUPABASE
@@ -1007,8 +478,14 @@ const SUPABASE_URL =
   "https://vlzssmuzetcbkmzujecs.supabase.co";
 
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
 
+/* =====================================
+   MINITUBE ADMIN UID
+   ===================================== */
+
+const ADMIN_UID =
+  "e67326b1-307b-4b40-b2bf-8d56be9c0373";
 
 /* =====================================
    SUBSCRIBE SYSTEM
@@ -1017,40 +494,21 @@ const SUPABASE_ANON_KEY =
 const SUBSCRIBE_KEY =
   "minitube_my_channel_subscribed";
 
-
 /* =====================================
    RAW USER OBJECT
    ===================================== */
 
 function getRawUser(){
+  const userData = localStorage.getItem("minitube_user");
 
-  const userData =
-    localStorage.getItem(
-      "minitube_user"
-    );
-
-
-  if(!userData){
-
-    return null;
-
-  }
-
+  if(!userData) return null;
 
   try{
-
-    return JSON.parse(
-      userData
-    );
-
+    return JSON.parse(userData);
   }catch(error){
-
     return null;
-
   }
-
 }
-
 
 /* =====================================
    LOGIN CHECK + USER INFORMATION
@@ -1059,231 +517,84 @@ function getRawUser(){
 function loadLoggedInUser(){
 
   const userData =
-    localStorage.getItem(
-      "minitube_user"
-    );
-
-
-  /*
-     Agar login nahi hai
-     to login page par bhejo
-  */
+    localStorage.getItem("minitube_user");
 
   if(!userData){
-
-    window.location.href =
-      "login.html";
-
+    window.location.href = "login.html";
     return false;
-
   }
-
 
   try{
 
-    const user =
-      JSON.parse(
-        userData
-      );
+    const user = JSON.parse(userData);
 
+    /* ADMIN DASHBOARD VISIBILITY */
+    const adminLink =
+      document.getElementById("adminAdsLink");
 
-    const email =
-      user.email ||
-      "";
+    if(adminLink){
+      adminLink.style.display =
+        user.id === ADMIN_UID ? "block" : "none";
+    }
 
-
-    /*
-       Supabase login ke waqt
-       display_name yahan save hua tha
-    */
-
-    const metadata =
-      user.user_metadata ||
-      {};
-
+    const email = user.email || "";
+    const metadata = user.user_metadata || {};
 
     let displayName =
-      metadata.display_name ||
-      "";
-
-
-    /*
-       Agar display name nahi mila
-       to email ka username use karo
-    */
+      metadata.display_name || "";
 
     if(!displayName){
-
-      displayName =
-        email.split("@")[0] ||
-        "User";
-
+      displayName = email.split("@")[0] || "User";
     }
-
-
-    /*
-       First letter
-    */
 
     const firstLetter =
-      displayName
-        .trim()
-        .charAt(0)
-        .toUpperCase() ||
-      "U";
-
-
-    /*
-       Handle
-    */
+      displayName.trim().charAt(0).toUpperCase() || "U";
 
     let cleanHandle =
-      displayName
+      displayName.toLowerCase()
+      .replace(/[^a-z0-9]+/g,"")
+      .slice(0,20);
+
+    if(!cleanHandle){
+      cleanHandle = email.split("@")[0]
         .toLowerCase()
-        .replace(
-          /[^a-z0-9]+/g,
-          ""
-        )
+        .replace(/[^a-z0-9]+/g,"")
         .slice(0,20);
-
-
-    /*
-       Agar naam Hindi/special characters
-       ki wajah se empty ho gaya
-    */
-
-    if(!cleanHandle){
-
-      cleanHandle =
-        email
-          .split("@")[0]
-          .toLowerCase()
-          .replace(
-            /[^a-z0-9]+/g,
-            ""
-          )
-          .slice(0,20);
-
     }
 
-
     if(!cleanHandle){
-
-      cleanHandle =
-        "user";
-
+      cleanHandle = "user";
     }
 
-
-    /*
-       ==============================
-       UPDATE HEADER AVATAR
-       ==============================
-    */
-
-    document
-      .getElementById(
-        "headerAvatar"
-      )
-      .textContent =
+    document.getElementById("headerAvatar").textContent =
       firstLetter;
 
-
-    /*
-       ==============================
-       UPDATE CHANNEL AVATAR
-       ==============================
-    */
-
-    document
-      .getElementById(
-        "channelAvatar"
-      )
-      .textContent =
+    document.getElementById("channelAvatar").textContent =
       firstLetter;
 
-
-    /*
-       ==============================
-       UPDATE CHANNEL NAME
-       ==============================
-    */
-
-    document
-      .getElementById(
-        "channelName"
-      )
-      .textContent =
+    document.getElementById("channelName").textContent =
       displayName;
 
-
-    /*
-       ==============================
-       UPDATE HANDLE
-       ==============================
-    */
-
-    document
-      .getElementById(
-        "handle"
-      )
-      .textContent =
+    document.getElementById("handle").textContent =
       "@" + cleanHandle;
 
-
-    /*
-       ==============================
-       UPDATE EMAIL
-       ==============================
-    */
-
-    document
-      .getElementById(
-        "userEmail"
-      )
-      .textContent =
+    document.getElementById("userEmail").textContent =
       email;
-
 
     return true;
 
-
   }catch(error){
 
-    console.error(
-      "User data error:",
-      error
-    );
+    console.error("User data error:",error);
 
+    localStorage.removeItem("minitube_user");
+    localStorage.removeItem("minitube_access_token");
+    localStorage.removeItem("minitube_refresh_token");
 
-    /*
-       Corrupt login data
-       delete karke login par bhejo
-    */
-
-    localStorage.removeItem(
-      "minitube_user"
-    );
-
-    localStorage.removeItem(
-      "minitube_access_token"
-    );
-
-    localStorage.removeItem(
-      "minitube_refresh_token"
-    );
-
-
-    window.location.href =
-      "login.html";
-
-
+    window.location.href = "login.html";
     return false;
-
   }
-
 }
-
 
 /* =====================================
    REAL SUBSCRIBER COUNT
@@ -1292,67 +603,34 @@ function loadLoggedInUser(){
 async function loadSubscriberCount(userId){
 
   const countEl =
-    document.getElementById(
-      "subscriberCount"
-    );
+    document.getElementById("subscriberCount");
 
-
-  if(!userId){
-
-    return;
-
-  }
-
+  if(!userId) return;
 
   try{
 
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?channel_id=eq." +
-        userId +
-        "&select=subscriber_id",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/subscriptions?channel_id=eq." +
+      encodeURIComponent(userId) +
+      "&select=subscriber_id",
+      {
+        headers:{
+          "apikey":SUPABASE_ANON_KEY,
+          "Authorization":"Bearer " + SUPABASE_ANON_KEY
         }
-
-      );
-
-
-    if(!response.ok){
-
-      return;
-
-    }
-
-
-    const rows =
-      await response.json();
-
-
-    countEl.textContent =
-      rows.length;
-
-
-  }catch(error){
-
-    console.error(
-      error
+      }
     );
 
+    if(!response.ok) return;
+
+    const rows = await response.json();
+    countEl.textContent = rows.length;
+
+  }catch(error){
+    console.error(error);
   }
-
 }
-
 
 /* =====================================
    EDIT CHANNEL
@@ -1360,210 +638,107 @@ async function loadSubscriberCount(userId){
 
 function editChannel(){
 
-  const user =
-    getRawUser();
+  const user = getRawUser();
+  if(!user) return;
 
+  const metadata = user.user_metadata || {};
+  const currentName = metadata.display_name || "";
 
-  if(!user){
-
-    return;
-
-  }
-
-
-  const metadata =
-    user.user_metadata ||
-    {};
-
-
-  const currentName =
-    metadata.display_name ||
-    "";
-
-
-  document.getElementById(
-    "editNameInput"
-  ).value =
+  document.getElementById("editNameInput").value =
     currentName;
 
-
-  document
-    .getElementById(
-      "editChannelOverlay"
-    )
-    .classList.add(
-      "show"
-    );
-
+  document.getElementById("editChannelOverlay")
+    .classList.add("show");
 }
-
 
 function closeEditChannel(){
 
-  document
-    .getElementById(
-      "editChannelOverlay"
-    )
-    .classList.remove(
-      "show"
-    );
-
+  document.getElementById("editChannelOverlay")
+    .classList.remove("show");
 }
-
 
 async function saveChannelEdit(){
 
-  const user =
-    getRawUser();
-
-
-  if(!user){
-
-    return;
-
-  }
-
+  const user = getRawUser();
+  if(!user) return;
 
   const newName =
-    document
-      .getElementById(
-        "editNameInput"
-      )
-      .value.trim();
-
+    document.getElementById("editNameInput").value.trim();
 
   if(!newName){
-
-    alert(
-      "Please enter a channel name."
-    );
-
+    alert("Please enter a channel name.");
     return;
-
   }
 
-
   const saveButton =
-    document.getElementById(
-      "saveChannelButton"
-    );
+    document.getElementById("saveChannelButton");
 
-
-  saveButton.disabled =
-    true;
-
-  saveButton.textContent =
-    "Saving...";
-
+  saveButton.disabled = true;
+  saveButton.textContent = "Saving...";
 
   const token =
-    localStorage.getItem(
-      "minitube_access_token"
-    );
+    localStorage.getItem("minitube_access_token");
 
+  if(!token){
+    alert("Login session missing. Please login again.");
+    saveButton.disabled = false;
+    saveButton.textContent = "Save";
+    return;
+  }
 
   try{
 
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles?id=eq." +
-        user.id,
-
-        {
-          method:"PATCH",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json",
-
-            "Prefer":
-              "return=minimal"
-          },
-
-          body: JSON.stringify({
-            display_name: newName
-          })
-        }
-
-      );
-
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/profiles?id=eq." +
+      encodeURIComponent(user.id),
+      {
+        method:"PATCH",
+        headers:{
+          "apikey":SUPABASE_ANON_KEY,
+          "Authorization":"Bearer " + token,
+          "Content-Type":"application/json",
+          "Prefer":"return=minimal"
+        },
+        body:JSON.stringify({
+          display_name:newName
+        })
+      }
+    );
 
     if(!response.ok){
 
-      const errorText =
-        await response.text();
+      const errorText = await response.text();
 
-      alert(
-        "Could not save changes: " +
-        errorText
-      );
+      alert("Could not save changes: " + errorText);
 
-      saveButton.disabled =
-        false;
-
-      saveButton.textContent =
-        "Save";
-
+      saveButton.disabled = false;
+      saveButton.textContent = "Save";
       return;
-
     }
-
-
-    /*
-      Also keep the local
-      auth-session copy of the
-      user in sync, so the name
-      updates everywhere right
-      away without needing to
-      log in again.
-    */
 
     if(!user.user_metadata){
-
       user.user_metadata = {};
-
     }
 
-    user.user_metadata.display_name =
-      newName;
+    user.user_metadata.display_name = newName;
 
     localStorage.setItem(
       "minitube_user",
       JSON.stringify(user)
     );
 
-
     closeEditChannel();
-
-
     loadLoggedInUser();
-
 
   }catch(error){
 
-    alert(
-      "Could not save changes: network error."
-    );
+    alert("Could not save changes: network error.");
 
-    saveButton.disabled =
-      false;
-
-    saveButton.textContent =
-      "Save";
-
+    saveButton.disabled = false;
+    saveButton.textContent = "Save";
   }
-
 }
-
 
 /* =====================================
    LOGOUT
@@ -1572,47 +747,16 @@ async function saveChannelEdit(){
 function logout(){
 
   const confirmLogout =
-    confirm(
-      "Are you sure you want to logout?"
-    );
+    confirm("Are you sure you want to logout?");
 
+  if(!confirmLogout) return;
 
-  if(!confirmLogout){
+  localStorage.removeItem("minitube_user");
+  localStorage.removeItem("minitube_access_token");
+  localStorage.removeItem("minitube_refresh_token");
 
-    return;
-
-  }
-
-
-  /*
-     Supabase login information
-     remove karo
-  */
-
-  localStorage.removeItem(
-    "minitube_user"
-  );
-
-
-  localStorage.removeItem(
-    "minitube_access_token"
-  );
-
-
-  localStorage.removeItem(
-    "minitube_refresh_token"
-  );
-
-
-  /*
-     Login page
-  */
-
-  window.location.href =
-    "login.html";
-
+  window.location.href = "login.html";
 }
-
 
 /* =====================================
    LOAD VIDEOS
@@ -1621,105 +765,51 @@ function logout(){
 async function loadVideos(){
 
   const container =
-    document.getElementById(
-      "videos"
-    );
-
+    document.getElementById("videos");
 
   const count =
-    document.getElementById(
-      "videoCount"
-    );
+    document.getElementById("videoCount");
 
-
-  const user =
-    getRawUser();
-
-
-  if(!user){
-
-    return;
-
-  }
-
+  const user = getRawUser();
+  if(!user) return;
 
   try{
 
-    container.innerHTML =
-      "Loading videos...";
+    container.textContent = "Loading videos...";
 
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/videos"
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "API error"
-      );
-
-    }
-
-
-    const allVideos =
-      await response.json();
-
-
-    const myVideos =
-      allVideos.filter(
-        video => video.owner_id === user.id
-      );
-
-
-    count.textContent =
-      myVideos.length;
-
-
-    renderVideos(
-      myVideos
+    const response = await fetch(
+      API_BASE + "/api/videos"
     );
 
+    if(!response.ok){
+      throw new Error("API error");
+    }
+
+    const allVideos = await response.json();
+
+    const myVideos = allVideos.filter(
+      video => video.owner_id === user.id
+    );
+
+    count.textContent = myVideos.length;
+
+    renderVideos(myVideos);
 
   }catch(error){
 
-    console.error(
-      "Video loading error:",
-      error
-    );
+    console.error("Video loading error:",error);
 
-
-    count.textContent =
-      "0";
-
+    count.textContent = "0";
 
     container.innerHTML = `
-
       <div class="empty">
-
-        <div class="emptyIcon">
-          ⚠️
-        </div>
-
-        <h2>
-          Couldn't load videos
-        </h2>
-
-        <p>
-          Please try again later.
-        </p>
-
+        <div class="emptyIcon">⚠️</div>
+        <h2>Couldn't load videos</h2>
+        <p>Please try again later.</p>
       </div>
-
     `;
-
   }
-
 }
-
 
 /* =====================================
    DISPLAY VIDEOS
@@ -1728,334 +818,145 @@ async function loadVideos(){
 function renderVideos(videos){
 
   const container =
-    document.getElementById(
-      "videos"
-    );
-
+    document.getElementById("videos");
 
   if(!Array.isArray(videos)){
 
     container.innerHTML = `
-
       <div class="empty">
-
-        <div class="emptyIcon">
-          ⚠️
-        </div>
-
-        <h2>
-          Something went wrong
-        </h2>
-
-        <p>
-          Invalid video data received.
-        </p>
-
+        <div class="emptyIcon">⚠️</div>
+        <h2>Something went wrong</h2>
+        <p>Invalid video data received.</p>
       </div>
-
     `;
 
     return;
-
   }
-
 
   if(videos.length === 0){
 
     container.innerHTML = `
-
       <div class="empty">
-
-        <div class="emptyIcon">
-          📹
-        </div>
-
-
-        <h2>
-          No videos yet
-        </h2>
-
-
-        <p>
-          Upload a video from the Home
-          page and it will appear here.
-        </p>
-
-
-        <button
-          class="homeButton"
-          onclick="goHome()"
-        >
-          Go to Home
-        </button>
-
+        <div class="emptyIcon">📹</div>
+        <h2>No videos yet</h2>
+        <p>Upload a video from the Home page and it will appear here.</p>
+        <button class="homeButton" onclick="goHome()">Go to Home</button>
       </div>
-
     `;
 
     return;
-
   }
-
 
   container.innerHTML = "";
 
-
   videos.forEach(video => {
 
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-
-    card.className =
-      "card";
-
+    const card = document.createElement("div");
+    card.className = "card";
 
     const videoURL =
-      API_BASE +
-      "/video/" +
-      encodeURIComponent(
-        video.r2_key
-      );
+      API_BASE + "/video/" +
+      encodeURIComponent(video.r2_key);
 
+    const viewsKey = "views_" + video.r2_key;
 
-    const viewsKey =
-      "views_" +
-      video.r2_key;
+    const views = Number(
+      localStorage.getItem(viewsKey) || 0
+    );
 
-    const views =
-      Number(
-        localStorage.getItem(
-          viewsKey
-        ) || 0
-      );
+    const info = document.createElement("div");
+    info.className = "info";
 
+    const videoElement = document.createElement("video");
+    videoElement.preload = "metadata";
+    videoElement.src = videoURL;
 
-    card.innerHTML = `
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = video.title || video.r2_key;
 
-      <video
-        preload="metadata"
-        src="${videoURL}"
-      ></video>
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = formatNumber(views) + " views";
 
-
-      <div class="info">
-
-
-        <div class="title">
-
-          ${escapeHTML(
-            video.title || video.r2_key
-          )}
-
-        </div>
-
-
-        <div class="meta">
-
-          ${formatNumber(views)} views
-
-        </div>
-
-
-        <button
-          class="watchButton"
-        >
-
-          ▶ Watch
-
-        </button>
-
-
-      </div>
-
-    `;
-
-
-    const videoElement =
-      card.querySelector(
-        "video"
-      );
-
-
-    const title =
-      card.querySelector(
-        ".title"
-      );
-
-
-    const watchButton =
-      card.querySelector(
-        ".watchButton"
-      );
-
+    const watchButton = document.createElement("button");
+    watchButton.className = "watchButton";
+    watchButton.textContent = "▶ Watch";
 
     function openVideo(){
-
       window.location.href =
         "watch.html?video=" +
-        encodeURIComponent(
-          video.r2_key
-        );
-
+        encodeURIComponent(video.r2_key);
     }
 
+    videoElement.addEventListener("click",openVideo);
+    title.addEventListener("click",openVideo);
+    watchButton.addEventListener("click",openVideo);
 
-    videoElement.addEventListener(
-      "click",
-      openVideo
-    );
+    info.appendChild(title);
+    info.appendChild(meta);
+    info.appendChild(watchButton);
 
+    card.appendChild(videoElement);
+    card.appendChild(info);
 
-    title.addEventListener(
-      "click",
-      openVideo
-    );
-
-
-    watchButton.addEventListener(
-      "click",
-      openVideo
-    );
-
-
-    container.appendChild(
-      card
-    );
-
+    container.appendChild(card);
   });
-
 }
 
-
 /* =====================================
-   SECURITY
+   FORMAT NUMBER
    ===================================== */
 
 function formatNumber(num){
 
   if(num >= 1000000){
-
-    return (
-      (num / 1000000)
-        .toFixed(1)
-        .replace(/\.0$/, "")
-      + "M"
-    );
-
+    return (num / 1000000)
+      .toFixed(1).replace(/\.0$/,"") + "M";
   }
-
 
   if(num >= 1000){
-
-    return (
-      (num / 1000)
-        .toFixed(1)
-        .replace(/\.0$/, "")
-      + "K"
-    );
-
+    return (num / 1000)
+      .toFixed(1).replace(/\.0$/,"") + "K";
   }
 
-
   return String(num);
-
 }
-
-
-function escapeHTML(text){
-
-  return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
 
 /* =====================================
    NAVIGATION
    ===================================== */
 
 function goHome(){
-
-  window.location.href =
-    "index.html";
-
+  window.location.href = "index.html";
 }
-
 
 function goShorts(){
-
-  window.location.href =
-    "shorts.html";
-
+  window.location.href = "shorts.html";
 }
-
 
 function goSubscriptions(){
-
-  window.location.href =
-    "subscriptions.html";
-
+  window.location.href = "subscriptions.html";
 }
 
-
 /* =====================================
-   START MINI TUBE
+   START MINITUBE
    ===================================== */
 
-const loggedIn =
-  loadLoggedInUser();
-
+const loggedIn = loadLoggedInUser();
 
 if(loggedIn){
 
-  const rawUser =
-    getRawUser();
-
+  const rawUser = getRawUser();
 
   if(rawUser){
-
-    loadSubscriberCount(
-      rawUser.id
-    );
-
+    loadSubscriberCount(rawUser.id);
   }
 
-
   loadVideos();
-
 }
 
 </script>
 
-
 </body>
-
 </html>
