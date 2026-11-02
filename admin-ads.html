@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MiniTube Ads Admin</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial;padding:18px}
+.wrap{max-width:950px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.logo{color:#ff0033;font-size:23px;font-weight:bold}
+button{background:#ff0033;color:white;border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5}
+.secondary{background:#333}
+.reject{background:#a52222}
+.card{background:#181818;border:1px solid #333;border-radius:12px;padding:17px;margin:15px 0}
+input{background:#111;border:1px solid #444;color:white;padding:12px;width:100%;border-radius:7px;margin:8px 0}
+video{width:100%;max-height:350px;background:black;border-radius:8px;margin-top:12px}
+small,.muted{color:#aaa}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.status{color:#ffb347;font-weight:bold}
+#msg{padding:12px;background:#222;border-radius:8px;margin:15px 0;white-space:pre-wrap}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:550px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo">▶ MiniTube Ads Admin</div>
+  <button class="secondary" onclick="loadCampaigns()">Refresh</button>
+</header>
+
+<div id="msg">Checking admin access...</div>
+
+<div class="card" id="loginBox" style="display:none">
+  <h3>MiniTube Admin Login</h3>
+  <p class="muted">Pehle MiniTube account mein login karo.</p>
+  <button onclick="location.href='login.html'">Go to Login</button>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Pending Requests</h3>
+    <div id="pendingCount">0</div>
+  </div>
+  <div class="card">
+    <h3>Approved / Active</h3>
+    <div id="approvedCount">0</div>
+  </div>
+</div>
+
+<div id="campaigns"></div>
+
+</div>
+
+<script>
+const SB = "https://vlzssmuzetcbkmzujecs.supabase.co";
+const KEY = "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+const msg = document.getElementById("msg");
+const campaigns = document.getElementById("campaigns");
+
+function token(){
+  return localStorage.getItem("minitube_access_token");
+}
+
+function setMsg(text){
+  msg.textContent=text;
+}
+
+function headers(){
+  return {
+    "apikey":KEY,
+    "Authorization":"Bearer "+token(),
+    "Content-Type":"application/json"
+  };
+}
+
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+async function loadCampaigns(){
+  if(!token()){
+    document.getElementById("loginBox").style.display="block";
+    setMsg("Login required.");
+    return;
+  }
+
+  setMsg("Loading campaigns...");
+  campaigns.innerHTML="";
+
+  try{
+    const res=await fetch(
+      SB+"/rest/v1/ad_campaigns?select=*&order=created_at.desc",
+      {headers:headers()}
+    );
+
+    if(!res.ok){
+      setMsg("Access denied or database error:\n"+await res.text());
+      return;
+    }
+
+    const rows=await res.json();
+
+    document.getElementById("pendingCount").textContent=
+      rows.filter(x=>x.status==="pending").length;
+
+    document.getElementById("approvedCount").textContent=
+      rows.filter(x=>["approved","active"].includes(x.status)).length;
+
+    setMsg("Admin connected. "+rows.length+" campaign(s).");
+
+    if(!rows.length){
+      campaigns.innerHTML='<div class="card">No advertising requests yet.</div>';
+      return;
+    }
+
+    rows.forEach(c=>{
+      const card=document.createElement("div");
+      card.className="card";
+
+      const videoURL=c.ad_video_url || "";
+      const safeVideo=videoURL.startsWith(
+        "https://wispy-base-65bb.naradsocial7.workers.dev/video/"
+      );
+
+      card.innerHTML=`
+        <h3>${esc(c.business_name)}</h3>
+        <div class="status">Status: ${esc(c.status)}</div>
+        <p>Contact: ${esc(c.contact_name)}</p>
+        <p>Mobile: ${esc(c.mobile)}</p>
+        <p>Email: ${esc(c.email)}</p>
+        <p>Category: ${esc(c.business_category)}</p>
+        <p>Budget: ₹${esc(c.budget)}</p>
+        <p>Duration: ${esc(c.ad_duration)} seconds</p>
+        <p>Placement: ${esc(c.placement)}</p>
+        <p>Location: ${esc(c.target_location || "Not specified")}</p>
+        <p>Audience: ${esc(c.target_audience || "Not specified")}</p>
+        <p>Dates: ${esc(c.start_date || "Not set")} – ${esc(c.end_date || "Not set")}</p>
+        <p>Submitted: ${esc(c.created_at)}</p>
+        ${safeVideo?`<video controls preload="metadata" src="${esc(videoURL)}"></video>`:"<p>Video preview unavailable</p>"}
+        <div class="actions">
+          ${c.status==="pending"?`
+            <button onclick="changeStatus('${c.id}','approved')">Approve</button>
+            <button class="reject" onclick="changeStatus('${c.id}','rejected')">Reject</button>
+          `:""}
+          ${c.status==="approved"?`
+            <button onclick="changeStatus('${c.id}','active')">Activate</button>
+          `:""}
+          ${c.status==="active"?`
+            <button class="secondary" onclick="changeStatus('${c.id}','completed')">Complete Campaign</button>
+          `:""}
+        </div>
+      `;
+
+      campaigns.appendChild(card);
+    });
+
+  }catch(e){
+    setMsg("Network error: "+e.message);
+  }
+}
+
+async function changeStatus(id,status){
+  const allowed=["approved","rejected","active","completed"];
+  if(!allowed.includes(status))return;
+
+  if(!confirm("Campaign status "+status+" karna hai?"))return;
+
+  try{
+    const res=await fetch(
+      SB+"/rest/v1/ad_campaigns?id=eq."+encodeURIComponent(id),
+      {
+        method:"PATCH",
+        headers:{
+          ...headers(),
+          "Prefer":"return=representation"
+        },
+        body:JSON.stringify({status:status})
+      }
+    );
+
+    if(!res.ok){
+      alert("Update failed:\n"+await res.text());
+      return;
+    }
+
+    alert("Campaign status updated: "+status);
+    loadCampaigns();
+
+  }catch(e){
+    alert("Network error: "+e.message);
+  }
+}
+
+loadCampaigns();
+</script>
+</body>
+</html>
