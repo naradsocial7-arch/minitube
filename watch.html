@@ -1,1324 +1,562 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MiniTube - Watch</title>
-
 <style>
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;background:#0f0f0f;color:#fff;
-  font-family:Arial,sans-serif;padding-bottom:90px
-}
-header{
-  position:sticky;top:0;z-index:100;height:64px;
-  background:rgba(17,17,17,.96);backdrop-filter:blur(12px);
-  border-bottom:1px solid #292929;display:flex;
-  align-items:center;padding:0 16px;gap:14px
-}
-.back{
-  width:40px;height:40px;background:none;border:0;
-  color:white;font-size:32px;cursor:pointer;border-radius:50%
-}
-.back:hover{background:#292929}
-.logo{font-size:23px;font-weight:800;white-space:nowrap}
-.logo span{color:#ff0033}
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif;padding-bottom:85px}
+header{height:60px;background:#171717;position:sticky;top:0;z-index:20;display:flex;align-items:center;padding:0 15px;gap:15px;border-bottom:1px solid #333}
+.logo{font-size:23px;font-weight:bold}.logo span{color:#ff0033}
+.back{background:none;border:0;color:white;font-size:30px}
 .spacer{flex:1}
-.avatar,.channelAvatar,.commentAvatar,.reviewAvatar{
-  border-radius:50%;background:#7c4dff;display:grid;
-  place-items:center;font-weight:bold;flex-shrink:0
-}
-.avatar{width:42px;height:42px}
-.main{width:100%;max-width:1100px;margin:0 auto;padding:20px}
-.videoBox{width:100%;background:#000;border-radius:14px;overflow:hidden}
-.videoBox video{width:100%;display:block;max-height:72vh;background:#000;object-fit:contain}
-.title{font-size:24px;font-weight:700;line-height:1.35;margin-top:18px;word-break:break-word}
-.meta{color:#999;font-size:14px;margin-top:8px}
-.actions{display:flex;align-items:center;gap:10px;margin-top:16px;flex-wrap:wrap}
-.actionButton{
-  background:#292929;border:0;color:white;border-radius:22px;
-  padding:10px 17px;cursor:pointer;font-size:14px;font-weight:600
-}
-.actionButton:hover{background:#3a3a3a}
+.avatar,.channelAvatar,.commentAvatar,.reviewAvatar{border-radius:50%;background:#7048c9;display:grid;place-items:center;font-weight:bold;flex-shrink:0}
+.avatar{width:38px;height:38px}
+.main{max-width:1150px;margin:auto;padding:18px}
+.videoBox{background:#000;border-radius:12px;overflow:hidden}
+.videoBox video{width:100%;max-height:70vh;display:block;background:#000}
+.title{font-size:23px;font-weight:bold;margin-top:16px;line-height:1.4;overflow-wrap:anywhere}
+.meta{color:#999;font-size:13px;margin-top:8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.actionButton,.secondaryButton{background:#292929;color:white;border:0;border-radius:22px;padding:10px 15px;cursor:pointer}
 .actionButton.liked{color:#ff0033}
-.subscribeButton,.channelSubscribe{
-  background:white;color:#111;border:0;border-radius:22px;
-  padding:10px 18px;font-weight:bold;cursor:pointer
-}
-.subscribeButton.subscribed{background:#292929;color:white;border:1px solid #555}
-.channel{
-  margin-top:20px;padding:16px;background:#181818;border-radius:14px;
-  display:flex;align-items:center;gap:13px
-}
-.channelAvatar{width:50px;height:50px;font-size:18px;cursor:pointer}
-.channelInfo{flex:1;min-width:0;cursor:pointer}
-.channelName{font-weight:bold;font-size:16px}
-.channelText{color:#999;font-size:13px;margin-top:5px}
-.panel{
-  margin-top:24px;padding:18px;background:#181818;
-  border:1px solid #292929;border-radius:14px
-}
-.panelTitle{font-size:21px;font-weight:bold;margin-bottom:14px}
-.muted{color:#999;font-size:13px}
+.subscribeButton,.channelSubscribe{background:white;color:#111;border:0;border-radius:22px;padding:10px 17px;font-weight:bold;cursor:pointer}
+.subscribeButton.subscribed{background:#333;color:white}
+.channel{display:flex;align-items:center;gap:12px;background:#181818;padding:15px;border-radius:12px;margin-top:20px}
+.channelAvatar{width:48px;height:48px;cursor:pointer}
+.channelInfo{flex:1;cursor:pointer}
+.channelName{font-weight:bold}
+.channelText,.muted{color:#999;font-size:13px;margin-top:5px}
+.panel{background:#181818;border:1px solid #292929;border-radius:13px;padding:17px;margin-top:22px}
+.panelTitle{font-size:20px;font-weight:bold;margin-bottom:14px}
+.textInput,.textArea,select{width:100%;background:#222;color:white;border:1px solid #444;border-radius:9px;padding:12px;font-family:Arial;margin-top:10px}
+.textArea{min-height:85px;resize:vertical}
+.primaryButton,.postButton{background:#ff0033;color:white;border:0;border-radius:22px;padding:11px 18px;font-weight:bold;cursor:pointer;margin-top:10px}
 .supportAmountRow{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
-.amountButton{
-  background:#292929;color:white;border:1px solid #444;
-  padding:10px 16px;border-radius:20px;cursor:pointer
-}
-.amountButton.selected{background:#ff0033;border-color:#ff0033}
-.textInput,.textArea{
-  width:100%;background:#222;border:1px solid #444;
-  border-radius:10px;padding:12px;color:white;
-  font-size:14px;outline:none;font-family:inherit
-}
-.textArea{resize:vertical;min-height:85px}
-.primaryButton{
-  background:#ff0033;color:white;border:0;border-radius:22px;
-  padding:11px 18px;font-weight:bold;cursor:pointer
-}
-.secondaryButton{
-  background:#292929;color:white;border:1px solid #444;
-  border-radius:22px;padding:10px 16px;cursor:pointer
-}
-.supportRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.ratingSummary{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.averageRating{font-size:42px;font-weight:bold}
-.stars{color:#ffbf00;letter-spacing:2px}
-.ratingBars{flex:1;min-width:180px}
-.ratingBarRow{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:13px;color:#bbb}
+.amountButton{background:#292929;color:white;border:1px solid #444;padding:10px 16px;border-radius:20px}
+.amountButton.selected{background:#ff0033}
+.supportRow{display:flex;gap:10px;align-items:center}
+.ratingSummary{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.averageRating{font-size:40px;font-weight:bold}
+.stars{color:#ffbf00}
+.ratingBars{flex:1;min-width:160px}
+.ratingBarRow{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12px;color:#bbb}
 .ratingBarTrack{height:8px;background:#333;border-radius:10px;overflow:hidden;flex:1}
 .ratingBarFill{height:100%;background:#ffbf00}
-.starPicker{display:flex;gap:5px;margin:12px 0}
-.starPicker button{
-  background:none;border:0;color:#555;font-size:32px;
-  cursor:pointer;padding:0
-}
+.starPicker{display:flex;gap:5px;margin:10px 0}
+.starPicker button{background:none;border:0;color:#555;font-size:30px}
 .starPicker button.active{color:#ffbf00}
-.reviewForm{margin-top:18px;padding-top:16px;border-top:1px solid #333}
-.reviewForm select{
-  width:100%;background:#222;color:white;border:1px solid #444;
-  padding:11px;border-radius:10px;margin:10px 0
-}
-.reviewCard{padding:15px 0;border-bottom:1px solid #333}
-.reviewTop{display:flex;align-items:center;gap:10px}
-.reviewAvatar{width:38px;height:38px}
-.reviewAuthor{font-weight:bold;font-size:14px}
-.reviewDate{color:#777;font-size:12px;margin-top:3px}
-.reviewText{white-space:pre-wrap;line-height:1.5;color:#ddd;margin-top:10px;word-break:break-word}
-.reviewCategory{display:inline-block;background:#292929;color:#bbb;padding:5px 9px;border-radius:12px;font-size:12px;margin-top:8px}
-.creatorReply{
-  margin:12px 0 0 18px;padding:12px;
-  background:#222;border-left:3px solid #ff0033;border-radius:8px
-}
-.creatorReply strong{font-size:13px}
-.reviewActions{margin-top:10px;display:flex;gap:12px}
-.smallButton{background:none;border:0;color:#ff647d;cursor:pointer;padding:4px 0}
-.comments{margin-top:32px}
-.commentsTitle{font-size:22px;font-weight:bold;margin-bottom:15px}
-.commentForm{background:#181818;border-radius:14px;padding:15px}
-.commentInput{
-  width:100%;min-height:90px;resize:vertical;background:#222;
-  border:1px solid #444;border-radius:10px;padding:12px;
-  color:white;font-family:Arial;font-size:15px;outline:none
-}
-.commentBottom{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px}
-.commentName{color:#999;font-size:13px}
-.postButton{background:#ff0033;color:white;border:0;border-radius:22px;padding:10px 18px;font-weight:bold;cursor:pointer}
-.commentList{margin-top:18px}
-.comment{background:#181818;border-radius:12px;padding:14px;margin-bottom:10px}
-.commentTop{display:flex;align-items:center;gap:9px}
-.commentAvatar{width:36px;height:36px;font-size:13px}
-.commentAuthor{font-weight:bold;font-size:14px}
-.commentDate{color:#777;font-size:12px;margin-top:2px}
-.commentText{margin-top:10px;color:#ddd;line-height:1.5;white-space:pre-wrap;word-break:break-word}
-.deleteComment{background:none;border:0;color:#ff4964;padding:0;cursor:pointer;font-size:13px}
-.noComments,.emptyState{color:#888;text-align:center;padding:25px 10px}
-.saveModalOverlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
-  z-index:300;align-items:flex-end;justify-content:center
-}
-.saveModalOverlay.show{display:flex}
-.saveModal{
-  width:100%;max-width:480px;background:#181818;
-  border-radius:20px 20px 0 0;padding:20px;max-height:75vh;overflow:auto
-}
-.saveModalTitle{font-size:17px;font-weight:bold;margin-bottom:14px}
-.playlistCheckRow{display:flex;align-items:center;gap:12px;padding:11px 0;cursor:pointer}
-.playlistCheckRow input{width:20px;height:20px}
-.playlistCheckName{flex:1;font-size:15px;word-break:break-word}
-.playlistCheckCount{color:#999;font-size:12px}
-.newPlaylistRow{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid #292929}
-.newPlaylistInput{flex:1;background:#222;border:1px solid #444;border-radius:20px;padding:10px 15px;color:white;min-width:0}
-.saveModalDone{width:100%;margin-top:16px;background:#292929;border:0;color:white;border-radius:10px;padding:13px;font-weight:bold}
-.reportOptions{display:flex;flex-direction:column;gap:2px}
-.reportOption{display:flex;align-items:center;gap:12px;padding:11px 0;font-size:15px}
-.reportOption input{width:19px;height:19px}
-.reportButtonRow{display:flex;gap:10px;margin-top:16px}
-.reportButtonRow button{flex:1}
-.errorBox{background:#181818;border:1px solid #292929;border-radius:14px;padding:40px 20px;text-align:center}
-.errorBox p{color:#999}
-.bottom{
-  position:fixed;bottom:0;left:0;right:0;height:70px;
-  background:#151515;border-top:1px solid #333;
-  display:flex;justify-content:space-around;align-items:center;z-index:200
-}
-.bottom button{min-width:55px;background:none;border:0;color:#aaa;font-size:12px;cursor:pointer;padding:5px}
-.bottom button b{display:block;font-size:22px;color:white;margin-bottom:3px}
-@media(max-width:600px){
-  header{padding:0 12px}.logo{font-size:21px}
-  .main{padding:12px}.videoBox{border-radius:10px}
-  .videoBox video{max-height:65vh}.title{font-size:20px}
-  .channel{padding:14px}.channelSubscribe{display:none}
-  .commentBottom{align-items:flex-end}
-  .commentName{max-width:55%;line-height:1.3}
+.reviewCard{padding:14px 0;border-bottom:1px solid #333}
+.reviewTop,.commentTop{display:flex;align-items:center;gap:10px}
+.reviewAvatar,.commentAvatar{width:36px;height:36px}
+.reviewText,.commentText{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5;margin-top:9px;color:#ddd}
+.reviewDate,.commentDate{font-size:12px;color:#888;margin-top:3px}
+.reviewCategory{display:inline-block;background:#292929;padding:5px 9px;border-radius:12px;margin-top:8px;font-size:12px}
+.creatorReply{margin:12px 0 0 18px;padding:12px;background:#222;border-left:3px solid #ff0033}
+.smallButton,.deleteComment{background:none;border:0;color:#ff647d;cursor:pointer;margin-top:10px}
+.comments{margin-top:28px}
+.commentsTitle{font-size:21px;font-weight:bold;margin-bottom:13px}
+.commentForm,.comment{background:#181818;padding:14px;border-radius:12px;margin-bottom:10px}
+.commentInput{width:100%;min-height:85px;background:#222;color:white;border:1px solid #444;border-radius:9px;padding:12px}
+.commentBottom{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.commentName{font-size:12px;color:#999}
+.suggested-section{margin-top:28px}
+.suggested-title{font-size:21px;font-weight:bold;margin-bottom:14px}
+.suggested-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.suggested-card{display:flex;gap:10px;background:#181818;padding:9px;border-radius:10px;cursor:pointer;min-width:0}
+.suggested-thumb{width:145px;aspect-ratio:16/9;object-fit:cover;background:#292929;border-radius:7px;flex-shrink:0}
+.suggested-info{min-width:0}
+.suggested-video-title{font-size:14px;font-weight:bold;line-height:1.4;overflow-wrap:anywhere}
+.suggested-video-meta{font-size:12px;color:#999;margin-top:7px}
+.ad-box{display:none;background:#181818;border:1px solid #333;padding:13px;border-radius:12px;margin:18px 0}
+.ad-label{color:#ffbf00;font-size:12px;margin-bottom:8px}
+.ad-video{width:100%;max-height:300px;background:#000}
+.ad-button{background:#ff0033;color:white;border:0;padding:10px 16px;border-radius:20px;margin-top:10px}
+.emptyState,.noComments{padding:22px;text-align:center;color:#888}
+.modal{display:none;position:fixed;inset:0;background:#000b;z-index:100;align-items:flex-end;justify-content:center}
+.modal.show{display:flex}
+.modalContent{width:100%;max-width:480px;background:#181818;padding:20px;border-radius:18px 18px 0 0;max-height:80vh;overflow:auto}
+.modalContent label{display:block;padding:10px 0}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:68px;background:#151515;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:30}
+.bottom button{background:none;border:0;color:#aaa;font-size:12px}
+.bottom b{display:block;font-size:21px;color:white;margin-bottom:3px}
+@media(max-width:650px){
+.main{padding:11px}.title{font-size:19px}.videoBox{border-radius:8px}
+.videoBox video{max-height:60vh}
+.suggested-grid{grid-template-columns:1fr}
+.suggested-card{background:transparent;padding:0}
+.suggested-thumb{width:42%;max-width:160px}
+.channelSubscribe{display:none}
+.supportRow{align-items:stretch;flex-direction:column}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <button class="back" onclick="goBack()" aria-label="Back">‹</button>
-  <div class="logo"><span>▶</span> MiniTube</div>
-  <div class="spacer"></div>
-  <div class="avatar" id="headerAvatar">M</div>
+<button class="back" onclick="goBack()">‹</button>
+<div class="logo"><span>▶</span> MiniTube</div>
+<div class="spacer"></div>
+<div class="avatar" id="headerAvatar">M</div>
 </header>
 
 <main class="main">
 
-  <div class="videoBox">
-    <video id="videoPlayer" controls playsinline preload="metadata"></video>
-  </div>
+<div class="videoBox">
+<video id="videoPlayer" controls playsinline preload="metadata"></video>
+</div>
 
-  <div id="videoTitle" class="title">Loading video...</div>
-  <div class="meta"><span id="viewCount">0</span> views</div>
+<div id="videoTitle" class="title">Loading video...</div>
+<div class="meta"><span id="viewCount">0</span> views</div>
 
-  <div class="actions">
-    <button id="likeButton" class="actionButton" onclick="toggleLike()">♡ Like 0</button>
-    <button class="actionButton" onclick="shareVideo()">↗ Share</button>
-    <button class="actionButton" onclick="openSaveModal()">⊕ Save</button>
-    <button class="actionButton" onclick="openReportModal()">⚑ Report</button>
-    <button id="subscribeButton" class="subscribeButton" onclick="toggleSubscribe()">Subscribe</button>
-  </div>
+<div class="actions">
+<button id="likeButton" class="actionButton" onclick="toggleLike()">♡ Like 0</button>
+<button class="actionButton" onclick="shareVideo()">↗ Share</button>
+<button class="actionButton" onclick="openSaveModal()">⊕ Save</button>
+<button class="actionButton" onclick="openReportModal()">⚑ Report</button>
+<button id="subscribeButton" class="subscribeButton" onclick="toggleSubscribe()">Subscribe</button>
+</div>
 
-  <!-- REPORT MODAL -->
-  <div id="reportModalOverlay" class="saveModalOverlay" onclick="closeReportModalOnOverlay(event)">
-    <div class="saveModal">
-      <div class="saveModalTitle">Report this video</div>
-      <div class="reportOptions">
-        <label class="reportOption"><input type="radio" name="reportReason" value="Spam or misleading"> Spam or misleading</label>
-        <label class="reportOption"><input type="radio" name="reportReason" value="Sexual or nudity content"> Sexual or nudity content</label>
-        <label class="reportOption"><input type="radio" name="reportReason" value="Violent or harmful content"> Violent or harmful content</label>
-        <label class="reportOption"><input type="radio" name="reportReason" value="Harassment or bullying"> Harassment or bullying</label>
-        <label class="reportOption"><input type="radio" name="reportReason" value="Hate speech"> Hate speech</label>
-        <label class="reportOption"><input type="radio" name="reportReason" value="Copyright infringement"> Copyright infringement</label>
-        <label class="reportOption"><input type="radio" name="reportReason" value="Other"> Other</label>
-      </div>
-      <textarea id="reportDetails" class="textArea" placeholder="Add details (optional)" rows="3"></textarea>
-      <div class="reportButtonRow">
-        <button class="secondaryButton" onclick="closeReportModal()">Cancel</button>
-        <button id="submitReportButton" class="primaryButton" onclick="submitReport()">Submit report</button>
-      </div>
-    </div>
-  </div>
+<div class="channel">
+<div class="channelAvatar" id="channelAvatar">M</div>
+<div class="channelInfo" id="channelInfo">
+<div class="channelName" id="channelName">Creator</div>
+<div class="channelText">MiniTube Creator</div>
+</div>
+<button id="channelSubscribe" class="channelSubscribe" onclick="toggleSubscribe()">Subscribe</button>
+</div>
 
-  <!-- SAVE MODAL -->
-  <div id="saveModalOverlay" class="saveModalOverlay" onclick="closeSaveModalOnOverlay(event)">
-    <div class="saveModal">
-      <div class="saveModalTitle">Save video to...</div>
-      <div id="playlistCheckList"></div>
-      <div class="newPlaylistRow">
-        <input id="newPlaylistName" class="newPlaylistInput" placeholder="Create new playlist"
-          onkeydown="if(event.key==='Enter')createPlaylistFromModal()">
-        <button class="primaryButton" onclick="createPlaylistFromModal()">Create</button>
-      </div>
-      <button class="saveModalDone" onclick="closeSaveModal()">Done</button>
-    </div>
-  </div>
+<!-- PRE ROLL AD -->
+<section id="preAdBox" class="ad-box">
+<div class="ad-label">ADVERTISEMENT</div>
+<video id="preAdPlayer" class="ad-video" controls playsinline></video>
+<button id="preAdContinue" class="ad-button" onclick="finishAd('pre')">Continue to video</button>
+</section>
 
-  <!-- CHANNEL -->
-  <div class="channel">
-    <div class="channelAvatar" id="channelAvatar">M</div>
-    <div class="channelInfo" id="channelInfo">
-      <div class="channelName" id="channelName">My Channel</div>
-      <div class="channelText">MiniTube creator</div>
-    </div>
-    <button id="channelSubscribe" class="channelSubscribe" onclick="toggleSubscribe()">Subscribe</button>
-  </div>
+<!-- MID ROLL AD -->
+<section id="midAdBox" class="ad-box">
+<div class="ad-label">ADVERTISEMENT</div>
+<video id="midAdPlayer" class="ad-video" controls playsinline></video>
+<button id="midAdContinue" class="ad-button" onclick="finishAd('mid')">Continue watching</button>
+</section>
 
-  <!-- DIRECT CREATOR SUPPORT -->
-  <section class="panel" id="supportPanel" style="display:none">
-    <div class="panelTitle">❤️ Support this Creator</div>
-    <div class="muted">Support the creator directly using UPI.</div>
-    <div class="supportAmountRow">
-      <button class="amountButton selected" onclick="selectSupportAmount(10,this)">₹10</button>
-      <button class="amountButton" onclick="selectSupportAmount(20,this)">₹20</button>
-      <button class="amountButton" onclick="selectSupportAmount(50,this)">₹50</button>
-      <button class="amountButton" onclick="selectSupportAmount(100,this)">₹100</button>
-    </div>
-    <div class="supportRow">
-      <input id="customSupportAmount" class="textInput" type="number" min="1" step="1" placeholder="Custom amount (₹)">
-      <button class="primaryButton" onclick="supportCreator()">Support</button>
-    </div>
-    <p class="muted">Payment will open in your UPI app. MiniTube cannot automatically verify whether the payment is completed.</p>
-  </section>
+<!-- CREATOR SUPPORT -->
+<section class="panel" id="supportPanel" style="display:none">
+<div class="panelTitle">❤️ Support this Creator</div>
+<div class="muted">Support the creator directly using UPI.</div>
+<div class="supportAmountRow">
+<button class="amountButton selected" onclick="selectSupportAmount(10,this)">₹10</button>
+<button class="amountButton" onclick="selectSupportAmount(20,this)">₹20</button>
+<button class="amountButton" onclick="selectSupportAmount(50,this)">₹50</button>
+<button class="amountButton" onclick="selectSupportAmount(100,this)">₹100</button>
+</div>
+<div class="supportRow">
+<input id="customSupportAmount" class="textInput" type="number" min="1" placeholder="Custom amount ₹">
+<button class="primaryButton" onclick="supportCreator()">Support</button>
+</div>
+<div class="muted">Payment opens in your UPI app. MiniTube cannot automatically verify payment.</div>
+</section>
 
-  <!-- VIDEO RATINGS -->
-  <section class="panel" id="ratingPanel">
-    <div class="panelTitle">⭐ Video Ratings & Reviews</div>
-    <div class="ratingSummary">
-      <div>
-        <div class="averageRating" id="averageRating">0.0</div>
-        <div class="stars" id="averageStars">☆☆☆☆☆</div>
-        <div class="muted" id="ratingTotal">0 ratings</div>
-      </div>
-      <div class="ratingBars" id="ratingBars">
-        <div class="muted">Loading ratings...</div>
-      </div>
-    </div>
+<!-- RATINGS -->
+<section class="panel" id="ratingPanel">
+<div class="panelTitle">⭐ Video Ratings & Reviews</div>
+<div class="ratingSummary">
+<div>
+<div class="averageRating" id="averageRating">0.0</div>
+<div class="stars" id="averageStars">☆☆☆☆☆</div>
+<div class="muted" id="ratingTotal">0 ratings</div>
+</div>
+<div class="ratingBars" id="ratingBars"></div>
+</div>
+<div style="margin-top:20px;border-top:1px solid #333;padding-top:15px">
+<strong id="reviewFormTitle">Rate this video</strong>
+<div class="starPicker" id="starPicker">
+<button data-star="1" onclick="chooseRating(1)">★</button>
+<button data-star="2" onclick="chooseRating(2)">★</button>
+<button data-star="3" onclick="chooseRating(3)">★</button>
+<button data-star="4" onclick="chooseRating(4)">★</button>
+<button data-star="5" onclick="chooseRating(5)">★</button>
+</div>
+<select id="reviewCategory">
+<option value="">Choose feedback category</option>
+<option>Good video</option><option>Audio quality</option>
+<option>Video quality</option><option>Informative</option>
+<option>Entertainment</option><option>Needs improvement</option><option>Other</option>
+</select>
+<textarea id="reviewText" class="textArea" maxlength="1000" placeholder="Write your review..."></textarea>
+<button id="submitRatingButton" class="primaryButton" onclick="submitRating()">Submit Rating</button>
+<button class="secondaryButton" onclick="resetRatingForm()">Clear</button>
+</div>
+<div style="margin-top:20px;font-weight:bold">Viewer Reviews</div>
+<div id="reviewList"><div class="emptyState">Loading reviews...</div></div>
+</section>
 
-    <div class="reviewForm">
-      <strong id="reviewFormTitle">Rate this video</strong>
-      <div class="starPicker" id="starPicker">
-        <button type="button" data-star="1" onclick="chooseRating(1)">★</button>
-        <button type="button" data-star="2" onclick="chooseRating(2)">★</button>
-        <button type="button" data-star="3" onclick="chooseRating(3)">★</button>
-        <button type="button" data-star="4" onclick="chooseRating(4)">★</button>
-        <button type="button" data-star="5" onclick="chooseRating(5)">★</button>
-      </div>
-      <select id="reviewCategory">
-        <option value="">Choose feedback category (optional)</option>
-        <option value="Good video">Good video</option>
-        <option value="Audio quality">Audio quality</option>
-        <option value="Video quality">Video quality</option>
-        <option value="Informative">Informative</option>
-        <option value="Entertainment">Entertainment</option>
-        <option value="Needs improvement">Needs improvement</option>
-        <option value="Other">Other</option>
-      </select>
-      <textarea id="reviewText" class="textArea" maxlength="1000" placeholder="Write your review (optional)..."></textarea>
-      <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-        <button id="submitRatingButton" class="primaryButton" onclick="submitRating()">Submit Rating</button>
-        <button class="secondaryButton" onclick="resetRatingForm()">Clear</button>
-      </div>
-      <div class="muted" style="margin-top:9px">You can update your rating and review later.</div>
-    </div>
+<!-- COMMENTS -->
+<section class="comments">
+<div class="commentsTitle">Comments <span id="commentCount">0</span></div>
+<div class="commentForm">
+<textarea id="commentInput" class="commentInput" maxlength="500" placeholder="Add a comment..."></textarea>
+<div class="commentBottom">
+<span class="commentName" id="commentName">Commenting as MiniTube user</span>
+<button class="postButton" onclick="postComment()">Post Comment</button>
+</div>
+</div>
+<div id="commentList"></div>
+</section>
 
-    <div style="margin-top:22px;font-weight:bold">Viewer Reviews</div>
-    <div id="reviewList"><div class="emptyState">Loading reviews...</div></div>
-  </section>
-
-  <!-- COMMENTS -->
-  <section class="comments">
-    <div class="commentsTitle">Comments <span id="commentCount">0</span></div>
-    <div class="commentForm">
-      <textarea id="commentInput" class="commentInput" placeholder="Add a comment..." maxlength="500"></textarea>
-      <div class="commentBottom">
-        <div class="commentName" id="commentName">Commenting as MiniTube user</div>
-        <button class="postButton" onclick="postComment()">Post Comment</button>
-      </div>
-    </div>
-    <div id="commentList" class="commentList"></div>
-  </section>
+<!-- SUGGESTED VIDEOS -->
+<section class="suggested-section">
+<div class="suggested-title">Recommended Videos</div>
+<div id="suggestedVideos" class="suggested-grid">
+<div class="emptyState">Loading videos...</div>
+</div>
+</section>
 
 </main>
 
+<!-- SAVE MODAL -->
+<div id="saveModal" class="modal" onclick="if(event.target===this)closeSaveModal()">
+<div class="modalContent">
+<strong>Save video to...</strong>
+<div id="playlistCheckList"></div>
+<input id="newPlaylistName" class="textInput" placeholder="New playlist name">
+<button class="primaryButton" onclick="createPlaylist()">Create Playlist</button>
+<button class="secondaryButton" onclick="closeSaveModal()">Done</button>
+</div>
+</div>
+
+<!-- REPORT MODAL -->
+<div id="reportModal" class="modal" onclick="if(event.target===this)closeReportModal()">
+<div class="modalContent">
+<strong>Report this video</strong>
+<div id="reportOptions">
+<label><input type="radio" name="reportReason" value="Spam or misleading"> Spam or misleading</label>
+<label><input type="radio" name="reportReason" value="Sexual content"> Sexual content</label>
+<label><input type="radio" name="reportReason" value="Violent content"> Violent content</label>
+<label><input type="radio" name="reportReason" value="Harassment"> Harassment</label>
+<label><input type="radio" name="reportReason" value="Hate speech"> Hate speech</label>
+<label><input type="radio" name="reportReason" value="Copyright"> Copyright</label>
+<label><input type="radio" name="reportReason" value="Other"> Other</label>
+</div>
+<textarea id="reportDetails" class="textArea" placeholder="Details (optional)"></textarea>
+<button class="primaryButton" onclick="submitReport()">Submit Report</button>
+<button class="secondaryButton" onclick="closeReportModal()">Cancel</button>
+</div>
+</div>
+
 <nav class="bottom">
-  <button onclick="goHome()"><b>⌂</b>Home</button>
-  <button onclick="goShorts()"><b>▶</b>HORIZONTAL</button>
-  <button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
-  <button onclick="goYou()"><b>●</b>You</button>
+<button onclick="goHome()"><b>⌂</b>Home</button>
+<button onclick="goShorts()"><b>▶</b>HORIZONTAL</button>
+<button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
+<button onclick="goYou()"><b>●</b>You</button>
 </nav>
 
 <script>
-/* =====================================
-   CONFIGURATION
-===================================== */
+const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
+const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+const ACCESS_TOKEN_KEY="minitube_access_token";
+const USER_KEY="minitube_user";
+const params=new URLSearchParams(location.search);
+const videoName=params.get("video");
+const player=document.getElementById("videoPlayer");
 
-const API_BASE = "https://wispy-base-65bb.naradsocial7.workers.dev";
-const SUPABASE_URL = "https://vlzssmuzetcbkmzujecs.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
+let videoMeta=null,ratingsCache=[],commentsCache=[],repliesCache=[];
+let selectedRating=0,supportAmount=10,creatorPaymentInfo=null;
+let isSubscribedToChannel=false,preAdDone=false,midAdDone=false;
+let midAdTime=30,midAdCampaign=null,preAdCampaign=null;
+let resumeAfterAd=0;
 
-const ACCESS_TOKEN_KEY = "minitube_access_token";
-const USER_KEY = "minitube_user";
-const AUTOPLAY_KEY = "minitube_autoplay";
-const PLAYLIST_KEY = "minitube_playlists";
-const HISTORY_KEY = "minitube_watch_history";
+function user(){try{return JSON.parse(localStorage.getItem(USER_KEY)||"null")}catch(e){return null}}
+function token(){return localStorage.getItem(ACCESS_TOKEN_KEY)||SUPABASE_ANON_KEY}
+function headers(extra={}){return {apikey:SUPABASE_ANON_KEY,Authorization:"Bearer "+token(),...extra}}
+async function db(path,options={}){return fetch(SUPABASE_URL+"/rest/v1/"+path,{...options,headers:headers(options.headers||{})})}
+function loginPrompt(action){if(confirm("Please login to "+action+". Go to Login?"))location.href="login.html"}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function fmt(n){n=Number(n)||0;return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1000?(n/1000).toFixed(1)+"K":String(n)}
+function stars(n){n=Math.max(0,Math.min(5,n));return "★".repeat(n)+"☆".repeat(5-n)}
 
-const params = new URLSearchParams(window.location.search);
-const videoName = params.get("video");
-const safeVideoName = videoName || "";
-
-const likeKey = "likes_" + safeVideoName;
-const likedKey = "liked_" + safeVideoName;
-const viewKey = "views_" + safeVideoName;
-const viewedKey = "viewed_" + safeVideoName;
-
-let videoMeta = null;
-let commentsCache = [];
-let ratingsCache = [];
-let repliesCache = [];
-let isSubscribedToChannel = false;
-let selectedRating = 0;
-let supportAmount = 10;
-let creatorPaymentInfo = null;
-
-const player = document.getElementById("videoPlayer");
-const title = document.getElementById("videoTitle");
-const viewCount = document.getElementById("viewCount");
-const likeButton = document.getElementById("likeButton");
-const subscribeButton = document.getElementById("subscribeButton");
-const channelSubscribe = document.getElementById("channelSubscribe");
-const commentInput = document.getElementById("commentInput");
-
-function getLoggedUser(){
-  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
-  const savedUser = localStorage.getItem(USER_KEY);
-  if(!token || !savedUser) return null;
-  try{return JSON.parse(savedUser)}catch(e){return null}
+async function init(){
+ if(!videoName){showError("Video not found");return}
+ document.getElementById("headerAvatar").textContent=(user()?.email||"M").charAt(0).toUpperCase();
+ document.getElementById("commentName").textContent="Commenting as "+(user()?.user_metadata?.display_name||user()?.email?.split("@")[0]||"MiniTube user");
+ player.src=API_BASE+"/video/"+encodeURIComponent(videoName);
+ videoMeta=await loadMetadata();
+ if(!videoMeta){document.getElementById("videoTitle").textContent=videoName;return}
+ document.getElementById("videoTitle").textContent=videoMeta.title||videoName;
+ const creator=videoMeta.profiles?.display_name||"MiniTube Creator";
+ document.getElementById("channelName").textContent=creator;
+ document.getElementById("channelAvatar").textContent=creator.charAt(0).toUpperCase();
+ const own=user()?.id===videoMeta.owner_id;
+ const href=own?"channel.html":"channel.html?id="+encodeURIComponent(videoMeta.owner_id);
+ document.getElementById("channelAvatar").onclick=()=>location.href=href;
+ document.getElementById("channelInfo").onclick=()=>location.href=href;
+ if(own){document.getElementById("subscribeButton").style.display="none";document.getElementById("channelSubscribe").style.display="none"}
+ await Promise.all([updateLike(),updateSubscribe(),loadComments(),loadRatings(),loadCreatorUPI(),loadSuggestions(),loadAds()]);
+ recordHistory();countView();
 }
-
-function getToken(){
-  return localStorage.getItem(ACCESS_TOKEN_KEY) || SUPABASE_ANON_KEY;
+async function loadMetadata(){
+ try{let r=await db("videos?r2_key=eq."+encodeURIComponent(videoName)+"&select=id,title,description,owner_id,profiles(display_name)");if(!r.ok)return null;return (await r.json())[0]||null}catch(e){return null}
 }
-
-function apiHeaders(extra={}){
-  return {
-    "apikey":SUPABASE_ANON_KEY,
-    "Authorization":"Bearer "+getToken(),
-    ...extra
-  };
+function showError(msg){document.getElementById("videoTitle").textContent=msg}
+function countView(){
+ let key="views_"+videoName,viewed="viewed_"+videoName;
+ document.getElementById("viewCount").textContent=fmt(localStorage.getItem(key)||0);
+ if(localStorage.getItem(viewed)==="true")return;
+ let timer;
+ player.addEventListener("play",()=>{timer=setTimeout(()=>{let n=Number(localStorage.getItem(key)||0)+1;localStorage.setItem(key,n);localStorage.setItem(viewed,"true");document.getElementById("viewCount").textContent=fmt(n)},3000)},{once:true});
+ player.addEventListener("pause",()=>clearTimeout(timer));
 }
-
-async function dbFetch(path, options={}){
-  return fetch(SUPABASE_URL+"/rest/v1/"+path,{
-    ...options,
-    headers:apiHeaders(options.headers || {})
-  });
+async function getLikes(){
+ if(!videoMeta?.id)return [];
+ let r=await db("likes?video_id=eq."+videoMeta.id+"&select=user_id");
+ return r.ok?await r.json():[];
 }
-
-function loginPrompt(action){
-  const go = confirm("Please login first to "+action+".\n\nGo to Login?");
-  if(go) window.location.href="login.html";
-}
-
-function isAutoplayOn(){
-  const value=localStorage.getItem(AUTOPLAY_KEY);
-  return value===null ? true : value==="true";
-}
-
-function initialize(){
-  loadProfile();
-  loadVideo();
-}
-
-initialize();
-
-/* =====================================
-   PROFILE
-===================================== */
-
-function loadProfile(){
-  const user=getLoggedUser();
-  const storedName=localStorage.getItem("minitube_username") ||
-    (user && user.user_metadata && user.user_metadata.display_name) ||
-    (user && user.email ? user.email.split("@")[0] : "");
-
-  const storedAvatar=localStorage.getItem("minitube_avatar_letter") ||
-    (storedName ? storedName.charAt(0).toUpperCase() : "M");
-
-  if(storedName){
-    document.getElementById("commentName").textContent="Commenting as "+storedName;
-  }
-  document.getElementById("headerAvatar").textContent=storedAvatar;
-}
-
-/* =====================================
-   VIDEO METADATA
-===================================== */
-
-async function loadVideoMetadata(){
-  if(!videoName) return null;
-  try{
-    const response=await dbFetch(
-      "videos?r2_key=eq."+encodeURIComponent(videoName)+
-      "&select=id,title,description,owner_id,profiles(display_name)"
-    );
-    if(!response.ok) return null;
-    const rows=await response.json();
-    return rows[0] || null;
-  }catch(error){
-    console.error("Video metadata:",error);
-    return null;
-  }
-}
-
-function applyVideoMeta(){
-  if(!videoMeta) return;
-
-  title.textContent=videoMeta.title || videoName;
-  const ownerName=(videoMeta.profiles && videoMeta.profiles.display_name) || "Unknown creator";
-
-  document.getElementById("channelName").textContent=ownerName;
-  document.getElementById("channelAvatar").textContent=
-    ownerName.trim().charAt(0).toUpperCase() || "?";
-
-  const user=getLoggedUser();
-  const isOwnVideo=!!(user && user.id===videoMeta.owner_id);
-  const channelHref=isOwnVideo
-    ? "channel.html"
-    : "channel.html?id="+encodeURIComponent(videoMeta.owner_id);
-
-  document.getElementById("channelAvatar").onclick=()=>window.location.href=channelHref;
-  document.getElementById("channelInfo").onclick=()=>window.location.href=channelHref;
-
-  channelSubscribe.style.display=isOwnVideo ? "none" : "block";
-  subscribeButton.style.display=isOwnVideo ? "none" : "inline-flex";
-
-  loadCreatorPaymentInfo(isOwnVideo);
-}
-
-/* =====================================
-   LOAD VIDEO
-===================================== */
-
-async function loadVideo(){
-  if(!videoName){
-    showVideoError("Video not found","The video link is missing or invalid.");
-    return;
-  }
-
-  player.src=API_BASE+"/video/"+encodeURIComponent(videoName);
-  title.textContent=videoName;
-
-  videoMeta=await loadVideoMetadata();
-  applyVideoMeta();
-
-  updateLike();
-  updateSubscribe();
-  loadComments();
-  loadRatings();
-  recordHistory();
-  updateViews();
-  setupViewCounter();
-
-  if(isAutoplayOn()) player.play().catch(()=>{});
-
-  player.addEventListener("error",()=>{
-    showVideoError("This video isn't available","It may have been removed, or the link is broken.");
-  });
-}
-
-function showVideoError(heading,message){
-  title.textContent=heading;
-  document.querySelector(".videoBox").innerHTML=
-    '<div class="errorBox"><div style="font-size:42px">⚠️</div><h2>'+
-    escapeHTML(heading)+'</h2><p>'+escapeHTML(message)+'</p></div>';
-}
-
-/* =====================================
-   VIEW COUNTER
-===================================== */
-
-function updateViews(){
-  const count=Number(localStorage.getItem(viewKey)||0);
-  viewCount.textContent=formatNumber(count);
-}
-
-function setupViewCounter(){
-  let counted=localStorage.getItem(viewedKey)==="true";
-  if(counted) return;
-  let timer=null;
-
-  player.addEventListener("play",()=>{
-    if(counted) return;
-    clearTimeout(timer);
-    timer=setTimeout(()=>{
-      let views=Number(localStorage.getItem(viewKey)||0);
-      views++;
-      localStorage.setItem(viewKey,String(views));
-      localStorage.setItem(viewedKey,"true");
-      viewCount.textContent=formatNumber(views);
-      counted=true;
-    },3000);
-  });
-
-  ["pause","ended"].forEach(eventName=>{
-    player.addEventListener(eventName,()=>clearTimeout(timer));
-  });
-}
-
-/* =====================================
-   LIKE SYSTEM
-===================================== */
-
-async function getLikeState(){
-  if(!videoMeta || !videoMeta.id) return {count:0,likedByMe:false};
-  try{
-    const response=await dbFetch("likes?video_id=eq."+videoMeta.id+"&select=user_id");
-    if(!response.ok) return {count:0,likedByMe:false};
-    const rows=await response.json();
-    const user=getLoggedUser();
-    return {
-      count:rows.length,
-      likedByMe:!!(user && rows.some(row=>row.user_id===user.id))
-    };
-  }catch(e){
-    return {count:0,likedByMe:false};
-  }
-}
-
-async function toggleLike(){
-  if(!videoMeta || !videoMeta.id) return;
-  const user=getLoggedUser();
-  if(!user){loginPrompt("like videos");return}
-
-  const state=await getLikeState();
-  try{
-    let response;
-    if(state.likedByMe){
-      response=await dbFetch(
-        "likes?video_id=eq."+videoMeta.id+"&user_id=eq."+user.id,
-        {method:"DELETE"}
-      );
-    }else{
-      response=await dbFetch("likes",{
-        method:"POST",
-        headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
-        body:JSON.stringify({video_id:videoMeta.id,user_id:user.id})
-      });
-    }
-    if(!response.ok){
-      alert("Like update failed: "+await response.text());
-      return;
-    }
-    updateLike();
-  }catch(e){alert("Network error while updating like.")}
-}
-
 async function updateLike(){
-  const state=await getLikeState();
-  likeButton.textContent=(state.likedByMe?"♥":"♡")+" Like "+formatNumber(state.count);
-  likeButton.classList.toggle("liked",state.likedByMe);
+ const rows=await getLikes(),mine=user();
+ let liked=!!mine&&rows.some(x=>x.user_id===mine.id);
+ let b=document.getElementById("likeButton");
+ b.textContent=(liked?"♥":"♡")+" Like "+fmt(rows.length);b.classList.toggle("liked",liked);
 }
-
-/* =====================================
-   SUBSCRIBE SYSTEM
-===================================== */
-
-async function getSubscribeState(){
-  const user=getLoggedUser();
-  if(!videoMeta || !videoMeta.owner_id || !user) return false;
-  try{
-    const response=await dbFetch(
-      "subscriptions?channel_id=eq."+videoMeta.owner_id+
-      "&subscriber_id=eq."+user.id+"&select=subscriber_id"
-    );
-    if(!response.ok) return false;
-    return (await response.json()).length>0;
-  }catch(e){return false}
+async function toggleLike(){
+ let u=user();if(!u){loginPrompt("like videos");return}
+ let rows=await getLikes(),liked=rows.some(x=>x.user_id===u.id);
+ let r=await db("likes?video_id=eq."+videoMeta.id+"&user_id=eq."+u.id,liked?{method:"DELETE"}:{method:"POST",headers:{"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({video_id:videoMeta.id,user_id:u.id})});
+ if(!r.ok){alert(await r.text());return}updateLike();
 }
-
-async function toggleSubscribe(){
-  if(!videoMeta || !videoMeta.owner_id) return;
-  const user=getLoggedUser();
-  if(!user){loginPrompt("subscribe");return}
-  if(user.id===videoMeta.owner_id) return;
-
-  try{
-    let response;
-    if(isSubscribedToChannel){
-      response=await dbFetch(
-        "subscriptions?channel_id=eq."+videoMeta.owner_id+
-        "&subscriber_id=eq."+user.id,
-        {method:"DELETE"}
-      );
-    }else{
-      response=await dbFetch("subscriptions",{
-        method:"POST",
-        headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
-        body:JSON.stringify({channel_id:videoMeta.owner_id,subscriber_id:user.id})
-      });
-    }
-    if(!response.ok){
-      alert("Subscribe update failed: "+await response.text());
-      return;
-    }
-    await updateSubscribe();
-  }catch(e){alert("Network error while subscribing.")}
-}
-
 async function updateSubscribe(){
-  isSubscribedToChannel=await getSubscribeState();
-  const subscribed=isSubscribedToChannel;
-  subscribeButton.textContent=subscribed?"Subscribed":"Subscribe";
-  channelSubscribe.textContent=subscribed?"Subscribed":"Subscribe";
-  subscribeButton.classList.toggle("subscribed",subscribed);
-  if(subscribed){
-    channelSubscribe.style.background="#292929";
-    channelSubscribe.style.color="white";
-    channelSubscribe.style.border="1px solid #555";
-  }else{
-    channelSubscribe.style.background="white";
-    channelSubscribe.style.color="#111";
-    channelSubscribe.style.border="0";
-  }
+ let u=user();if(!u||!videoMeta?.owner_id)return;
+ let r=await db("subscriptions?channel_id=eq."+videoMeta.owner_id+"&subscriber_id=eq."+u.id+"&select=subscriber_id");
+ isSubscribedToChannel=r.ok&&(await r.json()).length>0;
+ let text=isSubscribedToChannel?"Subscribed":"Subscribe";
+ document.getElementById("subscribeButton").textContent=text;
+ document.getElementById("channelSubscribe").textContent=text;
+ document.getElementById("subscribeButton").classList.toggle("subscribed",isSubscribedToChannel);
+}
+async function toggleSubscribe(){
+ let u=user();if(!u){loginPrompt("subscribe");return}
+ if(u.id===videoMeta.owner_id)return;
+ let path="subscriptions?channel_id=eq."+videoMeta.owner_id+"&subscriber_id=eq."+u.id;
+ let r=await db(path,isSubscribedToChannel?{method:"DELETE"}:{method:"POST",headers:{"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({channel_id:videoMeta.owner_id,subscriber_id:u.id})});
+ if(!r.ok){alert(await r.text());return}updateSubscribe();
 }
 
-/* =====================================
-   CREATOR UPI SUPPORT
-===================================== */
-
-async function loadCreatorPaymentInfo(isOwnVideo){
-  const panel=document.getElementById("supportPanel");
-  panel.style.display="none";
-
-  if(isOwnVideo || !videoMeta || !videoMeta.owner_id) return;
-
-  try{
-    const response=await dbFetch("rpc/get_creator_payment_info",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({p_creator_id:videoMeta.owner_id})
-    });
-
-    if(!response.ok){
-      console.warn("Creator payment info unavailable:",await response.text());
-      return;
-    }
-
-    const rows=await response.json();
-    creatorPaymentInfo=Array.isArray(rows)?rows[0]:rows;
-
-    if(creatorPaymentInfo && creatorPaymentInfo.upi_id){
-      panel.style.display="block";
-    }
-  }catch(error){
-    console.error("Creator UPI:",error);
-  }
+/* CREATOR UPI */
+async function loadCreatorUPI(){
+ if(!videoMeta?.owner_id||user()?.id===videoMeta.owner_id)return;
+ try{
+ let r=await db("rpc/get_creator_payment_info",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({p_creator_id:videoMeta.owner_id})});
+ if(!r.ok)return;
+ let data=await r.json();creatorPaymentInfo=Array.isArray(data)?data[0]:data;
+ if(creatorPaymentInfo?.upi_id)document.getElementById("supportPanel").style.display="block";
+ }catch(e){console.log(e)}
 }
-
-function selectSupportAmount(amount,button){
-  supportAmount=amount;
-  document.getElementById("customSupportAmount").value="";
-  document.querySelectorAll(".amountButton").forEach(b=>b.classList.remove("selected"));
-  if(button) button.classList.add("selected");
-}
-
+function selectSupportAmount(n,b){supportAmount=n;document.getElementById("customSupportAmount").value="";document.querySelectorAll(".amountButton").forEach(x=>x.classList.remove("selected"));b.classList.add("selected")}
 function supportCreator(){
-  if(!creatorPaymentInfo || !creatorPaymentInfo.upi_id){
-    alert("Creator has not added a UPI ID.");
-    return;
-  }
-
-  const custom=document.getElementById("customSupportAmount").value.trim();
-  const amount=custom ? Number(custom) : supportAmount;
-
-  if(!Number.isFinite(amount) || amount<=0 || amount>100000){
-    alert("Please enter a valid amount between ₹1 and ₹1,00,000.");
-    return;
-  }
-
-  const upi=String(creatorPaymentInfo.upi_id).trim();
-  const name=creatorPaymentInfo.display_name || "MiniTube Creator";
-
-  const uri="upi://pay?pa="+encodeURIComponent(upi)+
-    "&pn="+encodeURIComponent(name)+
-    "&am="+encodeURIComponent(amount.toFixed(2))+
-    "&cu=INR&tn="+encodeURIComponent("MiniTube creator support");
-
-  window.location.href=uri;
-
-  setTimeout(()=>{
-    alert("Your UPI app should open. Complete the payment there. MiniTube cannot verify the payment automatically.");
-  },700);
+ if(!creatorPaymentInfo?.upi_id)return alert("Creator has not added UPI ID.");
+ let custom=document.getElementById("customSupportAmount").value;
+ let amount=custom?Number(custom):supportAmount;
+ if(!Number.isFinite(amount)||amount<1||amount>100000)return alert("Enter valid amount.");
+ let uri="upi://pay?pa="+encodeURIComponent(creatorPaymentInfo.upi_id)+"&pn="+encodeURIComponent(creatorPaymentInfo.display_name||"MiniTube Creator")+"&am="+amount.toFixed(2)+"&cu=INR&tn=MiniTube%20creator%20support";
+ location.href=uri;
 }
 
-/* =====================================
-   VIDEO RATINGS AND REVIEWS
-===================================== */
-
-function chooseRating(value){
-  selectedRating=value;
-  document.querySelectorAll("#starPicker button").forEach(button=>{
-    button.classList.toggle("active",Number(button.dataset.star)<=value);
-  });
-}
-
-function resetRatingForm(){
-  selectedRating=0;
-  chooseRating(0);
-  document.getElementById("reviewText").value="";
-  document.getElementById("reviewCategory").value="";
-  document.getElementById("reviewFormTitle").textContent="Rate this video";
-  document.getElementById("submitRatingButton").textContent="Submit Rating";
-}
-
+/* RATINGS */
+function chooseRating(n){selectedRating=n;document.querySelectorAll("#starPicker button").forEach(b=>b.classList.toggle("active",Number(b.dataset.star)<=n))}
+function resetRatingForm(){selectedRating=0;chooseRating(0);document.getElementById("reviewText").value="";document.getElementById("reviewCategory").value=""}
 async function loadRatings(){
-  if(!videoMeta || !videoMeta.id){
-    document.getElementById("reviewList").innerHTML='<div class="emptyState">Ratings are unavailable for this video.</div>';
-    return;
-  }
-
-  try{
-    const response=await dbFetch(
-      "video_ratings?video_id=eq."+videoMeta.id+
-      "&select=id,user_id,rating,category,review,created_at,updated_at&order=created_at.desc"
-    );
-
-    if(!response.ok){
-      document.getElementById("reviewList").innerHTML=
-        '<div class="emptyState">Could not load ratings. Check Supabase permissions.</div>';
-      return;
-    }
-
-    ratingsCache=await response.json();
-
-    const ids=[...new Set(ratingsCache.map(r=>r.user_id))];
-    let profiles={};
-
-    if(ids.length){
-      const profileResponse=await dbFetch(
-        "profiles?id=in.("+ids.join(",")+")&select=id,display_name"
-      );
-      if(profileResponse.ok){
-        const profileRows=await profileResponse.json();
-        profileRows.forEach(p=>profiles[p.id]=p.display_name);
-      }
-    }
-
-    ratingsCache.forEach(r=>{
-      r.reviewer_name=profiles[r.user_id] || "MiniTube user";
-    });
-
-    const ratingIds=ratingsCache.map(r=>r.id);
-    repliesCache=[];
-
-    if(ratingIds.length){
-      const replyResponse=await dbFetch(
-        "video_rating_replies?rating_id=in.("+ratingIds.join(",")+")"+
-        "&select=id,rating_id,creator_id,reply,created_at,updated_at"
-      );
-      if(replyResponse.ok) repliesCache=await replyResponse.json();
-    }
-
-    renderRatings();
-    loadMyRating();
-  }catch(error){
-    console.error("Ratings:",error);
-    document.getElementById("reviewList").innerHTML=
-      '<div class="emptyState">Unable to load reviews right now.</div>';
-  }
+ if(!videoMeta?.id)return;
+ let r=await db("video_ratings?video_id=eq."+videoMeta.id+"&select=id,user_id,rating,category,review,created_at,updated_at&order=created_at.desc");
+ if(!r.ok){document.getElementById("reviewList").textContent="Could not load ratings.";return}
+ ratingsCache=await r.json();
+ let ids=[...new Set(ratingsCache.map(x=>x.user_id))],profiles={};
+ if(ids.length){let p=await db("profiles?id=in.("+ids.join(",")+")&select=id,display_name");if(p.ok)(await p.json()).forEach(x=>profiles[x.id]=x.display_name)}
+ ratingsCache.forEach(x=>x.name=profiles[x.user_id]||"MiniTube user");
+ let ids2=ratingsCache.map(x=>x.id);repliesCache=[];
+ if(ids2.length){let q=await db("video_rating_replies?rating_id=in.("+ids2.join(",")+")&select=id,rating_id,creator_id,reply,created_at,updated_at");if(q.ok)repliesCache=await q.json()}
+ renderRatings();
+ let mine=ratingsCache.find(x=>x.user_id===user()?.id);
+ if(mine){chooseRating(Number(mine.rating));document.getElementById("reviewText").value=mine.review||"";document.getElementById("reviewCategory").value=mine.category||"";document.getElementById("reviewFormTitle").textContent="Update your rating";document.getElementById("submitRatingButton").textContent="Update Rating"}
 }
-
 function renderRatings(){
-  const total=ratingsCache.length;
-  const sum=ratingsCache.reduce((n,r)=>n+Number(r.rating),0);
-  const average=total ? sum/total : 0;
-
-  document.getElementById("averageRating").textContent=average.toFixed(1);
-  document.getElementById("averageStars").textContent=starString(Math.round(average));
-  document.getElementById("ratingTotal").textContent=total+" rating"+(total===1?"":"s");
-
-  const bars=document.getElementById("ratingBars");
-  bars.innerHTML="";
-
-  for(let n=5;n>=1;n--){
-    const count=ratingsCache.filter(r=>Number(r.rating)===n).length;
-    const percent=total ? (count/total)*100 : 0;
-    const row=document.createElement("div");
-    row.className="ratingBarRow";
-    row.innerHTML='<span>'+n+' ★</span><div class="ratingBarTrack"><div class="ratingBarFill" style="width:'+percent+'%"></div></div><span>'+count+'</span>';
-    bars.appendChild(row);
-  }
-
-  const list=document.getElementById("reviewList");
-  list.innerHTML="";
-
-  if(!total){
-    list.innerHTML='<div class="emptyState">No reviews yet. Be the first to rate this video!</div>';
-    return;
-  }
-
-  const user=getLoggedUser();
-  const isCreator=!!(user && videoMeta && user.id===videoMeta.owner_id);
-
-  ratingsCache.forEach(rating=>{
-    const reply=repliesCache.find(r=>r.rating_id===rating.id);
-    const card=document.createElement("div");
-    card.className="reviewCard";
-
-    const name=rating.reviewer_name || "MiniTube user";
-    const initial=escapeHTML(name.trim().charAt(0).toUpperCase()||"M");
-    const date=rating.updated_at || rating.created_at;
-    const dateText=date ? new Date(date).toLocaleDateString() : "";
-
-    let replyHTML="";
-    if(reply){
-      replyHTML='<div class="creatorReply"><strong>Creator reply</strong><div class="reviewText">'+
-        escapeHTML(reply.reply)+'</div></div>';
-    }
-
-    const own=user && user.id===rating.user_id;
-
-    card.innerHTML=
-      '<div class="reviewTop">'+
-        '<div class="reviewAvatar">'+initial+'</div>'+
-        '<div><div class="reviewAuthor">'+escapeHTML(name)+'</div>'+
-        '<div class="reviewDate">'+escapeHTML(dateText)+'</div></div>'+
-      '</div>'+
-      '<div class="stars" style="margin-top:10px">'+starString(Number(rating.rating))+'</div>'+
-      (rating.category?'<div class="reviewCategory">'+escapeHTML(rating.category)+'</div>':'')+
-      (rating.review?'<div class="reviewText">'+escapeHTML(rating.review)+'</div>':'')+
-      replyHTML+
-      '<div class="reviewActions">'+
-      (own?'<button class="smallButton editReviewButton">Edit my review</button>':'')+
-      (isCreator?'<button class="smallButton replyReviewButton">'+(reply?"Edit creator reply":"Reply as creator")+'</button>':'')+
-      '</div>';
-
-    if(own){
-      card.querySelector(".editReviewButton").onclick=()=>editMyRating(rating);
-    }
-    if(isCreator){
-      card.querySelector(".replyReviewButton").onclick=()=>replyToReview(rating,reply);
-    }
-
-    list.appendChild(card);
-  });
+ let total=ratingsCache.length,avg=total?ratingsCache.reduce((a,x)=>a+Number(x.rating),0)/total:0;
+ document.getElementById("averageRating").textContent=avg.toFixed(1);
+ document.getElementById("averageStars").textContent=stars(Math.round(avg));
+ document.getElementById("ratingTotal").textContent=total+" ratings";
+ let bars=document.getElementById("ratingBars");bars.innerHTML="";
+ for(let n=5;n>=1;n--){let count=ratingsCache.filter(x=>Number(x.rating)===n).length;let row=document.createElement("div");row.className="ratingBarRow";row.innerHTML=`${n} ★ <div class="ratingBarTrack"><div class="ratingBarFill" style="width:${total?count/total*100:0}%"></div></div>${count}`;bars.append(row)}
+ let list=document.getElementById("reviewList");list.innerHTML="";
+ if(!total){list.innerHTML='<div class="emptyState">No reviews yet.</div>';return}
+ ratingsCache.forEach(x=>{
+ let reply=repliesCache.find(y=>y.rating_id===x.id),own=user()?.id===x.user_id,creator=user()?.id===videoMeta.owner_id;
+ let card=document.createElement("div");card.className="reviewCard";
+ card.innerHTML=`<div class="reviewTop"><div class="reviewAvatar">${esc(x.name.charAt(0))}</div><div><b>${esc(x.name)}</b><div class="reviewDate">${new Date(x.updated_at||x.created_at).toLocaleDateString()}</div></div></div><div class="stars">${stars(Number(x.rating))}</div>${x.category?`<div class="reviewCategory">${esc(x.category)}</div>`:""}${x.review?`<div class="reviewText">${esc(x.review)}</div>`:""}${reply?`<div class="creatorReply"><b>Creator reply</b><div class="reviewText">${esc(reply.reply)}</div></div>`:""}${own?'<button class="smallButton">Edit my review</button>':""}${creator?'<button class="smallButton replyButton">Reply as creator</button>':""}`;
+ if(own)card.querySelector(".smallButton").onclick=()=>{chooseRating(Number(x.rating));document.getElementById("reviewText").value=x.review||"";document.getElementById("reviewCategory").value=x.category||""};
+ if(creator){let btn=card.querySelector(".replyButton");btn.onclick=()=>replyToRating(x,reply)}
+ list.append(card);
+ });
 }
-
-function loadMyRating(){
-  const user=getLoggedUser();
-  if(!user) return;
-
-  const mine=ratingsCache.find(r=>r.user_id===user.id);
-  if(!mine) return;
-
-  selectedRating=Number(mine.rating);
-  chooseRating(selectedRating);
-  document.getElementById("reviewCategory").value=mine.category || "";
-  document.getElementById("reviewText").value=mine.review || "";
-  document.getElementById("reviewFormTitle").textContent="Update your rating";
-  document.getElementById("submitRatingButton").textContent="Update Rating";
-}
-
-function editMyRating(rating){
-  selectedRating=Number(rating.rating);
-  chooseRating(selectedRating);
-  document.getElementById("reviewCategory").value=rating.category || "";
-  document.getElementById("reviewText").value=rating.review || "";
-  document.getElementById("reviewFormTitle").textContent="Update your rating";
-  document.getElementById("submitRatingButton").textContent="Update Rating";
-  document.getElementById("ratingPanel").scrollIntoView({behavior:"smooth"});
-}
-
 async function submitRating(){
-  const user=getLoggedUser();
-  if(!user){loginPrompt("rate this video");return}
-  if(!videoMeta || !videoMeta.id){alert("Video information is not available.");return}
-  if(user.id===videoMeta.owner_id){alert("You cannot rate your own video.");return}
-  if(selectedRating<1 || selectedRating>5){alert("Please select 1 to 5 stars.");return}
-
-  const button=document.getElementById("submitRatingButton");
-  button.disabled=true;
-  button.textContent="Saving...";
-
-  const payload={
-    video_id:videoMeta.id,
-    user_id:user.id,
-    rating:selectedRating,
-    category:document.getElementById("reviewCategory").value || null,
-    review:document.getElementById("reviewText").value.trim() || null,
-    updated_at:new Date().toISOString()
-  };
-
-  try{
-    const response=await dbFetch(
-      "video_ratings?on_conflict=video_id,user_id",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Prefer":"resolution=merge-duplicates,return=minimal"
-        },
-        body:JSON.stringify(payload)
-      }
-    );
-
-    if(!response.ok){
-      alert("Could not save rating: "+await response.text());
-      return;
-    }
-
-    alert("Your rating has been saved!");
-    await loadRatings();
-  }catch(error){
-    alert("Network error while saving rating.");
-  }finally{
-    button.disabled=false;
-    button.textContent="Submit Rating";
-  }
+ let u=user();if(!u){loginPrompt("rate this video");return}
+ if(u.id===videoMeta.owner_id)return alert("You cannot rate your own video.");
+ if(!selectedRating)return alert("Select a star rating.");
+ let payload={video_id:videoMeta.id,user_id:u.id,rating:selectedRating,category:document.getElementById("reviewCategory").value||null,review:document.getElementById("reviewText").value.trim()||null,updated_at:new Date().toISOString()};
+ let r=await db("video_ratings?on_conflict=video_id,user_id",{method:"POST",headers:{"Content-Type":"application/json","Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify(payload)});
+ if(!r.ok)return alert(await r.text());alert("Rating saved!");loadRatings();
+}
+async function replyToRating(x,old){
+ let value=prompt("Creator reply:",old?.reply||"");if(value===null||!value.trim())return;
+ let r=await db("video_rating_replies?on_conflict=rating_id",{method:"POST",headers:{"Content-Type":"application/json","Prefer":"resolution=merge-duplicates,return=minimal"},body:JSON.stringify({rating_id:x.id,creator_id:user().id,reply:value.trim(),updated_at:new Date().toISOString()})});
+ if(!r.ok)return alert(await r.text());loadRatings();
 }
 
-async function replyToReview(rating,existingReply){
-  const user=getLoggedUser();
-  if(!user || !videoMeta || user.id!==videoMeta.owner_id){
-    alert("Only this video's creator can reply.");
-    return;
-  }
-
-  const current=existingReply ? existingReply.reply : "";
-  const reply=prompt("Write your reply to this review:",current);
-  if(reply===null) return;
-  if(!reply.trim()){alert("Reply cannot be empty.");return}
-
-  try{
-    const response=await dbFetch(
-      "video_rating_replies?on_conflict=rating_id",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Prefer":"resolution=merge-duplicates,return=minimal"
-        },
-        body:JSON.stringify({
-          rating_id:rating.id,
-          creator_id:user.id,
-          reply:reply.trim(),
-          updated_at:new Date().toISOString()
-        })
-      }
-    );
-
-    if(!response.ok){
-      alert("Could not save creator reply: "+await response.text());
-      return;
-    }
-
-    alert("Creator reply saved!");
-    await loadRatings();
-  }catch(error){
-    alert("Network error while saving reply.");
-  }
-}
-
-function starString(number){
-  return "★".repeat(Math.max(0,Math.min(5,number)))+
-    "☆".repeat(5-Math.max(0,Math.min(5,number)));
-}
-
-/* =====================================
-   COMMENTS
-===================================== */
-
+/* COMMENTS */
 async function loadComments(){
-  if(!videoMeta || !videoMeta.id){
-    renderComments([]);
-    return;
-  }
-
-  try{
-    const response=await dbFetch(
-      "comments?video_id=eq."+videoMeta.id+
-      "&select=id,text,created_at,user_id,profiles(display_name)&order=created_at.desc"
-    );
-
-    if(!response.ok){renderComments([]);return}
-    commentsCache=await response.json();
-    renderComments(commentsCache);
-  }catch(error){
-    console.error(error);
-    renderComments([]);
-  }
+ let r=await db("comments?video_id=eq."+videoMeta.id+"&select=id,text,created_at,user_id,profiles(display_name)&order=created_at.desc");
+ if(!r.ok)return;
+ commentsCache=await r.json();renderComments();
 }
-
+function renderComments(){
+ let box=document.getElementById("commentList");box.innerHTML="";
+ document.getElementById("commentCount").textContent=commentsCache.length;
+ if(!commentsCache.length){box.innerHTML='<div class="noComments">No comments yet. Be the first!</div>';return}
+ commentsCache.forEach(x=>{
+ let name=x.profiles?.display_name||"MiniTube user",el=document.createElement("div");el.className="comment";
+ el.innerHTML=`<div class="commentTop"><div class="commentAvatar">${esc(name.charAt(0))}</div><div><b>${esc(name)}</b><div class="commentDate">${new Date(x.created_at).toLocaleString()}</div></div></div><div class="commentText">${esc(x.text)}</div>${user()?.id===x.user_id?'<button class="deleteComment">Delete</button>':""}`;
+ if(user()?.id===x.user_id)el.querySelector(".deleteComment").onclick=()=>deleteComment(x.id);
+ box.append(el);
+ });
+}
 async function postComment(){
-  const text=commentInput.value.trim();
-  if(!text){alert("Please write a comment first.");commentInput.focus();return}
+ let u=user();if(!u){loginPrompt("comment");return}
+ let text=document.getElementById("commentInput").value.trim();if(!text)return alert("Write a comment first.");
+ let r=await db("comments",{method:"POST",headers:{"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({video_id:videoMeta.id,user_id:u.id,text})});
+ if(!r.ok)return alert(await r.text());document.getElementById("commentInput").value="";loadComments();
+}
+async function deleteComment(id){if(!confirm("Delete comment?"))return;let r=await db("comments?id=eq."+id,{method:"DELETE"});if(!r.ok)return alert(await r.text());loadComments()}
 
-  const user=getLoggedUser();
-  if(!user){loginPrompt("comment");return}
-  if(!videoMeta || !videoMeta.id){alert("Comments aren't available for this video.");return}
-
-  try{
-    const response=await dbFetch("comments",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
-      body:JSON.stringify({video_id:videoMeta.id,user_id:user.id,text:text})
-    });
-
-    if(!response.ok){alert("Could not post comment: "+await response.text());return}
-    commentInput.value="";
-    loadComments();
-  }catch(error){alert("Could not post comment: network error.")}
+/* SUGGESTED VIDEOS */
+async function loadSuggestions(){
+ let box=document.getElementById("suggestedVideos");
+ try{
+ let r=await db("videos?select=id,title,r2_key,owner_id,profiles(display_name)&order=created_at.desc&limit=30");
+ if(!r.ok)throw Error();
+ let rows=(await r.json()).filter(x=>x.r2_key!==videoName);
+ box.innerHTML="";
+ if(!rows.length){box.innerHTML='<div class="emptyState">No suggested videos yet.</div>';return}
+ rows.forEach(v=>{
+ let card=document.createElement("div");card.className="suggested-card";
+ let img=document.createElement("img");img.className="suggested-thumb";img.alt="Video thumbnail";img.src="https://placehold.co/320x180/202020/ffffff?text=MiniTube";
+ let info=document.createElement("div");info.className="suggested-info";
+ let t=document.createElement("div");t.className="suggested-video-title";t.textContent=v.title||v.r2_key;
+ let m=document.createElement("div");m.className="suggested-video-meta";m.textContent=v.profiles?.display_name||"MiniTube Creator";
+ info.append(t,m);card.append(img,info);
+ card.onclick=()=>location.href="watch.html?video="+encodeURIComponent(v.r2_key);
+ box.append(card);
+ });
+ }catch(e){box.innerHTML='<div class="emptyState">Could not load suggested videos.</div>'}
 }
 
-function renderComments(comments){
-  const container=document.getElementById("commentList");
-  document.getElementById("commentCount").textContent=formatNumber(comments.length);
-
-  if(!comments.length){
-    container.innerHTML='<div class="noComments">No comments yet. Be the first to comment! 💬</div>';
-    return;
-  }
-
-  container.innerHTML="";
-  const currentUser=getLoggedUser();
-
-  comments.forEach(comment=>{
-    const element=document.createElement("div");
-    element.className="comment";
-
-    const authorName=(comment.profiles && comment.profiles.display_name)||"MiniTube user";
-    const initial=authorName.trim().charAt(0).toUpperCase()||"M";
-    const dateLabel=comment.created_at?new Date(comment.created_at).toLocaleString():"";
-    const canDelete=currentUser && currentUser.id===comment.user_id;
-
-    element.innerHTML=
-      '<div class="commentTop"><div class="commentAvatar">'+escapeHTML(initial)+'</div>'+
-      '<div><div class="commentAuthor">'+escapeHTML(authorName)+'</div>'+
-      '<div class="commentDate">'+escapeHTML(dateLabel)+'</div></div></div>'+
-      '<div class="commentText">'+escapeHTML(comment.text)+'</div>'+
-      (canDelete?'<div style="margin-top:10px"><button class="deleteComment">Delete</button></div>':"");
-
-    if(canDelete){
-      element.querySelector(".deleteComment").onclick=()=>deleteComment(comment.id);
-    }
-    container.appendChild(element);
-  });
+/* ADVERTISEMENT INTEGRATION
+   Requires Worker GET /api/ads to return:
+   [{id,ad_video_url,placement,ad_duration,status}]
+*/
+async function loadAds(){
+ try{
+ let r=await fetch(API_BASE+"/api/ads");
+ if(!r.ok)return;
+ let ads=await r.json();
+ if(!Array.isArray(ads))return;
+ let now=new Date();
+ ads=ads.filter(a=>a.status==="active"&&a.ad_video_url);
+ preAdCampaign=ads.find(a=>a.placement==="preroll"||a.placement==="both")||null;
+ midAdCampaign=ads.find(a=>a.placement==="midroll"||a.placement==="both")||null;
+ if(preAdCampaign){
+  player.pause();
+  document.getElementById("preAdBox").style.display="block";
+  let ad=document.getElementById("preAdPlayer");ad.src=preAdCampaign.ad_video_url;
+  ad.play().catch(()=>{});
+  ad.onended=()=>finishAd("pre");
+ }else{player.play().catch(()=>{})}
+ }catch(e){console.log("Ads unavailable",e)}
 }
-
-async function deleteComment(id){
-  if(!confirm("Delete this comment?")) return;
-  try{
-    const response=await dbFetch("comments?id=eq."+id,{method:"DELETE"});
-    if(!response.ok){alert("Could not delete comment: "+await response.text());return}
-    loadComments();
-  }catch(error){alert("Network error while deleting comment.")}
+function finishAd(type){
+ if(type==="pre"){
+  preAdDone=true;
+  document.getElementById("preAdBox").style.display="none";
+  document.getElementById("preAdPlayer").pause();
+  player.play().catch(()=>{});
+ }else{
+  midAdDone=true;
+  document.getElementById("midAdBox").style.display="none";
+  document.getElementById("midAdPlayer").pause();
+  player.currentTime=resumeAfterAd;
+  player.play().catch(()=>{});
+ }
 }
+player.addEventListener("timeupdate",()=>{
+ if(!preAdDone&&preAdCampaign)return;
+ if(!midAdDone&&midAdCampaign&&player.currentTime>=midAdTime&&player.duration>60){
+  midAdDone=true;resumeAfterAd=player.currentTime;
+  player.pause();
+  document.getElementById("midAdBox").style.display="block";
+  let ad=document.getElementById("midAdPlayer");ad.src=midAdCampaign.ad_video_url;
+  ad.play().catch(()=>{});
+  ad.onended=()=>finishAd("mid");
+ }
+});
 
-/* =====================================
-   REPORT VIDEO
-===================================== */
-
-function openReportModal(){
-  if(!getLoggedUser()){loginPrompt("report a video");return}
-  document.querySelectorAll('input[name="reportReason"]').forEach(input=>input.checked=false);
-  document.getElementById("reportDetails").value="";
-  document.getElementById("submitReportButton").disabled=false;
-  document.getElementById("submitReportButton").textContent="Submit report";
-  document.getElementById("reportModalOverlay").classList.add("show");
-}
-
-function closeReportModal(){
-  document.getElementById("reportModalOverlay").classList.remove("show");
-}
-
-function closeReportModalOnOverlay(event){
-  if(event.target.id==="reportModalOverlay") closeReportModal();
-}
-
-async function submitReport(){
-  if(!videoMeta || !videoMeta.id){alert("This video can't be reported right now.");return}
-
-  const selected=document.querySelector('input[name="reportReason"]:checked');
-  if(!selected){alert("Please choose a reason first.");return}
-
-  const user=getLoggedUser();
-  if(!user){closeReportModal();loginPrompt("report a video");return}
-
-  const button=document.getElementById("submitReportButton");
-  button.disabled=true;
-  button.textContent="Submitting...";
-
-  try{
-    const response=await dbFetch("reports",{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Prefer":"return=minimal"},
-      body:JSON.stringify({
-        video_id:videoMeta.id,
-        reporter_id:user.id,
-        reason:selected.value,
-        details:document.getElementById("reportDetails").value.trim()||null
-      })
-    });
-
-    if(!response.ok){
-      alert("Could not submit report: "+await response.text());
-      return;
-    }
-
-    closeReportModal();
-    alert("Thanks — this video has been reported. Our team will review it.");
-  }catch(error){
-    alert("Could not submit report: network error.");
-  }finally{
-    button.disabled=false;
-    button.textContent="Submit report";
-  }
-}
-
-/* =====================================
-   PLAYLISTS
-===================================== */
-
+/* PLAYLISTS */
+const PLAYLIST_KEY="minitube_playlists";
 function getPlaylists(){
-  try{
-    const saved=localStorage.getItem(PLAYLIST_KEY);
-    const list=saved?JSON.parse(saved):[];
-
-    if(!list.some(p=>p.id==="watch-later")){
-      list.unshift({
-        id:"watch-later",name:"Watch Later",builtIn:true,
-        createdAt:Date.now(),videoNames:[]
-      });
-    }
-    return list;
-  }catch(error){
-    return [{id:"watch-later",name:"Watch Later",builtIn:true,createdAt:Date.now(),videoNames:[]}];
-  }
+ try{return JSON.parse(localStorage.getItem(PLAYLIST_KEY)||"[]")}catch(e){return []}
+}
+function openSaveModal(){renderPlaylists();document.getElementById("saveModal").classList.add("show")}
+function closeSaveModal(){document.getElementById("saveModal").classList.remove("show")}
+function renderPlaylists(){
+ let box=document.getElementById("playlistCheckList");box.innerHTML="";
+ let lists=getPlaylists();
+ if(!lists.some(x=>x.id==="watch-later"))lists.unshift({id:"watch-later",name:"Watch Later",videoNames:[]});
+ lists.forEach(p=>{
+ let label=document.createElement("label"),check=document.createElement("input");check.type="checkbox";check.checked=(p.videoNames||[]).includes(videoName);
+ label.append(check,document.createTextNode(" "+p.name));box.append(label);
+ check.onchange=()=>{p.videoNames=p.videoNames||[];if(check.checked&&!p.videoNames.includes(videoName))p.videoNames.push(videoName);else p.videoNames=p.videoNames.filter(x=>x!==videoName);localStorage.setItem(PLAYLIST_KEY,JSON.stringify(lists))};
+ });
+}
+function createPlaylist(){
+ let name=document.getElementById("newPlaylistName").value.trim();if(!name)return alert("Enter playlist name.");
+ let lists=getPlaylists();lists.push({id:"pl_"+Date.now(),name,videoNames:[videoName]});localStorage.setItem(PLAYLIST_KEY,JSON.stringify(lists));document.getElementById("newPlaylistName").value="";renderPlaylists();
 }
 
-function savePlaylists(list){
-  localStorage.setItem(PLAYLIST_KEY,JSON.stringify(list));
+/* REPORT */
+function openReportModal(){if(!user()){loginPrompt("report video");return}document.getElementById("reportModal").classList.add("show")}
+function closeReportModal(){document.getElementById("reportModal").classList.remove("show")}
+async function submitReport(){
+ let reason=document.querySelector('input[name="reportReason"]:checked');if(!reason)return alert("Choose a reason.");
+ let u=user();let r=await db("reports",{method:"POST",headers:{"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({video_id:videoMeta.id,reporter_id:u.id,reason:reason.value,details:document.getElementById("reportDetails").value.trim()||null})});
+ if(!r.ok)return alert(await r.text());closeReportModal();alert("Report submitted. Thank you.");
 }
 
-function openSaveModal(){
-  renderPlaylistCheckList();
-  document.getElementById("saveModalOverlay").classList.add("show");
-}
-
-function closeSaveModal(){
-  document.getElementById("saveModalOverlay").classList.remove("show");
-}
-
-function closeSaveModalOnOverlay(event){
-  if(event.target.id==="saveModalOverlay") closeSaveModal();
-}
-
-function renderPlaylistCheckList(){
-  const container=document.getElementById("playlistCheckList");
-  const playlists=getPlaylists();
-  container.innerHTML="";
-
-  playlists.forEach(playlist=>{
-    const row=document.createElement("label");
-    row.className="playlistCheckRow";
-    const checked=playlist.videoNames.includes(videoName);
-
-    row.innerHTML=
-      '<input type="checkbox" '+(checked?"checked":"")+'>'+
-      '<div class="playlistCheckName">'+escapeHTML(playlist.name)+'</div>'+
-      '<div class="playlistCheckCount">'+playlist.videoNames.length+'</div>';
-
-    row.querySelector("input").addEventListener("change",event=>{
-      togglePlaylistVideo(playlist.id,event.target.checked);
-    });
-    container.appendChild(row);
-  });
-}
-
-function togglePlaylistVideo(playlistId,add){
-  const playlists=getPlaylists();
-  const playlist=playlists.find(p=>p.id===playlistId);
-  if(!playlist) return;
-
-  if(add){
-    if(!playlist.videoNames.includes(videoName)) playlist.videoNames.unshift(videoName);
-  }else{
-    playlist.videoNames=playlist.videoNames.filter(name=>name!==videoName);
-  }
-
-  savePlaylists(playlists);
-  renderPlaylistCheckList();
-}
-
-function createPlaylistFromModal(){
-  const input=document.getElementById("newPlaylistName");
-  const name=input.value.trim();
-  if(!name){alert("Enter a playlist name.");return}
-
-  const playlists=getPlaylists();
-  playlists.push({
-    id:"pl_"+Date.now(),name:name,builtIn:false,
-    createdAt:Date.now(),videoNames:[videoName]
-  });
-  savePlaylists(playlists);
-  input.value="";
-  renderPlaylistCheckList();
-}
-
-/* =====================================
-   WATCH HISTORY
-===================================== */
-
-function getHistory(){
-  try{
-    const saved=localStorage.getItem(HISTORY_KEY);
-    return saved?JSON.parse(saved):[];
-  }catch(error){return []}
-}
-
+/* HISTORY, SHARE, NAVIGATION */
 function recordHistory(){
-  if(!videoName) return;
-  let history=getHistory();
-  history=history.filter(entry=>entry.name!==videoName);
-  history.unshift({name:videoName,watchedAt:Date.now()});
-  localStorage.setItem(HISTORY_KEY,JSON.stringify(history.slice(0,100)));
+ let h=[];try{h=JSON.parse(localStorage.getItem("minitube_watch_history")||"[]")}catch(e){}
+ h=h.filter(x=>x.name!==videoName);h.unshift({name:videoName,watchedAt:Date.now()});localStorage.setItem("minitube_watch_history",JSON.stringify(h.slice(0,100)));
 }
-
-/* =====================================
-   SHARE
-===================================== */
-
 function shareVideo(){
-  const url=window.location.href;
-  if(navigator.share){
-    navigator.share({title:videoMeta?.title||"MiniTube video",url:url}).catch(()=>{});
-  }else if(navigator.clipboard){
-    navigator.clipboard.writeText(url)
-      .then(()=>alert("Link copied to clipboard!"))
-      .catch(()=>prompt("Copy this link:",url));
-  }else{
-    prompt("Copy this link:",url);
-  }
+ let url=location.href;
+ if(navigator.share)navigator.share({title:videoMeta?.title||"MiniTube video",url}).catch(()=>{});
+ else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>alert("Link copied!")).catch(()=>prompt("Copy link",url));
+ else prompt("Copy link",url);
 }
+function goBack(){if(history.length>1)history.back();else goHome()}
+function goHome(){location.href="index.html"}
+function goShorts(){location.href="shorts.html"}
+function goSubscriptions(){location.href="subscriptions.html"}
+function goYou(){location.href="you.html"}
 
-/* =====================================
-   NAVIGATION
-===================================== */
-
-function goBack(){
-  if(window.history.length>1) window.history.back();
-  else window.location.href="index.html";
-}
-function goHome(){window.location.href="index.html"}
-function goShorts(){window.location.href="shorts.html"}
-function goSubscriptions(){window.location.href="subscriptions.html"}
-function goYou(){window.location.href="you.html"}
-
-/* =====================================
-   HELPERS
-===================================== */
-
-function formatNumber(num){
-  num=Number(num)||0;
-  if(num>=1000000) return (num/1000000).toFixed(1).replace(/\.0$/,"")+"M";
-  if(num>=1000) return (num/1000).toFixed(1).replace(/\.0$/,"")+"K";
-  return String(num);
-}
-
-function escapeHTML(text){
-  return String(text??"")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
+player.addEventListener("error",()=>showError("This video is unavailable"));
+init();
 </script>
 </body>
 </html>
