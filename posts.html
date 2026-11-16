@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Posts - MiniTube</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif}
+header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #292929;background:#101010;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:bold}.logo span{color:#ff3030}
+button{cursor:pointer}
+.create{background:#ff3030;border:0;border-radius:22px;padding:10px 16px;color:white;font-weight:bold}
+main{max-width:650px;margin:auto;padding:15px}
+h2{font-size:23px;margin:10px 0}
+.sub{color:#aaa;font-size:13px;margin-bottom:18px}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:5px 0 15px}
+.filters button{white-space:nowrap;border:0;border-radius:18px;background:#292929;color:white;padding:9px 14px}
+.filters button.active{background:white;color:black}
+.post{background:#1b1b1b;border:1px solid #303030;border-radius:14px;padding:15px;margin-bottom:14px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.avatar{width:40px;height:40px;border-radius:50%;background:#713be7;display:grid;place-items:center;font-weight:bold}
+.author{font-weight:bold;font-size:14px}
+.meta{font-size:12px;color:#999;margin-top:4px}
+.category{margin-left:auto;font-size:11px;color:#ff7777;background:#3b2020;padding:6px 9px;border-radius:15px}
+.content{font-size:15px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.post img{width:100%;max-height:500px;object-fit:contain;border-radius:10px;margin-top:12px;background:#090909}
+.empty,.status{text-align:center;color:#aaa;padding:35px 10px}
+.error{color:#ff7777}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><span>▶</span> MiniTube</div>
+<button class="create" onclick="location.href='upload.html'">＋ Create</button>
+</header>
+
+<main>
+<h2>Community Posts</h2>
+<div class="sub">Thoughts, photos and updates from the MiniTube community.</div>
+
+<div class="filters" id="filters"></div>
+<div id="feed"><div class="status">Loading posts...</div></div>
+</main>
+
+<script>
+const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
+const SUPABASE_ANON_KEY="PASTE_YOUR_EXISTING_PUBLIC_ANON_KEY_HERE";
+
+const CATEGORIES=[
+"All","Trending","Technology","Trading","Business","Education",
+"Entertainment","Sports","Science","Comedy","Gaming","Music",
+"News","Finance","Health"
+];
+
+let selectedCategory="All";
+let allPosts=[];
+
+const feed=document.getElementById("feed");
+const filters=document.getElementById("filters");
+
+function makeFilters(){
+  filters.innerHTML=CATEGORIES.map(category=>
+    `<button class="${category==="All"?"active":""}" data-category="${category}">${category}</button>`
+  ).join("");
+
+  filters.querySelectorAll("button").forEach(button=>{
+    button.addEventListener("click",()=>{
+      selectedCategory=button.dataset.category;
+      filters.querySelectorAll("button").forEach(b=>
+        b.classList.toggle("active",b===button)
+      );
+      renderPosts();
+    });
+  });
+}
+
+function escapeHTML(value){
+  return String(value||"").replace(/[&<>"']/g,char=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[char]);
+}
+
+function timeAgo(dateValue){
+  const seconds=Math.floor((Date.now()-new Date(dateValue).getTime())/1000);
+  if(!Number.isFinite(seconds)||seconds<0)return "Just now";
+  if(seconds<60)return "Just now";
+  if(seconds<3600)return Math.floor(seconds/60)+" min ago";
+  if(seconds<86400)return Math.floor(seconds/3600)+" hr ago";
+  if(seconds<604800)return Math.floor(seconds/86400)+" days ago";
+  return new Date(dateValue).toLocaleDateString();
+}
+
+async function loadPosts(){
+  if(SUPABASE_ANON_KEY.includes("PASTE_")){
+    feed.innerHTML='<div class="status error">Add your Supabase public anon key in posts.html.</div>';
+    return;
+  }
+
+  try{
+    const response=await fetch(
+      `${SUPABASE_URL}/rest/v1/posts?select=id,content,image_path,category,created_at&order=created_at.desc&limit=100`,
+      {
+        headers:{
+          "apikey":SUPABASE_ANON_KEY,
+          "Authorization":"Bearer "+(
+            localStorage.getItem("minitube_access_token")||SUPABASE_ANON_KEY
+          )
+        }
+      }
+    );
+
+    if(!response.ok)throw new Error(await response.text());
+
+    allPosts=await response.json();
+    renderPosts();
+
+  }catch(error){
+    feed.innerHTML='<div class="status error">Could not load posts. Please refresh and try again.<br><br>'+escapeHTML(error.message)+'</div>';
+  }
+}
+
+function renderPosts(){
+  const posts=selectedCategory==="All"
+    ?allPosts
+    :allPosts.filter(post=>post.category===selectedCategory);
+
+  if(!posts.length){
+    feed.innerHTML='<div class="empty">No posts here yet.<br><br>Be the first to share something!</div>';
+    return;
+  }
+
+  feed.innerHTML=posts.map(post=>{
+    const content=post.content
+      ?`<div class="content">${escapeHTML(post.content)}</div>`
+      :"";
+
+    const photo=post.image_path
+      ?`<img src="${escapeHTML(post.image_path)}" alt="Post photo" loading="lazy">`
+      :"";
+
+    return `
+      <article class="post">
+        <div class="top">
+          <div class="avatar">M</div>
+          <div>
+            <div class="author">MiniTube Creator</div>
+            <div class="meta">${timeAgo(post.created_at)}</div>
+          </div>
+          <div class="category">${escapeHTML(post.category)}</div>
+        </div>
+        ${content}
+        ${photo}
+      </article>
+    `;
+  }).join("");
+}
+
+makeFilters();
+loadPosts();
+</script>
+</body>
+</html>
