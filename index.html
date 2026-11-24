@@ -1,2593 +1,406 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MiniTube</title>
-
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0f0f0f">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
-
 <style>
-
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  background:#0f0f0f;
-  color:white;
-  font-family:Arial,sans-serif;
-  padding-bottom:80px;
-}
-
-/* =========================
-   HEADER
-   ========================= */
-
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#111;
-  border-bottom:1px solid #292929;
-  padding:12px 16px;
-}
-
-.top{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.logo{
-  font-size:24px;
-  font-weight:800;
-  white-space:nowrap;
-}
-
-.logo span{
-  color:#ff0033;
-}
-
-.search{
-  flex:1;
-  min-width:0;
-  background:#222;
-  border:1px solid #444;
-  border-radius:30px;
-  padding:13px 17px;
-  color:white;
-  font-size:16px;
-  outline:none;
-}
-
-.iconButton{
-  background:#222;
-  border:1px solid #444;
-  color:white;
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  font-size:19px;
-  cursor:pointer;
-  flex-shrink:0;
-  display:grid;
-  place-items:center;
-  position:relative;
-}
-
-.iconButton .dot{
-  position:absolute;
-  top:6px;
-  right:6px;
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:#ff0033;
-  display:none;
-}
-
-.iconButton .dot.show{
-  display:block;
-}
-
-.menuLinks{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-
-.menuLink{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:10px 4px;
-  color:white;
-  cursor:pointer;
-  border-radius:8px;
-  font-size:14px;
-}
-
-.menuLink:hover{
-  background:#242424;
-}
-
-.menuLinkIcon{
-  width:20px;
-  text-align:center;
-  font-size:16px;
-}
-
-.avatar{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  background:#7c4dff;
-  display:grid;
-  place-items:center;
-  font-weight:bold;
-  cursor:pointer;
-  flex-shrink:0;
-}
-
-/* LOGIN ACCOUNT */
-
-.accountArea{
-  position:relative;
-}
-
-.accountMenu{
-  display:none;
-
-  position:absolute;
-  right:0;
-  top:50px;
-
-  width:250px;
-
-  background:#181818;
-  border:1px solid #333;
-  border-radius:14px;
-
-  padding:15px;
-
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
-
-  z-index:100;
-}
-
-.accountMenu.show{
-  display:block;
-}
-
-.accountAvatar{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:#7c4dff;
-
-  display:grid;
-  place-items:center;
-
-  font-size:20px;
-  font-weight:bold;
-
-  margin-bottom:10px;
-}
-
-.accountName{
-  font-weight:bold;
-  font-size:16px;
-  word-break:break-word;
-}
-
-.accountEmail{
-  color:#999;
-  font-size:13px;
-  margin-top:5px;
-  word-break:break-word;
-}
-
-.loginStatus{
-  color:#6ee7b7;
-  font-size:13px;
-  margin-top:8px;
-}
-
-.accountDivider{
-  height:1px;
-  background:#333;
-  margin:14px 0;
-}
-
-.accountButton{
-  width:100%;
-  padding:11px;
-
-  border:0;
-  border-radius:9px;
-
-  background:#292929;
-  color:white;
-
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.accountButton:hover{
-  background:#383838;
-}
-
-.logoutButton{
-  background:#ff0033;
-}
-
-
-/* =========================
-   CATEGORIES
-   ========================= */
-
-.categories{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding-top:12px;
-}
-
-.categories button{
-  border:0;
-  border-radius:22px;
-  padding:10px 18px;
-  background:#292929;
-  color:white;
-  font-size:15px;
-  white-space:nowrap;
-  cursor:pointer;
-}
-
-.categories button.active{
-  background:white;
-  color:#111;
-}
-
-
-/* =========================
-   HERO
-   ========================= */
-
-.hero{
-  margin:24px 22px;
-  padding:28px;
-  border-radius:30px;
-  background:linear-gradient(120deg,#24132d,#151515);
-}
-
-.hero h1{
-  margin:0 0 10px;
-  font-size:30px;
-}
-
-.hero p{
-  color:#aaa;
-  font-size:17px;
-}
-
-.upload{
-  background:#ff0033;
-  color:white;
-  border:0;
-  border-radius:30px;
-  padding:15px 22px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.file{
-  display:none;
-}
-
-.status{
-  text-align:center;
-  color:#aaa;
-  padding:20px;
-}
-
-
-/* =========================
-   VIDEO GRID
-   ========================= */
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(
-    auto-fit,
-    minmax(260px,1fr)
-  );
-  gap:18px;
-  padding:0 22px;
-}
-
-.card{
-  background:#181818;
-  border-radius:16px;
-  overflow:hidden;
-}
-
-.cardVideo{
-  width:100%;
-  aspect-ratio:16/9;
-  display:block;
-  background:#000;
-  object-fit:cover;
-  cursor:pointer;
-}
-
-.cardVideo:hover{
-  opacity:.92;
-}
-
-.info{
-  padding:12px;
-}
-
-.title{
-  font-size:17px;
-  font-weight:bold;
-  word-break:break-word;
-  cursor:pointer;
-}
-
-.title:hover{
-  text-decoration:underline;
-}
-
-.meta{
-  color:#999;
-  font-size:13px;
-  margin-top:7px;
-}
-
-
-/* =========================
-   CHANNEL + SUBSCRIBE
-   ========================= */
-
-.channelRow{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-top:7px;
-}
-
-.channelName{
-  color:#999;
-  font-size:13px;
-  cursor:pointer;
-}
-
-.subscribeBtn{
-  border:0;
-  border-radius:22px;
-  padding:9px 16px;
-  background:#fff;
-  color:#111;
-  font-weight:bold;
-  cursor:pointer;
-  white-space:nowrap;
-}
-
-.subscribeBtn.subscribed{
-  background:#292929;
-  color:#fff;
-  border:1px solid #555;
-}
-
-
-/* =========================
-   ACTIONS
-   ========================= */
-
-.actions{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  margin-top:12px;
-}
-
-.likeBtn{
-  background:none;
-  border:0;
-  color:#ccc;
-  font-size:16px;
-  padding:0;
-  cursor:pointer;
-}
-
-.likeBtn.liked{
-  color:#ff0033;
-}
-
-.views{
-  color:#aaa;
-  font-size:15px;
-}
-
-.watchBtn{
-  margin-top:12px;
-  background:#292929;
-  color:white;
-  border:0;
-  padding:9px 14px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-}
-
-.watchBtn:hover{
-  background:#383838;
-}
-
-.delete{
-  margin-top:12px;
-  margin-left:6px;
-  background:#292929;
-  color:#ff4964;
-  border:0;
-  padding:8px 12px;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-
-/* =========================
-   BOTTOM NAV
-   ========================= */
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:70px;
-  background:#151515;
-  border-top:1px solid #333;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:20;
-}
-
-.bottom button{
-  background:none;
-  border:0;
-  color:#aaa;
-  font-size:13px;
-  cursor:pointer;
-}
-
-.bottom button b{
-  display:block;
-  font-size:22px;
-  color:white;
-  margin-bottom:3px;
-}
-
-
-/* =========================
-   MOBILE
-   ========================= */
-
+*{box-sizing:border-box}
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif;padding-bottom:80px}
+header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid #292929;padding:12px 16px}
+.top{display:flex;align-items:center;gap:10px}
+.logo{font-size:22px;font-weight:800;white-space:nowrap}
+.logo span{color:#ff0033}
+.search{flex:1;min-width:0;background:#222;border:1px solid #444;border-radius:30px;padding:12px;color:white;font-size:15px}
+.iconButton,.avatar{background:#222;border:1px solid #444;color:white;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex-shrink:0}
+.avatar{background:#7c4dff;font-weight:bold}
+.accountArea{position:relative}
+.accountMenu{display:none;position:absolute;right:0;top:46px;width:245px;background:#181818;border:1px solid #333;border-radius:14px;padding:15px;box-shadow:0 10px 30px #0008;z-index:100}
+.accountMenu.show{display:block}
+.accountAvatar{width:45px;height:45px;border-radius:50%;background:#7c4dff;display:grid;place-items:center;font-size:20px;font-weight:bold;margin-bottom:10px}
+.accountEmail,.loginStatus{font-size:13px;color:#999;margin-top:5px;overflow-wrap:anywhere}
+.loginStatus{color:#6ee7b7}
+.accountDivider{height:1px;background:#333;margin:12px 0}
+.menuLink{padding:10px 3px;cursor:pointer;font-size:14px}
+.menuLink:hover{background:#292929}
+.accountButton{width:100%;padding:11px;border:0;border-radius:9px;background:#292929;color:white;font-weight:bold}
+.logoutButton{background:#ff0033}
+.categories,.feedTabs{display:flex;gap:9px;overflow-x:auto;padding-top:12px}
+.categories button,.feedTabs button{border:0;border-radius:22px;padding:9px 15px;background:#292929;color:white;font-size:14px;white-space:nowrap}
+.categories button.active,.feedTabs button.active{background:white;color:#111}
+.hero{margin:22px 16px;padding:25px;border-radius:23px;background:linear-gradient(120deg,#24132d,#151515)}
+.hero h1{margin:0 0 10px;font-size:27px}
+.hero p{color:#aaa}
+.upload{background:#ff0033;color:white;border:0;border-radius:30px;padding:13px 21px;font-size:15px;font-weight:bold}
+.sectionTitle{padding:18px 16px 10px;font-size:19px;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:17px;padding:0 16px}
+.card,.postCard{background:#181818;border-radius:15px;overflow:hidden;border:1px solid #292929}
+.cardVideo{width:100%;aspect-ratio:16/9;display:block;background:#000;object-fit:contain;cursor:pointer}
+.cardVideo.vertical{aspect-ratio:9/16;max-height:430px}
+.info{padding:12px}
+.title{font-size:16px;font-weight:bold;overflow-wrap:anywhere;cursor:pointer}
+.meta{color:#999;font-size:13px;margin-top:7px}
+.channelRow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px}
+.channelName{color:#aaa;font-size:13px;cursor:pointer}
+.subscribeBtn{border:0;border-radius:20px;padding:8px 13px;background:white;color:#111;font-weight:bold}
+.subscribeBtn.subscribed{background:#292929;color:white;border:1px solid #555}
+.actions{display:flex;align-items:center;gap:17px;margin-top:12px}
+.likeBtn{background:none;border:0;color:#ccc;font-size:15px;padding:0}
+.likeBtn.liked{color:#ff0033}
+.views{color:#aaa;font-size:13px}
+.watchBtn,.delete{margin-top:12px;background:#292929;color:white;border:0;padding:9px 13px;border-radius:8px}
+.delete{margin-left:5px;color:#ff4964}
+.postCard{padding:15px;margin-bottom:14px}
+.postTop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.postAvatar{width:38px;height:38px;border-radius:50%;background:#713be7;display:grid;place-items:center;font-weight:bold}
+.postMeta{color:#999;font-size:12px;margin-top:4px}
+.postCategory{margin-left:auto;font-size:11px;color:#ff9999;background:#3b2020;padding:6px 9px;border-radius:15px}
+.postContent{font-size:15px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.postImage{width:100%;max-height:500px;object-fit:contain;border-radius:10px;margin-top:12px;background:#080808}
+.status{text-align:center;color:#aaa;padding:22px}
+.hidden{display:none!important}
+.bottom{position:fixed;bottom:0;left:0;right:0;height:68px;background:#151515;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:20}
+.bottom button{background:none;border:0;color:#aaa;font-size:12px}
+.bottom b{display:block;font-size:21px;color:white;margin-bottom:3px}
 @media(max-width:600px){
-
-  .top{
-    gap:8px;
-  }
-
-  .logo{
-    font-size:19px;
-  }
-
-  .avatar{
-    width:36px;
-    height:36px;
-  }
-
-  .iconButton{
-    width:36px;
-    height:36px;
-    font-size:15px;
-  }
-
-  .search{
-    padding:11px 14px;
-    font-size:15px;
-  }
-
-  .hero{
-    margin:20px 16px;
-    padding:24px;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-    padding:0 16px;
-  }
-
-  .channelRow{
-    align-items:center;
-  }
-
-  .subscribeBtn{
-    padding:8px 14px;
-  }
-
-  .accountMenu{
-    right:-5px;
-    width:230px;
-  }
-
+ .logo{font-size:19px}.grid{grid-template-columns:1fr}
+ .hero{padding:22px}.accountMenu{right:-5px;width:230px}
 }
-
-@media(max-width:400px){
-
-  .top{
-    gap:6px;
-  }
-
-  .logoText{
-    display:none;
-  }
-
-  .avatar{
-    width:34px;
-    height:34px;
-    font-size:14px;
-  }
-
-  .iconButton{
-    width:34px;
-    height:34px;
-    font-size:14px;
-  }
-
-}
-
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- =========================
-     HEADER
-     ========================= -->
-
 <header>
-
-  <div class="top">
-
-    <div class="logo">
-      <span>▶</span> <span class="logoText">MiniTube</span>
-    </div>
-
-    <input
-      id="search"
-      class="search"
-      placeholder="Search videos..."
-      oninput="filterVideos()"
-      onfocus="window.location.href='search.html'"
-      onclick="window.location.href='search.html'"
-      readonly
-    >
-
-    <button
-      class="iconButton"
-      onclick="window.location.href='notifications.html'"
-    >
-      🔔
-      <span
-        id="notifDot"
-        class="dot"
-      ></span>
-    </button>
-
-    <!-- ACCOUNT -->
-
-    <div class="accountArea">
-
-      <div
-        id="avatar"
-        class="avatar"
-        onclick="toggleAccountMenu()"
-      >
-        M
-      </div>
-
-
-      <div
-        id="accountMenu"
-        class="accountMenu"
-      >
-
-        <div
-          id="accountAvatar"
-          class="accountAvatar"
-        >
-          M
-        </div>
-
-
-        <div
-          id="accountName"
-          class="accountName"
-        >
-          Account
-        </div>
-
-
-        <div
-          id="accountEmail"
-          class="accountEmail"
-        >
-          Not logged in
-        </div>
-
-
-        <div
-          id="loginStatus"
-          class="loginStatus"
-        >
-        </div>
-
-
-        <div class="accountDivider"></div>
-
-
-        <div class="menuLinks">
-
-          <div
-            class="menuLink"
-            onclick="window.location.href='channel.html'"
-          >
-            <span class="menuLinkIcon">👤</span>
-            Your channel
-          </div>
-
-          <div
-            class="menuLink"
-            onclick="window.location.href='studio.html'"
-          >
-            <span class="menuLinkIcon">🎬</span>
-            Your videos (Studio)
-          </div>
-
-          <div
-            class="menuLink"
-            onclick="window.location.href='playlist.html'"
-          >
-            <span class="menuLinkIcon">▤</span>
-            Playlists
-          </div>
-
-          <div
-            class="menuLink"
-            onclick="window.location.href='history.html'"
-          >
-            <span class="menuLinkIcon">🕐</span>
-            Watch history
-          </div>
-
-          <div
-            class="menuLink"
-            onclick="window.location.href='settings.html'"
-          >
-            <span class="menuLinkIcon">⚙</span>
-            Settings
-          </div>
-
-        </div>
-
-
-        <div class="accountDivider"></div>
-
-
-        <button
-          id="accountAction"
-          class="accountButton"
-          onclick="accountAction()"
-        >
-          Login
-        </button>
-
-      </div>
-
-    </div>
-
+ <div class="top">
+  <div class="logo"><span>▶</span> MiniTube</div>
+  <input class="search" placeholder="Search videos..." readonly onclick="location.href='search.html'">
+  <button class="iconButton" onclick="location.href='notifications.html'">🔔</button>
+  <div class="accountArea">
+   <div id="avatar" class="avatar" onclick="toggleAccountMenu()">M</div>
+   <div id="accountMenu" class="accountMenu">
+    <div id="accountAvatar" class="accountAvatar">M</div>
+    <div id="accountName">Account</div>
+    <div id="accountEmail" class="accountEmail">Not logged in</div>
+    <div id="loginStatus" class="loginStatus"></div>
+    <div class="accountDivider"></div>
+    <div class="menuLink" onclick="location.href='channel.html'">👤 Your channel</div>
+    <div class="menuLink" onclick="location.href='studio.html'">🎬 Your videos (Studio)</div>
+    <div class="menuLink" onclick="location.href='playlist.html'">▤ Playlists</div>
+    <div class="menuLink" onclick="location.href='history.html'">🕐 Watch history</div>
+    <div class="menuLink" onclick="location.href='settings.html'">⚙ Settings</div>
+    <div class="accountDivider"></div>
+    <button id="accountAction" class="accountButton" onclick="accountAction()">Login</button>
+   </div>
   </div>
+ </div>
 
-
-  <div class="categories">
-
-    <button
-      class="active"
-      onclick="filterByCategory('All', this)"
-    >
-      All
-    </button>
-
-    <button
-      onclick="filterByCategory('Music', this)"
-    >
-      Music
-    </button>
-
-    <button
-      onclick="filterByCategory('Gaming', this)"
-    >
-      Gaming
-    </button>
-
-    <button
-      onclick="filterByCategory('News', this)"
-    >
-      News
-    </button>
-
-    <button
-      onclick="filterByCategory('Sports', this)"
-    >
-      Sports
-    </button>
-
-  </div>
-
+ <div class="categories" id="categories"></div>
 </header>
 
-
-<!-- =========================
-     HERO
-     ========================= -->
-
 <section class="hero">
-
-  <h1>
-    Welcome to MiniTube
-  </h1>
-
-  <p id="welcomeText">
-    Your own video-sharing platform.
-  </p>
-
-
-  <button
-    class="upload"
-    onclick="startUpload()"
-  >
-    + Upload Video
-  </button>
-
-
-  <input
-    id="file"
-    class="file"
-    type="file"
-    accept="video/*"
-    onchange="uploadVideo()"
-  >
-
+ <h1>Welcome to MiniTube</h1>
+ <p id="welcomeText">Your own video-sharing platform.</p>
+ <button class="upload" onclick="startUpload()">＋ Create</button>
 </section>
 
-
-<div
-  id="status"
-  class="status"
->
-  Loading videos...
+<div class="feedTabs" style="padding:0 16px 12px">
+ <button class="active" data-feed="all" onclick="changeFeed('all',this)">All Videos</button>
+ <button data-feed="vertical" onclick="changeFeed('vertical',this)">📱 Shorts</button>
+ <button data-feed="horizontal" onclick="changeFeed('horizontal',this)">🖥 Horizontal</button>
+ <button data-feed="posts" onclick="changeFeed('posts',this)">📝 Posts</button>
 </div>
 
-
-<div
-  id="videos"
-  class="grid"
-></div>
-
-
-<!-- =========================
-     BOTTOM NAVIGATION
-     ========================= -->
+<div id="sectionTitle" class="sectionTitle">Latest Videos</div>
+<div id="status" class="status">Loading videos...</div>
+<div id="videos" class="grid"></div>
+<div id="posts" class="hidden" style="max-width:650px;margin:auto;padding:0 16px"></div>
 
 <div class="bottom">
-
-  <button onclick="goHome()">
-    <b>⌂</b>
-    Home
-  </button>
-
-
-  <button onclick="goShorts()">
-    <b>▶</b>
-    HORIZONTAL
-  </button>
-
-
-  <button onclick="goSubscriptions()">
-    <b>□</b>
-    Subscriptions
-  </button>
-
-
-  <button onclick="goYou()">
-    <b>●</b>
-    You
-  </button>
-
+ <button onclick="location.href='index.html'"><b>⌂</b>Home</button>
+ <button onclick="location.href='shorts.html'"><b>▶</b>Shorts</button>
+ <button onclick="location.href='posts.html'"><b>▤</b>Posts</button>
+ <button onclick="location.href='subscriptions.html'"><b>□</b>Subscriptions</button>
+ <button onclick="location.href='you.html'"><b>●</b>You</button>
 </div>
 
-
 <script>
-
-/* =====================================
-   CLOUDFLARE WORKER
-   ===================================== */
-
-const API_BASE =
-  "https://wispy-base-65bb.naradsocial7.workers.dev";
-
-
-/* =====================================
-   SUPABASE
-   ===================================== */
-
-const SUPABASE_URL =
-  "https://vlzssmuzetcbkmzujecs.supabase.co";
-
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
-
-
-/* =====================================
-   AUTH STORAGE
-   ===================================== */
-
-const ACCESS_TOKEN_KEY =
-  "minitube_access_token";
-
-const REFRESH_TOKEN_KEY =
-  "minitube_refresh_token";
-
-const USER_KEY =
-  "minitube_user";
-
-
-/* =====================================
-   SUBSCRIBE SYSTEM (database-backed,
-   per channel)
-   ===================================== */
-
-let mySubscriptions =
-  new Set();
-
-
-async function loadMySubscriptions(){
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    mySubscriptions =
-      new Set();
-
-    return;
-
-  }
-
-
-  try{
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?subscriber_id=eq." +
-        user.id +
-        "&select=channel_id",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    if(!response.ok){
-
-      return;
-
-    }
-
-
-    const rows =
-      await response.json();
-
-
-    mySubscriptions =
-      new Set(
-        rows.map(
-          row => row.channel_id
-        )
-      );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-}
-
-
-async function toggleSubscribeChannel(channelId){
-
-  const user =
-    getLoggedUser();
-
-
-  if(!user){
-
-    const go =
-      confirm(
-        "Please login first to subscribe.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  if(user.id === channelId){
-
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-
-  const alreadySubscribed =
-    mySubscriptions.has(
-      channelId
-    );
-
-
-  try{
-
-    if(alreadySubscribed){
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?channel_id=eq." +
-        channelId +
-        "&subscriber_id=eq." +
-        user.id,
-
-        {
-          method:"DELETE",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token
-          }
-        }
-
-      );
-
-
-      mySubscriptions.delete(
-        channelId
-      );
-
-
-    }else{
-
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions",
-
-        {
-          method:"POST",
-
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              token,
-
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            channel_id: channelId,
-            subscriber_id: user.id
-          })
-        }
-
-      );
-
-
-      mySubscriptions.add(
-        channelId
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  applySubscribeStates();
-
-}
-
-
-function applySubscribeStates(){
-
-  const buttons =
-    document.querySelectorAll(
-      ".subscribeBtn"
-    );
-
-
-  buttons.forEach(button => {
-
-    const channelId =
-      button.dataset.channelId;
-
-
-    const subscribed =
-      mySubscriptions.has(
-        channelId
-      );
-
-
-    button.classList.toggle(
-      "subscribed",
-      subscribed
-    );
-
-
-    button.textContent =
-      subscribed
-        ? "Subscribed"
-        : "Subscribe";
-
-  });
-
-}
-
-
-/* =====================================
-   GET LOGGED USER
-   ===================================== */
-
+const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
+const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+const ACCESS_TOKEN_KEY="minitube_access_token";
+const REFRESH_TOKEN_KEY="minitube_refresh_token";
+const USER_KEY="minitube_user";
+
+const CATEGORIES=["All","Trending","Technology","Trading","Business","Education","Entertainment","Sports","Science","Comedy","Gaming","Music","News","Finance","Health"];
+
+let allVideos=[],allPosts=[],currentFeed="all",currentCategory="All";
+let mySubscriptions=new Set();
+
+const $=id=>document.getElementById(id);
 function getLoggedUser(){
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-  const savedUser =
-    localStorage.getItem(
-      USER_KEY
-    );
-
-
-  if(!token || !savedUser){
-
-    return null;
-
-  }
-
-
-  try{
-
-    return JSON.parse(
-      savedUser
-    );
-
-  }catch(error){
-
-    console.error(
-      "Invalid saved user",
-      error
-    );
-
-    return null;
-
-  }
-
+ try{
+  const token=localStorage.getItem(ACCESS_TOKEN_KEY);
+  const saved=localStorage.getItem(USER_KEY);
+  return token&&saved?JSON.parse(saved):null;
+ }catch{return null}
 }
-
-
-/* =====================================
-   AUTH STATE
-   ===================================== */
-
-function isLoggedIn(){
-
-  return !!getLoggedUser();
-
-}
-
-
-/* =====================================
-   GET USER NAME
-   ===================================== */
-
+function isLoggedIn(){return !!getLoggedUser()}
 function getUserName(user){
-
-  if(!user){
-
-    return "Account";
-
-  }
-
-
-  const metadata =
-    user.user_metadata ||
-    user.userMetadata ||
-    {};
-
-
-  return (
-
-    metadata.display_name ||
-
-    metadata.full_name ||
-
-    metadata.name ||
-
-    user.email ||
-
-    "MiniTube User"
-
-  );
-
+ const m=user?.user_metadata||user?.userMetadata||{};
+ return m.display_name||m.full_name||m.name||user?.email||"MiniTube User";
 }
-
-
-/* =====================================
-   GET INITIAL
-   ===================================== */
-
-function getUserInitial(user){
-
-  const name =
-    getUserName(user);
-
-
-  return name
-    .trim()
-    .charAt(0)
-    .toUpperCase() || "M";
-
-}
-
-
-/* =====================================
-   UPDATE ACCOUNT UI
-   ===================================== */
+function getUserInitial(user){return getUserName(user).trim().charAt(0).toUpperCase()||"M"}
 
 function updateAccountUI(){
-
-  const user =
-    getLoggedUser();
-
-
-  const avatar =
-    document.getElementById(
-      "avatar"
-    );
-
-
-  const accountAvatar =
-    document.getElementById(
-      "accountAvatar"
-    );
-
-
-  const accountName =
-    document.getElementById(
-      "accountName"
-    );
-
-
-  const accountEmail =
-    document.getElementById(
-      "accountEmail"
-    );
-
-
-  const loginStatus =
-    document.getElementById(
-      "loginStatus"
-    );
-
-
-  const accountAction =
-    document.getElementById(
-      "accountAction"
-    );
-
-
-  const welcomeText =
-    document.getElementById(
-      "welcomeText"
-    );
-
-
-  if(user){
-
-    const name =
-      getUserName(user);
-
-
-    const initial =
-      getUserInitial(user);
-
-
-    avatar.textContent =
-      initial;
-
-
-    accountAvatar.textContent =
-      initial;
-
-
-    accountName.textContent =
-      name;
-
-
-    accountEmail.textContent =
-      user.email ||
-      "";
-
-
-    loginStatus.textContent =
-      "✓ Logged in";
-
-
-    accountAction.textContent =
-      "Logout";
-
-
-    accountAction.classList.add(
-      "logoutButton"
-    );
-
-
-    welcomeText.textContent =
-      "Welcome back, " +
-      name +
-      "!";
-
-
-  }else{
-
-
-    avatar.textContent =
-      "M";
-
-
-    accountAvatar.textContent =
-      "M";
-
-
-    accountName.textContent =
-      "Not logged in";
-
-
-    accountEmail.textContent =
-      "Login to your MiniTube account";
-
-
-    loginStatus.textContent =
-      "";
-
-
-    accountAction.textContent =
-      "Login";
-
-
-    accountAction.classList.remove(
-      "logoutButton"
-    );
-
-
-    welcomeText.textContent =
-      "Your own video-sharing platform.";
-
-  }
-
+ const user=getLoggedUser();
+ const initial=user?getUserInitial(user):"M";
+ $("avatar").textContent=initial;
+ $("accountAvatar").textContent=initial;
+ $("accountName").textContent=user?getUserName(user):"Not logged in";
+ $("accountEmail").textContent=user?.email||"Login to your MiniTube account";
+ $("loginStatus").textContent=user?"✓ Logged in":"";
+ $("accountAction").textContent=user?"Logout":"Login";
+ $("accountAction").classList.toggle("logoutButton",!!user);
+ $("welcomeText").textContent=user?"Welcome back, "+getUserName(user)+"!":"Your own video-sharing platform.";
 }
-
-
-/* =====================================
-   ACCOUNT MENU
-   ===================================== */
-
-function toggleAccountMenu(){
-
-  const menu =
-    document.getElementById(
-      "accountMenu"
-    );
-
-
-  menu.classList.toggle(
-    "show"
-  );
-
-}
-
-
-document.addEventListener(
-  "click",
-  function(event){
-
-    const area =
-      document.querySelector(
-        ".accountArea"
-      );
-
-
-    const menu =
-      document.getElementById(
-        "accountMenu"
-      );
-
-
-    if(
-      area &&
-      !area.contains(
-        event.target
-      )
-    ){
-
-      menu.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-);
-
-
-/* =====================================
-   ACCOUNT ACTION
-   ===================================== */
-
+function toggleAccountMenu(){$("accountMenu").classList.toggle("show")}
+document.addEventListener("click",e=>{
+ if(!e.target.closest(".accountArea"))$("accountMenu").classList.remove("show");
+});
 function accountAction(){
-
-  if(isLoggedIn()){
-
-    logout();
-
-  }else{
-
-    window.location.href =
-      "login.html";
-
-  }
-
+ if(!isLoggedIn()){location.href="login.html";return}
+ if(!confirm("Logout from this MiniTube account?"))return;
+ [ACCESS_TOKEN_KEY,REFRESH_TOKEN_KEY,USER_KEY].forEach(k=>localStorage.removeItem(k));
+ updateAccountUI();
+ location.reload();
 }
-
-
-/* =====================================
-   LOGOUT
-   ===================================== */
-
-function logout(){
-
-  const confirmed =
-    confirm(
-      "Logout from this MiniTube account?"
-    );
-
-
-  if(!confirmed){
-
-    return;
-
-  }
-
-
-  localStorage.removeItem(
-    ACCESS_TOKEN_KEY
-  );
-
-
-  localStorage.removeItem(
-    REFRESH_TOKEN_KEY
-  );
-
-
-  localStorage.removeItem(
-    USER_KEY
-  );
-
-
-  updateAccountUI();
-
-
-  document
-    .getElementById(
-      "accountMenu"
-    )
-    .classList.remove(
-      "show"
-    );
-
-
-  alert(
-    "You have been logged out."
-  );
-
-}
-
-
-/* =====================================
-   UPLOAD BUTTON
-   ===================================== */
-
 function startUpload(){
+ if(!isLoggedIn()){
+  if(confirm("Please login first to create content. Go to Login?"))location.href="login.html";
+  return;
+ }
+ location.href="upload.html";
+}
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+}
+function openWatch(key){location.href="watch.html?video="+encodeURIComponent(key)}
 
-  if(!isLoggedIn()){
-
-    const go =
-      confirm(
-        "Please login first to upload a video.\n\nGo to Login?"
-      );
-
-
-    if(go){
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    return;
-
-  }
-
-
-  /*
-    Always go through upload.html —
-    that's the only upload path with
-    360p compression and the content
-    safety check wired in. The old
-    inline file-picker + uploadVideo()
-    flow below is no longer used from
-    here, but is left in place in case
-    anything else still calls it.
-  */
-
-  window.location.href =
-    "upload.html";
-
+function makeCategories(){
+ $("categories").innerHTML=CATEGORIES.map(c=>
+  `<button class="${c==="All"?"active":""}" data-category="${c}">${c}</button>`
+ ).join("");
+ $("categories").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  currentCategory=b.dataset.category;
+  $("categories").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));
+  renderCurrent();
+ });
 }
 
-
-/* =====================================
-   OPEN WATCH PAGE
-   ===================================== */
-
-function openWatch(videoName){
-
-  const url =
-    "watch.html?video=" +
-    encodeURIComponent(
-      videoName
-    );
-
-  window.location.href =
-    url;
-
+function changeFeed(feed,button){
+ currentFeed=feed;
+ document.querySelectorAll(".feedTabs button").forEach(b=>b.classList.toggle("active",b===button));
+ renderCurrent();
 }
-
-
-/* =====================================
-   HOME
-   ===================================== */
-
-function goHome(){
-
-  window.location.href =
-    "index.html";
-
-}
-
-
-/* =====================================
-   SHORTS
-   ===================================== */
-
-function goShorts(){
-
-  window.location.href =
-    "shorts.html";
-
-}
-
-
-/* =====================================
-   SUBSCRIPTIONS
-   ===================================== */
-
-function goSubscriptions(){
-
-  window.location.href =
-    "subscriptions.html";
-
-}
-
-
-/* =====================================
-   YOU
-   ===================================== */
-
-function goYou(){
-
-  window.location.href =
-    "you.html";
-
-}
-
-
-/* =====================================
-   LOAD VIDEOS
-   ===================================== */
 
 async function loadVideos(){
-
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-
-  try{
-
-    status.textContent =
-      "Loading videos...";
-
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/videos"
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "API error"
-      );
-
-    }
-
-
-    allVideos =
-      await response.json();
-
-
-    renderVideos(
-      allVideos
-    );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    status.textContent =
-      "Unable to load videos.";
-
-  }
-
+ try{
+  const response=await fetch(API_BASE+"/api/videos");
+  if(!response.ok)throw new Error(await response.text());
+  allVideos=await response.json();
+  renderCurrent();
+ }catch(error){
+  $("status").textContent="Unable to load videos. "+error.message;
+ }
 }
 
+async function loadPosts(){
+ try{
+  const response=await fetch(
+   `${SUPABASE_URL}/rest/v1/posts?select=id,content,image_path,category,created_at&order=created_at.desc&limit=100`,
+   {headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY}}
+  );
+  if(!response.ok)throw new Error(await response.text());
+  allPosts=await response.json();
+  if(currentFeed==="posts")renderCurrent();
+ }catch(error){
+  console.error("Posts loading error:",error);
+ }
+}
 
-let allVideos = [];
+function renderCurrent(){
+ const videosBox=$("videos"),postsBox=$("posts"),status=$("status");
+ videosBox.innerHTML="";postsBox.innerHTML="";
+ const showPosts=currentFeed==="posts";
+ videosBox.classList.toggle("hidden",showPosts);
+ postsBox.classList.toggle("hidden",!showPosts);
 
+ if(showPosts){
+  $("sectionTitle").textContent="Community Posts";
+  status.textContent=allPosts.length?allPosts.length+" post(s)":"";
+  const list=currentCategory==="All"?allPosts:allPosts.filter(p=>p.category===currentCategory);
+  if(!list.length){postsBox.innerHTML='<div class="status">No posts here yet. Be the first to share!</div>';return}
+  postsBox.innerHTML=list.map(p=>`
+   <article class="postCard">
+    <div class="postTop">
+     <div class="postAvatar">M</div>
+     <div><b>MiniTube Creator</b><div class="postMeta">${new Date(p.created_at).toLocaleString()}</div></div>
+     <div class="postCategory">${escapeHTML(p.category)}</div>
+    </div>
+    ${p.content?`<div class="postContent">${escapeHTML(p.content)}</div>`:""}
+    ${p.image_path?`<img class="postImage" src="${escapeHTML(p.image_path)}" alt="Post photo" loading="lazy">`:""}
+   </article>
+  `).join("");
+  return;
+ }
 
-/* =====================================
-   DISPLAY VIDEOS
-   ===================================== */
+ let list=allVideos;
+ if(currentFeed==="vertical")list=list.filter(v=>v.format==="vertical");
+ if(currentFeed==="horizontal")list=list.filter(v=>v.format!=="vertical");
+ if(currentCategory!=="All")list=list.filter(v=>v.category===currentCategory);
 
-function renderVideos(videos){
+ $("sectionTitle").textContent=currentFeed==="vertical"?"Shorts":currentFeed==="horizontal"?"Horizontal Videos":"Latest Videos";
+ status.textContent=list.length?list.length+" video(s)":"";
+ if(!list.length){status.textContent="No videos found. Upload your first video 🚀";return}
 
-  const container =
-    document.getElementById(
-      "videos"
-    );
+ list.forEach(video=>{
+  const key=video.r2_key;
+  if(!key)return;
+  const title=video.title||key;
+  const ownerName=video.profiles?.display_name||"Unknown creator";
+  const user=getLoggedUser();
+  const own=!!user&&user.id===video.owner_id;
+  const url=API_BASE+"/video/"+encodeURIComponent(key);
+  const likeKey="likes_"+key,likedKey="liked_"+key,viewsKey="views_"+key;
+  let likes=Number(localStorage.getItem(likeKey)||0);
+  let liked=localStorage.getItem(likedKey)==="true";
+  let views=Number(localStorage.getItem(viewsKey)||0);
 
+  const card=document.createElement("article");
+  card.className="card";
+  card.innerHTML=`
+   <video class="cardVideo ${video.format==="vertical"?"vertical":""}" preload="metadata" playsinline src="${url}"></video>
+   <div class="info">
+    <div class="title">${escapeHTML(title)}</div>
+    <div class="channelRow">
+     <div class="channelName">${escapeHTML(ownerName)}</div>
+     ${own?"":`<button class="subscribeBtn" data-channel-id="${escapeHTML(video.owner_id)}">Subscribe</button>`}
+    </div>
+    <div class="meta">${escapeHTML(video.category||"Trending")} · ${video.format==="vertical"?"Shorts":"Horizontal"}</div>
+    <div class="actions">
+     <button class="likeBtn ${liked?"liked":""}">${liked?"♥":"♡"} Like <span>${likes}</span></button>
+     <div class="views">👁 <span>${views}</span> views</div>
+    </div>
+    <button class="watchBtn">▶ Watch</button>
+    ${own?'<button class="delete">Delete</button>':""}
+   </div>`;
 
-  const status =
-    document.getElementById(
-      "status"
-    );
+  const open=()=>openWatch(key);
+  card.querySelector("video").onclick=open;
+  card.querySelector(".title").onclick=open;
+  card.querySelector(".watchBtn").onclick=open;
 
+  card.querySelector(".channelName").onclick=()=>{
+   location.href=own?"channel.html":"channel.html?id="+encodeURIComponent(video.owner_id);
+  };
 
-  container.innerHTML =
-    "";
+  const likeButton=card.querySelector(".likeBtn");
+  likeButton.onclick=()=>{
+   liked=!liked;
+   likes=Math.max(0,likes+(liked?1:-1));
+   localStorage.setItem(likeKey,likes);
+   localStorage.setItem(likedKey,String(liked));
+   likeButton.classList.toggle("liked",liked);
+   likeButton.innerHTML=`${liked?"♥":"♡"} Like <span>${likes}</span>`;
+  };
 
+  card.querySelector(".video")?.addEventListener("play",()=>{});
+  card.querySelector(".cardVideo").addEventListener("click",open);
 
-  if(videos.length === 0){
-
-    status.innerHTML =
-      "No videos found.<br><br>" +
-      "Upload your first video 🚀";
-
-    return;
-
+  const sub=card.querySelector(".subscribeBtn");
+  if(sub){
+   const channelId=video.owner_id;
+   sub.classList.toggle("subscribed",mySubscriptions.has(channelId));
+   sub.textContent=mySubscriptions.has(channelId)?"Subscribed":"Subscribe";
+   sub.onclick=()=>toggleSubscribeChannel(channelId,sub);
   }
 
-
-  status.textContent =
-    videos.length +
-    " video(s)";
-
-
-  videos.forEach(video => {
-
-    const card =
-      document.createElement(
-        "div"
-      );
-
-
-    card.className =
-      "card";
-
-
-    /*
-      New schema: the Worker now
-      returns database rows, not
-      raw R2 listings. The file
-      lives at r2_key; the human
-      title is `title`; the
-      uploader's name comes from
-      the joined profiles row.
-    */
-
-    const videoKey =
-      video.r2_key;
-
-    const displayTitle =
-      video.title ||
-      video.r2_key;
-
-    const ownerName =
-      (video.profiles &&
-        video.profiles.display_name) ||
-      "Unknown creator";
-
-    const currentUser =
-      getLoggedUser();
-
-    const isOwnVideo =
-      currentUser &&
-      currentUser.id === video.owner_id;
-
-
-    const videoURL =
-      API_BASE +
-      "/video/" +
-      encodeURIComponent(
-        videoKey
-      );
-
-
-    /* ===============================
-       LIKE DATA
-       =============================== */
-
-    const likeKey =
-      "likes_" +
-      videoKey;
-
-
-    const likedKey =
-      "liked_" +
-      videoKey;
-
-
-    let likes =
-      Number(
-        localStorage.getItem(
-          likeKey
-        ) || 0
-      );
-
-
-    let liked =
-      localStorage.getItem(
-        likedKey
-      ) === "true";
-
-
-    /* ===============================
-       VIEW DATA
-       =============================== */
-
-    const viewsKey =
-      "views_" +
-      videoKey;
-
-
-    let views =
-      Number(
-        localStorage.getItem(
-          viewsKey
-        ) || 0
-      );
-
-
-    /* ===============================
-       CARD HTML
-       =============================== */
-
-    card.innerHTML = `
-
-      <video
-        class="cardVideo"
-        preload="metadata"
-        src="${videoURL}"
-      ></video>
-
-
-      <div class="info">
-
-        <div
-          class="title"
-          title="Watch ${escapeHTML(
-            displayTitle
-          )}"
-        >
-          ${escapeHTML(
-            displayTitle
-          )}
-        </div>
-
-
-        <div class="channelRow">
-
-          <div class="channelName">
-            ${escapeHTML(
-              ownerName
-            )}
-          </div>
-
-
-          ${
-            isOwnVideo
-              ? ""
-              : `<button
-                  class="subscribeBtn"
-                  data-channel-id="${video.owner_id}"
-                  onclick="toggleSubscribeChannel('${video.owner_id}')"
-                >
-                  Subscribe
-                </button>`
-          }
-
-        </div>
-
-
-        <div class="actions">
-
-          <button
-            class="likeBtn ${
-              liked ? "liked" : ""
-            }"
-          >
-
-            ${
-              liked
-                ? "♥"
-                : "♡"
-            }
-
-            Like
-
-            <span class="likeCount">
-              ${likes}
-            </span>
-
-          </button>
-
-
-          <div class="views">
-
-            👁️
-
-            <span class="viewCount">
-              ${views}
-            </span>
-
-            views
-
-          </div>
-
-        </div>
-
-
-        <button class="watchBtn">
-          ▶ Watch
-        </button>
-
-
-        ${
-          isOwnVideo
-            ? `<button class="delete">
-                Delete
-              </button>`
-            : ""
-        }
-
-      </div>
-
-    `;
-
-
-    /* ===============================
-       VIDEO → WATCH PAGE
-       =============================== */
-
-    const videoElement =
-      card.querySelector(
-        ".cardVideo"
-      );
-
-
-    videoElement.addEventListener(
-      "click",
-      function(){
-
-        openWatch(
-          videoKey
-        );
-
-      }
-    );
-
-
-    /* ===============================
-       CHANNEL NAME → CHANNEL PAGE
-       =============================== */
-
-    const channelNameElement =
-      card.querySelector(
-        ".channelName"
-      );
-
-
-    channelNameElement.addEventListener(
-      "click",
-      function(){
-
-        window.location.href =
-          isOwnVideo
-            ? "channel.html"
-            : "channel.html?id=" +
-              encodeURIComponent(
-                video.owner_id
-              );
-
-      }
-    );
-
-
-    /* ===============================
-       TITLE → WATCH PAGE
-       =============================== */
-
-    const titleElement =
-      card.querySelector(
-        ".title"
-      );
-
-
-    titleElement.addEventListener(
-      "click",
-      function(){
-
-        openWatch(
-          videoKey
-        );
-
-      }
-    );
-
-
-    /* ===============================
-       WATCH BUTTON
-       =============================== */
-
-    const watchButton =
-      card.querySelector(
-        ".watchBtn"
-      );
-
-
-    watchButton.addEventListener(
-      "click",
-      function(){
-
-        openWatch(
-          videoKey
-        );
-
-      }
-    );
-
-
-    /* ===============================
-       LIKE BUTTON
-       =============================== */
-
-    const likeButton =
-      card.querySelector(
-        ".likeBtn"
-      );
-
-
-    const likeCount =
-      card.querySelector(
-        ".likeCount"
-      );
-
-
-    likeButton.addEventListener(
-      "click",
-      function(){
-
-        liked =
-          !liked;
-
-
-        if(liked){
-
-          likes++;
-
-        }else{
-
-          if(likes > 0){
-
-            likes--;
-
-          }
-
-        }
-
-
-        localStorage.setItem(
-          likeKey,
-          likes
-        );
-
-
-        localStorage.setItem(
-          likedKey,
-          liked
-        );
-
-
-        likeButton.classList.toggle(
-          "liked",
-          liked
-        );
-
-
-        likeButton.innerHTML =
-          `${liked ? "♥" : "♡"} Like
-          <span class="likeCount">
-          ${likes}
-          </span>`;
-
-      }
-    );
-
-
-    /* ===============================
-       DELETE (only rendered for
-       your own videos — Worker/DB
-       would reject it anyway, but
-       we don't even show the button)
-       =============================== */
-
-    const deleteButton =
-      card.querySelector(
-        ".delete"
-      );
-
-
-    if(deleteButton){
-
-      deleteButton.addEventListener(
-        "click",
-        async function(){
-
-          await deleteVideo(
-            encodeURIComponent(
-              videoKey
-            )
-          );
-
-        }
-      );
-
-    }
-
-
-    container.appendChild(
-      card
-    );
-
+  const del=card.querySelector(".delete");
+  if(del)del.onclick=()=>deleteVideo(key);
+
+  card.querySelector(".views span").textContent=views;
+  videosBox.appendChild(card);
+ });
+}
+
+async function toggleSubscribeChannel(channelId,button){
+ const user=getLoggedUser();
+ if(!user){if(confirm("Please login first. Go to Login?"))location.href="login.html";return}
+ if(user.id===channelId)return;
+ const token=localStorage.getItem(ACCESS_TOKEN_KEY);
+ const already=mySubscriptions.has(channelId);
+ try{
+  const response=await fetch(
+   SUPABASE_URL+"/rest/v1/subscriptions?subscriber_id=eq."+encodeURIComponent(user.id)+"&channel_id=eq."+encodeURIComponent(channelId),
+   already?{
+    method:"DELETE",
+    headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+token}
+   }:{
+    method:"POST",
+    headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json","Prefer":"return=minimal"},
+    body:JSON.stringify({subscriber_id:user.id,channel_id:channelId})
+   }
+  );
+  if(!response.ok)throw new Error(await response.text());
+  if(already)mySubscriptions.delete(channelId);else mySubscriptions.add(channelId);
+  button.classList.toggle("subscribed",!already);
+  button.textContent=already?"Subscribe":"Subscribed";
+ }catch(error){alert("Subscription update failed: "+error.message)}
+}
+
+async function loadMySubscriptions(){
+ const user=getLoggedUser();if(!user)return;
+ try{
+  const response=await fetch(
+   SUPABASE_URL+"/rest/v1/subscriptions?subscriber_id=eq."+encodeURIComponent(user.id)+"&select=channel_id",
+   {headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+localStorage.getItem(ACCESS_TOKEN_KEY)}}
+  );
+  if(response.ok){
+   const rows=await response.json();
+   mySubscriptions=new Set(rows.map(r=>r.channel_id));
+   renderCurrent();
+  }
+ }catch(error){console.error(error)}
+}
+
+async function deleteVideo(key){
+ if(!isLoggedIn()){alert("Please login first.");return}
+ if(!confirm("Delete this video?"))return;
+ try{
+  const response=await fetch(API_BASE+"/api/delete/"+encodeURIComponent(key),{
+   method:"DELETE",
+   headers:{"Authorization":"Bearer "+localStorage.getItem(ACCESS_TOKEN_KEY)}
   });
-
-
-  applySubscribeStates();
-
+  if(!response.ok)throw new Error(await response.text());
+  allVideos=allVideos.filter(v=>v.r2_key!==key);
+  renderCurrent();
+ }catch(error){alert("Could not delete video: "+error.message)}
 }
 
-
-/* =====================================
-   UPLOAD
-   ===================================== */
-
-function uploadVideo(){
-
-  const input =
-    document.getElementById(
-      "file"
-    );
-
-
-  const file =
-    input.files[0];
-
-
-  if(!file){
-
-    return;
-
-  }
-
-
-  if(!isLoggedIn()){
-
-    alert(
-      "Please login first."
-    );
-
-
-    input.value =
-      "";
-
-
-    return;
-
-  }
-
-
-  const status =
-    document.getElementById(
-      "status"
-    );
-
-
-  const xhr =
-    new XMLHttpRequest();
-
-
-  /*
-    Hard safety timeout.
-    If nothing happens for
-    5 minutes, stop waiting
-    and show an error instead
-    of hanging forever.
-  */
-
-  xhr.timeout =
-    5 * 60 * 1000;
-
-
-  xhr.open(
-    "POST",
-    API_BASE +
-    "/api/upload?filename=" +
-    encodeURIComponent(
-      file.name
-    )
-  );
-
-
-  xhr.setRequestHeader(
-    "Content-Type",
-    file.type ||
-    "video/mp4"
-  );
-
-
-  xhr.setRequestHeader(
-    "Authorization",
-    "Bearer " +
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    )
-  );
-
-
-  /*
-    Real upload progress,
-    so we can SEE it's
-    actually moving instead
-    of guessing.
-  */
-
-  xhr.upload.addEventListener(
-    "progress",
-    function(event){
-
-      if(!event.lengthComputable){
-
-        return;
-
-      }
-
-
-      const percent =
-        Math.round(
-          (event.loaded / event.total) * 100
-        );
-
-
-      status.textContent =
-        "Uploading " +
-        file.name +
-        "... " +
-        percent +
-        "%";
-
-    }
-  );
-
-
-  xhr.addEventListener(
-    "load",
-    function(){
-
-      let result = {};
-
-      try{
-
-        result =
-          JSON.parse(
-            xhr.responseText
-          );
-
-      }catch(error){
-
-        result = {};
-
-      }
-
-
-      if(
-        xhr.status >= 200 &&
-        xhr.status < 300
-      ){
-
-        status.textContent =
-          "Upload successful 🚀";
-
-
-        input.value =
-          "";
-
-
-        loadVideos();
-
-
-      }else{
-
-        status.textContent =
-          "Upload failed: " +
-          (
-            result.error ||
-            ("server returned " + xhr.status)
-          );
-
-      }
-
-    }
-  );
-
-
-  xhr.addEventListener(
-    "error",
-    function(){
-
-      status.textContent =
-        "Upload failed: network error. Check your internet connection.";
-
-    }
-  );
-
-
-  xhr.addEventListener(
-    "timeout",
-    function(){
-
-      status.textContent =
-        "Upload failed: timed out. Try a smaller video or a better connection.";
-
-    }
-  );
-
-
-  status.textContent =
-    "Uploading " +
-    file.name +
-    "... 0%";
-
-
-  xhr.send(file);
-
-}
-
-
-/* =====================================
-   DELETE
-   ===================================== */
-
-async function deleteVideo(name){
-
-  if(!isLoggedIn()){
-
-    alert(
-      "Please login first."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !confirm(
-      "Delete this video?"
-    )
-  ){
-
-    return;
-
-  }
-
-
-  try{
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/delete/" +
-        name,
-        {
-          method:"DELETE",
-
-          headers:{
-            "Authorization":
-              "Bearer " +
-              localStorage.getItem(
-                ACCESS_TOKEN_KEY
-              )
-          }
-
-        }
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "Delete failed"
-      );
-
-    }
-
-
-    await loadVideos();
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    alert(
-      "Could not delete video."
-    );
-
-  }
-
-}
-
-
-/* =====================================
-   SEARCH
-   ===================================== */
-
-/* =====================================
-   CATEGORY FILTER
-   ===================================== */
-
-function filterByCategory(category, buttonEl){
-
-  document
-    .querySelectorAll(
-      ".categories button"
-    )
-    .forEach(button => {
-
-      button.classList.remove(
-        "active"
-      );
-
-    });
-
-
-  buttonEl.classList.add(
-    "active"
-  );
-
-
-  if(category === "All"){
-
-    renderVideos(
-      allVideos
-    );
-
-    return;
-
-  }
-
-
-  const filtered =
-    allVideos.filter(video =>
-
-      video.category === category
-
-    );
-
-
-  renderVideos(
-    filtered
-  );
-
-}
-
-
-function filterVideos(){
-
-  const search =
-    document
-      .getElementById(
-        "search"
-      )
-      .value
-      .toLowerCase();
-
-
-  const filtered =
-    allVideos.filter(
-      video =>
-        (video.title || video.r2_key || "")
-          .toLowerCase()
-          .includes(
-            search
-          )
-    );
-
-
-  renderVideos(
-    filtered
-  );
-
-}
-
-
-/* =====================================
-   SECURITY
-   ===================================== */
-
-function escapeHTML(text){
-
-  return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =====================================
-   START
-   ===================================== */
-
+makeCategories();
 updateAccountUI();
-
 loadVideos();
-
-
-/*
-  Register the service worker
-  (needed for the PWA/Android
-  app wrapper to install this
-  as a standalone app).
-*/
+loadPosts();
+loadMySubscriptions();
 
 if("serviceWorker" in navigator){
-
-  window.addEventListener(
-    "load",
-    function(){
-
-      navigator.serviceWorker
-        .register("sw.js")
-        .catch(function(error){
-
-          console.error(
-            "Service worker registration failed:",
-            error
-          );
-
-        });
-
-    }
-  );
-
+ window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(console.error));
 }
-
-loadMySubscriptions().then(
-  applySubscribeStates
-);
-
-
-/*
-  Show a red dot on the bell icon
-  if there are unread notifications
-  (written by notifications.html).
-*/
-
-try{
-
-  const notifications =
-    JSON.parse(
-      localStorage.getItem(
-        "minitube_notifications"
-      ) || "[]"
-    );
-
-
-  const hasUnread =
-    notifications.some(
-      n => !n.read
-    );
-
-
-  document
-    .getElementById(
-      "notifDot"
-    )
-    .classList.toggle(
-      "show",
-      hasUnread
-    );
-
-
-}catch(error){
-
-  /* ignore */
-
-}
-
 </script>
-
 </body>
 </html>
