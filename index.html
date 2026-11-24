@@ -9,6 +9,7 @@
 <meta name="theme-color" content="#0f0f0f">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif;padding-bottom:80px}
@@ -30,13 +31,14 @@ header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid 
 .menuLink:hover{background:#292929}
 .accountButton{width:100%;padding:11px;border:0;border-radius:9px;background:#292929;color:white;font-weight:bold}
 .logoutButton{background:#ff0033}
-.categories,.feedTabs{display:flex;gap:9px;overflow-x:auto;padding-top:12px}
-.categories button,.feedTabs button{border:0;border-radius:22px;padding:9px 15px;background:#292929;color:white;font-size:14px;white-space:nowrap}
+.categories,.feedTabs{display:flex;gap:9px;overflow-x:auto;padding-top:12px;scrollbar-width:none}
+.categories::-webkit-scrollbar,.feedTabs::-webkit-scrollbar{display:none}
+.categories button,.feedTabs button{border:0;border-radius:22px;padding:9px 15px;background:#292929;color:white;font-size:14px;white-space:nowrap;cursor:pointer}
 .categories button.active,.feedTabs button.active{background:white;color:#111}
 .hero{margin:22px 16px;padding:25px;border-radius:23px;background:linear-gradient(120deg,#24132d,#151515)}
 .hero h1{margin:0 0 10px;font-size:27px}
 .hero p{color:#aaa}
-.upload{background:#ff0033;color:white;border:0;border-radius:30px;padding:13px 21px;font-size:15px;font-weight:bold}
+.upload{background:#ff0033;color:white;border:0;border-radius:30px;padding:13px 21px;font-size:15px;font-weight:bold;cursor:pointer}
 .sectionTitle{padding:18px 16px 10px;font-size:19px;font-weight:bold}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:17px;padding:0 16px}
 .card,.postCard{background:#181818;border-radius:15px;overflow:hidden;border:1px solid #292929}
@@ -47,13 +49,13 @@ header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid 
 .meta{color:#999;font-size:13px;margin-top:7px}
 .channelRow{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px}
 .channelName{color:#aaa;font-size:13px;cursor:pointer}
-.subscribeBtn{border:0;border-radius:20px;padding:8px 13px;background:white;color:#111;font-weight:bold}
+.subscribeBtn{border:0;border-radius:20px;padding:8px 13px;background:white;color:#111;font-weight:bold;cursor:pointer}
 .subscribeBtn.subscribed{background:#292929;color:white;border:1px solid #555}
 .actions{display:flex;align-items:center;gap:17px;margin-top:12px}
-.likeBtn{background:none;border:0;color:#ccc;font-size:15px;padding:0}
+.likeBtn{background:none;border:0;color:#ccc;font-size:15px;padding:0;cursor:pointer}
 .likeBtn.liked{color:#ff0033}
 .views{color:#aaa;font-size:13px}
-.watchBtn,.delete{margin-top:12px;background:#292929;color:white;border:0;padding:9px 13px;border-radius:8px}
+.watchBtn,.delete{margin-top:12px;background:#292929;color:white;border:0;padding:9px 13px;border-radius:8px;cursor:pointer}
 .delete{margin-left:5px;color:#ff4964}
 .postCard{padding:15px;margin-bottom:14px}
 .postTop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
@@ -65,35 +67,46 @@ header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid 
 .status{text-align:center;color:#aaa;padding:22px}
 .hidden{display:none!important}
 .bottom{position:fixed;bottom:0;left:0;right:0;height:68px;background:#151515;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center;z-index:20}
-.bottom button{background:none;border:0;color:#aaa;font-size:12px}
+.bottom button{background:none;border:0;color:#aaa;font-size:12px;cursor:pointer}
 .bottom b{display:block;font-size:21px;color:white;margin-bottom:3px}
 @media(max-width:600px){
- .logo{font-size:19px}.grid{grid-template-columns:1fr}
- .hero{padding:22px}.accountMenu{right:-5px;width:230px}
+ .logo{font-size:19px}
+ .grid{grid-template-columns:1fr}
+ .hero{padding:22px}
+ .accountMenu{right:-5px;width:230px}
 }
 </style>
 </head>
+
 <body>
 
 <header>
  <div class="top">
   <div class="logo"><span>▶</span> MiniTube</div>
+
   <input class="search" placeholder="Search videos..." readonly onclick="location.href='search.html'">
+
   <button class="iconButton" onclick="location.href='notifications.html'">🔔</button>
+
   <div class="accountArea">
    <div id="avatar" class="avatar" onclick="toggleAccountMenu()">M</div>
+
    <div id="accountMenu" class="accountMenu">
     <div id="accountAvatar" class="accountAvatar">M</div>
     <div id="accountName">Account</div>
     <div id="accountEmail" class="accountEmail">Not logged in</div>
     <div id="loginStatus" class="loginStatus"></div>
+
     <div class="accountDivider"></div>
+
     <div class="menuLink" onclick="location.href='channel.html'">👤 Your channel</div>
     <div class="menuLink" onclick="location.href='studio.html'">🎬 Your videos (Studio)</div>
     <div class="menuLink" onclick="location.href='playlist.html'">▤ Playlists</div>
     <div class="menuLink" onclick="location.href='history.html'">🕐 Watch history</div>
     <div class="menuLink" onclick="location.href='settings.html'">⚙ Settings</div>
+
     <div class="accountDivider"></div>
+
     <button id="accountAction" class="accountButton" onclick="accountAction()">Login</button>
    </div>
   </div>
@@ -110,7 +123,7 @@ header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid 
 
 <div class="feedTabs" style="padding:0 16px 12px">
  <button class="active" data-feed="all" onclick="changeFeed('all',this)">All Videos</button>
- <button data-feed="vertical" onclick="changeFeed('vertical',this)">📱 Shorts</button>
+ <button data-feed="vertical" onclick="changeFeed('vertical',this)">📱 Scroll</button>
  <button data-feed="horizontal" onclick="changeFeed('horizontal',this)">🖥 Horizontal</button>
  <button data-feed="posts" onclick="changeFeed('posts',this)">📝 Posts</button>
 </div>
@@ -118,11 +131,12 @@ header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid 
 <div id="sectionTitle" class="sectionTitle">Latest Videos</div>
 <div id="status" class="status">Loading videos...</div>
 <div id="videos" class="grid"></div>
+
 <div id="posts" class="hidden" style="max-width:650px;margin:auto;padding:0 16px"></div>
 
 <div class="bottom">
  <button onclick="location.href='index.html'"><b>⌂</b>Home</button>
- <button onclick="location.href='shorts.html'"><b>▶</b>Shorts</button>
+ <button onclick="location.href='shorts.html'"><b>▶</b>Scroll</button>
  <button onclick="location.href='posts.html'"><b>▤</b>Posts</button>
  <button onclick="location.href='subscriptions.html'"><b>□</b>Subscriptions</button>
  <button onclick="location.href='you.html'"><b>●</b>You</button>
@@ -132,16 +146,25 @@ header{position:sticky;top:0;z-index:10;background:#111;border-bottom:1px solid 
 const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
 const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
 const ACCESS_TOKEN_KEY="minitube_access_token";
 const REFRESH_TOKEN_KEY="minitube_refresh_token";
 const USER_KEY="minitube_user";
 
-const CATEGORIES=["All","Trending","Technology","Trading","Business","Education","Entertainment","Sports","Science","Comedy","Gaming","Music","News","Finance","Health"];
+const CATEGORIES=[
+ "All","Trending","Technology","Trading","Business",
+ "Education","Entertainment","Sports","Science","Comedy",
+ "Gaming","Music","News","Finance","Health"
+];
 
-let allVideos=[],allPosts=[],currentFeed="all",currentCategory="All";
+let allVideos=[];
+let allPosts=[];
+let currentFeed="all";
+let currentCategory="All";
 let mySubscriptions=new Set();
 
 const $=id=>document.getElementById(id);
+
 function getLoggedUser(){
  try{
   const token=localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -149,16 +172,24 @@ function getLoggedUser(){
   return token&&saved?JSON.parse(saved):null;
  }catch{return null}
 }
-function isLoggedIn(){return !!getLoggedUser()}
+
+function isLoggedIn(){
+ return !!getLoggedUser();
+}
+
 function getUserName(user){
  const m=user?.user_metadata||user?.userMetadata||{};
  return m.display_name||m.full_name||m.name||user?.email||"MiniTube User";
 }
-function getUserInitial(user){return getUserName(user).trim().charAt(0).toUpperCase()||"M"}
+
+function getUserInitial(user){
+ return getUserName(user).trim().charAt(0).toUpperCase()||"M";
+}
 
 function updateAccountUI(){
  const user=getLoggedUser();
  const initial=user?getUserInitial(user):"M";
+
  $("avatar").textContent=initial;
  $("accountAvatar").textContent=initial;
  $("accountName").textContent=user?getUserName(user):"Not logged in";
@@ -166,54 +197,104 @@ function updateAccountUI(){
  $("loginStatus").textContent=user?"✓ Logged in":"";
  $("accountAction").textContent=user?"Logout":"Login";
  $("accountAction").classList.toggle("logoutButton",!!user);
- $("welcomeText").textContent=user?"Welcome back, "+getUserName(user)+"!":"Your own video-sharing platform.";
+
+ $("welcomeText").textContent=user
+  ?"Welcome back, "+getUserName(user)+"!"
+  :"Your own video-sharing platform.";
 }
-function toggleAccountMenu(){$("accountMenu").classList.toggle("show")}
+
+function toggleAccountMenu(){
+ $("accountMenu").classList.toggle("show");
+}
+
 document.addEventListener("click",e=>{
- if(!e.target.closest(".accountArea"))$("accountMenu").classList.remove("show");
+ if(!e.target.closest(".accountArea")){
+  $("accountMenu").classList.remove("show");
+ }
 });
+
 function accountAction(){
- if(!isLoggedIn()){location.href="login.html";return}
+ if(!isLoggedIn()){
+  location.href="login.html";
+  return;
+ }
+
  if(!confirm("Logout from this MiniTube account?"))return;
- [ACCESS_TOKEN_KEY,REFRESH_TOKEN_KEY,USER_KEY].forEach(k=>localStorage.removeItem(k));
+
+ [ACCESS_TOKEN_KEY,REFRESH_TOKEN_KEY,USER_KEY].forEach(k=>{
+  localStorage.removeItem(k);
+ });
+
  updateAccountUI();
  location.reload();
 }
+
 function startUpload(){
  if(!isLoggedIn()){
-  if(confirm("Please login first to create content. Go to Login?"))location.href="login.html";
+  if(confirm("Please login first to create content. Go to Login?")){
+   location.href="login.html";
+  }
   return;
  }
+
  location.href="upload.html";
 }
+
 function escapeHTML(value){
- return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
+ }[c]));
 }
-function openWatch(key){location.href="watch.html?video="+encodeURIComponent(key)}
+
+function openWatch(key){
+ location.href="watch.html?video="+encodeURIComponent(key);
+}
 
 function makeCategories(){
  $("categories").innerHTML=CATEGORIES.map(c=>
-  `<button class="${c==="All"?"active":""}" data-category="${c}">${c}</button>`
+  `<button class="${c==="All"?"active":""}" data-category="${escapeHTML(c)}">${escapeHTML(c)}</button>`
  ).join("");
- $("categories").querySelectorAll("button").forEach(b=>b.onclick=()=>{
-  currentCategory=b.dataset.category;
-  $("categories").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));
-  renderCurrent();
+
+ $("categories").querySelectorAll("button").forEach(b=>{
+  b.onclick=()=>{
+   currentCategory=b.dataset.category;
+
+   $("categories").querySelectorAll("button").forEach(x=>{
+    x.classList.toggle("active",x===b);
+   });
+
+   renderCurrent();
+  };
  });
 }
 
 function changeFeed(feed,button){
  currentFeed=feed;
- document.querySelectorAll(".feedTabs button").forEach(b=>b.classList.toggle("active",b===button));
+
+ document.querySelectorAll(".feedTabs button").forEach(b=>{
+  b.classList.toggle("active",b===button);
+ });
+
  renderCurrent();
 }
 
 async function loadVideos(){
  try{
   const response=await fetch(API_BASE+"/api/videos");
-  if(!response.ok)throw new Error(await response.text());
-  allVideos=await response.json();
+
+  if(!response.ok){
+   throw new Error(await response.text());
+  }
+
+  const data=await response.json();
+  allVideos=Array.isArray(data)?data:[];
+
   renderCurrent();
+
  }catch(error){
   $("status").textContent="Unable to load videos. "+error.message;
  }
@@ -223,184 +304,359 @@ async function loadPosts(){
  try{
   const response=await fetch(
    `${SUPABASE_URL}/rest/v1/posts?select=id,content,image_path,category,created_at&order=created_at.desc&limit=100`,
-   {headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY}}
+   {
+    headers:{
+     "apikey":SUPABASE_ANON_KEY,
+     "Authorization":"Bearer "+SUPABASE_ANON_KEY
+    }
+   }
   );
-  if(!response.ok)throw new Error(await response.text());
+
+  if(!response.ok){
+   throw new Error(await response.text());
+  }
+
   allPosts=await response.json();
-  if(currentFeed==="posts")renderCurrent();
+
+  if(currentFeed==="posts"){
+   renderCurrent();
+  }
+
  }catch(error){
   console.error("Posts loading error:",error);
  }
 }
 
 function renderCurrent(){
- const videosBox=$("videos"),postsBox=$("posts"),status=$("status");
- videosBox.innerHTML="";postsBox.innerHTML="";
+ const videosBox=$("videos");
+ const postsBox=$("posts");
+ const status=$("status");
+
+ videosBox.innerHTML="";
+ postsBox.innerHTML="";
+
  const showPosts=currentFeed==="posts";
+
  videosBox.classList.toggle("hidden",showPosts);
  postsBox.classList.toggle("hidden",!showPosts);
 
  if(showPosts){
   $("sectionTitle").textContent="Community Posts";
-  status.textContent=allPosts.length?allPosts.length+" post(s)":"";
-  const list=currentCategory==="All"?allPosts:allPosts.filter(p=>p.category===currentCategory);
-  if(!list.length){postsBox.innerHTML='<div class="status">No posts here yet. Be the first to share!</div>';return}
+
+  const list=currentCategory==="All"
+   ?allPosts
+   :allPosts.filter(p=>p.category===currentCategory);
+
+  status.textContent=list.length?list.length+" post(s)":"";
+
+  if(!list.length){
+   postsBox.innerHTML='<div class="status">No posts here yet. Be the first to share!</div>';
+   return;
+  }
+
   postsBox.innerHTML=list.map(p=>`
    <article class="postCard">
     <div class="postTop">
      <div class="postAvatar">M</div>
-     <div><b>MiniTube Creator</b><div class="postMeta">${new Date(p.created_at).toLocaleString()}</div></div>
-     <div class="postCategory">${escapeHTML(p.category)}</div>
+
+     <div>
+      <b>MiniTube Creator</b>
+      <div class="postMeta">${new Date(p.created_at).toLocaleString()}</div>
+     </div>
+
+     <div class="postCategory">${escapeHTML(p.category||"General")}</div>
     </div>
+
     ${p.content?`<div class="postContent">${escapeHTML(p.content)}</div>`:""}
-    ${p.image_path?`<img class="postImage" src="${escapeHTML(p.image_path)}" alt="Post photo" loading="lazy">`:""}
+
+    ${p.image_path?`
+     <img class="postImage"
+      src="${escapeHTML(p.image_path)}"
+      alt="Post photo"
+      loading="lazy">
+    `:""}
    </article>
   `).join("");
+
   return;
  }
 
- let list=allVideos;
- if(currentFeed==="vertical")list=list.filter(v=>v.format==="vertical");
- if(currentFeed==="horizontal")list=list.filter(v=>v.format!=="vertical");
- if(currentCategory!=="All")list=list.filter(v=>v.category===currentCategory);
+ let list=[...allVideos];
 
- $("sectionTitle").textContent=currentFeed==="vertical"?"Shorts":currentFeed==="horizontal"?"Horizontal Videos":"Latest Videos";
+ if(currentFeed==="vertical"){
+  list=list.filter(v=>v.format==="vertical");
+ }
+
+ if(currentFeed==="horizontal"){
+  list=list.filter(v=>v.format==="horizontal"||!v.format);
+ }
+
+ if(currentCategory!=="All"){
+  list=list.filter(v=>v.category===currentCategory);
+ }
+
+ $("sectionTitle").textContent=
+  currentFeed==="vertical"?"Scroll Videos":
+  currentFeed==="horizontal"?"Horizontal Videos":
+  "Latest Videos";
+
  status.textContent=list.length?list.length+" video(s)":"";
- if(!list.length){status.textContent="No videos found. Upload your first video 🚀";return}
+
+ if(!list.length){
+  status.textContent="No videos found. Upload your first video 🚀";
+  return;
+ }
 
  list.forEach(video=>{
   const key=video.r2_key;
   if(!key)return;
+
   const title=video.title||key;
   const ownerName=video.profiles?.display_name||"Unknown creator";
+
   const user=getLoggedUser();
   const own=!!user&&user.id===video.owner_id;
+
   const url=API_BASE+"/video/"+encodeURIComponent(key);
-  const likeKey="likes_"+key,likedKey="liked_"+key,viewsKey="views_"+key;
+
+  const likeKey="likes_"+key;
+  const likedKey="liked_"+key;
+  const viewsKey="views_"+key;
+
   let likes=Number(localStorage.getItem(likeKey)||0);
   let liked=localStorage.getItem(likedKey)==="true";
   let views=Number(localStorage.getItem(viewsKey)||0);
 
+  const isVertical=video.format==="vertical";
+
   const card=document.createElement("article");
   card.className="card";
+
   card.innerHTML=`
-   <video class="cardVideo ${video.format==="vertical"?"vertical":""}" preload="metadata" playsinline src="${url}"></video>
+   <video
+    class="cardVideo ${isVertical?"vertical":""}"
+    preload="metadata"
+    playsinline
+    controls
+    src="${url}">
+   </video>
+
    <div class="info">
     <div class="title">${escapeHTML(title)}</div>
+
     <div class="channelRow">
      <div class="channelName">${escapeHTML(ownerName)}</div>
-     ${own?"":`<button class="subscribeBtn" data-channel-id="${escapeHTML(video.owner_id)}">Subscribe</button>`}
+
+     ${own?"":`
+      <button class="subscribeBtn"
+       data-channel-id="${escapeHTML(video.owner_id)}">
+       Subscribe
+      </button>
+     `}
     </div>
-    <div class="meta">${escapeHTML(video.category||"Trending")} · ${video.format==="vertical"?"Shorts":"Horizontal"}</div>
+
+    <div class="meta">
+     ${escapeHTML(video.category||"Trending")} ·
+     ${isVertical?"Scroll":"Horizontal"}
+    </div>
+
     <div class="actions">
-     <button class="likeBtn ${liked?"liked":""}">${liked?"♥":"♡"} Like <span>${likes}</span></button>
+     <button class="likeBtn ${liked?"liked":""}">
+      ${liked?"♥":"♡"} Like <span>${likes}</span>
+     </button>
+
      <div class="views">👁 <span>${views}</span> views</div>
     </div>
+
     <button class="watchBtn">▶ Watch</button>
+
     ${own?'<button class="delete">Delete</button>':""}
-   </div>`;
+   </div>
+  `;
 
   const open=()=>openWatch(key);
-  card.querySelector("video").onclick=open;
+
   card.querySelector(".title").onclick=open;
   card.querySelector(".watchBtn").onclick=open;
 
   card.querySelector(".channelName").onclick=()=>{
-   location.href=own?"channel.html":"channel.html?id="+encodeURIComponent(video.owner_id);
+   location.href=own
+    ?"channel.html"
+    :"channel.html?id="+encodeURIComponent(video.owner_id);
   };
 
   const likeButton=card.querySelector(".likeBtn");
+
   likeButton.onclick=()=>{
    liked=!liked;
    likes=Math.max(0,likes+(liked?1:-1));
+
    localStorage.setItem(likeKey,likes);
    localStorage.setItem(likedKey,String(liked));
+
    likeButton.classList.toggle("liked",liked);
-   likeButton.innerHTML=`${liked?"♥":"♡"} Like <span>${likes}</span>`;
+
+   likeButton.innerHTML=
+    `${liked?"♥":"♡"} Like <span>${likes}</span>`;
   };
 
-  card.querySelector(".video")?.addEventListener("play",()=>{});
-  card.querySelector(".cardVideo").addEventListener("click",open);
-
   const sub=card.querySelector(".subscribeBtn");
+
   if(sub){
    const channelId=video.owner_id;
+
    sub.classList.toggle("subscribed",mySubscriptions.has(channelId));
-   sub.textContent=mySubscriptions.has(channelId)?"Subscribed":"Subscribe";
+   sub.textContent=mySubscriptions.has(channelId)
+    ?"Subscribed"
+    :"Subscribe";
+
    sub.onclick=()=>toggleSubscribeChannel(channelId,sub);
   }
 
   const del=card.querySelector(".delete");
-  if(del)del.onclick=()=>deleteVideo(key);
 
-  card.querySelector(".views span").textContent=views;
+  if(del){
+   del.onclick=()=>deleteVideo(key);
+  }
+
   videosBox.appendChild(card);
  });
 }
 
 async function toggleSubscribeChannel(channelId,button){
  const user=getLoggedUser();
- if(!user){if(confirm("Please login first. Go to Login?"))location.href="login.html";return}
+
+ if(!user){
+  if(confirm("Please login first. Go to Login?")){
+   location.href="login.html";
+  }
+  return;
+ }
+
  if(user.id===channelId)return;
+
  const token=localStorage.getItem(ACCESS_TOKEN_KEY);
  const already=mySubscriptions.has(channelId);
+
  try{
   const response=await fetch(
-   SUPABASE_URL+"/rest/v1/subscriptions?subscriber_id=eq."+encodeURIComponent(user.id)+"&channel_id=eq."+encodeURIComponent(channelId),
+   SUPABASE_URL+"/rest/v1/subscriptions?subscriber_id=eq."+
+   encodeURIComponent(user.id)+
+   "&channel_id=eq."+
+   encodeURIComponent(channelId),
+
    already?{
     method:"DELETE",
-    headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+token}
+    headers:{
+     "apikey":SUPABASE_ANON_KEY,
+     "Authorization":"Bearer "+token
+    }
    }:{
     method:"POST",
-    headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+token,"Content-Type":"application/json","Prefer":"return=minimal"},
-    body:JSON.stringify({subscriber_id:user.id,channel_id:channelId})
+    headers:{
+     "apikey":SUPABASE_ANON_KEY,
+     "Authorization":"Bearer "+token,
+     "Content-Type":"application/json",
+     "Prefer":"return=minimal"
+    },
+    body:JSON.stringify({
+     subscriber_id:user.id,
+     channel_id:channelId
+    })
    }
   );
-  if(!response.ok)throw new Error(await response.text());
-  if(already)mySubscriptions.delete(channelId);else mySubscriptions.add(channelId);
+
+  if(!response.ok){
+   throw new Error(await response.text());
+  }
+
+  if(already){
+   mySubscriptions.delete(channelId);
+  }else{
+   mySubscriptions.add(channelId);
+  }
+
   button.classList.toggle("subscribed",!already);
   button.textContent=already?"Subscribe":"Subscribed";
- }catch(error){alert("Subscription update failed: "+error.message)}
+
+ }catch(error){
+  alert("Subscription update failed: "+error.message);
+ }
 }
 
 async function loadMySubscriptions(){
- const user=getLoggedUser();if(!user)return;
+ const user=getLoggedUser();
+ if(!user)return;
+
  try{
   const response=await fetch(
-   SUPABASE_URL+"/rest/v1/subscriptions?subscriber_id=eq."+encodeURIComponent(user.id)+"&select=channel_id",
-   {headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+localStorage.getItem(ACCESS_TOKEN_KEY)}}
+   SUPABASE_URL+"/rest/v1/subscriptions?subscriber_id=eq."+
+   encodeURIComponent(user.id)+"&select=channel_id",
+   {
+    headers:{
+     "apikey":SUPABASE_ANON_KEY,
+     "Authorization":"Bearer "+localStorage.getItem(ACCESS_TOKEN_KEY)
+    }
+   }
   );
+
   if(response.ok){
    const rows=await response.json();
+
    mySubscriptions=new Set(rows.map(r=>r.channel_id));
+
    renderCurrent();
   }
- }catch(error){console.error(error)}
+
+ }catch(error){
+  console.error(error);
+ }
 }
 
 async function deleteVideo(key){
- if(!isLoggedIn()){alert("Please login first.");return}
+ if(!isLoggedIn()){
+  alert("Please login first.");
+  return;
+ }
+
  if(!confirm("Delete this video?"))return;
+
  try{
-  const response=await fetch(API_BASE+"/api/delete/"+encodeURIComponent(key),{
-   method:"DELETE",
-   headers:{"Authorization":"Bearer "+localStorage.getItem(ACCESS_TOKEN_KEY)}
-  });
-  if(!response.ok)throw new Error(await response.text());
+  const response=await fetch(
+   API_BASE+"/api/delete/"+encodeURIComponent(key),
+   {
+    method:"DELETE",
+    headers:{
+     "Authorization":"Bearer "+localStorage.getItem(ACCESS_TOKEN_KEY)
+    }
+   }
+  );
+
+  if(!response.ok){
+   throw new Error(await response.text());
+  }
+
   allVideos=allVideos.filter(v=>v.r2_key!==key);
   renderCurrent();
- }catch(error){alert("Could not delete video: "+error.message)}
+
+ }catch(error){
+  alert("Could not delete video: "+error.message);
+ }
 }
 
 makeCategories();
 updateAccountUI();
+
 loadVideos();
 loadPosts();
 loadMySubscriptions();
 
 if("serviceWorker" in navigator){
- window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(console.error));
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("sw.js").catch(console.error);
+ });
 }
 </script>
+
 </body>
 </html>
