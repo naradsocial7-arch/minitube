@@ -3,11 +3,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Upload - MiniTube</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0f0f0f;color:#fff;font-family:Arial,sans-serif;padding-bottom:35px}
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial;padding-bottom:35px}
 header{height:60px;display:flex;align-items:center;gap:15px;padding:0 16px;border-bottom:1px solid #292929;position:sticky;top:0;background:#101010;z-index:5}
 .back{border:0;background:none;color:white;font-size:25px}
 .logo{font-size:21px;font-weight:bold}.logo span{color:#ff3030}
@@ -15,19 +15,18 @@ main{max-width:650px;margin:22px auto;padding:0 15px}
 h2{font-size:23px;margin:8px 0}
 .sub{color:#aaa;font-size:14px;line-height:1.5}
 .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
-.mode{background:#202020;border:1px solid #383838;border-radius:13px;color:white;padding:17px 5px;text-align:center;cursor:pointer}
+.mode{background:#202020;border:1px solid #383838;border-radius:13px;color:white;padding:17px 5px;text-align:center}
 .mode.active{border:2px solid #ff3030;background:#301818}
-.mode .emoji{font-size:25px;display:block;margin-bottom:8px}
-.mode b{font-size:14px}
+.emoji{font-size:25px;display:block;margin-bottom:8px}
 .panel{background:#1b1b1b;border:1px solid #303030;border-radius:15px;padding:17px;margin-top:14px}
 .hidden{display:none!important}
 label{display:block;color:#ddd;font-size:14px;margin:15px 0 7px}
-input,textarea,select{width:100%;padding:13px;border-radius:9px;border:1px solid #444;background:#101010;color:white;font-size:15px;outline:none}
+input,textarea,select{width:100%;padding:13px;border-radius:9px;border:1px solid #444;background:#101010;color:white;font-size:15px}
 textarea{min-height:115px;resize:vertical}
 .filebox{border:2px dashed #555;border-radius:13px;padding:25px 12px;text-align:center;margin-top:12px;cursor:pointer;color:#bbb}
 .filebox strong{display:block;color:white;margin-bottom:7px}
 .preview{width:100%;max-height:360px;object-fit:contain;background:#080808;border-radius:12px;margin-top:13px}
-button.primary{width:100%;background:#ff3030;color:white;border:0;padding:15px;border-radius:10px;font-size:16px;font-weight:bold;margin-top:18px}
+.primary{width:100%;background:#ff3030;color:white;border:0;padding:15px;border-radius:10px;font-size:16px;font-weight:bold;margin-top:18px}
 button:disabled{opacity:.5}
 .progress{height:8px;background:#333;border-radius:10px;overflow:hidden;margin-top:14px}
 .bar{height:100%;width:0;background:#ff3030}
@@ -40,65 +39,42 @@ button:disabled{opacity:.5}
 <button class="back" onclick="history.back()">‹</button>
 <div class="logo"><span>▶</span> MiniTube</div>
 </header>
-
 <main>
 <h2>Create on MiniTube</h2>
-<div class="sub">Choose what you want to share with the community.</div>
+<div class="sub">Choose what you want to share.</div>
 
 <div class="modes">
-<button class="mode active" id="postMode" onclick="selectMode('post')">
-<span class="emoji">📝</span><b>Post</b>
-</button>
-<button class="mode" id="videoMode" onclick="selectMode('video')">
-<span class="emoji">📱</span><b>Video</b>
-</button>
-<button class="mode" id="horizontalMode" onclick="selectMode('horizontal')">
-<span class="emoji">🖥️</span><b>Horizontal</b>
-</button>
+<button class="mode active" id="postMode" onclick="selectMode('post')"><span class="emoji">📝</span><b>Post</b></button>
+<button class="mode" id="videoMode" onclick="selectMode('video')"><span class="emoji">📱</span><b>Video</b></button>
+<button class="mode" id="horizontalMode" onclick="selectMode('horizontal')"><span class="emoji">🖥️</span><b>Horizontal</b></button>
 </div>
 
-<!-- POST FORM -->
 <section class="panel" id="postPanel">
 <h2>Create a Post</h2>
-<div class="sub">Share your thoughts or add a photo.</div>
-
+<div class="sub">Share text, a photo, or both.</div>
 <label>Write something</label>
 <textarea id="postText" maxlength="5000" placeholder="What's happening?"></textarea>
-
 <label>Choose a photo (optional)</label>
-<div class="filebox" onclick="document.getElementById('postPhoto').click()">
-<strong>＋ Select Photo</strong>
-JPG, PNG or WebP · Maximum 5 MB
-</div>
+<div class="filebox" onclick="document.getElementById('postPhoto').click()"><strong>＋ Select Photo</strong>JPG, PNG or WebP · Maximum 5 MB</div>
 <input class="hidden" type="file" id="postPhoto" accept="image/jpeg,image/png,image/webp">
 <img id="photoPreview" class="preview hidden">
-
 <label>Topic</label>
 <select id="postCategory"></select>
-
 <button class="primary" id="publishPost" onclick="publishPost()">Publish Post</button>
 <div class="status" id="postStatus"></div>
 </section>
 
-<!-- VIDEO FORM -->
 <section class="panel hidden" id="videoPanel">
-<h2 id="videoHeading">Upload Video</h2>
-<div class="sub" id="videoDescription">Vertical video for Shorts (9:16).</div>
-
-<div class="filebox" onclick="document.getElementById('videoFile').click()">
-<strong>＋ Select Video</strong>
-Choose a video from your phone
-</div>
+<h2 id="videoHeading">Upload Vertical Video</h2>
+<div class="sub" id="videoDescription">Vertical video for Shorts.</div>
+<div class="filebox" onclick="document.getElementById('videoFile').click()"><strong>＋ Select Video</strong>Choose a video from your phone</div>
 <input class="hidden" type="file" id="videoFile" accept="video/*">
 <video id="videoPreview" class="preview hidden" controls playsinline></video>
-
 <label>Video title</label>
 <input id="videoTitle" maxlength="150" placeholder="Enter video title">
-
 <label>Topic</label>
 <select id="videoCategory"></select>
-
-<div class="hint" id="formatHint">Required format: vertical 9:16. Video will be checked before upload.</div>
+<div class="hint" id="formatHint">Vertical video close to 9:16.</div>
 <button class="primary" id="uploadVideoButton" onclick="startVideoUpload()">Upload Video</button>
 <div class="progress"><div class="bar" id="progressBar"></div></div>
 <div class="status" id="videoStatus"></div>
@@ -107,319 +83,141 @@ Choose a video from your phone
 
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 <script>
-const API_BASE = "https://wispy-base-65bb.naradsocial7.workers.dev";
-
-const SUPABASE_URL = "https://vlzssmuzetcbkmzujecs.supabase.co";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_EXISTING_PUBLIC_ANON_KEY_HERE";
-
-const CATEGORIES = [
-"Trending","Technology","Trading","Business","Education",
-"Entertainment","Sports","Science","Comedy","Gaming",
-"Music","News","Finance","Health"
-];
-
-const $ = id => document.getElementById(id);
-
-function getToken(){
-  return localStorage.getItem("minitube_access_token") || "";
-}
-function getUser(){
-  try{return JSON.parse(localStorage.getItem("minitube_user") || "null")}
-  catch(e){return null}
-}
+const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
+const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+const CATEGORIES=["Trending","Technology","Trading","Business","Education","Entertainment","Sports","Science","Comedy","Gaming","Music","News","Finance","Health"];
+const $=id=>document.getElementById(id);
+const getToken=()=>localStorage.getItem("minitube_access_token")||"";
+function getUser(){try{return JSON.parse(localStorage.getItem("minitube_user")||"null")}catch{return null}}
 function requireLogin(){
-  if(!getToken() || !getUser()){
-    alert("Please login first to upload on MiniTube.");
-    location.href="login.html";
-    return false;
-  }
-  return true;
+ if(!getToken()||!getUser()){alert("Please login first.");location.href="login.html";return false}
+ return true;
 }
-
 function fillCategories(){
-  ["postCategory","videoCategory"].forEach(id=>{
-    $(id).innerHTML=CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join("");
-  });
+ ["postCategory","videoCategory"].forEach(id=>$(id).innerHTML=CATEGORIES.map(c=>`<option value="${c}">${c}</option>`).join(""));
 }
 fillCategories();
 
-let currentMode="post";
-let selectedVideo=null;
-let videoRatio=0;
-
+let currentMode="post",selectedVideo=null,videoRatio=0,videoWidth=0,videoHeight=0;
 function selectMode(mode){
-  currentMode=mode;
-  $("postMode").classList.toggle("active",mode==="post");
-  $("videoMode").classList.toggle("active",mode==="video");
-  $("horizontalMode").classList.toggle("active",mode==="horizontal");
-
-  $("postPanel").classList.toggle("hidden",mode!=="post");
-  $("videoPanel").classList.toggle("hidden",mode==="post");
-
-  if(mode==="video"){
-    $("videoHeading").textContent="Upload Vertical Video";
-    $("videoDescription").textContent="Vertical video for Shorts (9:16).";
-    $("formatHint").textContent="Required format: portrait 9:16. Landscape videos are not accepted here.";
-  }
-  if(mode==="horizontal"){
-    $("videoHeading").textContent="Upload Horizontal Video";
-    $("videoDescription").textContent="Landscape video for normal MiniTube videos (16:9).";
-    $("formatHint").textContent="Required format: landscape 16:9. Portrait videos are not accepted here.";
-  }
+ currentMode=mode;
+ $("postMode").classList.toggle("active",mode==="post");
+ $("videoMode").classList.toggle("active",mode==="video");
+ $("horizontalMode").classList.toggle("active",mode==="horizontal");
+ $("postPanel").classList.toggle("hidden",mode!=="post");
+ $("videoPanel").classList.toggle("hidden",mode==="post");
+ if(mode==="video"){
+  $("videoHeading").textContent="Upload Vertical Video";
+  $("videoDescription").textContent="Vertical video for Shorts (9:16).";
+  $("formatHint").textContent="Portrait video required. Aspect ratio close to 9:16.";
+ }else if(mode==="horizontal"){
+  $("videoHeading").textContent="Upload Horizontal Video";
+  $("videoDescription").textContent="Landscape video (16:9).";
+  $("formatHint").textContent="Landscape video required. Aspect ratio close to 16:9.";
+ }
 }
-
 $("postPhoto").addEventListener("change",()=>{
-  const file=$("postPhoto").files[0];
-  if(!file)return;
-  if(file.size>5*1024*1024){
-    alert("Photo must be 5 MB or smaller.");
-    $("postPhoto").value="";
-    return;
-  }
-  $("photoPreview").src=URL.createObjectURL(file);
-  $("photoPreview").classList.remove("hidden");
+ const file=$("postPhoto").files[0];if(!file)return;
+ if(file.size>5*1024*1024){alert("Photo must be 5 MB or smaller.");$("postPhoto").value="";return}
+ $("photoPreview").src=URL.createObjectURL(file);$("photoPreview").classList.remove("hidden");
 });
-
 $("videoFile").addEventListener("change",()=>{
-  const file=$("videoFile").files[0];
-  if(!file)return;
-  selectedVideo=file;
-  $("videoPreview").src=URL.createObjectURL(file);
-  $("videoPreview").classList.remove("hidden");
-  $("videoStatus").textContent="Checking video dimensions...";
-
-  const temp=document.createElement("video");
-  temp.preload="metadata";
-  temp.onloadedmetadata=()=>{
-    videoRatio=temp.videoWidth/temp.videoHeight;
-    const label=videoRatio<1?"Vertical":videoRatio>1?"Horizontal":"Square";
-    $("videoStatus").textContent=
-      `${label} video · ${temp.videoWidth} × ${temp.videoHeight}`;
-    URL.revokeObjectURL(temp.src);
-  };
-  temp.onerror=()=>{$("videoStatus").textContent="Could not read video information.";};
-  temp.src=URL.createObjectURL(file);
+ const file=$("videoFile").files[0];if(!file)return;
+ selectedVideo=file;videoRatio=0;
+ $("videoPreview").src=URL.createObjectURL(file);$("videoPreview").classList.remove("hidden");
+ $("videoStatus").textContent="Checking video dimensions...";
+ const temp=document.createElement("video");temp.preload="metadata";
+ temp.onloadedmetadata=()=>{
+  videoWidth=temp.videoWidth;videoHeight=temp.videoHeight;videoRatio=videoWidth/videoHeight;
+  $("videoStatus").textContent=(videoRatio<1?"Vertical":videoRatio>1?"Horizontal":"Square")+" video · "+videoWidth+" × "+videoHeight;
+  URL.revokeObjectURL(temp.src);
+ };
+ temp.onerror=()=>{$("videoStatus").textContent="Could not read video information."};
+ temp.src=URL.createObjectURL(file);
 });
 
 async function publishPost(){
-  if(!requireLogin())return;
-
-  const content=$("postText").value.trim();
-  const photo=$("postPhoto").files[0];
-  const category=$("postCategory").value;
-
-  if(!content && !photo){
-    alert("Write something or select a photo.");
-    return;
+ if(!requireLogin())return;
+ const content=$("postText").value.trim(),photo=$("postPhoto").files[0],category=$("postCategory").value;
+ if(!content&&!photo){alert("Write something or select a photo.");return}
+ if(photo&&photo.size>5*1024*1024){alert("Photo must be 5 MB or smaller.");return}
+ const button=$("publishPost"),status=$("postStatus");button.disabled=true;status.textContent="Publishing...";
+ try{
+  const user=getUser(),userId=user.id||user.user?.id;
+  if(!userId)throw new Error("User ID not found. Login again.");
+  let imagePath=null;
+  if(photo){
+   const safeName=photo.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+   const path=`${userId}/${Date.now()}-${safeName}`;
+   const up=await fetch(`${SUPABASE_URL}/storage/v1/object/post-images/${path}`,{
+    method:"POST",
+    headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+getToken(),"Content-Type":photo.type},
+    body:photo
+   });
+   if(!up.ok)throw new Error("Photo upload failed: "+await up.text());
+   imagePath=`${SUPABASE_URL}/storage/v1/object/public/post-images/${path}`;
   }
-  if(photo && photo.size>5*1024*1024){
-    alert("Photo must be 5 MB or smaller.");
-    return;
-  }
-  if(SUPABASE_ANON_KEY.includes("PASTE_")){
-    alert("Add your existing Supabase public anon key in upload.html first.");
-    return;
-  }
-
-  const button=$("publishPost");
-  const status=$("postStatus");
-  button.disabled=true;
-  status.textContent="Publishing your post...";
-
-  try{
-    const user=getUser();
-    const userId=user.id || user.user?.id;
-    if(!userId)throw new Error("User ID not found. Please login again.");
-
-    let imagePath=null;
-
-    if(photo){
-      const safeName=photo.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-      const path=`${userId}/${Date.now()}-${safeName}`;
-
-      const uploadResponse=await fetch(
-        `${SUPABASE_URL}/storage/v1/object/post-images/${path}`,
-        {
-          method:"POST",
-          headers:{
-            "apikey":SUPABASE_ANON_KEY,
-            "Authorization":"Bearer "+getToken(),
-            "Content-Type":photo.type,
-            "x-upsert":"false"
-          },
-          body:photo
-        }
-      );
-      if(!uploadResponse.ok){
-        const err=await uploadResponse.text();
-        throw new Error("Photo upload failed: "+err);
-      }
-
-      imagePath=`${SUPABASE_URL}/storage/v1/object/public/post-images/${path}`;
-    }
-
-    const response=await fetch(`${SUPABASE_URL}/rest/v1/posts`,{
-      method:"POST",
-      headers:{
-        "apikey":SUPABASE_ANON_KEY,
-        "Authorization":"Bearer "+getToken(),
-        "Content-Type":"application/json",
-        "Prefer":"return=representation"
-      },
-      body:JSON.stringify({
-        user_id:userId,
-        content:content,
-        image_path:imagePath,
-        category:category
-      })
-    });
-
-    if(!response.ok){
-      const err=await response.text();
-      throw new Error("Post save failed: "+err);
-    }
-
-    status.textContent="Post published successfully!";
-    $("postText").value="";
-    $("postPhoto").value="";
-    $("photoPreview").classList.add("hidden");
-    setTimeout(()=>location.href="posts.html",700);
-
-  }catch(error){
-    status.textContent=error.message;
-  }finally{
-    button.disabled=false;
-  }
+  const response=await fetch(`${SUPABASE_URL}/rest/v1/posts`,{
+   method:"POST",
+   headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+getToken(),"Content-Type":"application/json","Prefer":"return=representation"},
+   body:JSON.stringify({user_id:userId,content,image_path:imagePath,category})
+  });
+  if(!response.ok)throw new Error("Post save failed: "+await response.text());
+  status.textContent="Post published!";
+  location.href="posts.html";
+ }catch(error){status.textContent=error.message;button.disabled=false}
 }
 
 let ffmpegInstance=null;
-
 async function compressVideo(file){
-  const shortSide=Math.min(
-    $("videoPreview").videoWidth || 0,
-    $("videoPreview").videoHeight || 0
-  );
-  if(shortSide<=360)return file;
-
-  $("videoStatus").textContent="Preparing 360p compression...";
-
-  if(!ffmpegInstance){
-    const {createFFmpeg}=FFmpeg;
-    ffmpegInstance=createFFmpeg({
-      log:false,
-      corePath:"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"
-    });
-  }
-
-  if(!ffmpegInstance.isLoaded())await ffmpegInstance.load();
-
-  const inputName="input_video";
-  const outputName="output_video.mp4";
-  ffmpegInstance.FS("writeFile",inputName,await fetchFile(file));
-
-  if(videoRatio<1){
-    await ffmpegInstance.run(
-      "-i",inputName,
-      "-vf","scale=360:-2",
-      "-c:v","libx264","-preset","ultrafast",
-      "-crf","28","-c:a","aac","-b:a","96k",
-      outputName
-    );
-  }else{
-    await ffmpegInstance.run(
-      "-i",inputName,
-      "-vf","scale=-2:360",
-      "-c:v","libx264","-preset","ultrafast",
-      "-crf","28","-c:a","aac","-b:a","96k",
-      outputName
-    );
-  }
-
-  const data=ffmpegInstance.FS("readFile",outputName);
-  return new File([data.buffer],file.name.replace(/\.[^.]+$/,"")+"_360p.mp4",{
-    type:"video/mp4"
-  });
+ if(Math.min(videoWidth,videoHeight)<=360)return file;
+ $("videoStatus").textContent="Preparing 360p compression...";
+ if(!ffmpegInstance){
+  const {createFFmpeg}=FFmpeg;
+  ffmpegInstance=createFFmpeg({log:false,corePath:"https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"});
+ }
+ if(!ffmpegInstance.isLoaded())await ffmpegInstance.load();
+ const inputName="input_video.mp4",outputName="output_video.mp4";
+ ffmpegInstance.FS("writeFile",inputName,await FFmpeg.fetchFile(file));
+ const filter=videoRatio<1?"scale=360:-2":"scale=-2:360";
+ await ffmpegInstance.run("-i",inputName,"-vf",filter,"-c:v","libx264","-preset","ultrafast","-crf","28","-c:a","aac","-b:a","96k",outputName);
+ const data=ffmpegInstance.FS("readFile",outputName);
+ return new File([data],file.name.replace(/\.[^.]+$/,"")+"_360p.mp4",{type:"video/mp4"});
 }
 
 async function startVideoUpload(){
-  if(!requireLogin())return;
-
-  const file=selectedVideo;
-  if(!file){alert("Please select a video first.");return;}
-
-  const title=$("videoTitle").value.trim();
-  if(!title){alert("Please enter a video title.");return;}
-
-  const isVertical=currentMode==="video";
-  if(isVertical && videoRatio>0.80){
-    alert("Video option requires a vertical portrait video (9:16). Please select a vertical video.");
-    return;
-  }
-  if(!isVertical && (videoRatio<1.45 || videoRatio>1.90)){
-    alert("Horizontal option requires a landscape video close to 16:9. Please select a horizontal video.");
-    return;
-  }
-
-  const button=$("uploadVideoButton");
-  const status=$("videoStatus");
-  button.disabled=true;
-  $("progressBar").style.width="0%";
-
-  try{
-    let uploadFile=file;
-    try{
-      uploadFile=await compressVideo(file);
-    }catch(compressError){
-      const useOriginal=confirm(
-        "360p compression could not be completed. Upload the original video instead?"
-      );
-      if(!useOriginal)throw new Error("Upload cancelled.");
-      uploadFile=file;
-    }
-
-    status.textContent="Uploading video...";
-
-    const category=$("videoCategory").value;
-    const rawName=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
-
-    const xhr=new XMLHttpRequest();
-    xhr.open(
-      "POST",
-      `${API_BASE}/api/upload?filename=${encodeURIComponent(rawName)}&category=${encodeURIComponent(category)}&title=${encodeURIComponent(title)}&format=${isVertical?"vertical":"horizontal"}`
-    );
-    xhr.setRequestHeader("Content-Type",uploadFile.type || "video/mp4");
-    xhr.setRequestHeader("Authorization","Bearer "+getToken());
-
-    xhr.upload.onprogress=e=>{
-      if(e.lengthComputable){
-        const percent=Math.round((e.loaded/e.total)*100);
-        $("progressBar").style.width=percent+"%";
-        status.textContent="Uploading: "+percent+"%";
-      }
-    };
-
-    xhr.onload=()=>{
-      button.disabled=false;
-      if(xhr.status>=200 && xhr.status<300){
-        let result={};
-        try{result=JSON.parse(xhr.responseText)}catch(e){}
-        const savedName=result.filename || result.name || rawName;
-        status.textContent="Upload complete! Opening your video...";
-        location.href="watch.html?video="+encodeURIComponent(savedName);
-      }else{
-        status.textContent="Upload failed: "+xhr.responseText;
-      }
-    };
-    xhr.onerror=()=>{
-      button.disabled=false;
-      status.textContent="Network error. Please try again.";
-    };
-    xhr.send(uploadFile);
-
-  }catch(error){
-    status.textContent=error.message;
-    button.disabled=false;
-  }
+ if(!requireLogin())return;
+ const file=selectedVideo;if(!file){alert("Select a video first.");return}
+ const title=$("videoTitle").value.trim();if(!title){alert("Enter video title.");return}
+ if(!videoRatio){alert("Wait for video dimensions to load, or select the video again.");return}
+ const isVertical=currentMode==="video";
+ if(isVertical&&(videoRatio>0.80||videoRatio<0.45)){alert("Video option needs a portrait video close to 9:16.");return}
+ if(!isVertical&&(videoRatio<1.45||videoRatio>1.90)){alert("Horizontal option needs a landscape video close to 16:9.");return}
+ const button=$("uploadVideoButton"),status=$("videoStatus");button.disabled=true;$("progressBar").style.width="0%";
+ try{
+  let uploadFile=file;
+  try{uploadFile=await compressVideo(file)}
+  catch(e){if(!confirm("360p compression failed. Upload original video instead?"))throw new Error("Upload cancelled.");uploadFile=file}
+  const category=$("videoCategory").value;
+  const rawName=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const xhr=new XMLHttpRequest();
+  xhr.open("POST",`${API_BASE}/api/upload?filename=${encodeURIComponent(rawName)}&category=${encodeURIComponent(category)}&title=${encodeURIComponent(title)}&format=${isVertical?"vertical":"horizontal"}`);
+  xhr.setRequestHeader("Content-Type",uploadFile.type||"video/mp4");
+  xhr.setRequestHeader("Authorization","Bearer "+getToken());
+  xhr.upload.onprogress=e=>{
+   if(e.lengthComputable){const p=Math.round(e.loaded/e.total*100);$("progressBar").style.width=p+"%";status.textContent="Uploading: "+p+"%"}
+  };
+  xhr.onload=()=>{
+   button.disabled=false;
+   if(xhr.status>=200&&xhr.status<300){
+    let result={};try{result=JSON.parse(xhr.responseText)}catch{}
+    location.href="watch.html?video="+encodeURIComponent(result.filename||result.name||rawName);
+   }else status.textContent="Upload failed: "+xhr.responseText;
+  };
+  xhr.onerror=()=>{button.disabled=false;status.textContent="Network error."};
+  xhr.send(uploadFile);
+ }catch(error){status.textContent=error.message;button.disabled=false}
 }
 </script>
 </body>
