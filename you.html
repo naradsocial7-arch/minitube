@@ -8,954 +8,557 @@
 
 <style>
 *{box-sizing:border-box}
+body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif;padding-bottom:80px}
 
-body{
-  margin:0;
-  background:#0f0f0f;
-  color:white;
-  font-family:Arial,sans-serif;
-  padding-bottom:80px;
-}
-
-.editChannelOverlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:200;
-  align-items:flex-end;
-  justify-content:center;
-}
+/* EDIT CHANNEL MODAL */
+.editChannelOverlay{display:none;position:fixed;inset:0;background:#0009;z-index:200;align-items:flex-end;justify-content:center}
 .editChannelOverlay.show{display:flex}
-
-.editChannelBox{
-  width:100%;
-  max-width:480px;
-  background:#181818;
-  border-radius:20px 20px 0 0;
-  padding:20px;
-}
-.editChannelTitle{
-  font-size:17px;
-  font-weight:bold;
-  margin-bottom:16px;
-}
-.editFieldLabel{
-  color:#999;
-  font-size:13px;
-  margin-bottom:8px;
-}
-.editFieldInput{
-  width:100%;
-  background:#222;
-  border:1px solid #444;
-  border-radius:10px;
-  padding:12px 14px;
-  color:white;
-  font-size:15px;
-  outline:none;
-}
-.editChannelButtons{
-  display:flex;
-  gap:10px;
-  margin-top:18px;
-}
-.editCancelButton,.editSaveButton{
-  flex:1;
-  border:0;
-  border-radius:10px;
-  padding:13px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.editCancelButton{
-  background:#292929;
-  color:white;
-}
-.editSaveButton{
-  background:#ff0033;
-  color:white;
-}
-.editSaveButton:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
+.editChannelBox{width:100%;max-width:480px;background:#181818;border-radius:20px 20px 0 0;padding:20px}
+.editChannelTitle{font-size:17px;font-weight:bold;margin-bottom:16px}
+.editFieldLabel{color:#999;font-size:13px;margin-bottom:8px}
+.editFieldInput{width:100%;background:#222;border:1px solid #444;border-radius:10px;padding:12px 14px;color:white;font-size:15px;outline:none}
+.editChannelButtons{display:flex;gap:10px;margin-top:18px}
+.editCancelButton,.editSaveButton{flex:1;border:0;border-radius:10px;padding:13px;font-weight:bold;cursor:pointer}
+.editCancelButton{background:#292929;color:white}
+.editSaveButton{background:#ff0033;color:white}
+.editSaveButton:disabled{opacity:.6}
 
 /* HEADER */
-header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  height:64px;
-  background:#111;
-  border-bottom:1px solid #292929;
-  display:flex;
-  align-items:center;
-  padding:0 16px;
-  gap:14px;
-}
-.back{
-  background:none;
-  border:0;
-  color:white;
-  font-size:30px;
-  cursor:pointer;
-}
-.logo{
-  font-size:23px;
-  font-weight:800;
-}
+header{position:sticky;top:0;z-index:20;height:64px;background:#111;border-bottom:1px solid #292929;display:flex;align-items:center;padding:0 16px;gap:14px}
+.back{background:none;border:0;color:white;font-size:30px;cursor:pointer}
+.logo{font-size:23px;font-weight:800}
 .logo span{color:#ff0033}
 .spacer{flex:1}
-
-.avatarSmall{
-  width:42px;
-  height:42px;
-  border-radius:50%;
-  background:#7c4dff;
-  display:grid;
-  place-items:center;
-  font-weight:bold;
-  font-size:18px;
-  cursor:pointer;
-}
+.avatarSmall{width:42px;height:42px;border-radius:50%;background:#7c4dff;display:grid;place-items:center;font-weight:bold;font-size:18px;cursor:pointer}
 
 /* CHANNEL */
-.channelHeader{
-  margin:20px;
-  background:linear-gradient(135deg,#24132d,#171717);
-  border-radius:22px;
-  padding:25px;
-  display:flex;
-  align-items:center;
-  gap:20px;
-}
-.channelAvatar{
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  background:#7c4dff;
-  display:grid;
-  place-items:center;
-  font-size:34px;
-  font-weight:bold;
-  flex-shrink:0;
-}
+.channelHeader{margin:20px;background:linear-gradient(135deg,#24132d,#171717);border-radius:22px;padding:25px;display:flex;align-items:center;gap:20px}
+.channelAvatar{width:90px;height:90px;border-radius:50%;background:#7c4dff;display:grid;place-items:center;font-size:34px;font-weight:bold;flex-shrink:0}
 .channelDetails{flex:1;min-width:0}
-.channelName{
-  font-size:26px;
-  font-weight:800;
-  margin-bottom:7px;
-  word-break:break-word;
-}
-.handle{
-  color:#aaa;
-  font-size:14px;
-  margin-bottom:10px;
-}
-.channelStats{
-  color:#aaa;
-  font-size:14px;
-  line-height:1.5;
-}
-.userEmail{
-  color:#bbb;
-  word-break:break-all;
-}
-.channelActions{
-  margin-top:15px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.editButton,.logoutButton{
-  border-radius:22px;
-  padding:10px 18px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.editButton{
-  border:1px solid #555;
-  background:#292929;
-  color:white;
-}
-.logoutButton{
-  background:transparent;
-  color:#ff4964;
-  border:1px solid #ff4964;
-}
-.logoutButton:hover{
-  background:#ff0033;
-  color:white;
-}
+.channelName{font-size:26px;font-weight:800;margin-bottom:7px;word-break:break-word}
+.handle{color:#aaa;font-size:14px;margin-bottom:10px}
+.channelStats{color:#aaa;font-size:14px;line-height:1.5}
+.userEmail{color:#bbb;word-break:break-all}
+.channelActions{margin-top:15px;display:flex;gap:10px;flex-wrap:wrap}
+.editButton,.logoutButton{border-radius:22px;padding:10px 18px;font-weight:bold;cursor:pointer}
+.editButton{border:1px solid #555;background:#292929;color:white}
+.logoutButton{background:transparent;color:#ff4964;border:1px solid #ff4964}
 
 /* QUICK LINKS */
-.quickLinks{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  padding:0 20px;
-  margin-bottom:10px;
-}
-.quickLink{
-  background:#181818;
-  border-radius:14px;
-  padding:16px 8px;
-  text-align:center;
-  cursor:pointer;
-  min-width:0;
-}
+.quickLinks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px;margin-bottom:10px}
+.quickLink{background:#181818;border-radius:14px;padding:16px 8px;text-align:center;cursor:pointer;min-width:0}
 .quickLink:hover{background:#1f1f1f}
-.quickLinkIcon{
-  font-size:22px;
-  margin-bottom:8px;
-}
-.quickLinkLabel{
-  font-size:12px;
-  color:#ccc;
-  word-break:break-word;
-}
+.quickLinkIcon{font-size:22px;margin-bottom:8px}
+.quickLinkLabel{font-size:12px;color:#ccc;word-break:break-word}
 
 /* CONTENT */
 .content{padding:0 20px}
-.sectionTitle{
-  font-size:21px;
-  font-weight:bold;
-  margin:25px 0 15px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:18px;
-}
-.card{
-  background:#181818;
-  border-radius:16px;
-  overflow:hidden;
-}
-.card video{
-  width:100%;
-  aspect-ratio:16/9;
-  display:block;
-  background:#000;
-  cursor:pointer;
-}
+.sectionTitle{font-size:21px;font-weight:bold;margin:25px 0 15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.card{background:#181818;border-radius:16px;overflow:hidden}
+.card video{width:100%;aspect-ratio:16/9;display:block;background:#000;cursor:pointer;object-fit:contain}
 .info{padding:12px}
-.title{
-  font-size:17px;
-  font-weight:bold;
-  word-break:break-word;
-  cursor:pointer;
-}
+.title{font-size:17px;font-weight:bold;word-break:break-word;cursor:pointer}
 .title:hover{text-decoration:underline}
-.meta{
-  color:#999;
-  font-size:13px;
-  margin-top:7px;
-  cursor:pointer;
-  display:inline-block;
-}
-.watchButton{
-  margin-top:12px;
-  background:#292929;
-  color:white;
-  border:0;
-  padding:9px 14px;
-  border-radius:8px;
-  cursor:pointer;
-}
-.watchButton:hover{background:#383838}
-
-/* EMPTY */
-.empty{
-  background:#181818;
-  border:1px solid #292929;
-  border-radius:16px;
-  padding:45px 20px;
-  text-align:center;
-}
-.emptyIcon{
-  font-size:45px;
-  margin-bottom:15px;
-}
+.meta{color:#999;font-size:13px;margin-top:7px}
+.watchButton{margin-top:12px;background:#292929;color:white;border:0;padding:9px 14px;border-radius:8px;cursor:pointer}
+.empty{background:#181818;border:1px solid #292929;border-radius:16px;padding:45px 20px;text-align:center}
+.emptyIcon{font-size:45px;margin-bottom:15px}
 .empty h2{margin:0 0 8px}
-.empty p{
-  color:#999;
-  line-height:1.5;
-  margin:0;
-}
-.homeButton{
-  margin-top:20px;
-  background:#ff0033;
-  color:white;
-  border:0;
-  border-radius:25px;
-  padding:13px 22px;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-}
+.empty p{color:#999;line-height:1.5;margin:0}
+.homeButton{margin-top:20px;background:#ff0033;color:white;border:0;border-radius:25px;padding:13px 22px;font-size:15px;font-weight:bold;cursor:pointer}
 
-/* BOTTOM NAV */
+/* FIVE TAB BOTTOM NAVIGATION */
 .bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:70px;
-  background:#151515;
-  border-top:1px solid #333;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:30;
+ position:fixed;
+ bottom:0;left:0;right:0;
+ height:70px;
+ background:#151515;
+ border-top:1px solid #333;
+ display:flex;
+ justify-content:space-around;
+ align-items:center;
+ z-index:100;
+ padding:0;
 }
 .bottom button{
-  background:none;
-  border:0;
-  color:#aaa;
-  font-size:13px;
-  cursor:pointer;
+ flex:1;
+ width:20%;
+ max-width:20%;
+ height:70px;
+ padding:5px 1px;
+ margin:0;
+ background:none;
+ border:0;
+ color:#aaa;
+ font-size:12px;
+ font-family:Arial,sans-serif;
+ cursor:pointer;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ white-space:nowrap;
 }
 .bottom button b{
-  display:block;
-  font-size:22px;
-  color:white;
-  margin-bottom:3px;
+ display:block;
+ font-size:22px;
+ line-height:22px;
+ height:25px;
+ margin-bottom:3px;
+ color:white;
+ font-weight:normal;
 }
-.bottom .active{color:white}
+.bottom button.active{color:white}
+.bottom button.active b{color:white}
 
 @media(max-width:600px){
-  .channelHeader{
-    margin:16px;
-    padding:20px;
-    align-items:flex-start;
-  }
-  .channelAvatar{
-    width:70px;
-    height:70px;
-    font-size:27px;
-  }
-  .channelName{font-size:21px}
-  .content{padding:0 16px}
-  .grid{grid-template-columns:1fr}
+ .channelHeader{margin:16px;padding:20px;align-items:flex-start}
+ .channelAvatar{width:70px;height:70px;font-size:27px}
+ .channelName{font-size:21px}
+ .content{padding:0 16px}
+ .grid{grid-template-columns:1fr}
 }
-
 @media(max-width:380px){
-  .channelHeader{gap:12px}
-  .channelAvatar{
-    width:60px;
-    height:60px;
-    font-size:23px;
-  }
-  .channelName{font-size:18px}
-  .handle{font-size:13px}
-  .quickLinks{padding:0 12px;gap:8px}
+ .channelHeader{gap:12px}
+ .channelAvatar{width:60px;height:60px;font-size:23px}
+ .channelName{font-size:18px}
+ .handle{font-size:13px}
+ .quickLinks{padding:0 12px;gap:8px}
+ .bottom button{font-size:11px}
+ .bottom button b{font-size:20px}
 }
 </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <header>
-  <button class="back" onclick="goHome()">‹</button>
-  <div class="logo"><span>▶</span> MiniTube</div>
-  <div class="spacer"></div>
-  <div id="headerAvatar" class="avatarSmall"
-       onclick="window.location.href='settings.html'">?</div>
+ <button class="back" onclick="goHome()">‹</button>
+ <div class="logo"><span>▶</span> MiniTube</div>
+ <div class="spacer"></div>
+ <div id="headerAvatar" class="avatarSmall" onclick="location.href='settings.html'">?</div>
 </header>
 
-<!-- CHANNEL HEADER -->
 <section class="channelHeader">
-  <div id="channelAvatar" class="channelAvatar">?</div>
-
-  <div class="channelDetails">
-    <div id="channelName" class="channelName">Loading...</div>
-    <div id="handle" class="handle">@user</div>
-
-    <div class="channelStats">
-      <div id="userEmail" class="userEmail">Loading...</div>
-      <div style="margin-top:6px;">
-        <span id="videoCount">0</span> videos
-        &nbsp; • &nbsp;
-        <span id="subscriberCount">0</span> subscribers
-      </div>
-    </div>
-
-    <div class="channelActions">
-      <button class="editButton" onclick="editChannel()">Edit Channel</button>
-      <button class="logoutButton" onclick="logout()">Logout</button>
-    </div>
+ <div id="channelAvatar" class="channelAvatar">?</div>
+ <div class="channelDetails">
+  <div id="channelName" class="channelName">Loading...</div>
+  <div id="handle" class="handle">@user</div>
+  <div class="channelStats">
+   <div id="userEmail" class="userEmail">Loading...</div>
+   <div style="margin-top:6px">
+    <span id="videoCount">0</span> videos
+    &nbsp; • &nbsp;
+    <span id="subscriberCount">0</span> subscribers
+   </div>
   </div>
+  <div class="channelActions">
+   <button class="editButton" onclick="editChannel()">Edit Channel</button>
+   <button class="logoutButton" onclick="logout()">Logout</button>
+  </div>
+ </div>
 </section>
 
-<!-- QUICK LINKS -->
 <div class="quickLinks">
 
-  <div class="quickLink" onclick="window.location.href='studio.html'">
-    <div class="quickLinkIcon">🎬</div>
-    <div class="quickLinkLabel">Studio</div>
-  </div>
+ <div class="quickLink" onclick="location.href='studio.html'">
+  <div class="quickLinkIcon">🎬</div>
+  <div class="quickLinkLabel">Studio</div>
+ </div>
 
-  <div class="quickLink" onclick="window.location.href='playlist.html'">
-    <div class="quickLinkIcon">▤</div>
-    <div class="quickLinkLabel">Playlists</div>
-  </div>
+ <div class="quickLink" onclick="location.href='playlist.html'">
+  <div class="quickLinkIcon">▤</div>
+  <div class="quickLinkLabel">Playlists</div>
+ </div>
 
-  <div class="quickLink" onclick="window.location.href='history.html'">
-    <div class="quickLinkIcon">🕐</div>
-    <div class="quickLinkLabel">History</div>
-  </div>
+ <div class="quickLink" onclick="location.href='history.html'">
+  <div class="quickLinkIcon">🕐</div>
+  <div class="quickLinkLabel">History</div>
+ </div>
 
-  <div class="quickLink" onclick="window.location.href='settings.html'">
-    <div class="quickLinkIcon">⚙️</div>
-    <div class="quickLinkLabel">Settings</div>
-  </div>
+ <div class="quickLink" onclick="location.href='settings.html'">
+  <div class="quickLinkIcon">⚙️</div>
+  <div class="quickLinkLabel">Settings</div>
+ </div>
 
-  <!-- ADVERTISE OPTION: ALL USERS -->
-  <div class="quickLink" onclick="window.location.href='advertise.html'">
-    <div class="quickLinkIcon">📢</div>
-    <div class="quickLinkLabel">Advertise</div>
-  </div>
+ <div class="quickLink" onclick="location.href='advertise.html'">
+  <div class="quickLinkIcon">📢</div>
+  <div class="quickLinkLabel">Advertise</div>
+ </div>
 
-  <!-- ADMIN OPTION: ONLY ADMIN UID -->
-  <div class="quickLink" id="adminAdsLink"
-       style="display:none;"
-       onclick="window.location.href='admin-ads.html'">
-    <div class="quickLinkIcon">🛡️</div>
-    <div class="quickLinkLabel">Admin Ads</div>
-  </div>
+ <div class="quickLink" id="adminAdsLink" style="display:none"
+      onclick="location.href='admin-ads.html'">
+  <div class="quickLinkIcon">🛡️</div>
+  <div class="quickLinkLabel">Admin Ads</div>
+ </div>
 
 </div>
 
-<!-- VIDEOS -->
 <section class="content">
-  <div class="sectionTitle">Your Videos</div>
-  <div id="videos">Loading videos...</div>
+ <div class="sectionTitle">Your Videos</div>
+ <div id="videos">Loading videos...</div>
 </section>
 
-<!-- BOTTOM NAV -->
+<!-- FIVE BOTTOM TABS -->
 <div class="bottom">
-  <button onclick="goHome()"><b>⌂</b>Home</button>
-  <button onclick="goShorts()"><b>▶</b>HORIZONTAL</button>
-  <button onclick="goSubscriptions()"><b>□</b>Subscriptions</button>
-  <button class="active"><b>●</b>You</button>
+
+ <button onclick="goHome()">
+  <b>⌂</b>
+  Home
+ </button>
+
+ <button onclick="goScroll()">
+  <b>▶</b>
+  Scroll
+ </button>
+
+ <button onclick="goPosts()">
+  <b>▤</b>
+  Posts
+ </button>
+
+ <button onclick="goSubscriptions()">
+  <b>□</b>
+  Subscriptions
+ </button>
+
+ <button class="active">
+  <b>●</b>
+  You
+ </button>
+
 </div>
 
 <!-- EDIT CHANNEL MODAL -->
 <div id="editChannelOverlay" class="editChannelOverlay"
-     onclick="if(event.target === this){closeEditChannel();}">
-  <div class="editChannelBox">
-    <div class="editChannelTitle">Edit channel</div>
-    <div class="editFieldLabel">Channel name</div>
+ onclick="if(event.target===this)closeEditChannel()">
 
-    <input id="editNameInput" class="editFieldInput"
-           placeholder="Your channel name">
+ <div class="editChannelBox">
+  <div class="editChannelTitle">Edit channel</div>
+  <div class="editFieldLabel">Channel name</div>
 
-    <div class="editChannelButtons">
-      <button class="editCancelButton" onclick="closeEditChannel()">Cancel</button>
-      <button id="saveChannelButton" class="editSaveButton"
-              onclick="saveChannelEdit()">Save</button>
-    </div>
+  <input id="editNameInput" class="editFieldInput"
+         placeholder="Your channel name" maxlength="50">
+
+  <div class="editChannelButtons">
+   <button class="editCancelButton" onclick="closeEditChannel()">Cancel</button>
+   <button id="saveChannelButton" class="editSaveButton"
+           onclick="saveChannelEdit()">Save</button>
   </div>
+ </div>
 </div>
 
 <script>
+const API_BASE="https://wispy-base-65bb.naradsocial7.workers.dev";
 
-/* =====================================
-   CLOUDFLARE WORKER
-   ===================================== */
+const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
 
-const API_BASE =
-  "https://wispy-base-65bb.naradsocial7.workers.dev";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
 
-/* =====================================
-   SUPABASE
-   ===================================== */
-
-const SUPABASE_URL =
-  "https://vlzssmuzetcbkmzujecs.supabase.co";
-
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInJlZiI6InZsenNzbXV6ZXRjYmttenVqZWNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0OTEyNDEsImV4cCI6MjEwMzA2NzI0MX0.bf7qGqTyHHfEcXLchStVyPlqJlwzDyXMYrAVHNW1B0g";
-
-/* =====================================
-   MINITUBE ADMIN UID
-   ===================================== */
-
-const ADMIN_UID =
-  "e67326b1-307b-4b40-b2bf-8d56be9c0373";
-
-/* =====================================
-   SUBSCRIBE SYSTEM
-   ===================================== */
-
-const SUBSCRIBE_KEY =
-  "minitube_my_channel_subscribed";
-
-/* =====================================
-   RAW USER OBJECT
-   ===================================== */
+const ADMIN_UID="e67326b1-307b-4b40-b2bf-8d56be9c0373";
 
 function getRawUser(){
-  const userData = localStorage.getItem("minitube_user");
-
-  if(!userData) return null;
-
-  try{
-    return JSON.parse(userData);
-  }catch(error){
-    return null;
-  }
+ const userData=localStorage.getItem("minitube_user");
+ if(!userData)return null;
+ try{return JSON.parse(userData)}
+ catch(error){return null}
 }
-
-/* =====================================
-   LOGIN CHECK + USER INFORMATION
-   ===================================== */
 
 function loadLoggedInUser(){
+ const user=getRawUser();
 
-  const userData =
-    localStorage.getItem("minitube_user");
+ if(!user){
+  location.href="login.html";
+  return false;
+ }
 
-  if(!userData){
-    window.location.href = "login.html";
-    return false;
-  }
+ const adminLink=document.getElementById("adminAdsLink");
+ if(adminLink){
+  adminLink.style.display=user.id===ADMIN_UID?"block":"none";
+ }
 
-  try{
+ const email=user.email||"";
+ const metadata=user.user_metadata||{};
 
-    const user = JSON.parse(userData);
+ let displayName=metadata.display_name||metadata.full_name||metadata.name||"";
+ if(!displayName)displayName=email.split("@")[0]||"User";
 
-    /* ADMIN DASHBOARD VISIBILITY */
-    const adminLink =
-      document.getElementById("adminAdsLink");
+ const firstLetter=displayName.trim().charAt(0).toUpperCase()||"U";
 
-    if(adminLink){
-      adminLink.style.display =
-        user.id === ADMIN_UID ? "block" : "none";
-    }
+ let cleanHandle=displayName.toLowerCase()
+  .replace(/[^a-z0-9]+/g,"").slice(0,20);
 
-    const email = user.email || "";
-    const metadata = user.user_metadata || {};
+ if(!cleanHandle){
+  cleanHandle=email.split("@")[0].toLowerCase()
+   .replace(/[^a-z0-9]+/g,"").slice(0,20);
+ }
+ if(!cleanHandle)cleanHandle="user";
 
-    let displayName =
-      metadata.display_name || "";
+ document.getElementById("headerAvatar").textContent=firstLetter;
+ document.getElementById("channelAvatar").textContent=firstLetter;
+ document.getElementById("channelName").textContent=displayName;
+ document.getElementById("handle").textContent="@"+cleanHandle;
+ document.getElementById("userEmail").textContent=email;
 
-    if(!displayName){
-      displayName = email.split("@")[0] || "User";
-    }
-
-    const firstLetter =
-      displayName.trim().charAt(0).toUpperCase() || "U";
-
-    let cleanHandle =
-      displayName.toLowerCase()
-      .replace(/[^a-z0-9]+/g,"")
-      .slice(0,20);
-
-    if(!cleanHandle){
-      cleanHandle = email.split("@")[0]
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g,"")
-        .slice(0,20);
-    }
-
-    if(!cleanHandle){
-      cleanHandle = "user";
-    }
-
-    document.getElementById("headerAvatar").textContent =
-      firstLetter;
-
-    document.getElementById("channelAvatar").textContent =
-      firstLetter;
-
-    document.getElementById("channelName").textContent =
-      displayName;
-
-    document.getElementById("handle").textContent =
-      "@" + cleanHandle;
-
-    document.getElementById("userEmail").textContent =
-      email;
-
-    return true;
-
-  }catch(error){
-
-    console.error("User data error:",error);
-
-    localStorage.removeItem("minitube_user");
-    localStorage.removeItem("minitube_access_token");
-    localStorage.removeItem("minitube_refresh_token");
-
-    window.location.href = "login.html";
-    return false;
-  }
+ return true;
 }
 
-/* =====================================
-   REAL SUBSCRIBER COUNT
-   ===================================== */
-
+/* SUBSCRIBER COUNT */
 async function loadSubscriberCount(userId){
+ const countEl=document.getElementById("subscriberCount");
+ if(!userId)return;
 
-  const countEl =
-    document.getElementById("subscriberCount");
+ try{
+  const token=localStorage.getItem("minitube_access_token");
+  const response=await fetch(
+   SUPABASE_URL+"/rest/v1/subscriptions?channel_id=eq."+
+   encodeURIComponent(userId)+"&select=subscriber_id",
+   {headers:{
+    "apikey":SUPABASE_ANON_KEY,
+    "Authorization":"Bearer "+(token||SUPABASE_ANON_KEY)
+   }}
+  );
 
-  if(!userId) return;
+  if(!response.ok)throw new Error(await response.text());
 
-  try{
-
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/subscriptions?channel_id=eq." +
-      encodeURIComponent(userId) +
-      "&select=subscriber_id",
-      {
-        headers:{
-          "apikey":SUPABASE_ANON_KEY,
-          "Authorization":"Bearer " + SUPABASE_ANON_KEY
-        }
-      }
-    );
-
-    if(!response.ok) return;
-
-    const rows = await response.json();
-    countEl.textContent = rows.length;
-
-  }catch(error){
-    console.error(error);
-  }
+  const rows=await response.json();
+  countEl.textContent=rows.length;
+ }catch(error){
+  console.error("Subscriber count error:",error);
+ }
 }
 
-/* =====================================
-   EDIT CHANNEL
-   ===================================== */
-
+/* EDIT CHANNEL */
 function editChannel(){
+ const user=getRawUser();
+ if(!user)return;
 
-  const user = getRawUser();
-  if(!user) return;
+ const metadata=user.user_metadata||{};
+ document.getElementById("editNameInput").value=
+  metadata.display_name||metadata.full_name||metadata.name||"";
 
-  const metadata = user.user_metadata || {};
-  const currentName = metadata.display_name || "";
-
-  document.getElementById("editNameInput").value =
-    currentName;
-
-  document.getElementById("editChannelOverlay")
-    .classList.add("show");
+ document.getElementById("editChannelOverlay").classList.add("show");
 }
 
 function closeEditChannel(){
-
-  document.getElementById("editChannelOverlay")
-    .classList.remove("show");
+ document.getElementById("editChannelOverlay").classList.remove("show");
 }
 
 async function saveChannelEdit(){
+ const user=getRawUser();
+ if(!user)return;
 
-  const user = getRawUser();
-  if(!user) return;
+ const newName=document.getElementById("editNameInput").value.trim();
 
-  const newName =
-    document.getElementById("editNameInput").value.trim();
+ if(!newName){
+  alert("Please enter a channel name.");
+  return;
+ }
 
-  if(!newName){
-    alert("Please enter a channel name.");
-    return;
+ const saveButton=document.getElementById("saveChannelButton");
+ const token=localStorage.getItem("minitube_access_token");
+
+ if(!token){
+  alert("Login session missing. Please login again.");
+  return;
+ }
+
+ saveButton.disabled=true;
+ saveButton.textContent="Saving...";
+
+ try{
+  const response=await fetch(
+   SUPABASE_URL+"/rest/v1/profiles?id=eq."+encodeURIComponent(user.id),
+   {
+    method:"PATCH",
+    headers:{
+     "apikey":SUPABASE_ANON_KEY,
+     "Authorization":"Bearer "+token,
+     "Content-Type":"application/json",
+     "Prefer":"return=minimal"
+    },
+    body:JSON.stringify({display_name:newName})
+   }
+  );
+
+  if(!response.ok){
+   throw new Error(await response.text());
   }
 
-  const saveButton =
-    document.getElementById("saveChannelButton");
+  if(!user.user_metadata)user.user_metadata={};
+  user.user_metadata.display_name=newName;
 
-  saveButton.disabled = true;
-  saveButton.textContent = "Saving...";
+  localStorage.setItem("minitube_user",JSON.stringify(user));
 
-  const token =
-    localStorage.getItem("minitube_access_token");
+  closeEditChannel();
+  loadLoggedInUser();
 
-  if(!token){
-    alert("Login session missing. Please login again.");
-    saveButton.disabled = false;
-    saveButton.textContent = "Save";
-    return;
-  }
-
-  try{
-
-    const response = await fetch(
-      SUPABASE_URL +
-      "/rest/v1/profiles?id=eq." +
-      encodeURIComponent(user.id),
-      {
-        method:"PATCH",
-        headers:{
-          "apikey":SUPABASE_ANON_KEY,
-          "Authorization":"Bearer " + token,
-          "Content-Type":"application/json",
-          "Prefer":"return=minimal"
-        },
-        body:JSON.stringify({
-          display_name:newName
-        })
-      }
-    );
-
-    if(!response.ok){
-
-      const errorText = await response.text();
-
-      alert("Could not save changes: " + errorText);
-
-      saveButton.disabled = false;
-      saveButton.textContent = "Save";
-      return;
-    }
-
-    if(!user.user_metadata){
-      user.user_metadata = {};
-    }
-
-    user.user_metadata.display_name = newName;
-
-    localStorage.setItem(
-      "minitube_user",
-      JSON.stringify(user)
-    );
-
-    closeEditChannel();
-    loadLoggedInUser();
-
-  }catch(error){
-
-    alert("Could not save changes: network error.");
-
-    saveButton.disabled = false;
-    saveButton.textContent = "Save";
-  }
+ }catch(error){
+  alert("Could not save changes: "+error.message);
+ }finally{
+  saveButton.disabled=false;
+  saveButton.textContent="Save";
+ }
 }
 
-/* =====================================
-   LOGOUT
-   ===================================== */
-
+/* LOGOUT */
 function logout(){
+ if(!confirm("Are you sure you want to logout?"))return;
 
-  const confirmLogout =
-    confirm("Are you sure you want to logout?");
+ localStorage.removeItem("minitube_user");
+ localStorage.removeItem("minitube_access_token");
+ localStorage.removeItem("minitube_refresh_token");
 
-  if(!confirmLogout) return;
-
-  localStorage.removeItem("minitube_user");
-  localStorage.removeItem("minitube_access_token");
-  localStorage.removeItem("minitube_refresh_token");
-
-  window.location.href = "login.html";
+ location.href="login.html";
 }
 
-/* =====================================
-   LOAD VIDEOS
-   ===================================== */
-
+/* LOAD YOUR VIDEOS */
 async function loadVideos(){
+ const container=document.getElementById("videos");
+ const count=document.getElementById("videoCount");
+ const user=getRawUser();
 
-  const container =
-    document.getElementById("videos");
+ if(!user)return;
 
-  const count =
-    document.getElementById("videoCount");
+ try{
+  container.textContent="Loading videos...";
 
-  const user = getRawUser();
-  if(!user) return;
+  const response=await fetch(API_BASE+"/api/videos");
+  if(!response.ok)throw new Error("API error: "+response.status);
 
-  try{
+  const allVideos=await response.json();
 
-    container.textContent = "Loading videos...";
+  const myVideos=allVideos.filter(video=>video.owner_id===user.id);
 
-    const response = await fetch(
-      API_BASE + "/api/videos"
-    );
+  count.textContent=myVideos.length;
+  renderVideos(myVideos);
 
-    if(!response.ok){
-      throw new Error("API error");
-    }
+ }catch(error){
+  console.error("Video loading error:",error);
+  count.textContent="0";
 
-    const allVideos = await response.json();
-
-    const myVideos = allVideos.filter(
-      video => video.owner_id === user.id
-    );
-
-    count.textContent = myVideos.length;
-
-    renderVideos(myVideos);
-
-  }catch(error){
-
-    console.error("Video loading error:",error);
-
-    count.textContent = "0";
-
-    container.innerHTML = `
-      <div class="empty">
-        <div class="emptyIcon">⚠️</div>
-        <h2>Couldn't load videos</h2>
-        <p>Please try again later.</p>
-      </div>
-    `;
-  }
+  container.innerHTML=`
+   <div class="empty">
+    <div class="emptyIcon">⚠️</div>
+    <h2>Couldn't load videos</h2>
+    <p>Please try again later.</p>
+   </div>`;
+ }
 }
 
-/* =====================================
-   DISPLAY VIDEOS
-   ===================================== */
-
+/* DISPLAY VIDEOS */
 function renderVideos(videos){
+ const container=document.getElementById("videos");
 
-  const container =
-    document.getElementById("videos");
+ if(!Array.isArray(videos)){
+  container.innerHTML=`
+   <div class="empty">
+    <div class="emptyIcon">⚠️</div>
+    <h2>Something went wrong</h2>
+    <p>Invalid video data received.</p>
+   </div>`;
+  return;
+ }
 
-  if(!Array.isArray(videos)){
+ if(videos.length===0){
+  container.innerHTML=`
+   <div class="empty">
+    <div class="emptyIcon">📹</div>
+    <h2>No videos yet</h2>
+    <p>Upload a video from the Home page and it will appear here.</p>
+    <button class="homeButton" onclick="goHome()">Go to Home</button>
+   </div>`;
+  return;
+ }
 
-    container.innerHTML = `
-      <div class="empty">
-        <div class="emptyIcon">⚠️</div>
-        <h2>Something went wrong</h2>
-        <p>Invalid video data received.</p>
-      </div>
-    `;
+ container.innerHTML="";
 
-    return;
+ videos.forEach(video=>{
+  if(!video.r2_key)return;
+
+  const card=document.createElement("div");
+  card.className="card";
+
+  const videoURL=API_BASE+"/video/"+encodeURIComponent(video.r2_key);
+
+  const viewsKey="views_"+video.r2_key;
+  const views=Number(localStorage.getItem(viewsKey)||0);
+
+  const info=document.createElement("div");
+  info.className="info";
+
+  const videoElement=document.createElement("video");
+  videoElement.preload="metadata";
+  videoElement.playsInline=true;
+  videoElement.src=videoURL;
+
+  const title=document.createElement("div");
+  title.className="title";
+  title.textContent=video.title||video.r2_key;
+
+  const meta=document.createElement("div");
+  meta.className="meta";
+  const format=video.format==="vertical"?"Scroll":"Horizontal";
+  meta.textContent=formatNumber(views)+" views · "+format;
+
+  const watchButton=document.createElement("button");
+  watchButton.className="watchButton";
+  watchButton.textContent="▶ Watch";
+
+  function openVideo(){
+   location.href="watch.html?video="+encodeURIComponent(video.r2_key);
   }
 
-  if(videos.length === 0){
+  videoElement.addEventListener("click",openVideo);
+  title.addEventListener("click",openVideo);
+  watchButton.addEventListener("click",openVideo);
 
-    container.innerHTML = `
-      <div class="empty">
-        <div class="emptyIcon">📹</div>
-        <h2>No videos yet</h2>
-        <p>Upload a video from the Home page and it will appear here.</p>
-        <button class="homeButton" onclick="goHome()">Go to Home</button>
-      </div>
-    `;
+  info.appendChild(title);
+  info.appendChild(meta);
+  info.appendChild(watchButton);
 
-    return;
-  }
+  card.appendChild(videoElement);
+  card.appendChild(info);
 
-  container.innerHTML = "";
-
-  videos.forEach(video => {
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const videoURL =
-      API_BASE + "/video/" +
-      encodeURIComponent(video.r2_key);
-
-    const viewsKey = "views_" + video.r2_key;
-
-    const views = Number(
-      localStorage.getItem(viewsKey) || 0
-    );
-
-    const info = document.createElement("div");
-    info.className = "info";
-
-    const videoElement = document.createElement("video");
-    videoElement.preload = "metadata";
-    videoElement.src = videoURL;
-
-    const title = document.createElement("div");
-    title.className = "title";
-    title.textContent = video.title || video.r2_key;
-
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent = formatNumber(views) + " views";
-
-    const watchButton = document.createElement("button");
-    watchButton.className = "watchButton";
-    watchButton.textContent = "▶ Watch";
-
-    function openVideo(){
-      window.location.href =
-        "watch.html?video=" +
-        encodeURIComponent(video.r2_key);
-    }
-
-    videoElement.addEventListener("click",openVideo);
-    title.addEventListener("click",openVideo);
-    watchButton.addEventListener("click",openVideo);
-
-    info.appendChild(title);
-    info.appendChild(meta);
-    info.appendChild(watchButton);
-
-    card.appendChild(videoElement);
-    card.appendChild(info);
-
-    container.appendChild(card);
-  });
+  container.appendChild(card);
+ });
 }
 
-/* =====================================
-   FORMAT NUMBER
-   ===================================== */
-
+/* FORMAT NUMBER */
 function formatNumber(num){
-
-  if(num >= 1000000){
-    return (num / 1000000)
-      .toFixed(1).replace(/\.0$/,"") + "M";
-  }
-
-  if(num >= 1000){
-    return (num / 1000)
-      .toFixed(1).replace(/\.0$/,"") + "K";
-  }
-
-  return String(num);
+ if(num>=1000000)return (num/1000000).toFixed(1).replace(/\.0$/,"")+"M";
+ if(num>=1000)return (num/1000).toFixed(1).replace(/\.0$/,"")+"K";
+ return String(num);
 }
 
-/* =====================================
-   NAVIGATION
-   ===================================== */
-
+/* NAVIGATION */
 function goHome(){
-  window.location.href = "index.html";
+ location.href="index.html";
 }
 
-function goShorts(){
-  window.location.href = "shorts.html";
+/* Scroll uses the existing shorts.html address */
+function goScroll(){
+ location.href="shorts.html";
+}
+
+function goPosts(){
+ location.href="posts.html";
 }
 
 function goSubscriptions(){
-  window.location.href = "subscriptions.html";
+ location.href="subscriptions.html";
 }
 
-/* =====================================
-   START MINITUBE
-   ===================================== */
-
-const loggedIn = loadLoggedInUser();
+/* START */
+const loggedIn=loadLoggedInUser();
 
 if(loggedIn){
-
-  const rawUser = getRawUser();
-
-  if(rawUser){
-    loadSubscriberCount(rawUser.id);
-  }
-
-  loadVideos();
+ const user=getRawUser();
+ if(user)loadSubscriberCount(user.id);
+ loadVideos();
 }
-
 </script>
 
 </body>
