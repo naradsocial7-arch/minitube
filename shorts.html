@@ -1,1514 +1,877 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>MiniTube - Shorts</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0f0f0f">
+<title>MiniTube - Scroll</title>
 
 <style>
+*{box-sizing:border-box}
 
-*{
-  box-sizing:border-box;
+html,body{
+ margin:0;
+ padding:0;
+ width:100%;
+ height:100%;
+ background:#000;
+ color:#fff;
+ font-family:Arial,sans-serif;
+ overflow:hidden;
 }
 
-html,
-body{
-  margin:0;
-  padding:0;
-  background:#000;
-  color:#fff;
-  font-family:Arial,sans-serif;
-}
-
-body{
-  padding-bottom:70px;
-}
-
-
-/* =========================
-   HEADER
-   ========================= */
-
+/* HEADER */
 header{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-
-  height:64px;
-
-  z-index:20;
-
-  background:rgba(15,15,15,.95);
-
-  border-bottom:1px solid #292929;
-
-  display:flex;
-
-  align-items:center;
-
-  padding:0 14px;
-
-  gap:12px;
+ position:fixed;
+ top:0;
+ left:0;
+ right:0;
+ height:64px;
+ z-index:20;
+ background:rgba(15,15,15,.97);
+ border-bottom:1px solid #292929;
+ display:flex;
+ align-items:center;
+ padding:0 14px;
+ gap:12px;
 }
 
 .back{
-  border:0;
-  background:none;
-  color:white;
-
-  font-size:30px;
-
-  padding:0;
-
-  cursor:pointer;
-
-  line-height:1;
+ border:0;
+ background:none;
+ color:white;
+ font-size:30px;
+ padding:0;
+ cursor:pointer;
+ line-height:1;
 }
 
 .logo{
-  font-size:22px;
-  font-weight:800;
-  white-space:nowrap;
+ font-size:22px;
+ font-weight:800;
+ white-space:nowrap;
 }
 
-.logo span{
-  color:#ff0033;
-}
+.logo span{color:#ff0033}
 
 .headerTitle{
-  margin-left:auto;
-
-  font-size:16px;
-  font-weight:bold;
+ margin-left:auto;
+ font-size:17px;
+ font-weight:bold;
 }
 
 .avatar{
-  width:38px;
-  height:38px;
-
-  border-radius:50%;
-
-  background:#7c4dff;
-
-  display:grid;
-  place-items:center;
-
-  font-weight:bold;
-
-  cursor:pointer;
-
-  flex-shrink:0;
+ width:38px;
+ height:38px;
+ border-radius:50%;
+ background:#7c4dff;
+ display:grid;
+ place-items:center;
+ font-weight:bold;
+ cursor:pointer;
+ flex-shrink:0;
 }
 
-
-/* =========================
-   SHORTS FEED
-   ========================= */
-
-.shorts{
-  width:100%;
-  max-width:600px;
-
-  height:calc(100vh - 70px);
-
-  margin:64px auto 0;
-
-  overflow-y:auto;
-
-  scroll-snap-type:y mandatory;
-
-  scrollbar-width:none;
+/* SCROLL FEED */
+.scrollFeed{
+ position:fixed;
+ top:64px;
+ bottom:70px;
+ left:0;
+ right:0;
+ width:100%;
+ max-width:600px;
+ margin:auto;
+ overflow-y:auto;
+ overflow-x:hidden;
+ scroll-snap-type:y mandatory;
+ scrollbar-width:none;
+ background:#000;
 }
 
-.shorts::-webkit-scrollbar{
-  display:none;
-}
+.scrollFeed::-webkit-scrollbar{display:none}
 
-
-/* =========================
-   SHORT CARD
-   ========================= */
-
+/* VIDEO CARD */
 .short{
-  position:relative;
-
-  width:100%;
-
-  height:calc(100vh - 70px);
-
-  min-height:500px;
-
-  scroll-snap-align:start;
-
-  background:#000;
-
-  overflow:hidden;
+ position:relative;
+ width:100%;
+ height:100%;
+ min-height:100%;
+ scroll-snap-align:start;
+ scroll-snap-stop:always;
+ background:#000;
+ overflow:hidden;
 }
 
 .short video{
-  width:100%;
-  height:100%;
-
-  object-fit:contain;
-
-  background:#000;
+ width:100%;
+ height:100%;
+ object-fit:contain;
+ display:block;
+ background:#000;
 }
 
-
-/* =========================
-   GRADIENT
-   ========================= */
-
+/* GRADIENT */
 .gradient{
-  position:absolute;
-
-  left:0;
-  right:0;
-  bottom:0;
-
-  height:42%;
-
-  background:
-    linear-gradient(
-      transparent,
-      rgba(0,0,0,.9)
-    );
-
-  pointer-events:none;
+ position:absolute;
+ left:0;
+ right:0;
+ bottom:0;
+ height:42%;
+ background:linear-gradient(transparent,rgba(0,0,0,.9));
+ pointer-events:none;
 }
 
-
-/* =========================
-   INFO
-   ========================= */
-
+/* VIDEO INFO */
 .info{
-  position:absolute;
-
-  left:16px;
-  right:85px;
-  bottom:25px;
-
-  z-index:3;
+ position:absolute;
+ left:16px;
+ right:85px;
+ bottom:25px;
+ z-index:3;
 }
 
 .channelRow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-
-  margin-bottom:10px;
-
-  cursor:pointer;
+ display:flex;
+ align-items:center;
+ gap:8px;
+ margin-bottom:10px;
+ cursor:pointer;
 }
 
 .channelAvatar{
-  width:32px;
-  height:32px;
-
-  border-radius:50%;
-
-  background:#7c4dff;
-
-  display:grid;
-  place-items:center;
-
-  font-size:13px;
-  font-weight:bold;
-
-  flex-shrink:0;
+ width:34px;
+ height:34px;
+ border-radius:50%;
+ background:#7c4dff;
+ display:grid;
+ place-items:center;
+ font-size:13px;
+ font-weight:bold;
+ flex-shrink:0;
 }
 
 .channelName{
-  font-size:14px;
-  font-weight:bold;
+ font-size:14px;
+ font-weight:bold;
 }
 
 .videoName{
-  font-size:15px;
-
-  word-break:break-word;
-
-  line-height:1.4;
+ font-size:15px;
+ word-break:break-word;
+ line-height:1.4;
 }
 
-
-/* =========================
-   SIDE ACTIONS
-   ========================= */
-
+/* RIGHT ACTIONS */
 .actions{
-  position:absolute;
-
-  right:14px;
-  bottom:30px;
-
-  z-index:5;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  gap:20px;
+ position:absolute;
+ right:14px;
+ bottom:30px;
+ z-index:5;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:20px;
 }
 
 .action{
-  background:rgba(20,20,20,.7);
-
-  border:0;
-
-  color:white;
-
-  width:52px;
-
-  min-height:52px;
-
-  border-radius:50%;
-
-  font-size:24px;
-
-  cursor:pointer;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  flex-direction:column;
+ background:rgba(20,20,20,.7);
+ border:0;
+ color:white;
+ width:52px;
+ min-height:52px;
+ border-radius:50%;
+ font-size:24px;
+ cursor:pointer;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ flex-direction:column;
 }
 
 .action span{
-  font-size:11px;
-
-  margin-top:3px;
-
-  color:#ddd;
+ font-size:11px;
+ margin-top:3px;
+ color:#ddd;
 }
 
-.action.liked{
-  color:#ff0033;
-}
+.action.liked{color:#ff0033}
 
-
-/* =========================
-   MUTE BADGE
-   ========================= */
-
+/* MUTE */
 .muteBadge{
-  position:absolute;
-
-  top:78px;
-  right:14px;
-
-  z-index:5;
-
-  background:rgba(0,0,0,.6);
-
-  color:white;
-
-  width:38px;
-  height:38px;
-
-  border-radius:50%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  font-size:16px;
-
-  cursor:pointer;
+ position:absolute;
+ top:78px;
+ right:14px;
+ z-index:5;
+ background:rgba(0,0,0,.6);
+ color:white;
+ width:40px;
+ height:40px;
+ border-radius:50%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:17px;
+ cursor:pointer;
 }
 
-
-/* =========================
-   EMPTY / LOADING
-   ========================= */
-
-.empty{
-  height:100%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  text-align:center;
-
-  color:#aaa;
-
-  padding:30px;
+/* LOADING / EMPTY */
+.empty,.loading{
+ min-height:100%;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ color:#aaa;
+ padding:30px;
 }
 
 .empty strong{
-  display:block;
-
-  color:white;
-
-  font-size:22px;
-
-  margin-bottom:10px;
+ display:block;
+ color:white;
+ font-size:22px;
+ margin-bottom:10px;
 }
 
-.loading{
-  height:100%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  color:#aaa;
-}
-
-
-/* =========================
-   STANDARD MINI TUBE
-   BOTTOM NAV
-   ========================= */
-
+/* BOTTOM NAVIGATION */
 .bottom{
-  position:fixed;
-
-  bottom:0;
-  left:0;
-  right:0;
-
-  height:70px;
-
-  background:#151515;
-
-  border-top:1px solid #333;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-around;
-
-  z-index:100;
-
-  padding:0;
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ height:70px;
+ background:#151515;
+ border-top:1px solid #333;
+ display:flex;
+ align-items:center;
+ justify-content:space-around;
+ z-index:100;
+ padding:0;
 }
 
 .bottom button{
-  flex:1;
-
-  width:25%;
-  max-width:25%;
-
-  height:70px;
-
-  padding:5px 2px;
-
-  margin:0;
-
-  background:none;
-
-  border:0;
-
-  color:#aaa;
-
-  font-size:13px;
-
-  font-family:Arial,sans-serif;
-
-  cursor:pointer;
-
-  display:flex;
-
-  flex-direction:column;
-
-  align-items:center;
-
-  justify-content:center;
-
-  text-align:center;
+ flex:1;
+ width:20%;
+ max-width:20%;
+ height:70px;
+ padding:5px 1px;
+ margin:0;
+ background:none;
+ border:0;
+ color:#aaa;
+ font-size:12px;
+ font-family:Arial,sans-serif;
+ cursor:pointer;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ white-space:nowrap;
 }
 
 .bottom button b{
-  display:block;
-
-  font-size:22px;
-
-  line-height:22px;
-
-  height:25px;
-
-  margin-bottom:3px;
-
-  color:white;
-
-  font-weight:normal;
+ display:block;
+ font-size:22px;
+ line-height:22px;
+ height:25px;
+ margin-bottom:3px;
+ color:white;
+ font-weight:normal;
 }
 
 .bottom button.active{
-  color:white;
+ color:white;
 }
 
 .bottom button.active b{
-  color:white;
+ color:#ff0033;
 }
 
-
-/* =========================
-   DESKTOP
-   ========================= */
-
+/* DESKTOP */
 @media(min-width:601px){
-
-  body{
-    background:#111;
-  }
-
-  .shorts{
-    box-shadow:
-      0 0 40px rgba(0,0,0,.7);
-  }
-
+ body{background:#111}
+ .scrollFeed{
+  box-shadow:0 0 40px rgba(0,0,0,.7);
+ }
 }
 
-
-/* =========================
-   SMALL MOBILE
-   ========================= */
-
+/* SMALL MOBILE */
 @media(max-width:380px){
-
-  .bottom button{
-    font-size:12px;
-  }
-
-  .bottom button b{
-    font-size:21px;
-  }
-
+ .logo{font-size:19px}
+ .bottom button{font-size:11px}
+ .bottom button b{font-size:20px}
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-     ========================= -->
-
+<!-- HEADER -->
 <header>
 
-  <button
-    class="back"
-    onclick="goBack()"
-    aria-label="Go back"
-  >
-    ‹
-  </button>
+ <button class="back" onclick="goBack()" aria-label="Go back">
+  ‹
+ </button>
 
-  <div class="logo">
-    <span>▶</span> MiniTube
-  </div>
+ <div class="logo">
+  <span>▶</span> MiniTube
+ </div>
 
-  <div class="headerTitle">
-    Shorts
-  </div>
+ <div class="headerTitle">
+  Scroll
+ </div>
 
-  <div
-    id="headerAvatar"
-    class="avatar"
-    onclick="window.location.href='setting.html'"
-  >
-    M
-  </div>
+ <div
+  id="headerAvatar"
+  class="avatar"
+  onclick="goYou()">
+  M
+ </div>
 
 </header>
 
-
-<!-- =========================
-     SHORTS FEED
-     ========================= -->
-
-<div
-  id="shorts"
-  class="shorts"
->
-
-  <div class="loading">
-    Loading Shorts...
-  </div>
-
+<!-- SCROLL FEED -->
+<div id="scrollFeed" class="scrollFeed">
+ <div class="loading">Loading Scroll videos...</div>
 </div>
 
-
-<!-- =========================
-     STANDARD BOTTOM NAVIGATION
-     ========================= -->
-
+<!-- BOTTOM NAVIGATION -->
 <div class="bottom">
 
-  <button
-    onclick="goHome()"
-    aria-label="Home"
-  >
-    <b>⌂</b>
-    Home
-  </button>
+ <button onclick="goHome()" aria-label="Home">
+  <b>⌂</b>
+  Home
+ </button>
 
-  <button
-    class="active"
-    aria-label="Horizontal videos"
-  >
-    <b>▶</b>
-    HORIZONTAL
-  </button>
+ <button class="active" onclick="goScroll()" aria-label="Scroll">
+  <b>▶</b>
+  Scroll
+ </button>
 
-  <button
-    onclick="goSubscriptions()"
-    aria-label="Subscriptions"
-  >
-    <b>□</b>
-    Subscriptions
-  </button>
+ <button onclick="goPosts()" aria-label="Posts">
+  <b>▤</b>
+  Posts
+ </button>
 
-  <button
-    onclick="goYou()"
-    aria-label="You"
-  >
-    <b>●</b>
-    You
-  </button>
+ <button onclick="goSubscriptions()" aria-label="Subscriptions">
+  <b>□</b>
+  Subscriptions
+ </button>
+
+ <button onclick="goYou()" aria-label="You">
+  <b>●</b>
+  You
+ </button>
 
 </div>
-
 
 <script>
 
-/* =====================================
-   CLOUDFLARE WORKER
-   ===================================== */
+/* =================================
+   CONFIGURATION
+================================= */
 
 const API_BASE =
-  "https://wispy-base-65bb.naradsocial7.workers.dev";
-
-
-/* =====================================
-   AUTH
-   ===================================== */
+ "https://wispy-base-65bb.naradsocial7.workers.dev";
 
 const ACCESS_TOKEN_KEY =
-  "minitube_access_token";
+ "minitube_access_token";
 
 const USER_KEY =
-  "minitube_user";
+ "minitube_user";
 
+let videos=[];
+let observer=null;
+
+
+/* =================================
+   USER
+================================= */
 
 function getLoggedUser(){
+ const token=localStorage.getItem(ACCESS_TOKEN_KEY);
+ const saved=localStorage.getItem(USER_KEY);
 
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
+ if(!token||!saved)return null;
 
-  const savedUser =
-    localStorage.getItem(
-      USER_KEY
-    );
+ try{
+  return JSON.parse(saved);
+ }catch(error){
+  return null;
+ }
+}
 
+function updateAvatar(){
+ const user=getLoggedUser();
+ const avatar=document.getElementById("headerAvatar");
 
-  if(!token || !savedUser){
+ if(!user)return;
 
-    return null;
+ const metadata=user.user_metadata||user.userMetadata||{};
 
-  }
+ const name=
+  metadata.display_name||
+  metadata.full_name||
+  metadata.name||
+  user.email||
+  "M";
 
-
-  try{
-
-    return JSON.parse(
-      savedUser
-    );
-
-  }catch(error){
-
-    return null;
-
-  }
-
+ avatar.textContent=
+  name.trim().charAt(0).toUpperCase()||"M";
 }
 
 
-(function(){
+/* =================================
+   HTML ESCAPE
+================================= */
 
-  const user =
-    getLoggedUser();
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
+ }[c]));
+}
 
-  const avatar =
-    document.getElementById(
-      "headerAvatar"
-    );
+
+/* =================================
+   VIDEO URL
+================================= */
+
+function getVideoURL(video){
+ return API_BASE+"/video/"+encodeURIComponent(video.r2_key);
+}
 
 
-  if(user){
+/* =================================
+   CHECK VIDEO FORMAT
+================================= */
 
-    const metadata =
-      user.user_metadata || {};
+function checkVideoOrientation(video){
 
-    const name =
-      metadata.display_name ||
-      metadata.full_name ||
-      user.email ||
-      "M";
+ return new Promise(resolve=>{
 
-    avatar.textContent =
-      name.trim().charAt(0).toUpperCase() ||
-      "M";
+  const probe=document.createElement("video");
+  probe.preload="metadata";
+  probe.muted=true;
 
+  let finished=false;
+
+  const finish=result=>{
+   if(finished)return;
+   finished=true;
+   clearTimeout(timer);
+   probe.removeAttribute("src");
+   probe.load();
+   resolve(result);
+  };
+
+  const timer=setTimeout(()=>{
+   finish(false);
+  },8000);
+
+  probe.addEventListener("loadedmetadata",()=>{
+   finish(probe.videoHeight>probe.videoWidth);
+  },{once:true});
+
+  probe.addEventListener("error",()=>{
+   finish(false);
+  },{once:true});
+
+  probe.src=getVideoURL(video);
+
+ });
+}
+
+
+/* =================================
+   LOAD SCROLL VIDEOS
+================================= */
+
+async function loadScroll(){
+
+ const container=document.getElementById("scrollFeed");
+
+ try{
+
+  const response=await fetch(API_BASE+"/api/videos");
+
+  if(!response.ok){
+   throw new Error("Unable to load videos");
   }
 
-})();
+  const data=await response.json();
 
+  const all=Array.isArray(data)?data:[];
 
-/* =====================================
-   VIDEOS
-   ===================================== */
+  /*
+   Worker format available:
+   vertical = Scroll video
+   horizontal = Horizontal video
 
-let videos =
-  [];
+   Old videos without format:
+   Check actual video orientation.
+  */
 
+  const results=await Promise.all(
+   all.map(async video=>{
 
-/* =====================================
-   LOAD SHORTS
-   ===================================== */
+    if(!video.r2_key)return null;
 
-async function loadShorts(){
-
-  const container =
-    document.getElementById(
-      "shorts"
-    );
-
-
-  try{
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/videos"
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "API error"
-      );
-
+    if(video.format){
+     return video.format==="vertical"?video:null;
     }
 
+    const vertical=await checkVideoOrientation(video);
 
-    const data =
-      await response.json();
+    return vertical?video:null;
 
-
-    container.innerHTML = `
-
-      <div class="loading">
-        Checking video orientation...
-      </div>
-
-    `;
-
-
-    videos =
-      await filterVerticalVideos(
-        data
-      );
-
-
-    renderShorts();
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div>
-
-          <strong>
-            Unable to load Shorts
-          </strong>
-
-          Please try again later.
-
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-}
-
-
-/* =====================================
-   FILTER: VERTICAL VIDEOS ONLY
-   ===================================== */
-
-function checkOrientation(video){
-
-  return new Promise(function(resolve){
-
-    const probe =
-      document.createElement(
-        "video"
-      );
-
-    probe.preload =
-      "metadata";
-
-    probe.muted =
-      true;
-
-
-    let done =
-      false;
-
-
-    const timer =
-      setTimeout(
-        function(){
-
-          if(!done){
-
-            done =
-              true;
-
-            resolve(
-              null
-            );
-
-          }
-
-        },
-        8000
-      );
-
-
-    probe.addEventListener(
-      "loadedmetadata",
-      function(){
-
-        if(done){
-
-          return;
-
-        }
-
-        done =
-          true;
-
-        clearTimeout(
-          timer
-        );
-
-
-        const isVertical =
-          probe.videoHeight >
-          probe.videoWidth;
-
-
-        resolve(
-          isVertical
-            ? video
-            : null
-        );
-
-      }
-    );
-
-
-    probe.addEventListener(
-      "error",
-      function(){
-
-        if(done){
-
-          return;
-
-        }
-
-        done =
-          true;
-
-        clearTimeout(
-          timer
-        );
-
-        resolve(
-          null
-        );
-
-      }
-    );
-
-
-    probe.src =
-      API_BASE +
-      "/video/" +
-      encodeURIComponent(
-        video.r2_key
-      );
-
-  });
-
-}
-
-
-async function filterVerticalVideos(rawVideos){
-
-  const results =
-    await Promise.all(
-      rawVideos.map(
-        checkOrientation
-      )
-    );
-
-
-  return results.filter(
-    video => video !== null
+   })
   );
 
-}
+  videos=results.filter(Boolean);
 
+  renderScroll();
 
-/* =====================================
-   RENDER SHORTS
-   ===================================== */
+ }catch(error){
 
-function renderShorts(){
+  console.error(error);
 
-  const container =
-    document.getElementById(
-      "shorts"
-    );
+  container.innerHTML=`
+   <div class="empty">
+    <div>
+     <strong>Unable to load Scroll</strong>
+     Please check your internet connection and try again.
+    </div>
+   </div>
+  `;
 
-
-  if(videos.length === 0){
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div>
-
-          <strong>
-            No Shorts yet
-          </strong>
-
-          Upload a vertical video from
-          the Home page to start
-          building your Shorts feed 🚀
-
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    "";
-
-
-  videos.forEach(video => {
-
-    container.appendChild(
-      createShort(
-        video
-      )
-    );
-
-  });
-
-
-  setupAutoplay();
+ }
 
 }
 
 
-/* =====================================
-   CREATE SHORT CARD
-   ===================================== */
+/* =================================
+   RENDER SCROLL
+================================= */
+
+function renderScroll(){
+
+ const container=document.getElementById("scrollFeed");
+
+ if(observer){
+  observer.disconnect();
+  observer=null;
+ }
+
+ container.innerHTML="";
+
+ if(videos.length===0){
+
+  container.innerHTML=`
+   <div class="empty">
+    <div>
+     <strong>No Scroll videos yet</strong>
+     Upload a vertical video from the Home page
+     to start building your Scroll feed 🚀
+    </div>
+   </div>
+  `;
+
+  return;
+ }
+
+ videos.forEach(video=>{
+  container.appendChild(createShort(video));
+ });
+
+ setupAutoplay();
+
+}
+
+
+/* =================================
+   CREATE VIDEO CARD
+================================= */
 
 function createShort(video){
 
-  const card =
-    document.createElement(
-      "div"
-    );
+ const card=document.createElement("section");
+ card.className="short";
 
-  card.className =
-    "short";
+ const user=getLoggedUser();
 
+ const channelName=
+  video.profiles?.display_name||
+  "Unknown creator";
 
-  const videoURL =
-    API_BASE +
-    "/video/" +
-    encodeURIComponent(
-      video.r2_key
-    );
+ const channelInitial=
+  channelName.trim().charAt(0).toUpperCase()||"M";
 
+ const own=
+  !!user&&user.id===video.owner_id;
 
-  const channelName =
-    (video.profiles &&
-      video.profiles.display_name) ||
-    "Unknown creator";
+ const channelHref=own
+  ?"channel.html"
+  :"channel.html?id="+encodeURIComponent(video.owner_id||"");
 
+ const key=video.r2_key;
 
-  const currentUser =
-    getLoggedUser();
+ const likeKey="likes_"+key;
+ const likedKey="liked_"+key;
+ const viewsKey="views_"+key;
 
-  const isOwnVideo =
-    currentUser &&
-    currentUser.id === video.owner_id;
+ let likes=Number(localStorage.getItem(likeKey)||0);
+ let liked=localStorage.getItem(likedKey)==="true";
+ let views=Number(localStorage.getItem(viewsKey)||0);
 
+ card.innerHTML=`
 
-  const channelHref =
-    isOwnVideo
-      ? "channel.html"
-      : "channel.html?id=" +
-        encodeURIComponent(
-          video.owner_id
-        );
+  <video
+   playsinline
+   webkit-playsinline
+   loop
+   muted
+   preload="metadata"
+   src="${getVideoURL(video)}">
+  </video>
 
+  <div class="gradient"></div>
 
-  const likeKey =
-    "likes_" +
-    video.r2_key;
+  <button class="muteBadge" aria-label="Mute or unmute">
+   🔇
+  </button>
 
-  const likedKey =
-    "liked_" +
-    video.r2_key;
+  <div class="info">
 
-  let likes =
-    Number(
-      localStorage.getItem(
-        likeKey
-      ) || 0
-    );
-
-  let liked =
-    localStorage.getItem(
-      likedKey
-    ) === "true";
-
-
-  const viewsKey =
-    "views_" +
-    video.r2_key;
-
-  let views =
-    Number(
-      localStorage.getItem(
-        viewsKey
-      ) || 0
-    );
-
-
-  card.innerHTML = `
-
-    <video
-      playsinline
-      loop
-      muted
-      preload="metadata"
-      src="${videoURL}">
-    </video>
-
-
-    <div class="gradient"></div>
-
-
-    <div class="muteBadge">
-      🔇
+   <div class="channelRow">
+    <div class="channelAvatar">
+     ${escapeHTML(channelInitial)}
     </div>
 
-
-    <div class="info">
-
-      <div class="channelRow">
-
-        <div class="channelAvatar">
-          ${escapeHTML(
-            channelName.trim().charAt(0).toUpperCase() || "M"
-          )}
-        </div>
-
-        <div class="channelName">
-          ${escapeHTML(
-            channelName
-          )}
-        </div>
-
-      </div>
-
-
-      <div class="videoName">
-
-        ${escapeHTML(
-          video.title || video.r2_key
-        )}
-
-      </div>
-
+    <div class="channelName">
+     ${escapeHTML(channelName)}
     </div>
+   </div>
 
+   <div class="videoName">
+    ${escapeHTML(video.title||key)}
+   </div>
 
-    <div class="actions">
+  </div>
 
+  <div class="actions">
 
-      <button
-        class="action likeBtn"
-      >
+   <button class="action likeBtn ${liked?"liked":""}">
+    <span class="heart">${liked?"♥":"♡"}</span>
+    <span class="likeNumber">${likes}</span>
+   </button>
 
-        <span class="heart">
+   <button class="action shareBtn">
+    ↗
+    <span>Share</span>
+   </button>
 
-          ${liked
-            ? "♥"
-            : "♡"}
+   <button class="action viewBtn">
+    👁
+    <span class="shortViews">${views}</span>
+   </button>
 
-        </span>
+  </div>
+ `;
 
+ const videoElement=card.querySelector("video");
+ const muteButton=card.querySelector(".muteBadge");
 
-        <span class="likeNumber">
+ /* MUTE / UNMUTE */
 
-          ${likes}
+ function toggleMute(){
+  videoElement.muted=!videoElement.muted;
+  muteButton.textContent=videoElement.muted?"🔇":"🔊";
+ }
 
-        </span>
+ muteButton.addEventListener("click",toggleMute);
 
-      </button>
+ videoElement.addEventListener("click",toggleMute);
 
+ /* CHANNEL */
 
-      <button
-        class="action shareBtn"
-      >
+ card.querySelector(".channelRow").addEventListener("click",()=>{
+  if(video.owner_id){
+   location.href=channelHref;
+  }
+ });
 
-        ↗
+ /* LIKE */
 
-        <span>
-          Share
-        </span>
+ const likeButton=card.querySelector(".likeBtn");
 
-      </button>
+ likeButton.addEventListener("click",()=>{
 
+  liked=!liked;
 
-      <button
-        class="action viewBtn"
-      >
+  likes=Math.max(0,likes+(liked?1:-1));
 
-        👁
+  localStorage.setItem(likeKey,likes);
+  localStorage.setItem(likedKey,String(liked));
 
-        <span class="shortViews">
+  likeButton.classList.toggle("liked",liked);
 
-          ${views}
+  likeButton.querySelector(".heart").textContent=
+   liked?"♥":"♡";
 
-        </span>
+  likeButton.querySelector(".likeNumber").textContent=likes;
 
-      </button>
+ });
 
+ /* SHARE */
 
-    </div>
+ card.querySelector(".shareBtn").addEventListener("click",async()=>{
 
-  `;
-
-
-  const videoElement =
-    card.querySelector(
-      "video"
-    );
-
-  const muteBadge =
-    card.querySelector(
-      ".muteBadge"
-    );
-
-
-  /* ===============================
-     TAP VIDEO TO MUTE/UNMUTE
-     =============================== */
-
-  videoElement.addEventListener(
-    "click",
-    function(){
-
-      videoElement.muted =
-        !videoElement.muted;
-
-      muteBadge.textContent =
-        videoElement.muted
-          ? "🔇"
-          : "🔊";
-
-    }
+  const shareURL=new URL(
+   "watch.html",
+   window.location.href
   );
 
+  shareURL.searchParams.set("video",key);
 
-  /* ===============================
-     CHANNEL → CHANNEL PAGE
-     =============================== */
+  const shareData={
+   title:video.title||"MiniTube Scroll",
+   url:shareURL.href
+  };
 
-  card.querySelector(
-    ".channelRow"
-  ).addEventListener(
-    "click",
-    function(){
+  try{
 
-      window.location.href =
-        channelHref;
+   if(navigator.share){
+    await navigator.share(shareData);
+   }else if(navigator.clipboard?.writeText){
+    await navigator.clipboard.writeText(shareURL.href);
+    alert("Link copied!");
+   }else{
+    prompt("Copy this link:",shareURL.href);
+   }
 
-    }
-  );
+  }catch(error){
+   if(error.name!=="AbortError"){
+    console.error(error);
+   }
+  }
 
+ });
 
-  /* ===============================
-     LIKE
-     =============================== */
+ /* VIEW COUNT */
 
-  const likeButton =
-    card.querySelector(
-      ".likeBtn"
-    );
+ card.dataset.viewCounted="false";
 
+ card.addEventListener("countShortView",()=>{
 
-  likeButton.addEventListener(
-    "click",
-    function(){
+  if(card.dataset.viewCounted==="true")return;
 
-      liked =
-        !liked;
+  card.dataset.viewCounted="true";
 
+  views++;
 
-      if(liked){
+  localStorage.setItem(viewsKey,views);
 
-        likes++;
+  card.querySelector(".shortViews").textContent=views;
 
-      }else{
+ });
 
-        if(likes > 0){
-
-          likes--;
-
-        }
-
-      }
-
-
-      localStorage.setItem(
-        likeKey,
-        likes
-      );
-
-
-      localStorage.setItem(
-        likedKey,
-        liked
-      );
-
-
-      likeButton.classList.toggle(
-        "liked",
-        liked
-      );
-
-
-      likeButton.querySelector(
-        ".heart"
-      ).textContent =
-        liked ? "♥" : "♡";
-
-
-      likeButton.querySelector(
-        ".likeNumber"
-      ).textContent =
-        likes;
-
-    }
-  );
-
-
-  /* ===============================
-     SHARE
-     =============================== */
-
-  const shareButton =
-    card.querySelector(
-      ".shareBtn"
-    );
-
-
-  shareButton.addEventListener(
-    "click",
-    function(){
-
-      const url =
-        window.location.origin +
-        window.location.pathname.replace(
-          "shorts.html",
-          "watch.html"
-        ) +
-        "?video=" +
-        encodeURIComponent(
-          video.r2_key
-        );
-
-
-      if(navigator.share){
-
-        navigator.share({
-          title:
-            video.title ||
-            "MiniTube Shorts",
-          url: url
-        }).catch(
-          () => {}
-        );
-
-      }else{
-
-        navigator.clipboard
-          .writeText(url)
-          .then(
-            () => alert(
-              "Link copied to clipboard!"
-            )
-          )
-          .catch(
-            () => prompt(
-              "Copy this link:",
-              url
-            )
-          );
-
-      }
-
-    }
-  );
-
-
-  /* ===============================
-     VIEW COUNT
-     =============================== */
-
-  let viewCounted =
-    false;
-
-
-  card.dataset.countView =
-    "pending";
-
-
-  card.addEventListener(
-    "shortviewed",
-    function(){
-
-      if(viewCounted){
-
-        return;
-
-      }
-
-      viewCounted =
-        true;
-
-
-      views++;
-
-
-      localStorage.setItem(
-        viewsKey,
-        views
-      );
-
-
-      card.querySelector(
-        ".shortViews"
-      ).textContent =
-        views;
-
-    }
-  );
-
-
-  return card;
+ return card;
 
 }
 
 
-/* =====================================
+/* =================================
    AUTOPLAY ON SCROLL
-   ===================================== */
+================================= */
 
 function setupAutoplay(){
 
-  const cards =
-    document.querySelectorAll(
-      ".short"
+ const container=document.getElementById("scrollFeed");
+
+ const cards=container.querySelectorAll(".short");
+
+ observer=new IntersectionObserver(entries=>{
+
+  entries.forEach(entry=>{
+
+   const card=entry.target;
+   const video=card.querySelector("video");
+
+   if(entry.isIntersecting&&entry.intersectionRatio>=0.7){
+
+    video.play().catch(()=>{});
+
+    card.dispatchEvent(
+     new Event("countShortView")
     );
 
+   }else{
 
-  const observer =
-    new IntersectionObserver(
-      function(entries){
+    video.pause();
 
-        entries.forEach(entry => {
-
-          const video =
-            entry.target.querySelector(
-              "video"
-            );
-
-
-          if(
-            entry.isIntersecting &&
-            entry.intersectionRatio > .7
-          ){
-
-            video.play().catch(
-              () => {}
-            );
-
-
-            entry.target.dispatchEvent(
-              new Event(
-                "shortviewed"
-              )
-            );
-
-
-          }else{
-
-            video.pause();
-
-          }
-
-        });
-
-      },
-      {
-        threshold:[
-          .7
-        ]
-      }
-    );
-
-
-  cards.forEach(card => {
-
-    observer.observe(
-      card
-    );
+   }
 
   });
 
+ },{
+  root:container,
+  threshold:[0,0.7,1]
+ });
+
+ cards.forEach(card=>{
+  observer.observe(card);
+ });
+
 }
 
 
-/* =====================================
+/* =================================
    NAVIGATION
-   ===================================== */
+================================= */
 
 function goBack(){
 
-  if(
-    window.history.length > 1
-  ){
-
-    window.history.back();
-
-  }else{
-
-    window.location.href =
-      "index.html";
-
-  }
+ if(window.history.length>1){
+  window.history.back();
+ }else{
+  location.href="index.html";
+ }
 
 }
-
 
 function goHome(){
-
-  window.location.href =
-    "index.html";
-
+ location.href="index.html";
 }
 
+function goScroll(){
+ location.href="shorts.html";
+}
+
+function goPosts(){
+ location.href="posts.html";
+}
 
 function goSubscriptions(){
-
-  window.location.href =
-    "subscriptions.html";
-
+ location.href="subscriptions.html";
 }
-
 
 function goYou(){
-
-  window.location.href =
-    "you.html";
-
+ location.href="you.html";
 }
 
 
-/* =====================================
-   HELPERS
-   ===================================== */
+/* =================================
+   START
+================================= */
 
-function escapeHTML(text){
-
-  return String(text)
-
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
-
-
-/* =====================================
-   INIT
-   ===================================== */
-
-loadShorts();
+updateAvatar();
+loadScroll();
 
 </script>
 
