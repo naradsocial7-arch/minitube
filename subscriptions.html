@@ -1,25 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MiniTube - Subscriptions</title>
 
 <style>
+*{box-sizing:border-box}
 
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
+html,body{
   margin:0;
   padding:0;
 }
@@ -28,677 +18,366 @@ body{
   background:#0f0f0f;
   color:white;
   font-family:Arial,sans-serif;
-  padding-bottom:70px;
+  padding-bottom:82px;
 }
 
-
-/* =========================
-   HEADER
-   ========================= */
-
+/* HEADER */
 header{
   position:sticky;
   top:0;
   z-index:20;
-
   height:64px;
-
   background:#111;
-
   border-bottom:1px solid #292929;
-
   display:flex;
   align-items:center;
-
   padding:0 16px;
-
   gap:14px;
 }
 
 .back{
   background:none;
   border:0;
-
   color:white;
-
   font-size:30px;
-
   cursor:pointer;
-
   padding:0;
-
   line-height:1;
 }
 
 .logo{
   font-size:23px;
   font-weight:800;
-
   white-space:nowrap;
 }
 
-.logo span{
-  color:#ff0033;
-}
-
-.spacer{
-  flex:1;
-}
+.logo span{color:#ff0033}
+.spacer{flex:1}
 
 .avatar{
   width:42px;
   height:42px;
-
   border-radius:50%;
-
   background:#7c4dff;
-
   display:grid;
   place-items:center;
-
   font-weight:bold;
-
   overflow:hidden;
-
   cursor:pointer;
-
   flex-shrink:0;
 }
 
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-
-/* =========================
-   PAGE TITLE
-   ========================= */
-
+/* PAGE TITLE */
 .pageTitle{
   padding:25px 20px 10px;
 }
 
 .pageTitle h1{
   margin:0;
-
   font-size:28px;
 }
 
 .pageTitle p{
   color:#999;
-
   margin-top:8px;
 }
 
-
-/* =========================
-   CHANNEL
-   ========================= */
-
+/* CHANNEL */
 .channelBox{
-
   margin:10px 20px 25px;
-
   background:#181818;
-
   border-radius:16px;
-
   padding:16px;
-
   display:flex;
-
   align-items:center;
-
   gap:14px;
 }
 
 .channelAvatar{
-
   width:55px;
   height:55px;
-
   border-radius:50%;
-
   background:#7c4dff;
-
   display:grid;
-
   place-items:center;
-
   font-weight:bold;
-
   font-size:20px;
-
   flex-shrink:0;
-
-  overflow:hidden;
-
   cursor:pointer;
 }
 
-.channelAvatar img{
-
-  width:100%;
-  height:100%;
-
-  object-fit:cover;
-}
-
 .channelInfo{
-
   flex:1;
-
   min-width:0;
+  cursor:pointer;
 }
 
 .channelName{
-
   font-weight:bold;
-
   font-size:16px;
-
   word-break:break-word;
 }
 
 .channelStatus{
-
   color:#999;
-
   font-size:13px;
-
   margin-top:5px;
 }
 
 .unsubscribe{
-
   background:#292929;
-
   color:white;
-
   border:1px solid #555;
-
   border-radius:22px;
-
   padding:9px 15px;
-
   font-weight:bold;
-
   cursor:pointer;
-
   white-space:nowrap;
 }
 
-
-/* =========================
-   FEED
-   ========================= */
-
+/* FEED */
 .feed{
-
   padding:0 20px;
 }
 
 .feedTitle{
-
   font-size:20px;
-
   font-weight:bold;
-
   margin-bottom:15px;
 }
 
 .grid{
-
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(260px,1fr)
-    );
-
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:18px;
 }
 
 .card{
-
   background:#181818;
-
   border-radius:16px;
-
   overflow:hidden;
 }
 
 .card video{
-
   width:100%;
-
   aspect-ratio:16/9;
-
   display:block;
-
   background:#000;
-
   cursor:pointer;
-
-  object-fit:cover;
+  object-fit:contain;
 }
 
-.info{
-
-  padding:12px;
-}
+.info{padding:12px}
 
 .title{
-
   font-size:17px;
-
   font-weight:bold;
-
   word-break:break-word;
+  cursor:pointer;
 }
 
 .meta{
-
   color:#999;
-
   font-size:13px;
-
   margin-top:7px;
 }
 
 .watchButton{
-
   margin-top:12px;
-
   background:#292929;
-
   color:white;
-
   border:0;
-
   padding:9px 14px;
-
   border-radius:8px;
-
   cursor:pointer;
 }
 
-
-/* =========================
-   EMPTY
-   ========================= */
-
+/* EMPTY */
 .empty{
-
   background:#181818;
-
   border:1px solid #292929;
-
   border-radius:16px;
-
   padding:45px 20px;
-
   text-align:center;
 }
 
 .emptyIcon{
-
   font-size:45px;
-
   margin-bottom:15px;
 }
 
-.empty h2{
-
-  margin:0 0 8px;
-}
+.empty h2{margin:0 0 8px}
 
 .empty p{
-
   color:#999;
-
   line-height:1.5;
-
   margin:0;
 }
 
 .homeBtn{
-
   margin-top:20px;
-
   background:#ff0033;
-
   color:white;
-
   border:0;
-
   border-radius:25px;
-
   padding:13px 22px;
-
   font-size:15px;
-
   font-weight:bold;
-
   cursor:pointer;
 }
 
-
-/* =========================
-   STANDARD MINI TUBE
-   BOTTOM NAV
-   ========================= */
-
+/* BOTTOM NAV - FIVE TABS */
 .bottom{
-
   position:fixed;
-
   bottom:0;
   left:0;
   right:0;
-
   height:70px;
-
   background:#151515;
-
   border-top:1px solid #333;
-
   display:flex;
-
   align-items:center;
-
   justify-content:space-around;
-
   z-index:100;
-
   padding:0;
 }
 
 .bottom button{
-
   flex:1;
-
-  width:25%;
-  max-width:25%;
-
+  width:20%;
+  max-width:20%;
   height:70px;
-
-  padding:5px 2px;
-
+  padding:5px 1px;
   margin:0;
-
   background:none;
-
   border:0;
-
   color:#aaa;
-
-  font-size:13px;
-
+  font-size:11px;
   font-family:Arial,sans-serif;
-
   cursor:pointer;
-
   display:flex;
-
   flex-direction:column;
-
   align-items:center;
-
   justify-content:center;
-
   text-align:center;
+  white-space:nowrap;
 }
 
 .bottom button b{
-
   display:block;
-
   font-size:22px;
-
   line-height:22px;
-
   height:25px;
-
   margin-bottom:3px;
-
   color:white;
-
   font-weight:normal;
 }
 
-.bottom button.active{
-
-  color:white;
-}
-
-.bottom button.active b{
-
-  color:white;
-}
-
-
-/* =========================
-   MOBILE
-   ========================= */
+.bottom button.active{color:white}
+.bottom button.active b{color:white}
 
 @media(max-width:600px){
-
   .pageTitle{
-
     padding-left:16px;
     padding-right:16px;
   }
 
   .channelBox{
-
     margin-left:16px;
     margin-right:16px;
   }
 
-  .feed{
-
-    padding:0 16px;
-  }
-
-  .grid{
-
-    grid-template-columns:1fr;
-  }
+  .feed{padding:0 16px}
+  .grid{grid-template-columns:1fr}
 
   .unsubscribe{
-
     padding:8px 12px;
-
     font-size:12px;
   }
-
 }
-
-
-/* =========================
-   SMALL MOBILE
-   ========================= */
 
 @media(max-width:380px){
-
-  .bottom button{
-
-    font-size:12px;
-  }
-
-  .bottom button b{
-
-    font-size:21px;
-  }
-
+  .bottom button{font-size:10px}
+  .bottom button b{font-size:20px}
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-     ========================= -->
-
+<!-- HEADER -->
 <header>
-
-  <button
-    class="back"
-    onclick="goHome()"
-    aria-label="Go back"
-  >
-    ‹
-  </button>
-
+  <button class="back" onclick="goHome()" aria-label="Go back">‹</button>
 
   <div class="logo">
-
-    <span>▶</span>
-
-    MiniTube
-
+    <span>▶</span> MiniTube
   </div>
-
 
   <div class="spacer"></div>
 
-
-  <div
-    id="headerAvatar"
-    class="avatar"
-    onclick="window.location.href='setting.html'"
-  >
+  <div id="headerAvatar" class="avatar"
+       onclick="window.location.href='settings.html'">
     N
   </div>
-
 </header>
 
-
-<!-- =========================
-     TITLE
-     ========================= -->
-
+<!-- TITLE -->
 <section class="pageTitle">
-
-  <h1>
-    Subscriptions
-  </h1>
-
-  <p>
-    Videos from channels you follow
-  </p>
-
+  <h1>Subscriptions</h1>
+  <p>Videos from channels you follow</p>
 </section>
 
-
-<!-- =========================
-     CHANNEL
-     ========================= -->
-
+<!-- CHANNELS -->
 <div id="channelArea"></div>
 
-
-<!-- =========================
-     VIDEO FEED
-     ========================= -->
-
+<!-- VIDEO FEED -->
 <section class="feed">
-
-  <div class="feedTitle">
-    Latest videos
-  </div>
-
-
-  <div id="videos">
-
-    Loading videos...
-
-  </div>
-
+  <div class="feedTitle">Latest videos</div>
+  <div id="videos">Loading videos...</div>
 </section>
 
-
-<!-- =========================
-     STANDARD BOTTOM NAVIGATION
-     ========================= -->
-
+<!-- FIVE TAB NAVIGATION -->
 <div class="bottom">
 
-
-  <button
-    onclick="goHome()"
-    aria-label="Home"
-  >
-
+  <button onclick="goHome()" aria-label="Home">
     <b>⌂</b>
-
     Home
-
   </button>
 
-
-  <button
-    onclick="goShorts()"
-    aria-label="Horizontal videos"
-  >
-
+  <button onclick="goScroll()" aria-label="Scroll">
     <b>▶</b>
-
-    HORIZONTAL
-
+    Scroll
   </button>
 
+  <button onclick="goPosts()" aria-label="Posts">
+    <b>▤</b>
+    Posts
+  </button>
 
-  <button
-    class="active"
-    aria-label="Subscriptions"
-  >
-
+  <button class="active" aria-label="Subscriptions">
     <b>□</b>
-
     Subscriptions
-
   </button>
 
-
-  <button
-    onclick="goYou()"
-    aria-label="You"
-  >
-
+  <button onclick="goYou()" aria-label="You">
     <b>●</b>
-
     You
-
   </button>
-
 
 </div>
 
-
 <script>
-
 
 /* =====================================
    CLOUDFLARE WORKER
-   ===================================== */
+===================================== */
 
 const API_BASE =
   "https://wispy-base-65bb.naradsocial7.workers.dev";
 
-
 /* =====================================
    SUPABASE
-   ===================================== */
+===================================== */
 
 const SUPABASE_URL =
   "https://vlzssmuzetcbkmzujecs.supabase.co";
@@ -706,997 +385,508 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
   "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
 
-
 /* =====================================
-   AUTH STORAGE
-   ===================================== */
+   STORAGE KEYS
+===================================== */
 
-const USER_KEY =
-  "minitube_user";
-
-
-const ACCESS_TOKEN_KEY =
-  "minitube_access_token";
-
-
-/* =====================================
-   SUBSCRIBE STORAGE
-   ===================================== */
-
-const SUBSCRIBE_KEY =
-  "minitube_my_channel_subscribed";
-
+const USER_KEY = "minitube_user";
+const ACCESS_TOKEN_KEY = "minitube_access_token";
 
 /* =====================================
    GET USER
-   ===================================== */
+===================================== */
 
 function getUser(){
-
   try{
-
-    const raw =
-      localStorage.getItem(
-        USER_KEY
-      );
-
-    if(!raw){
-
-      return null;
-
-    }
-
-    return JSON.parse(raw);
-
+    const raw = localStorage.getItem(USER_KEY);
+    return raw ? JSON.parse(raw) : null;
   }catch(error){
-
-    console.error(
-      "User data error:",
-      error
-    );
-
+    console.error("User data error:",error);
     return null;
-
   }
-
 }
 
+function getToken(){
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+/* =====================================
+   SUPABASE HEADERS
+===================================== */
+
+function getHeaders(){
+  return {
+    "apikey":SUPABASE_ANON_KEY,
+    "Authorization":"Bearer " + getToken()
+  };
+}
 
 /* =====================================
    USER NAME
-   ===================================== */
+===================================== */
 
 function getUserName(){
+  const user = getUser();
 
-  const user =
-    getUser();
+  if(!user) return "User";
 
-
-  if(!user){
-
-    return "User";
-
-  }
-
-
-  const metadata =
-    user.user_metadata || {};
-
+  const metadata = user.user_metadata || {};
 
   return (
-
     metadata.display_name ||
-
     metadata.full_name ||
-
     metadata.name ||
-
     user.email ||
-
     "User"
-
   );
-
 }
 
-
 /* =====================================
-   USER EMAIL
-   ===================================== */
-
-function getUserEmail(){
-
-  const user =
-    getUser();
-
-
-  if(
-    user &&
-    user.email
-  ){
-
-    return user.email;
-
-  }
-
-
-  return "";
-
-}
-
-
-/* =====================================
-   AVATAR INITIAL
-   ===================================== */
-
-function getInitial(){
-
-  const name =
-    getUserName();
-
-
-  const clean =
-    String(name)
-      .trim();
-
-
-  if(!clean){
-
-    return "N";
-
-  }
-
-
-  return clean
-    .charAt(0)
-    .toUpperCase();
-
-}
-
-
-/* =====================================
-   HANDLE
-   ===================================== */
-
-function getHandle(){
-
-  const name =
-    getUserName();
-
-
-  let handle =
-    String(name)
-      .toLowerCase()
-      .trim();
-
-
-  handle =
-    handle.replace(
-      /[^a-z0-9]+/g,
-      ""
-    );
-
-
-  if(!handle){
-
-    const email =
-      getUserEmail();
-
-
-    handle =
-      email
-        .split("@")[0]
-        .replace(
-          /[^a-z0-9]/g,
-          ""
-        );
-
-  }
-
-
-  return "@" + (
-    handle || "user"
-  );
-
-}
-
-
-/* =====================================
-   CHECK LOGIN
-   ===================================== */
+   LOGIN CHECK
+===================================== */
 
 function checkLogin(){
+  const user = getUser();
+  const token = getToken();
 
-  const user =
-    getUser();
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
-
-  if(
-    !user ||
-    !token
-  ){
-
-    window.location.href =
-      "login.html";
-
+  if(!user || !token){
+    window.location.href = "login.html";
     return false;
-
   }
 
-
   return true;
-
 }
-
 
 /* =====================================
    UPDATE HEADER
-   ===================================== */
+===================================== */
 
 function updateHeader(){
+  const avatar = document.getElementById("headerAvatar");
 
-  const avatar =
-    document.getElementById(
-      "headerAvatar"
-    );
-
-
-  const initial =
-    getInitial();
-
+  const name = String(getUserName()).trim();
 
   avatar.textContent =
-    initial;
-
+    name.charAt(0).toUpperCase() || "N";
 }
 
-
 /* =====================================
-   SUBSCRIBED CHANNELS
-   ===================================== */
+   LOAD SUBSCRIBED CHANNELS
+===================================== */
 
 async function loadSubscribedChannels(){
 
-  const user =
-    getUser();
+  const user = getUser();
 
+  if(!user) return [];
 
-  if(!user){
+  const response = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/subscriptions?subscriber_id=eq." +
+    encodeURIComponent(user.id) +
+    "&select=channel_id",
+    {
+      headers:getHeaders()
+    }
+  );
 
-    return [];
-
+  if(!response.ok){
+    throw new Error("Could not load subscriptions");
   }
 
+  const subscriptions = await response.json();
 
-  try{
+  const channelIds = [
+    ...new Set(
+      subscriptions
+        .map(row => row.channel_id)
+        .filter(Boolean)
+    )
+  ];
 
-    const subsResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/subscriptions?subscriber_id=eq." +
-        user.id +
-        "&select=channel_id",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    if(!subsResponse.ok){
-
-      return [];
-
-    }
-
-
-    const subs =
-      await subsResponse.json();
-
-
-    const channelIds =
-      subs.map(
-        row => row.channel_id
-      );
-
-
-    if(channelIds.length === 0){
-
-      return [];
-
-    }
-
-
-    const idFilter =
-      "(" +
-      channelIds.join(",") +
-      ")";
-
-
-    const profilesResponse =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/profiles?id=in." +
-        idFilter +
-        "&select=id,display_name",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
-
-    const profiles =
-      profilesResponse.ok
-        ? await profilesResponse.json()
-        : [];
-
-
-    return profiles;
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
+  if(channelIds.length === 0){
     return [];
-
   }
 
+  const idFilter =
+    "(" + channelIds.join(",") + ")";
+
+  const profilesResponse = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/profiles?id=in." +
+    encodeURIComponent(idFilter) +
+    "&select=id,display_name",
+    {
+      headers:getHeaders()
+    }
+  );
+
+  if(!profilesResponse.ok){
+    throw new Error("Could not load channel profiles");
+  }
+
+  const profiles = await profilesResponse.json();
+
+  /* Keep subscribed channels even if a profile is missing */
+  const profilesById = {};
+
+  profiles.forEach(profile => {
+    profilesById[profile.id] = profile;
+  });
+
+  return channelIds.map(id => ({
+    id:id,
+    display_name:
+      profilesById[id]?.display_name ||
+      "MiniTube user"
+  }));
 }
-
 
 /* =====================================
    UNSUBSCRIBE
-   ===================================== */
+===================================== */
 
 async function unsubscribeFromChannel(channelId){
 
-  const user =
-    getUser();
+  const user = getUser();
 
+  if(!user) return;
 
-  if(!user){
+  const confirmed = confirm(
+    "Are you sure you want to unsubscribe?"
+  );
 
-    return;
-
-  }
-
-
-  const token =
-    localStorage.getItem(
-      ACCESS_TOKEN_KEY
-    );
-
+  if(!confirmed) return;
 
   try{
 
-    await fetch(
-
+    const response = await fetch(
       SUPABASE_URL +
       "/rest/v1/subscriptions?channel_id=eq." +
-      channelId +
+      encodeURIComponent(channelId) +
       "&subscriber_id=eq." +
-      user.id,
-
+      encodeURIComponent(user.id),
       {
         method:"DELETE",
-
         headers:{
-          "apikey":
-            SUPABASE_ANON_KEY,
-
-          "Authorization":
-            "Bearer " +
-            token
+          ...getHeaders(),
+          "Prefer":"return=minimal"
         }
       }
-
     );
-
-
-  }catch(error){
-
-    console.error(
-      error
-    );
-
-  }
-
-
-  renderPage();
-
-}
-
-
-/* =====================================
-   CHANNELS LIST
-   ===================================== */
-
-function renderChannels(channels){
-
-  const area =
-    document.getElementById(
-      "channelArea"
-    );
-
-
-  if(channels.length === 0){
-
-    area.innerHTML =
-      "";
-
-    return;
-
-  }
-
-
-  area.innerHTML =
-    "";
-
-
-  channels.forEach(channel => {
-
-    const name =
-      channel.display_name ||
-      "MiniTube user";
-
-
-    const initial =
-      name
-        .trim()
-        .charAt(0)
-        .toUpperCase() || "M";
-
-
-    const box =
-      document.createElement(
-        "div"
-      );
-
-    box.className =
-      "channelBox";
-
-
-    box.innerHTML = `
-
-      <div class="channelAvatar">
-        ${escapeHTML(initial)}
-      </div>
-
-
-      <div class="channelInfo">
-
-        <div class="channelName">
-          ${escapeHTML(name)}
-        </div>
-
-
-        <div class="channelStatus">
-          Subscribed
-        </div>
-
-      </div>
-
-
-      <button class="unsubscribe">
-        Subscribed
-      </button>
-
-    `;
-
-
-    const channelInfo =
-      box.querySelector(
-        ".channelInfo"
-      );
-
-    const channelAvatar =
-      box.querySelector(
-        ".channelAvatar"
-      );
-
-
-    const goToChannel =
-      function(){
-
-        window.location.href =
-          "channel.html?id=" +
-          encodeURIComponent(
-            channel.id
-          );
-
-      };
-
-
-    channelInfo.addEventListener(
-      "click",
-      goToChannel
-    );
-
-    channelAvatar.addEventListener(
-      "click",
-      goToChannel
-    );
-
-
-    box.querySelector(
-      ".unsubscribe"
-    ).addEventListener(
-      "click",
-      function(event){
-
-        event.stopPropagation();
-
-        unsubscribeFromChannel(
-          channel.id
-        );
-
-      }
-    );
-
-
-    area.appendChild(
-      box
-    );
-
-  });
-
-}
-
-
-/* =====================================
-   LOAD VIDEOS
-   ===================================== */
-
-async function loadVideos(channels){
-
-  const container =
-    document.getElementById(
-      "videos"
-    );
-
-
-  if(channels.length === 0){
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div class="emptyIcon">
-          🔔
-        </div>
-
-
-        <h2>
-          No subscriptions yet
-        </h2>
-
-
-        <p>
-
-          Subscribe to channels from
-          their videos or channel page
-          to see their latest uploads
-          here.
-
-        </p>
-
-
-        <button
-          class="homeBtn"
-          onclick="goHome()"
-        >
-
-          Explore videos
-
-        </button>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    "Loading videos...";
-
-
-  try{
-
-    const channelIds =
-      channels.map(
-        channel => channel.id
-      );
-
-
-    const idFilter =
-      "(" +
-      channelIds.join(",") +
-      ")";
-
-
-    const response =
-      await fetch(
-
-        SUPABASE_URL +
-        "/rest/v1/videos?owner_id=in." +
-        idFilter +
-        "&select=id,r2_key,title,owner_id,created_at&order=created_at.desc",
-
-        {
-          headers:{
-            "apikey":
-              SUPABASE_ANON_KEY,
-
-            "Authorization":
-              "Bearer " +
-              SUPABASE_ANON_KEY
-          }
-        }
-
-      );
-
 
     if(!response.ok){
-
-      throw new Error(
-        "API error"
-      );
-
+      const errorText = await response.text();
+      throw new Error(errorText || "Unsubscribe failed");
     }
 
-
-    const videos =
-      await response.json();
-
-
-    const namesById = {};
-
-
-    channels.forEach(channel => {
-
-      namesById[channel.id] =
-        channel.display_name ||
-        "MiniTube user";
-
-    });
-
-
-    renderVideos(
-      videos,
-      namesById
-    );
-
+    await renderPage();
 
   }catch(error){
 
     console.error(error);
-
-
-    container.innerHTML = `
-
-      <div class="empty">
-
-        <div class="emptyIcon">
-          ⚠️
-        </div>
-
-
-        <h2>
-          Couldn't load videos
-        </h2>
-
-
-        <p>
-          Please try again later.
-        </p>
-
-      </div>
-
-    `;
+    alert("Could not unsubscribe. Please try again.");
 
   }
-
 }
 
+/* =====================================
+   RENDER CHANNELS
+===================================== */
+
+function renderChannels(channels){
+
+  const area = document.getElementById("channelArea");
+
+  area.innerHTML = "";
+
+  if(channels.length === 0){
+    return;
+  }
+
+  channels.forEach(channel => {
+
+    const name =
+      channel.display_name || "MiniTube user";
+
+    const initial =
+      name.trim().charAt(0).toUpperCase() || "M";
+
+    const box = document.createElement("div");
+    box.className = "channelBox";
+
+    const avatar = document.createElement("div");
+    avatar.className = "channelAvatar";
+    avatar.textContent = initial;
+
+    const info = document.createElement("div");
+    info.className = "channelInfo";
+
+    const channelName = document.createElement("div");
+    channelName.className = "channelName";
+    channelName.textContent = name;
+
+    const status = document.createElement("div");
+    status.className = "channelStatus";
+    status.textContent = "Subscribed";
+
+    info.appendChild(channelName);
+    info.appendChild(status);
+
+    const button = document.createElement("button");
+    button.className = "unsubscribe";
+    button.textContent = "Subscribed";
+
+    function openChannel(){
+      window.location.href =
+        "channel.html?id=" +
+        encodeURIComponent(channel.id);
+    }
+
+    avatar.addEventListener("click",openChannel);
+    info.addEventListener("click",openChannel);
+
+    button.addEventListener("click",function(){
+      unsubscribeFromChannel(channel.id);
+    });
+
+    box.appendChild(avatar);
+    box.appendChild(info);
+    box.appendChild(button);
+
+    area.appendChild(box);
+
+  });
+}
 
 /* =====================================
-   DISPLAY VIDEOS
-   ===================================== */
+   LOAD SUBSCRIBED CHANNEL VIDEOS
+===================================== */
 
-function renderVideos(videos, namesById){
+async function loadVideos(channels){
 
-  const container =
-    document.getElementById(
-      "videos"
-    );
+  const container = document.getElementById("videos");
 
-
-  if(
-    !Array.isArray(videos) ||
-    videos.length === 0
-  ){
+  if(channels.length === 0){
 
     container.innerHTML = `
-
       <div class="empty">
-
-        <div class="emptyIcon">
-          📺
-        </div>
-
-
-        <h2>
-          No videos yet
-        </h2>
-
-
+        <div class="emptyIcon">🔔</div>
+        <h2>No subscriptions yet</h2>
         <p>
-
-          Channels you're subscribed to
-          haven't uploaded anything yet.
-
+          Subscribe to channels from their videos
+          or channel page to see their latest uploads here.
         </p>
-
+        <button class="homeBtn" onclick="goHome()">
+          Explore videos
+        </button>
       </div>
-
     `;
 
     return;
-
   }
 
+  container.textContent = "Loading videos...";
 
-  container.innerHTML =
-    "";
+  try{
 
+    const channelIds = channels.map(channel => channel.id);
 
-  videos.forEach(
-    video => {
+    const idFilter =
+      "(" + channelIds.join(",") + ")";
 
-      const card =
-        document.createElement(
-          "div"
-        );
-
-
-      card.className =
-        "card";
-
-
-      const videoURL =
-        API_BASE +
-        "/video/" +
-        encodeURIComponent(
-          video.r2_key
-        );
-
-
-      const channelName =
-        namesById[video.owner_id] ||
-        "MiniTube user";
-
-
-      card.innerHTML = `
-
-        <video
-          preload="metadata"
-          muted
-          src="${videoURL}"
-        ></video>
-
-
-        <div class="info">
-
-          <div class="title">
-
-            ${escapeHTML(
-              video.title || video.r2_key
-            )}
-
-          </div>
-
-
-          <div class="meta">
-
-            ${escapeHTML(
-              channelName
-            )}
-
-          </div>
-
-
-          <button
-            class="watchButton"
-          >
-
-            ▶ Watch
-
-          </button>
-
-        </div>
-
-      `;
-
-
-      const videoElement =
-        card.querySelector(
-          "video"
-        );
-
-
-      const watchButton =
-        card.querySelector(
-          ".watchButton"
-        );
-
-
-      function openVideo(){
-
-        window.location.href =
-          "watch.html?video=" +
-          encodeURIComponent(
-            video.r2_key
-          );
-
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/videos?owner_id=in." +
+      encodeURIComponent(idFilter) +
+      "&select=id,r2_key,title,owner_id,created_at,format,category" +
+      "&order=created_at.desc",
+      {
+        headers:getHeaders()
       }
-
-
-      videoElement.addEventListener(
-        "click",
-        openVideo
-      );
-
-
-      watchButton.addEventListener(
-        "click",
-        openVideo
-      );
-
-
-      container.appendChild(
-        card
-      );
-
-    }
-  );
-
-}
-
-
-/* =====================================
-   SECURITY
-   ===================================== */
-
-function escapeHTML(text){
-
-  return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
     );
 
+    if(!response.ok){
+      const errorText = await response.text();
+      throw new Error(errorText || "Video API error");
+    }
+
+    const videos = await response.json();
+
+    const namesById = {};
+
+    channels.forEach(channel => {
+      namesById[channel.id] =
+        channel.display_name || "MiniTube user";
+    });
+
+    renderVideos(videos,namesById);
+
+  }catch(error){
+
+    console.error("Video loading error:",error);
+
+    container.innerHTML = `
+      <div class="empty">
+        <div class="emptyIcon">⚠️</div>
+        <h2>Couldn't load videos</h2>
+        <p>Please try again later.</p>
+      </div>
+    `;
+
+  }
 }
 
+/* =====================================
+   DISPLAY VIDEOS
+===================================== */
+
+function renderVideos(videos,namesById){
+
+  const container = document.getElementById("videos");
+
+  if(!Array.isArray(videos) || videos.length === 0){
+
+    container.innerHTML = `
+      <div class="empty">
+        <div class="emptyIcon">📺</div>
+        <h2>No videos yet</h2>
+        <p>
+          Channels you're subscribed to
+          haven't uploaded anything yet.
+        </p>
+      </div>
+    `;
+
+    return;
+  }
+
+  container.innerHTML = "";
+
+  videos.forEach(video => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const videoURL =
+      API_BASE +
+      "/video/" +
+      encodeURIComponent(video.r2_key);
+
+    const videoElement = document.createElement("video");
+    videoElement.preload = "metadata";
+    videoElement.muted = true;
+    videoElement.playsInline = true;
+    videoElement.src = videoURL;
+
+    const info = document.createElement("div");
+    info.className = "info";
+
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = video.title || video.r2_key;
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+
+    const channelName =
+      namesById[video.owner_id] || "MiniTube user";
+
+    const formatName =
+      video.format === "vertical" ? "Scroll" : "Horizontal";
+
+    meta.textContent =
+      channelName + " • " + formatName;
+
+    const watchButton = document.createElement("button");
+    watchButton.className = "watchButton";
+    watchButton.textContent = "▶ Watch";
+
+    function openVideo(){
+      window.location.href =
+        "watch.html?video=" +
+        encodeURIComponent(video.r2_key);
+    }
+
+    videoElement.addEventListener("click",openVideo);
+    title.addEventListener("click",openVideo);
+    watchButton.addEventListener("click",openVideo);
+
+    info.appendChild(title);
+    info.appendChild(meta);
+    info.appendChild(watchButton);
+
+    card.appendChild(videoElement);
+    card.appendChild(info);
+
+    container.appendChild(card);
+
+  });
+}
 
 /* =====================================
    NAVIGATION
-   ===================================== */
+===================================== */
 
 function goHome(){
-
-  window.location.href =
-    "index.html";
-
+  window.location.href = "index.html";
 }
 
-
-function goShorts(){
-
-  window.location.href =
-    "shorts.html";
-
+function goScroll(){
+  window.location.href = "shorts.html";
 }
 
+function goPosts(){
+  window.location.href = "posts.html";
+}
 
 function goYou(){
-
-  window.location.href =
-    "you.html";
-
+  window.location.href = "you.html";
 }
-
 
 /* =====================================
    RENDER PAGE
-   ===================================== */
+===================================== */
 
 async function renderPage(){
 
-  const channels =
-    await loadSubscribedChannels();
+  const container = document.getElementById("videos");
 
+  container.textContent = "Loading subscriptions...";
 
-  renderChannels(
-    channels
-  );
+  try{
 
+    const channels = await loadSubscribedChannels();
 
-  loadVideos(
-    channels
-  );
+    renderChannels(channels);
 
+    await loadVideos(channels);
+
+  }catch(error){
+
+    console.error("Page loading error:",error);
+
+    container.innerHTML = `
+      <div class="empty">
+        <div class="emptyIcon">⚠️</div>
+        <h2>Couldn't load subscriptions</h2>
+        <p>Please refresh the page and try again.</p>
+      </div>
+    `;
+
+  }
 }
-
 
 /* =====================================
-   START
-   ===================================== */
+   START MINITUBE
+===================================== */
 
-if(
-  checkLogin()
-){
-
+if(checkLogin()){
   updateHeader();
-
   renderPage();
-
 }
-
 
 </script>
 
 </body>
-
 </html>
