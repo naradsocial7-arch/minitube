@@ -4,108 +4,703 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MiniTube Posts</title>
+<title>MiniTube - Posts</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#0f0f0f;color:white;font-family:Arial,sans-serif;padding-bottom:75px}
-header{height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #292929;background:#101010;position:sticky;top:0;z-index:5}
-.logo{font-size:21px;font-weight:bold}.logo span{color:#ff3030}
-button{cursor:pointer}
-.create{background:#ff3030;border:0;border-radius:22px;padding:10px 16px;color:white;font-weight:bold}
-main{max-width:650px;margin:auto;padding:15px}
-h2{font-size:23px;margin:10px 0}
-.sub{color:#aaa;font-size:13px;margin-bottom:18px}
-.filters{display:flex;gap:8px;overflow-x:auto;padding:5px 0 15px}
-.filters button{white-space:nowrap;border:0;border-radius:18px;background:#292929;color:white;padding:9px 14px}
-.filters button.active{background:white;color:black}
-.post{background:#1b1b1b;border:1px solid #303030;border-radius:14px;padding:15px;margin-bottom:14px}
-.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.avatar{width:40px;height:40px;border-radius:50%;background:#713be7;display:grid;place-items:center;font-weight:bold}
-.author{font-weight:bold;font-size:14px}
-.meta{font-size:12px;color:#999;margin-top:4px}
-.category{margin-left:auto;font-size:11px;color:#ff9999;background:#3b2020;padding:6px 9px;border-radius:15px}
-.content{font-size:15px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
-.post img{width:100%;max-height:500px;object-fit:contain;border-radius:10px;margin-top:12px;background:#090909}
-.empty,.status{text-align:center;color:#aaa;padding:35px 10px}
+
+body{
+  margin:0;
+  background:#0f0f0f;
+  color:white;
+  font-family:Arial,sans-serif;
+  padding-bottom:82px;
+}
+
+/* HEADER */
+header{
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  border-bottom:1px solid #292929;
+  background:#101010;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.logo span{color:#ff3030}
+
+.create{
+  background:#ff3030;
+  border:0;
+  border-radius:22px;
+  padding:10px 16px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* MAIN */
+main{
+  max-width:650px;
+  margin:auto;
+  padding:15px;
+}
+
+h2{
+  font-size:23px;
+  margin:10px 0;
+}
+
+.sub{
+  color:#aaa;
+  font-size:13px;
+  margin-bottom:18px;
+  line-height:1.5;
+}
+
+/* CATEGORY FILTERS */
+.filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:5px 0 15px;
+  scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{display:none}
+
+.filters button{
+  white-space:nowrap;
+  border:0;
+  border-radius:18px;
+  background:#292929;
+  color:white;
+  padding:9px 14px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.filters button.active{
+  background:white;
+  color:black;
+}
+
+/* POST */
+.post{
+  background:#1b1b1b;
+  border:1px solid #303030;
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:14px;
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#713be7;
+  display:grid;
+  place-items:center;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.authorInfo{
+  min-width:0;
+  flex:1;
+}
+
+.author{
+  font-weight:bold;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+
+.meta{
+  font-size:12px;
+  color:#999;
+  margin-top:4px;
+}
+
+.category{
+  font-size:11px;
+  color:#ff9999;
+  background:#3b2020;
+  padding:6px 9px;
+  border-radius:15px;
+  flex-shrink:0;
+}
+
+.content{
+  font-size:15px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.post img{
+  width:100%;
+  max-height:500px;
+  object-fit:contain;
+  border-radius:10px;
+  margin-top:12px;
+  background:#090909;
+  display:block;
+}
+
+/* EMPTY / STATUS */
+.empty,.status{
+  text-align:center;
+  color:#aaa;
+  padding:35px 10px;
+  line-height:1.6;
+}
+
 .error{color:#ff7777}
-.bottom{position:fixed;bottom:0;left:0;right:0;height:65px;background:#151515;border-top:1px solid #333;display:flex;justify-content:space-around;align-items:center}
-.bottom button{background:none;border:0;color:#aaa;font-size:12px}
-.bottom b{display:block;font-size:21px;color:white;margin-bottom:3px}
+
+/* BOTTOM NAV */
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  background:#151515;
+  border-top:1px solid #333;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:100;
+}
+
+.bottom button{
+  flex:1;
+  width:20%;
+  max-width:20%;
+  height:70px;
+  padding:5px 1px;
+  background:none;
+  border:0;
+  color:#aaa;
+  font-size:11px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  white-space:nowrap;
+}
+
+.bottom button b{
+  display:block;
+  font-size:22px;
+  color:white;
+  margin-bottom:3px;
+  line-height:22px;
+  height:25px;
+  font-weight:normal;
+}
+
+.bottom button.active{color:white}
+.bottom button.active b{color:white}
+
+@media(max-width:380px){
+  .bottom button{font-size:10px}
+  .bottom button b{font-size:20px}
+}
 </style>
 </head>
+
 <body>
+
+<!-- HEADER -->
 <header>
-<div class="logo"><span>▶</span> MiniTube</div>
-<button class="create" onclick="location.href='upload.html'">＋ Create</button>
+  <div class="logo">
+    <span>▶</span> MiniTube
+  </div>
+
+  <button class="create" onclick="goCreate()">
+    ＋ Create
+  </button>
 </header>
+
+<!-- MAIN -->
 <main>
-<h2>Community Posts</h2>
-<div class="sub">Thoughts, photos and updates from the MiniTube community.</div>
-<div class="filters" id="filters"></div>
-<div id="feed"><div class="status">Loading posts...</div></div>
+
+  <h2>Community Posts</h2>
+
+  <div class="sub">
+    Thoughts, photos and updates from the MiniTube community.
+  </div>
+
+  <div class="filters" id="filters"></div>
+
+  <div id="feed">
+    <div class="status">Loading posts...</div>
+  </div>
+
 </main>
+
+<!-- FIVE TAB NAVIGATION -->
 <div class="bottom">
-<button onclick="location.href='index.html'"><b>⌂</b>Home</button>
-<button onclick="location.href='shorts.html'"><b>▶</b>Shorts</button>
-<button onclick="location.href='posts.html'"><b>▤</b>Posts</button>
-<button onclick="location.href='you.html'"><b>●</b>You</button>
+
+  <button onclick="goHome()">
+    <b>⌂</b>
+    Home
+  </button>
+
+  <button onclick="goScroll()">
+    <b>▶</b>
+    Scroll
+  </button>
+
+  <button class="active">
+    <b>▤</b>
+    Posts
+  </button>
+
+  <button onclick="goSubscriptions()">
+    <b>□</b>
+    Subscriptions
+  </button>
+
+  <button onclick="goYou()">
+    <b>●</b>
+    You
+  </button>
+
 </div>
+
 <script>
-const SUPABASE_URL="https://vlzssmuzetcbkmzujecs.supabase.co";
-const SUPABASE_ANON_KEY="sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
-const CATEGORIES=["All","Trending","Technology","Trading","Business","Education","Entertainment","Sports","Science","Comedy","Gaming","Music","News","Finance","Health"];
-let selectedCategory="All",allPosts=[];
-const feed=document.getElementById("feed"),filters=document.getElementById("filters");
+
+/* =====================================
+   SUPABASE
+===================================== */
+
+const SUPABASE_URL =
+  "https://vlzssmuzetcbkmzujecs.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_tM8cIA2W3eZVc9AOtCtKWg_Suywus3I";
+
+const USER_KEY = "minitube_user";
+const TOKEN_KEY = "minitube_access_token";
+
+/* =====================================
+   CATEGORIES
+===================================== */
+
+const CATEGORIES = [
+  "All",
+  "Trending",
+  "Technology",
+  "Trading",
+  "Business",
+  "Education",
+  "Entertainment",
+  "Sports",
+  "Science",
+  "Comedy",
+  "Gaming",
+  "Music",
+  "News",
+  "Finance",
+  "Health"
+];
+
+let selectedCategory = "All";
+let allPosts = [];
+
+const feed = document.getElementById("feed");
+const filters = document.getElementById("filters");
+
+/* =====================================
+   AUTH HEADERS
+===================================== */
+
+function getHeaders(){
+
+  const token =
+    localStorage.getItem(TOKEN_KEY);
+
+  return {
+    "apikey":SUPABASE_ANON_KEY,
+    "Authorization":"Bearer " + (token || SUPABASE_ANON_KEY)
+  };
+
+}
+
+/* =====================================
+   ESCAPE HTML
+===================================== */
+
 function escapeHTML(value){
- return String(value||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  return String(value ?? "")
+    .replace(/[&<>"']/g,c=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    }[c]));
+
 }
+
+/* =====================================
+   CATEGORY FILTERS
+===================================== */
+
 function makeFilters(){
- filters.innerHTML=CATEGORIES.map(c=>`<button data-category="${c}" class="${c==="All"?"active":""}">${c}</button>`).join("");
- filters.querySelectorAll("button").forEach(b=>b.onclick=()=>{
-  selectedCategory=b.dataset.category;
-  filters.querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));
-  renderPosts();
- });
+
+  filters.innerHTML = "";
+
+  CATEGORIES.forEach(category=>{
+
+    const button = document.createElement("button");
+
+    button.textContent = category;
+    button.dataset.category = category;
+
+    if(category === selectedCategory){
+      button.classList.add("active");
+    }
+
+    button.addEventListener("click",()=>{
+
+      selectedCategory = category;
+
+      filters.querySelectorAll("button").forEach(item=>{
+        item.classList.toggle(
+          "active",
+          item.dataset.category === category
+        );
+      });
+
+      renderPosts();
+
+    });
+
+    filters.appendChild(button);
+
+  });
+
 }
+
+/* =====================================
+   TIME AGO
+===================================== */
+
 function timeAgo(value){
- const seconds=Math.floor((Date.now()-new Date(value).getTime())/1000);
- if(!Number.isFinite(seconds)||seconds<60)return "Just now";
- if(seconds<3600)return Math.floor(seconds/60)+" min ago";
- if(seconds<86400)return Math.floor(seconds/3600)+" hr ago";
- if(seconds<604800)return Math.floor(seconds/86400)+" days ago";
- return new Date(value).toLocaleDateString();
-}
-async function loadPosts(){
- try{
-  const response=await fetch(
-   `${SUPABASE_URL}/rest/v1/posts?select=id,content,image_path,category,created_at&order=created_at.desc&limit=100`,
-   {headers:{"apikey":SUPABASE_ANON_KEY,"Authorization":"Bearer "+SUPABASE_ANON_KEY}}
+
+  const seconds = Math.floor(
+    (Date.now() - new Date(value).getTime()) / 1000
   );
-  if(!response.ok)throw new Error(await response.text());
-  allPosts=await response.json();
-  renderPosts();
- }catch(error){
-  feed.innerHTML='<div class="status error">Could not load posts. Check Supabase connection and posts table.</div>';
-  console.error(error);
- }
+
+  if(!Number.isFinite(seconds) || seconds < 60){
+    return "Just now";
+  }
+
+  if(seconds < 3600){
+    return Math.floor(seconds / 60) + " min ago";
+  }
+
+  if(seconds < 86400){
+    return Math.floor(seconds / 3600) + " hr ago";
+  }
+
+  if(seconds < 604800){
+    return Math.floor(seconds / 86400) + " days ago";
+  }
+
+  return new Date(value).toLocaleDateString();
+
 }
+
+/* =====================================
+   IMAGE URL
+===================================== */
+
+function getImageURL(path){
+
+  if(!path) return "";
+
+  const value = String(path);
+
+  if(
+    value.startsWith("https://") ||
+    value.startsWith("http://")
+  ){
+    return value;
+  }
+
+  const cleanPath = value
+    .replace(/^\/+/,"")
+    .replace(/^post-images\//,"");
+
+  return (
+    SUPABASE_URL +
+    "/storage/v1/object/public/post-images/" +
+    cleanPath.split("/").map(encodeURIComponent).join("/")
+  );
+
+}
+
+/* =====================================
+   LOAD PROFILES
+===================================== */
+
+async function loadProfiles(posts){
+
+  const userIds = [
+    ...new Set(
+      posts
+        .map(post=>post.user_id)
+        .filter(Boolean)
+    )
+  ];
+
+  if(userIds.length === 0){
+    return {};
+  }
+
+  const idFilter =
+    "(" + userIds.join(",") + ")";
+
+  const response = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/profiles?id=in." +
+    encodeURIComponent(idFilter) +
+    "&select=id,display_name",
+    {
+      headers:getHeaders()
+    }
+  );
+
+  if(!response.ok){
+    console.warn("Could not load creator profiles");
+    return {};
+  }
+
+  const profiles = await response.json();
+
+  const map = {};
+
+  profiles.forEach(profile=>{
+    map[profile.id] =
+      profile.display_name || "MiniTube Creator";
+  });
+
+  return map;
+
+}
+
+/* =====================================
+   LOAD POSTS
+===================================== */
+
+async function loadPosts(){
+
+  try{
+
+    feed.innerHTML =
+      '<div class="status">Loading posts...</div>';
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/posts?select=id,user_id,content,image_path,category,created_at&order=created_at.desc&limit=100",
+      {
+        headers:getHeaders()
+      }
+    );
+
+    if(!response.ok){
+      throw new Error(await response.text());
+    }
+
+    allPosts = await response.json();
+
+    const profiles = await loadProfiles(allPosts);
+
+    allPosts.forEach(post=>{
+      post.authorName =
+        profiles[post.user_id] ||
+        "MiniTube Creator";
+    });
+
+    renderPosts();
+
+  }catch(error){
+
+    console.error("Post loading error:",error);
+
+    feed.innerHTML = `
+      <div class="status error">
+        Could not load posts.<br>
+        Please check your internet connection and Supabase settings.
+      </div>
+    `;
+
+  }
+
+}
+
+/* =====================================
+   RENDER POSTS
+===================================== */
+
 function renderPosts(){
- const posts=selectedCategory==="All"?allPosts:allPosts.filter(p=>p.category===selectedCategory);
- if(!posts.length){feed.innerHTML='<div class="empty">No posts here yet.<br><br>Be the first to share something!</div>';return}
- feed.innerHTML=posts.map(p=>`
-  <article class="post">
-   <div class="top">
-    <div class="avatar">M</div>
-    <div><div class="author">MiniTube Creator</div><div class="meta">${timeAgo(p.created_at)}</div></div>
-    <div class="category">${escapeHTML(p.category)}</div>
-   </div>
-   ${p.content?`<div class="content">${escapeHTML(p.content)}</div>`:""}
-   ${p.image_path?`<img src="${escapeHTML(p.image_path)}" alt="Post photo" loading="lazy">`:""}
-  </article>
- `).join("");
+
+  const posts =
+    selectedCategory === "All"
+      ? allPosts
+      : allPosts.filter(post=>
+          post.category === selectedCategory
+        );
+
+  if(posts.length === 0){
+
+    feed.innerHTML = `
+      <div class="empty">
+        No posts here yet.<br><br>
+        Be the first to share something!
+      </div>
+    `;
+
+    return;
+
+  }
+
+  feed.innerHTML = "";
+
+  posts.forEach(post=>{
+
+    const article = document.createElement("article");
+    article.className = "post";
+
+    const name =
+      post.authorName || "MiniTube Creator";
+
+    const initial =
+      name.trim().charAt(0).toUpperCase() || "M";
+
+    const top = document.createElement("div");
+    top.className = "top";
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = initial;
+
+    const authorInfo = document.createElement("div");
+    authorInfo.className = "authorInfo";
+
+    const author = document.createElement("div");
+    author.className = "author";
+    author.textContent = name;
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent = timeAgo(post.created_at);
+
+    authorInfo.appendChild(author);
+    authorInfo.appendChild(meta);
+
+    top.appendChild(avatar);
+    top.appendChild(authorInfo);
+
+    if(post.category){
+
+      const category = document.createElement("div");
+      category.className = "category";
+      category.textContent = post.category;
+
+      top.appendChild(category);
+
+    }
+
+    article.appendChild(top);
+
+    if(post.content){
+
+      const content = document.createElement("div");
+      content.className = "content";
+      content.textContent = post.content;
+
+      article.appendChild(content);
+
+    }
+
+    if(post.image_path){
+
+      const image = document.createElement("img");
+
+      image.src = getImageURL(post.image_path);
+      image.alt = "Post photo";
+      image.loading = "lazy";
+
+      image.onerror = function(){
+        image.style.display = "none";
+      };
+
+      article.appendChild(image);
+
+    }
+
+    feed.appendChild(article);
+
+  });
+
 }
+
+/* =====================================
+   NAVIGATION
+===================================== */
+
+function goHome(){
+  window.location.href = "index.html";
+}
+
+function goScroll(){
+  window.location.href = "shorts.html";
+}
+
+function goSubscriptions(){
+  window.location.href = "subscriptions.html";
+}
+
+function goYou(){
+  window.location.href = "you.html";
+}
+
+function goCreate(){
+  window.location.href = "upload.html";
+}
+
+/* =====================================
+   START
+===================================== */
+
 makeFilters();
 loadPosts();
+
 </script>
+
 </body>
 </html>
